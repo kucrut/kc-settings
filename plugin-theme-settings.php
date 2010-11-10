@@ -2,6 +2,18 @@
 
 class kcThemeSettings {
 
+	private $locations = array(
+		'options-general.php',	// Settings
+		'tools.php',						// Tools
+		'users.php',						// Users
+		'plugins.php',					// Plugins
+		'themes.php',						// Appearance
+		'link-manager.php',			// Links
+		'upload.php',						// Media
+		'edit.php',							// Posts
+		'index.php'							// Dashboard
+	);
+
 	# Add settings menus and register the options
 	function init( $group ) {
 		if ( !is_array($group['options']) || empty($group['options']) )
@@ -29,21 +41,38 @@ class kcThemeSettings {
 	# Create the menu
 	function create_menu() {
 		extract( $this->group, EXTR_OVERWRITE );
-		# Set the location if not found
+
+		# Set the location
 		if ( !isset($menu_location) )
 			$menu_location = 'options-general.php';
+		elseif ( $menu_location == 'parent' )
+			$this->parent = true;
 
-		add_submenu_page( $menu_location, $page_title, $menu_title, 'manage_options', "kc-settings-{$prefix}", array($this, 'settings_page') );
+		$this->screen = ( !in_array($menu_location, $this->locations) ) ? 'options-general' : null;
+
+		# Top level menu title
+		$parent_title = ( isset($parent_title) && !empty($parent_title) ) ? $parent_title : $menu_title;
+
+
+		if ( isset($this->parent) && $this->parent === true ) {
+			add_menu_page( $page_title, $parent_title, 'manage_options', "kc-settings-{$prefix}" );
+			add_submenu_page( "kc-settings-{$prefix}", $page_title, $menu_title, 'manage_options', "kc-settings-{$prefix}", array($this, 'settings_page') );
+		}
+		else {
+			add_submenu_page( $menu_location, $page_title, $menu_title, 'manage_options', "kc-settings-{$prefix}", array($this, 'settings_page') );
+		}
 	}
 
 
 	# Register settings sections and fields
 	function register_options() {
 		extract( $this->group, EXTR_OVERWRITE );
-		# register our options, unique for each child theme
-		register_setting( "{$prefix}_settings", "{$prefix}_settings", array($this, 'validate') );
 
 		if ( is_array($options) && !empty($options) ) {
+
+			# register our options, unique for each theme/plugin
+			register_setting( "{$prefix}_settings", "{$prefix}_settings", array($this, 'validate') );
+
 			foreach ( $options as $section ) {
 				# Add sections
 				add_settings_section( $section['id'], $section['title'], array($this, 'section_desc'), "{$prefix}_settings" );
@@ -62,6 +91,7 @@ class kcThemeSettings {
 					add_settings_field( $field['id'], $field['title'], 'kc_settings_field', "{$prefix}_settings", $section['id'], $args );
 				}
 			}
+
 		}
 	}
 
@@ -71,16 +101,20 @@ class kcThemeSettings {
 		extract( $this->group, EXTR_OVERWRITE ); ?>
 
 	<div class="wrap">
-		<?php screen_icon(); ?>
+		<?php screen_icon( $this->screen ); ?>
 		<h2><?php echo $page_title ?></h2>
 		<form action="options.php" method="post">
-			<?php settings_fields( "{$prefix}_settings" ); ?>
-			<?php do_settings_sections( "{$prefix}_settings" ); ?>
+			<?php
+				# The hidden fields
+				settings_fields( "{$prefix}_settings" );
+
+				# Print the setting sections of this group/page
+				kc_do_settings_sections( $prefix, $this->group );
+			?>
 			<p class="submit"><input class="button-primary" name="submit" type="submit" value="<?php esc_attr_e( 'Save Changes', 'kc-settings' ); ?>" /></p>
 		</form>
 	</div>
-	<?php
-	}
+	<?php }
 
 
 	# Settings section description

@@ -152,6 +152,47 @@ function kc_get_option( $prefix, $section = null, $field = null ) {
 
 
 /**
+ * Prints out all settings sections added to a particular settings page
+ *
+ */
+function kc_do_settings_sections( $prefix, $group ) {
+	$page = "{$prefix}_settings";
+	global $wp_settings_sections, $wp_settings_fields;
+
+	if ( !isset($wp_settings_sections) || !isset($wp_settings_sections[$page]) )
+		return;
+
+	//$all_options = apply_filters( 'kc_plugin_settings', array() );
+
+	foreach ( (array) $wp_settings_sections[$page] as $section ) {
+		echo "<h3>{$section['title']}</h3>\n";
+		call_user_func( $section['callback'], $section );
+		if ( !isset($wp_settings_fields) || !isset($wp_settings_fields[$page]) || !isset($wp_settings_fields[$page][$section['id']]) )
+			continue;
+
+		$opt_section = $group['options'][$section['id']];
+
+		# Wanna do something before the options table?
+		do_action( 'kc_settings_section_before', $prefix, $opt_section );
+
+		# Call user callback function for printing the section when specified
+		if ( isset($opt_section['cb']) && is_callable($opt_section['cb']) ) {
+			call_user_func( $opt_section['cb'], $opt_section );
+		}
+		# Defaults to WordPress' Settings API
+		else {
+			echo '<table class="form-table">';
+			do_settings_fields( $page, $section['id'] );
+			echo '</table>';
+		}
+
+		# Wanna do something after the options table?
+		do_action( 'kc_settings_section_after', $prefix, $section );
+	}
+}
+
+
+/**
  * Form Label
  *
  * Generate form label
@@ -201,6 +242,7 @@ function kc_settings_field( $args ) {
 	extract($args, EXTR_OVERWRITE);
 
 	$type = ( isset($field['type']) ) ? $field['type'] : 'input' ;
+	$br = ( isset($tabled) && $tabled ) ? '<br />' : null;
 
 	# setup the input id and name attributes, also get the current value from db
 	switch ( $mode ) {
@@ -232,7 +274,8 @@ function kc_settings_field( $args ) {
 	$desc_tag = ( isset($desc_tag) ) ? $desc_tag : 'span';
 	$desc = ( isset($field['desc']) && !empty($field['desc']) ) ? "<{$desc_tag} class='description'>{$field['desc']}</{$desc_tag}>" : null;
 
-	$output = '';
+	# Let user filter the output of the setting field
+	$output = apply_filters( 'kc_settings_field_before', '', $section, $field );
 
 	# Special option with callback
 	if ( $type == 'special' && function_exists($field['cb']) ) {
@@ -246,13 +289,15 @@ function kc_settings_field( $args ) {
 	# Input
 	elseif ( $type == 'input' ) {
 		$value = ( !empty($db_value) ) ? esc_html( stripslashes($db_value) ) : '';
-		$output .= "\n\t<input type='text' {$name_id} value='{$value}' style='min-width:234px'/> {$desc}\n";
+		$attr = ( isset($field['attr']) ) ? $field['attr'] : 'style="min-width:234px" ';
+		$output .= "\n\t<input type='text' {$name_id} value='{$value}' {$attr}/> {$desc}\n";
 	}
 
 	# Textarea
 	elseif ( $type == 'textarea' ) {
 		$value = ( !empty($db_value) ) ? esc_html( stripslashes($db_value) ) : '';
-		$output .= "\n\t<textarea {$name_id} cols='100' rows='4' style='width:98%'>{$value}</textarea> {$desc}\n";
+		$attr = ( isset($field['attr']) ) ? $field['attr'] : ' cols="100" rows="4" style="min-width:98%"';
+		$output .= "\n\t<textarea {$name_id}{$attr}>{$value}</textarea> {$desc}\n";
 	}
 
 	# Checkboxes, Radioboxes, Dropdown options
@@ -267,7 +312,7 @@ function kc_settings_field( $args ) {
 			case 'checkbox' :
 				foreach ( $options as $c_id => $c_lbl ) {
 					$checked = ( is_array($db_value) && isset($db_value[$c_id]) && $db_value[$c_id] ) ? 'checked="checked" ' : null;
-					$output .= "\n\t<label><input type='checkbox' name='{$name}[{$c_id}]' value='1' {$checked}/> {$c_lbl}</label><br />\n";
+					$output .= "\n\t<label><input type='checkbox' name='{$name}[{$c_id}]' value='1' {$checked}/> {$c_lbl}</label>{$br}\n";
 				}
 			break;
 
@@ -276,14 +321,14 @@ function kc_settings_field( $args ) {
 				foreach ( $options as $c_val => $c_lbl ) {
 					$db_value = ( empty($db_value) && isset($field['default']) ) ? $field['default'] : $db_value;
 					$checked = ( $db_value == $c_val ) ? 'checked="checked" ' : null;
-					$output .= "\n\t<label><input type='radio' name='{$name}' value='{$c_val}' {$checked}/> {$c_lbl}</label><br />\n";
+					$output .= "\n\t<label><input type='radio' name='{$name}' value='{$c_val}' {$checked}/> {$c_lbl}</label>{$br}\n";
 				}
 			break;
 
 			# Dropdown
 			case 'select' :
 				$output  = "\n\t<select {$name_id}>\n";
-				$output .= "\t\t<option value='-1'>&mdash;".__('Select')."&mdash;</option>\n";
+				$output .= "\t\t<option value=''>&mdash;".__('Select')."&mdash;</option>\n";
 				foreach ( $options as $c_val => $c_lbl ) {
 					$selected = ( $db_value == $c_val ) ? ' selected="selected"' : null;
 					$output .= "\t\t<option value='{$c_val}'{$selected}>{$c_lbl}</option>\n";
@@ -314,10 +359,11 @@ function kc_settings_field( $args ) {
 	}
 
 
+	# Let user filter the output of the setting field
 	if ( isset($args['echo']) && $args['echo'] )
-		echo $output;
+		echo apply_filters( 'kc_settings_field_after', $output, $section, $field );
 	else
-		return $output;
+		return apply_filters( 'kc_settings_field_after', $output, $section, $field );
 }
 
 
@@ -443,6 +489,9 @@ function kc_meta( $object_type ) {
  */
 
 function kc_save_cfields( $post_id ) {
+	if ( isset($_POST['action']) && $_POST['action'] == 'inline-save' )
+		return $post_id;
+
 	$cfields = kc_meta( 'post' );
 
 	if ( isset($_POST['post_type']) )
@@ -632,6 +681,9 @@ function kc_term_meta_field( $args ) {
  */
 
 function kc_save_termmeta( $term_id, $tt_id, $taxonomy ) {
+	if ( isset($_POST['action']) && $_POST['action'] == 'inline-save-tax' )
+		return $term_id;
+
 	$terms_meta = kc_meta( 'term' );
 		if ( !is_array($terms_meta) || empty($terms_meta) )
 			return;

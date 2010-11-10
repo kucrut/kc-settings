@@ -26,6 +26,17 @@ Please find the readme.html file inside the plugin directory for full the docume
 
 == Changelog ==
 
+= 1.1 =
+* Added support for custom callback for displaying section
+* Exclude inline editing
+* Added filter before & after setting field
+* Added custom attribute support for 'input' and 'textarea'
+* Changed default select value to ''
+* Set default menu locations
+* Added support for top-level menu
+* Fixed screen_icon handler
+* Small fixes
+
 = 1.0 =
 * First release
 

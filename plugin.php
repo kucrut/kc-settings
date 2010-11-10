@@ -14,14 +14,15 @@ License: GPL v2
 class kcSettings {
 
 	function __construct() {
-		add_action( 'init', array($this, 'init') );
+		# Load functions
+		require( dirname(__FILE__) . '/functions.php' );
+
+		add_action( 'init', array($this, 'init'), 11 );
 	}
 
 	function init() {
 		# i18n
 		load_plugin_textdomain( 'kc-settings', null, 'kc-settings' );
-		# Load functions
-		require( dirname(__FILE__) . '/functions.php' );
 
 		# 1. Plugin / Theme Settings
 		$this->plugin_settings_init();
@@ -67,7 +68,7 @@ class kcSettings {
 		# Add every term fields to its taxonomy add & edit screen
 		foreach ( $term_options as $tax => $sections ) {
 			add_action( "{$tax}_add_form_fields", 'kc_term_meta_field' );
-			add_action( "{$tax}_edit_form_fields", 'kc_term_meta_field', 10, 2 );
+			add_action( "{$tax}_edit_form_fields", 'kc_term_meta_field', 11, 2 );
 		}
 		# Also add the saving routine
 		add_action( 'edit_term', 'kc_save_termmeta', 10, 3);
