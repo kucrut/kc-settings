@@ -79,11 +79,12 @@ class kcThemeSettings {
 				foreach ( $section['fields'] as $field ) {
 					# add fields on each sections
 					$args = array(
-						'mode' => 'plugin',
-						'prefix' => $prefix,
-						'section' => $section['id'],
-						'field' => $field,
-						'echo' => true
+						'mode' 		=> 'plugin',
+						'prefix' 	=> $prefix,
+						'section'	=> $section['id'],
+						'field'		=> $field,
+						'echo'		=> true,
+						'tabled'	=> true
 					);
 					if ( !in_array($field['type'], array('checkbox', 'radio', 'multiinput')) )
 						$args['label_for'] = "{$section['id']}__{$field['id']}";
@@ -103,6 +104,7 @@ class kcThemeSettings {
 	<div class="wrap">
 		<?php screen_icon( $this->screen ); ?>
 		<h2><?php echo $page_title ?></h2>
+		<?php do_action( "{$this->group['prefix']}_kc_settings_page_before", $this->group ) ?>
 		<form action="options.php" method="post">
 			<?php
 				# The hidden fields
@@ -113,6 +115,7 @@ class kcThemeSettings {
 			?>
 			<p class="submit"><input class="button-primary" name="submit" type="submit" value="<?php esc_attr_e( 'Save Changes', 'kc-settings' ); ?>" /></p>
 		</form>
+		<?php do_action( "{$this->group['prefix']}_kc_settings_page_after", $this->group ) ?>
 	</div>
 	<?php }
 

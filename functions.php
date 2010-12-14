@@ -238,7 +238,7 @@ function kc_settings_field( $args ) {
 		'field'			=> array(),
 		'label_for'	=> null
 	);
-	$r = wp_parse_args( $args, $defaults );
+	//$r = wp_parse_args( $args, $defaults );
 	extract($args, EXTR_OVERWRITE);
 
 	$type = ( isset($field['type']) ) ? $field['type'] : 'input' ;
@@ -296,7 +296,7 @@ function kc_settings_field( $args ) {
 	# Textarea
 	elseif ( $type == 'textarea' ) {
 		$value = ( !empty($db_value) ) ? esc_html( stripslashes($db_value) ) : '';
-		$attr = ( isset($field['attr']) ) ? $field['attr'] : ' cols="100" rows="4" style="min-width:98%"';
+		$attr = ( isset($field['attr']) ) ? $field['attr'] : ' cols="40" rows="4" style="min-width:98%"';
 		$output .= "\n\t<textarea {$name_id}{$attr}>{$value}</textarea> {$desc}\n";
 	}
 
@@ -339,7 +339,7 @@ function kc_settings_field( $args ) {
 			# Dropdown (multi)
 			case 'multiselect' :
 				$output  = "\n\t<select {$name_id} multiple='multiple' size='3' style='height:7.5em;padding-right:.5em'>\n";
-				$output .= "\t\t<option value='-1'>&mdash;".__('Select')."&mdash;</option>\n";
+				$output .= "\t\t<option value='0'>&mdash;".__('Select')."&mdash;</option>\n";
 				foreach ( $options as $c_val => $c_lbl ) {
 					//$selected = ( $db_value == $c_val ) ? ' selected="selected" ' : null;
 					$selected = ( is_array($db_value) && in_array($c_val, $db_value) ) ? ' selected="selected" ' : null;
@@ -355,6 +355,12 @@ function kc_settings_field( $args ) {
 	# pair Input
 	elseif ( $type == 'multiinput' ) {
 		$output .= kc_pair_option_row( $name, $db_value, $type );
+		$output .= "\t<p>{$desc}</p>\n";
+	}
+
+	# Upload
+	elseif ( $type == 'upload' ) {
+		$output .= kc_setting_upload( $name, $db_value, $type );
 		$output .= "\t<p>{$desc}</p>\n";
 	}
 
@@ -431,6 +437,21 @@ function kc_pair_option_row( $name, $db_value, $type = 'multiinput' ) {
 
 	# add button
 	$output .= "\t<button class='kc-add button'>".__('Add new row', 'kc-settings')."</button>";
+
+	return $output;
+}
+
+
+/**
+ * Upload field
+ */
+function kc_setting_upload( $name, $db_value, $type ) {
+	$output  = "\n\t<p id='upload-input'>\n";
+	$output .= "\t<input type='file' />\n";
+	$output .= "\t<button class='button'>Upload</button>\n";
+	$output .= "\t</p>\n";
+	$output .= "\t<div id='upload-files'>\n";
+	$output .= "\t</div>\n";
 
 	return $output;
 }
@@ -540,6 +561,9 @@ function kc_save_cfields( $post_id ) {
  */
 
 function kc_update_meta( $meta_type = 'post', $object_type_name, $object_id, $section, $field ) {
+	if ( isset($_POST['action']) && $_POST['action'] == 'inline-save' )
+		return;
+
 	# Set the meta key and get the value based on the $meta_type and screen
 	switch( $meta_type ) {
 		case 'post' :
@@ -707,12 +731,12 @@ function kc_save_termmeta( $term_id, $tt_id, $taxonomy ) {
  * @link http://www.cmurrayconsulting.com/software/wordpress-simple-term-meta/
  *
  */
-function kc_termmeta_table_create() {
+function kc_termmeta_table() {
 	global $wpdb;
 
 	$table_name = $wpdb->prefix . 'termmeta';
 
-	if ( $wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name ) {
+	if ( $wpdb->get_var("SHOW TABLES LIKE '{$table_name}'") != $table_name ) {
 		$sql = "CREATE TABLE {$table_name} (
 			meta_id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 			term_id bigint(20) unsigned NOT NULL DEFAULT '0',
@@ -723,29 +747,11 @@ function kc_termmeta_table_create() {
 			KEY meta_key (meta_key)
 		);";
 
-		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 		dbDelta( $sql );
 	}
 
-	update_option( 'kc-settings', '0.1' );
-}
-
-
-/**
- * Set termmeta table
- *
- * Make WordPress use termmeta for saving term metadata
- *
- * @credit Simple Term Meta
- * @link http://www.cmurrayconsulting.com/software/wordpress-simple-term-meta/
- *
- */
-
-function kc_termmeta_table_set() {
-	global $wpdb;
 	$wpdb->termmeta = $wpdb->prefix . 'termmeta';
 }
-
-
 
 ?>

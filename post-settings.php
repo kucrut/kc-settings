@@ -24,7 +24,7 @@ class kcPostSettings {
 						return;
 
 					# does this section have role set?
-					if ( isset($section['role']) || $section['role'] != '' ) {
+					if ( isset($section['role']) && $section['role'] != '' ) {
 						if ( !is_array($section['role']) )
 							$roles = array( $section['role'] );
 						else

@@ -4,7 +4,7 @@
 Plugin name: KC Settings
 Plugin URI: http://kucrut.org/2010/10/kc-settings/
 Description: Easily create plugin/theme settings page and custom fields metaboxes
-Version: 1.0
+Version: 1.2
 Author: Dzikri Aziz
 Author URI: http://kucrut.org/
 License: GPL v2
@@ -18,6 +18,7 @@ class kcSettings {
 		require( dirname(__FILE__) . '/functions.php' );
 
 		add_action( 'init', array($this, 'init'), 11 );
+		add_action( 'init', 'kc_termmeta_table' );
 	}
 
 	function init() {
@@ -68,7 +69,7 @@ class kcSettings {
 		# Add every term fields to its taxonomy add & edit screen
 		foreach ( $term_options as $tax => $sections ) {
 			add_action( "{$tax}_add_form_fields", 'kc_term_meta_field' );
-			add_action( "{$tax}_edit_form_fields", 'kc_term_meta_field', 11, 2 );
+			add_action( "{$tax}_edit_form_fields", 'kc_term_meta_field', 20, 2 );
 		}
 		# Also add the saving routine
 		add_action( 'edit_term', 'kc_save_termmeta', 10, 3);
@@ -81,7 +82,6 @@ class kcSettings {
 $kcSettings = new kcSettings;
 
 # Create and define termmeta table
-register_activation_hook( __FILE__, 'kc_termmeta_table_create' );
-add_action( 'init', 'kc_termmeta_table_set' );
+//register_activation_hook( __FILE__, 'kc_termmeta_table_create' );
 
 ?>
