@@ -74,8 +74,9 @@ class kcThemeSettings {
 			register_setting( "{$prefix}_settings", "{$prefix}_settings", array($this, 'validate') );
 
 			foreach ( $options as $section ) {
+				$section_title = ( isset($section['title']) ) ? $section['title'] : "{$prefix}-section-{$section['id']}";
 				# Add sections
-				add_settings_section( $section['id'], $section['title'], array($this, 'section_desc'), "{$prefix}_settings" );
+				add_settings_section( $section['id'], $section_title, array($this, 'section_desc'), "{$prefix}_settings" );
 				foreach ( $section['fields'] as $field ) {
 					# add fields on each sections
 					$args = array(
