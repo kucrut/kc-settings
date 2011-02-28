@@ -9,7 +9,7 @@
  * @param int $user_id User ID
  * @return null
  */
-function kc_user_meta_field( $user_id ) {
+function kc_user_meta_field( $user ) {
 	$metadata = kc_meta( 'user' );
 
 	if ( !is_array($metadata) || empty($metadata) )
@@ -36,7 +36,7 @@ function kc_user_meta_field( $user_id ) {
 
 				# don't use label's for attribute for these types of options
 				$label_for = ( !in_array($type, array('checkbox', 'radio')) ) ? $id : null;
-				$args = array( 'mode' => 'user', 'object_id' => $user_id, 'section' => $section['id'], 'field' => $field );
+				$args = array( 'mode' => 'user', 'object_id' => $user->ID, 'section' => $section['id'], 'field' => $field );
 
 				$output .= "\t\t<tr>\n";
 				$output .= "\t\t\t<th>".kc_form_label($title, $label_for, false, false)."</th>\n";
