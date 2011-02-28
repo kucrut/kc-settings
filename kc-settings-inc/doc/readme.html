@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>KC Settings WordPress Plugin</title>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="style.css" />
+	<style type="text/css">
+		body {
+			color:#333;
+			font:1em/1.5 'Linux Libertine', Georgia, serif}
+		body,div,h1,.desc {margin:0;padding:0}
+		h1,h2,h3,h4,h5,h6,
+		.desc, #footer {
+			color:#4e4e4e;
+			font-family: 'Linux Biolinum', 'Helvetica', sans-serif}
+		code,pre {color:#590000}
+		code span,pre span {color:#008C00}
+		a {
+			color:#007cba;
+			text-decoration:none}
+		a:focus, a:hover {text-decoration:underline}
+		a:active {color:#d54e21}
+		.desc {font-weight:bold}
+		.wrapper {
+			margin:0 auto;
+			width:960px}
+		#header {
+			background:#efefef;
+			border-bottom:1px solid #c6c6c6;
+			padding:16px 0}
+		#footer {
+			background:#efefef;
+			border-top:1px solid #c6c6c6;
+			font-size:.875em;
+			font-style:italic;
+			padding:5px 0}
+		#footer .wrapper {overflow:hidden}
+		.thanks {
+			float:left;
+			width:49%}
+		.fs {
+			float:right;
+			text-align:right;
+			width:49%}
+	</style>
+</head>
+<body>
+	<div id="header">
+		<div class="wrapper">
+			<h1>KC Settings WordPress Plugin</h1>
+			<p class="desc">Easily create plugin/theme settings page, custom fields metaboxes and term meta, and user meta settings.</p>
+		</div>
+	</div>
+	<div id="page">
+		<div class="wrapper">
+			<h2 id="about">About</h2>
+			<p>This plugin is my attempt to simplify the process of adding a setting page for the <a href="http://wordpress.org/">WordPress</a> themes I was working on. It was originally <em>inspired</em> by the <a href="http://themehybrid.com/">Hybrid</a> theme. I then re-wrote it to utilize the amazing WordPress' <a href="http://codex.wordpress.org/Settings_API">Settings API</a> after reading <a href="http://ottopress.com/2009/wordpress-settings-api-tutorial/">Otto's article</a>.</p>
+
+			<h2 id="installation">Installation</h2>
+			<h3 id="install-dep">As a dependency</h3>
+			<p>In this mode, KC Settings will act as a dependency for you plugin/theme. You should have it installed and activated all the time.</p>
+			<ol>
+				<li>Install the plugin either by using WordPress plugin installer or manually copying it to WordPress' plugins directory.</li>
+				<li>Activate the plugin.</li>
+			</ol>
+
+			<h3 id="mu-plugin">Must Use Plugin</h3>
+			<p>To have KC Settings active all the time, you need to install it inside the <code>mu-plugins</code> directory. To do that, follow these steps:</p>
+			<ol>
+				<li>Download the plugin and unpack it.</li>
+				<li>Using your favorite FTP client, go to your site's <code>wp-content</code> directory.</li>
+				<li>Create <code>mu-plugins</code> directory if it doesn't exist inside <code>wp-content</code> yet.</li>
+				<li>Upload <code>kc-settings.php</code> file and <code>kc-settings-inc</code> directory into the <code>mu-plugins</code> directory.</li>
+				<li>You're done. KC Settings should be active all the time.</li>
+			</ol>
+
+			<h3 id="install-builtin">Builtin</h3>
+			<p>If you think you'd rather have the KC Setting's functionality builtin with your plugin/theme (so user won't have to install it), follow this steps:</p>
+			<ol>
+				<li>Copy the kc-settings directory into your plugin/theme directory.</li>
+				<li>Include the main plugin file, eg: <code>require_once(dirname(__FILE__) . '/kc-settings/kc-settings.php');</code></li>
+			</ol>
+			<p>The only drawback of using this method is that you will have to overwrite the plugin's files each time it has an update. Your options arrays should be <em>safe</em> as long as you keep them outside the plugin's directory and use different names than the originals.</p>
+
+			<h2 id="options">The options</h2>
+			<p>There are a few sample options files included in the <code><span>sample</span></code> directory. Copy (examine and modify) the sample options files included in the <code>sample</code> directory to your plugin/theme directory and then include them from your theme/plugin, eg. <code>require_once( TEMPLATEPATH . '/__theme_options.php');</code></p>
+
+			<h2 id="get-data">Getting the data</h2>
+			<h3 id="get-data-plugin">Theme/plugin settings</h3>
+			<ul>
+				<li>
+					<h4>All data</h4>
+					<pre>$var = kc_get_option( '<span>prefix</span>' );</pre>
+					<p>Or, you can also use WordPress' builtin function:</p>
+					<pre>$var = get_option( '<span>prefix</span>_settings' );</pre>
+				</li>
+				<li>
+					<h4>Section</h4>
+					<pre>$var = kc_get_option( <span>'prefix'</span>, <span>'section_id'</span> );</pre>
+				</li>
+				<li>
+					<h4>Field</h4>
+					<pre>$var = kc_get_option( <span>'prefix'</span>, <span>'section_id'</span>, <span>'field_id'</span> );</pre>
+				</li>
+			</ul>
+
+			<h3 id="get-data-cfields">Custom field / Post metadata</h3>
+			<p>Just use standard WordPress function, but prefix the meta key with an underscore, for example:</p>
+			<p>
+				<code>$var = get_post_meta( <span>'post_id'</span>, <span>'_field_id'</span>, true );</code>
+				<br />or: <br/>
+				<code>$var = get_metadata( 'post', <span>'post_id'</span>, <span>'_field_id'</span>, true );</code>
+			</p>
+
+			<h3 id="get-data-termmeta">Term Metadata</h3>
+			<p>You can use standard WordPress function, for example:</p>
+			<pre>$var = get_metadata( 'term', <span>'term_id'</span>, <span>'field_id'</span>, true );</pre>
+
+			<h3 id="get-data-usermeta">User Metadata</h3>
+			<p>You can use standard WordPress function, for example:</p>
+			<p>
+				<code>$var = get_user_meta( <span>'user_id'</span>, <span>'field_id'</span>, true );</code>
+				<br />or: <br />
+				<code>$var = get_metadata( 'user', <span>'user_id'</span>, <span>'field_id'</span>, true );</code>
+			</p>
+
+			<h2 id="validation">Validation/sanitation</h2>
+			<p>All options are filtered before added to the database. You can add your own filter(s) by using one ore more of these filters:</p>
+
+			<h3 id="validation-plugin">Theme/plugin settings</h3>
+			<ul>
+				<li>
+					<h4>By prefix:</h4>
+					<dl>
+						<dt>Filter name:</dt>
+						<dd><code>kcv_setting_<span>prefix</span></code></dd>
+						<dt>Example:</dt>
+						<dd>
+							<pre>add_filter( 'kcv_setting_<span>myPrefix</span>', 'my_filter_function' );</pre>
+							<pre>
+function my_filter_function( $data ) {
+	// <span>.... do something with the POST data</span>
+	return $data;
+}
+							</pre>
+						</dd>
+					</dl>
+				</li>
+				<li>
+					<h4>By prefix &amp; section ID:</h4>
+					<dl>
+						<dt>Filter name:</dt>
+						<dd><code>kcv_setting_<span>prefix</span>_<span>sectionID</span></code></dd>
+						<dt>Example:</dt>
+						<dd>
+							<code>add_filter( 'kcv_setting_<span>myPrefix</span>_<span>mySectionID</span>', 'my_filter_function' );</code>
+							<pre>
+function my_filter_function( $section_data ) {
+	// <span>.... do something with the POST data</span>
+	return $section_data;
+}
+							</pre>
+						</dd>
+					</dl>
+				</li>
+				<li>
+					<h4>By prefix &amp; field type:</h4>
+					<dl>
+						<dt>Filter name:</dt>
+						<dd><code>kcv_setting_<span>prefix</span>_<span>fieldType</span></code></dd>
+						<dt>Example:</dt>
+						<dd>
+							<code>add_filter( 'kcv_setting_<span>myPrefix</span>_<span>textarea</span>', 'my_filter_function' );</code>
+							<pre>
+function my_filter_function( $field_data ) {
+	// <span>.... do something with the POST data</span>
+	return $field_data;
+}
+							</pre>
+						</dd>
+					</dl>
+				</li>
+				<li>
+					<h4>By prefix, section ID &amp; field ID:</h4>
+					<dl>
+						<dt>Filter name:</dt>
+						<dd><code>kcv_setting_<span>prefix</span>_<span>sectionID</span>_<span>fieldID</span></code></dd>
+						<dt>Example:</dt>
+						<dd>
+							<code>add_filter( 'kcv_setting_<span>myPrefix</span>_<span>mySectionID</span>_<span>myFieldID</span>', 'my_filter_function' );</code>
+							<pre>
+function my_filter_function( $field_data ) {
+	// <span>.... do something with the POST data</span>
+	return $field_data;
+}
+							</pre>
+						</dd>
+					</dl>
+				</li>
+			</ul>
+
+			<h3 id="validation-metadata">Metadata</h3>
+			<p>You can also filter your metadata values using the filters below. Note that there are three arguments passed to these filters, and they're valid for the three metadata types (post, term and user):</p>
+			<ol>
+				<li><code>$nu_val</code>: The new metadata value from the user</li>
+				<li><code>$section</code>: The section array</li>
+				<li><code>$field</code>: The field array</li>
+			</ol>
+			<p>Example validation/sanitation function for metadata:</p>
+			<pre>
+function my_filter_function( $nu_val, $section, $field ) {
+	//<span>... do someting with the data</span>
+	return $nu_val;
+}
+			</pre>
+
+			<h3 id="validation-cfields">Custom Fields / Post Meta</h3>
+			<ul>
+				<li>
+					<h4>By post type:</h4>
+					<dl>
+						<dt>Filter name:</dt>
+						<dd><code>kcv_postmeta_<span>postType</span></code></dd>
+						<dt>Example:</dt>
+						<dd><code>add_filter( 'kcv_postmeta_<span>post</span>', 'my_filter_function', 10, 3 );</code></dd>
+					</dl>
+				</li>
+				<li>
+					<h4>By post type &amp; field type:</h4>
+					<dl>
+						<dt>Filter name:</dt>
+						<dd><code>kcv_postmeta_<span>postType</span>_<span>fieldType</span></code></dd>
+						<dt>Example:</dt>
+						<dd><code>add_filter( 'kcv_postmeta_<span>post</span>_<span>textarea</span>', 'my_filter_function', 10, 3 );</code></dd>
+					</dl>
+				</li>
+				<li>
+					<h4>By post type &amp; section ID:</h4>
+					<dl>
+						<dt>Filter name:</dt>
+						<dd><code>kcv_postmeta_<span>postType</span>_<span>sectionID</span></code></dd>
+						<dt>Example:</dt>
+						<dd><code>add_filter( 'kcv_postmeta_<span>post</span>_<span>mySectionID</span>', 'my_filter_function', 10, 3 );</code></dd>
+					</dl>
+				</li>
+				<li>
+					<h4>By post type, section ID &amp; field ID:</h4>
+					<dl>
+						<dt>Filter name:</dt>
+						<dd><code>kcv_postmeta_<span>postType</span>_<span>sectionID</span>_<span>fieldID</span></code></dd>
+						<dt>Example:</dt>
+						<dd><code>add_filter( 'kcv_postmeta_<span>post</span>_<span>mySectionID</span>_<span>fieldID</span>', 'my_filter_function', 10, 3 );</code></dd>
+					</dl>
+				</li>
+			</ul>
+
+			<h3 id="validation-termmeta">Term meta</h3>
+			<p>The filters used for validating term meta values are very similiar with custom fields' filters. The only difference is that you'd use taxonomy name instead of post type name. Also the filters are prefixed with <code><span>kcv_termmeta_</span></code> instead of <code>kcv_postmeta_</code>. Here are the filters used:</p>
+			<p>And here are the filters:</p>
+			<ul>
+				<li>
+					<h4>By taxonomy:</h4>
+					<dl>
+						<dt>Filter name:</dt>
+						<dd><code>kcv_termmeta_<span>taxonomy</span></code></dd>
+						<dt>Example:</dt>
+						<dd><code>add_filter( 'kcv_termmeta_<span>category</span>', 'my_filter_function', 10, 3 );</code></dd>
+					</dl>
+				</li>
+				<li>
+					<h4>By taxonomy &amp; field type:</h4>
+					<dl>
+						<dt>Filter name:</dt>
+						<dd><code>kcv_termmeta_<span>taxonomy</span>_<span>fieldType</span></code></dd>
+						<dt>Example:</dt>
+						<dd><code>add_filter( 'kcv_termmeta_<span>category</span>_<span>textarea</span>', 'my_filter_function', 10, 3 );</code></dd>
+					</dl>
+				</li>
+				<li>
+					<h4>By taxonomy &amp; section ID:</h4>
+					<dl>
+						<dt>Filter name:</dt>
+						<dd><code>kcv_termmeta_<span>taxonomy</span>_<span>sectionID</span></code></dd>
+						<dt>Example:</dt>
+						<dd><code>add_filter( 'kcv_termmeta_<span>category</span>_<span>mySectionID</span>', 'my_filter_function', 10, 3 );</code></dd>
+					</dl>
+				</li>
+				<li>
+					<h4>By taxonomy, section ID &amp; field ID:</h4>
+					<dl>
+						<dt>Filter name:</dt>
+						<dd><code>kcv_termmeta_<span>taxonomy</span>_<span>sectionID</span>_<span>fieldID</span></code></dd>
+						<dt>Example:</dt>
+						<dd><code>add_filter( 'kcv_termmeta_<span>category</span>_<span>mySectionID</span>_<span>fieldID</span>', 'my_filter_function', 10, 3 );</code></dd>
+					</dl>
+				</li>
+			</ul>
+
+			<h3 id="validation-usermeta">User meta</h3>
+			<p>Validation/sanitation filters for user meta are very similiar with post and term meta. However, with user meta, you'll get fewer filters:</p>
+			<ul>
+				<li>
+					<h4>Filter everything:</h4>
+					<dl>
+						<dt>Filter name:</dt>
+						<dd><code>kcv_usermeta</code></dd>
+						<dt>Example:</dt>
+						<dd><code>add_filter( 'kcv_usermeta', 'my_filter_function', 10, 3 );</code></dd>
+					</dl>
+				</li>
+				<li>
+					<h4>By field type:</h4>
+					<dl>
+						<dt>Filter name:</dt>
+						<dd><code>kcv_usermeta_<span>fieldType</span></code></dd>
+						<dt>Example:</dt>
+						<dd><code>add_filter( 'kcv_usermeta_<span>textarea</span>', 'my_filter_function', 10, 3 );</code></dd>
+					</dl>
+				</li>
+				<li>
+					<h4>By section ID:</h4>
+					<dl>
+						<dt>Filter name:</dt>
+						<dd><code>kcv_usermeta_<span>sectionID</span></code></dd>
+						<dt>Example:</dt>
+						<dd><code>add_filter( 'kcv_usermeta_<span>mySectionID</span>', 'my_filter_function', 10, 3 );</code></dd>
+					</dl>
+				</li>
+				<li>
+					<h4>By section ID &amp; field ID:</h4>
+					<dl>
+						<dt>Filter name:</dt>
+						<dd><code>kcv_usermeta_<span>sectionID</span>_<span>fieldID</span></code></dd>
+						<dt>Example:</dt>
+						<dd><code>add_filter( 'kcv_usermeta_<span>mySectionID</span>_<span>fieldID</span>', 'my_filter_function', 10, 3 );</code></dd>
+					</dl>
+				</li>
+			</ul>
+
+			<h2>TODO</h2>
+			<ul>
+				<li>Add reset button with some explanation</li>
+				<li>Add 'upload' field type</li>
+				<li>Add 'component' field type</li>
+				<li>Create an easy-to-use interface for creating the options array</li>
+			</ul>
+
+			<h2 id="support">Support</h2>
+			<p>If you think you found a bug, need some features added, have questions or just want to say hi, please <em>feel free</em> to <a href="http://kucrut.org/contact/">contact me.</a></p>
+		</div>
+		<div id="footer">
+			<div class="wrapper">
+				<p class="thanks">Thank you for using <a href="http://kucrut.org/2010/10/kc-settings/">KC Settings</a> plugin.</p>
+				<p class="fs">Powered by <a href="http://www.gnu.org/licenses/gpl.html">Free Software</a>.</p>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
