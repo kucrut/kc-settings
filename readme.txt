@@ -1,7 +1,7 @@
 === Plugin Name ===
 Contributors: kucrut
 Donate link: http://kucrut.org/
-Tags: theme-options, plugin-options, settings, options, term-meta, category-meta, post-meta, custom-fields
+Tags: theme-options, plugin-options, settings, options, term-meta, category-meta, post-meta, custom-fields, user-meta
 Requires at least: 3.0
 Tested up to: 3.1
 Stable tag: 1.3
