@@ -150,4 +150,35 @@ function kc_get_option( $prefix, $section = null, $field = null ) {
 	}
 }
 
+
+/**
+ * Check role of current user
+ *
+ * Will determine if current user is allowed to do the task.
+ *
+ * @param array $roles Array containing roles, could be a string for single role.
+ * @return bool $allowed Permission
+ */
+function kcs_check_roles( $roles = array() ) {
+	if ( empty($roles) )
+		return true;
+
+	if ( !is_array($roles) )
+		$roles = array( $roles );
+
+	# get current user data
+	global $current_user;
+
+	# if current user is not within the roles, abort
+	$allowed = false;
+	foreach ( $roles as $r ) {
+		if ( in_array($r, $current_user->roles) ) {
+			$allowed = true;
+			break;
+		}
+	}
+
+	return $allowed;
+}
+
 ?>

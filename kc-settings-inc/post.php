@@ -21,19 +21,9 @@ function kc_save_cfields( $post_id ) {
 	if ( empty($post_cfields) )
 		return $post_id;
 
-	# Verify the nonce before preceding.
-	if ( !wp_verify_nonce( $_POST["{$post_type}_kc_meta_box_nonce"], '___kc_meta_box_nonce___' ) )
-		return $post_id;
-
-	# Get the post type object.
 	$post_type_obj = get_post_type_object( $post_type );
-
-	# Check if the current user has permission to edit the post.
-	if ( !current_user_can( $post_type_obj->cap->edit_post, $post_id ) )
+	if ( ( wp_verify_nonce($_POST["{$post_type}_kc_meta_box_nonce"], '___kc_meta_box_nonce___') && current_user_can($post_type_obj->cap->edit_post) ) !== true )
 		return $post_id;
-
-	global $post;
-
 
 	# Loop through all of post meta box arguments.
 	foreach ( $post_cfields as $section ) {
@@ -57,6 +47,10 @@ class kcPostSettings {
 		add_action( 'admin_menu', array($this, 'create_meta_box') );
 		# Save the custom fields values
 		add_action( 'save_post', 'kc_save_cfields' );
+
+		# Attachment
+		if ( isset($this->cfields['attachment']) && is_array($this->cfields['attachment']) && !empty($this->cfields['attachment']) )
+			$this->attachment_init( $this->cfields['attachment'] );
 	}
 
 
@@ -65,38 +59,25 @@ class kcPostSettings {
 
 		# loop trough the post options array
 		foreach ( $this->cfields as $post_type => $sections ) {
-			if ( is_array($sections) && !empty($sections) ) {
-				foreach ( $sections as $section ) {
-					# does this section have options?
-					if ( !isset($section['fields']) || empty($section['fields']) )
-						return;
+			# skip if no sections found
+			if ( !is_array($sections) || empty($sections) )
+				continue;
 
-					# does this section have role set?
-					if ( isset($section['role']) && $section['role'] != '' ) {
-						if ( !is_array($section['role']) )
-							$roles = array( $section['role'] );
-						else
-							$roles = $section['role'];
+			foreach ( $sections as $section ) {
+				# skip if no options found
+				if ( !isset($section['fields']) || empty($section['fields']) )
+					continue;
 
-						# get current user data
-						global $current_user;
+				# does this section have role set?
+				if ( isset($section['role']) && !empty($section['role']) )
+					if ( !kcs_check_roles($section['role']) )
+						continue;
 
-						# if current user is not within the roles, abort
-						$allowed = false;
-						foreach ( $roles as $r ) {
-							if ( in_array($r, $current_user->roles) )
-								$allowed = true;
-						}
-						if ( !$allowed )
-							return;
-					}
+				# set metabox priority
+				$priority = ( isset($section['priority']) && in_array($section['priority'], array('low', 'high')) ) ? $section['priority'] : 'high';
 
-					# set metabox priority
-					$priority = ( isset($section['priority']) && in_array($section['priority'], array('low', 'high')) ) ? $section['priority'] : 'high';
-
-					# add metabox
-					add_meta_box( "kc-metabox-{$post_type}-{$section['id']}", $section['title'], array($this, 'fill_meta_box'), $post_type, 'normal', $priority, $section['fields'] );
-				}
+				# add metabox
+				add_meta_box( "kc-metabox-{$post_type}-{$section['id']}", $section['title'], array($this, 'fill_meta_box'), $post_type, 'normal', $priority, $section['fields'] );
 			}
 		}
 	}
@@ -130,6 +111,70 @@ class kcPostSettings {
 		$output .= "</table>\n";
 
 		echo $output;
+	}
+
+
+	function attachment_init( $sections ) {
+		$this->attachment_sections = array();
+
+		foreach ( $sections as $section ) {
+			# skip if no options found
+			if ( !isset($section['fields']) || empty($section['fields']) )
+				continue;
+
+			# does this section have role set?
+			if ( isset($section['role']) && !empty($section['role']) )
+				if ( !kcs_check_roles($section['role']) )
+					continue;
+
+			$this->attachment_sections[] = $section;
+		}
+
+		if ( empty($this->attachment_sections) )
+			return;
+
+		add_filter( 'attachment_fields_to_edit', array($this, 'attachment_fields_to_edit'), 10, 2 );
+		add_filter( 'attachment_fields_to_save', array($this, 'attachment_fields_to_save'), 10, 2 );
+	}
+
+
+	function attachment_fields_to_edit( $fields, $post ) {
+		foreach ( $this->attachment_sections as $section ) {
+			foreach ( $section['fields'] as $field ) {
+				extract( $field, EXTR_OVERWRITE );
+
+				$input_args = array(
+					'mode'			=> 'attachment',
+					'object_id'	=> $post->ID,
+					'section'		=> $section['id'],
+					'field'			=> $field
+				);
+
+				$nu_field = array(
+					'label' => $title,
+					'input' => 'html',
+					'html'  => kc_settings_field( $input_args )
+				);
+				if ( isset($desc) && !empty($desc) )
+					$nu_field['helps'] = $desc;
+
+				$fields[$id] = $nu_field;
+			}
+		}
+
+		return $fields;
+	}
+
+
+	function attachment_fields_to_save( $post, $attachment ) {
+		foreach ( $this->attachment_sections as $section ) {
+			foreach ( $section['fields'] as $field ) {
+				if ( isset($attachment[$field['id']]) )
+					kc_update_meta( 'post', 'attachment', $post['ID'], $section, $field, true );
+			}
+		}
+
+		return $post;
 	}
 
 }

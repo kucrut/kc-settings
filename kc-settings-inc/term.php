@@ -50,8 +50,6 @@ function kc_term_meta_field( $args ) {
 				if ( isset($term_id) )
 					$args['object_id'] = $term_id;
 
-				//if ( !in_array($field['type'], array('checkbox', 'radio', 'multiinput')) )
-					//$args['label_for'] = "{$section['id']}__{$field['id']}";
 				$label_for = ( !in_array($field['type'], array('checkbox', 'radio')) ) ? $field['id'] : null;
 
 				$output .= "<{$row_tag} class='form-field'>\n";
@@ -132,7 +130,7 @@ function kc_termmeta_table() {
 		dbDelta( $sql );
 	}
 
-	$wpdb->termmeta = $wpdb->prefix . 'termmeta';
+	$wpdb->termmeta = $table_name;
 }
 
 ?>

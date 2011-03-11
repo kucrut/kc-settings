@@ -49,12 +49,13 @@ function kc_meta( $meta_type ) {
  * Update posts & terms metadata
  *
  * @param string $meta_type post|term|user The type of metadata, post, term or user
- * @param string $object_type The taxonomy or post type name
+ * @param string $object_type_name The taxonomy or post type name
  * @param int $object_id The ID of the object (post/term) that we're gonna update
  * @param array $section The meta section array
  * @param array $field The meta field array
+ * @param bool $attachment Are we updating attachment metadata?
  */
-function kc_update_meta( $meta_type = 'post', $object_type_name, $object_id, $section, $field ) {
+function kc_update_meta( $meta_type = 'post', $object_type_name, $object_id, $section, $field, $attachment = false ) {
 	if ( isset($_POST['action']) && $_POST['action'] == 'inline-save' )
 		return;
 
@@ -76,10 +77,14 @@ function kc_update_meta( $meta_type = 'post', $object_type_name, $object_id, $se
 		break;
 	}
 
-	$db_val = ( $_POST['action'] == $action ) ? get_metadata( $meta_type, $object_id, $meta_key, true ) : '';
+	#$db_val = ( isset($_POST['action']) && $_POST['action'] == $action ) ? get_metadata( $meta_type, $object_id, $meta_key, true ) : null;
+	$db_val = get_metadata( $meta_type, $object_id, $meta_key, true );
 
 	# Get the new meta value from user
-	$nu_val = $_POST["kc-{$meta_type}meta"][$section['id']][$field['id']];
+	if ( $attachment )
+		$nu_val = $_POST['attachments'][$object_id][$field['id']];
+	else
+		$nu_val = $_POST["kc-{$meta_type}meta"][$section['id']][$field['id']];
 
 	# default sanitation
 	if ( $field['type'] == 'multiinput' ) {

@@ -93,26 +93,38 @@ function kc_settings_field( $args ) {
 	$br = ( isset($tabled) && $tabled ) ? '<br />' : null;
 
 	# setup the input id and name attributes, also get the current value from db
-	if ( $mode == 'plugin' ) {
-		$name = "{$prefix}_settings[{$section}][{$field['id']}]";
-		$id = "{$section}__{$field['id']}";
-		$db_value = kc_get_option( $prefix, $section, $field['id'] );
-	}
-	else {
-		$name = "kc-{$mode}meta[{$section}][{$field['id']}]";
-		$id = $field['id'];
-		# prefix with underscore to hide it from the default custom fields metabox
-		if ( $mode == 'post' )
-			$id = "_{$id}";
-		$db_value = ( isset($object_id) && $object_id != '' ) ? get_metadata( $mode, $object_id, $id, true ) : null;
+	switch ( $mode ) {
+		# 0. Plugin / Theme
+		case 'plugin' :
+			$name = "{$prefix}_settings[{$section}][{$field['id']}]";
+			$id = "{$section}__{$field['id']}";
+			$db_value = kc_get_option( $prefix, $section, $field['id'] );
+		break;
+
+		# 1. Attachment
+		case 'attachment' :
+			$id = $field['id'];
+			$name = "attachments[{$object_id}][{$id}]";
+			$db_value = get_metadata( 'post', $object_id, "_{$id}", true );
+		break;
+
+		# 2. Others: post, term & user meta
+		default :
+			$id = $field['id'];
+			$name = "kc-{$mode}meta[{$section}][{$id}]";
+			# prefix with underscore to hide it from the default custom fields metabox
+			if ( $mode == 'post' )
+				$id = "_{$id}";
+			$db_value = ( isset($object_id) && $object_id != '' ) ? get_metadata( $mode, $object_id, $id, true ) : null;
+		break;
 	}
 
 	if ( in_array($type, array('multiselect')) )
 		$name .= '[]';
 	$name_id = "name='{$name}' id='{$id}'";
 
-	$desc_tag = ( isset($desc_tag) ) ? $desc_tag : 'span';
-	$desc = ( isset($field['desc']) && !empty($field['desc']) ) ? "<{$desc_tag} class='description'>{$field['desc']}</{$desc_tag}>" : null;
+	$desc_tag = ( isset($desc_tag) ) ? $desc_tag : 'p';
+	$desc = ( $mode != 'attachment' && isset($field['desc']) && !empty($field['desc']) ) ? "<{$desc_tag} class='description'>{$field['desc']}</{$desc_tag}>" : null;
 
 	# Let user filter the output of the setting field
 	$output = apply_filters( 'kc_settings_field_before', '', $section, $field );
@@ -195,15 +207,8 @@ function kc_settings_field( $args ) {
 	# pair Input
 	elseif ( $type == 'multiinput' ) {
 		$output .= kc_pair_option_row( $name, $db_value, $type );
-		$output .= "\t<p>{$desc}</p>\n";
+		$output .= "\t{$desc}\n";
 	}
-
-	# Upload
-	elseif ( $type == 'upload' ) {
-		$output .= kc_setting_upload( $name, $db_value, $type );
-		$output .= "\t<p>{$desc}</p>\n";
-	}
-
 
 	# Let user filter the output of the setting field
 	if ( isset($args['echo']) && $args['echo'] )
@@ -227,24 +232,7 @@ function kc_settings_field( $args ) {
  */
 
 function kc_pair_option_row( $name, $db_value, $type = 'multiinput' ) {
-
-	$output  = "\n<script type='text/javascript'>\n";
-	$output .= "//<![CDATA[\n";
-	$output .= 'jQuery("button.kc-rem").live("click", function() {jQuery(this).parent().remove();return false;} );'."\n";
-	$output .= 'jQuery("button.kc-add").live("click", function() {'."\n";
-	$output .= '	var $this = jQuery(this);'."\n";
-	$output .= '	var $lastRow = jQuery("div.kc-rows").children(":last-child");'."\n";
-	$output .= '	var $rowNum = $lastRow.index() + 1;'."\n";
-	$output .= '	var $nuRow = $lastRow.clone();'."\n";
-	$output .= '	$nuRow.removeAttr("class").addClass("row-"+$rowNum);'."\n";
-	$output .= '	var $name = "'.$name.'["+$rowNum+"]";'."\n";
-	$output .= '	jQuery("input", $nuRow).attr("value", "").removeAttr("name").attr("name", $name+"[0]");'."\n";
-	$output .= '	jQuery("textarea", $nuRow).empty().removeAttr("name").attr("name", $name+"[1]");'."\n";
-	$output .= '	$nuRow.appendTo(jQuery(".kc-rows"));'."\n";
-	$output .= '	return false;'."\n";
-	$output .= '});'."\n";
-	$output .= "//]]>\n";
-	$output .= "</script>\n";
+	$output = '';
 	$rownum = 0;
 
 	$output .= "\n\t<div class='kc-rows'>\n";
@@ -254,13 +242,13 @@ function kc_pair_option_row( $name, $db_value, $type = 'multiinput' ) {
 		foreach ( $db_value as $k => $v ) {
 			$p_lbl = ( isset($v[0]) ) ? esc_html( stripslashes($v[0]) ) : '';
 			$p_val = ( isset($v[1]) ) ? esc_html( stripslashes($v[1]) ) : '';
-			$output .= "\t\t<div class='row-{$rownum}' style='overflow:hidden;padding:2px 0'>\n";
+			$output .= "\t\t<div class='{$name}' style='overflow:hidden;padding:2px 0'>\n";
 			# label/key
 			$output .= "\t\t\t<input type='text' name='{$name}[{$k}][0]' value='{$p_lbl}' style='float:left;width:20%'/>&nbsp;\n";
 			# value
 			$output .= "\t\t\t<textarea name='{$name}[{$k}][1]' cols='100' rows='3' style='float:right;width:77%'>{$p_val}</textarea>\n";
 			# remove button
-			$output .= "\t\t\t<button class='kc-rem button' style='float:left;margin-top:7px'>".__('Delete', 'kc-settings')."</button>";
+			$output .= "\t\t\t<a class='kc-rem button' style='float:left;margin-top:7px'>".__('Delete', 'kc-settings')."</a>";
 			$output .= "\t\t</div>\n";
 
 			++$rownum;
@@ -268,32 +256,18 @@ function kc_pair_option_row( $name, $db_value, $type = 'multiinput' ) {
 	}
 
 	# empty row
-	$output .= "\t\t<div class='row-{$rownum}' style='overflow:hidden;padding:2px 0'>\n";
-	$output .= "\t\t\t<input type='text' name='{$name}[{$rownum}][0]' value='' style='float:left;;width:20%'/>&nbsp;\n";
-	$output .= "\t\t\t<textarea name='{$name}[{$rownum}][1]' cols='100' rows='3' style='float:right;width:76%'></textarea>\n";
+	$output .= "\t\t<div class='{$name}' style='overflow:hidden;padding:2px 0'>\n";
+	$output .= "\t\t\t<input type='text' name='{$name}[{$rownum}][0]' value='' style='float:left;width:20%'/>&nbsp;\n";
+	$output .= "\t\t\t<textarea name='{$name}[{$rownum}][1]' cols='100' rows='3' style='float:right;width:77%'></textarea>\n";
 	$output .= "\t\t</div>\n";
 
 	$output .= "\t</div>\n";
 
 	# add button
-	$output .= "\t<button class='kc-add button'>".__('Add new row', 'kc-settings')."</button>";
+	$output .= "\t<a class='kc-add button'>".__('Add new row', 'kc-settings')."</a>";
 
 	return $output;
 }
 
-
-/**
- * Upload field
- */
-function kc_setting_upload( $name, $db_value, $type ) {
-	$output  = "\n\t<p id='upload-input'>\n";
-	$output .= "\t<input type='file' />\n";
-	$output .= "\t<button class='button'>Upload</button>\n";
-	$output .= "\t</p>\n";
-	$output .= "\t<div id='upload-files'>\n";
-	$output .= "\t</div>\n";
-
-	return $output;
-}
 
 ?>

@@ -1,10 +1,10 @@
 === Plugin Name ===
 Contributors: kucrut
 Donate link: http://kucrut.org/
-Tags: theme-options, plugin-options, settings, options, term-meta, category-meta, post-meta, custom-fields, user-meta
+Tags: theme-options, plugin-options, settings, options, term-meta, category-meta, post-meta, custom-fields, user-meta, attachment
 Requires at least: 3.0
 Tested up to: 3.1
-Stable tag: 1.3.1
+Stable tag: 1.3.5
 
 Easily create plugin/theme settings page, custom fields metaboxes and term meta settings.
 
@@ -32,6 +32,10 @@ Please find the readme.html file inside the plugin directory for the documentati
 
 == Changelog ==
 
+= 1.3.5 =
+* New feature: Attachment metadata
+* Bug fixes
+* Enhancements
 = 1.3.1 =
 * Fixed bug in user profile form display
 = 1.3 =
