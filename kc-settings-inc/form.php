@@ -112,10 +112,8 @@ function kc_settings_field( $args ) {
 		default :
 			$id = $field['id'];
 			$name = "kc-{$mode}meta[{$section}][{$id}]";
-			# prefix with underscore to hide it from the default custom fields metabox
-			if ( $mode == 'post' )
-				$id = "_{$id}";
-			$db_value = ( isset($object_id) && $object_id != '' ) ? get_metadata( $mode, $object_id, $id, true ) : null;
+			$key = ( $mode == 'post' ) ? "_{$id}" : $id;
+			$db_value = ( isset($object_id) && $object_id != '' ) ? get_metadata( $mode, $object_id, $key, true ) : null;
 		break;
 	}
 
@@ -131,10 +129,7 @@ function kc_settings_field( $args ) {
 
 	# Special option with callback
 	if ( $type == 'special' && function_exists($field['cb']) ) {
-		if ( isset($field['args']) )
-			$output .= call_user_func( $field['cb'], $field['args'] );
-		else
-			$output .= call_user_func( $field['cb'] );
+		$output .= call_user_func( $field['cb'], $args, $db_value );
 		$output .= $desc;
 	}
 

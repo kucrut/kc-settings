@@ -4,7 +4,7 @@ Donate link: http://kucrut.org/
 Tags: theme-options, plugin-options, settings, options, term-meta, category-meta, post-meta, custom-fields, user-meta, attachment
 Requires at least: 3.0
 Tested up to: 3.1
-Stable tag: 1.3.5
+Stable tag: 1.3.6
 
 Easily create plugin/theme settings page, custom fields metaboxes and term meta settings.
 
@@ -31,6 +31,12 @@ Please find the readme.html file inside the plugin directory for the documentati
 4. Post settings
 
 == Changelog ==
+
+= 1.3.6 =
+* Fixed input ID bug in post meta field
+* Fixed bug in post metabox title
+* New feature: File type checking on attachment metadata
+* Pass the whole $args and $db_value to the field's custom callback function, props Tan
 
 = 1.3.5 =
 * New feature: Attachment metadata

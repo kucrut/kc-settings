@@ -59,6 +59,7 @@ class kcPostSettings {
 
 		# loop trough the post options array
 		foreach ( $this->cfields as $post_type => $sections ) {
+			$post_type_obj = get_post_type_object( $post_type );
 			# skip if no sections found
 			if ( !is_array($sections) || empty($sections) )
 				continue;
@@ -77,7 +78,8 @@ class kcPostSettings {
 				$priority = ( isset($section['priority']) && in_array($section['priority'], array('low', 'high')) ) ? $section['priority'] : 'high';
 
 				# add metabox
-				add_meta_box( "kc-metabox-{$post_type}-{$section['id']}", $section['title'], array($this, 'fill_meta_box'), $post_type, 'normal', $priority, $section['fields'] );
+				$title = ( !isset($section['title']) ) ? sprintf( __('%s Settings', 'kc-settings'), $post_type_obj->label ) : $section['title'];
+				add_meta_box( "kc-metabox-{$post_type}-{$section['id']}", $title, array($this, 'fill_meta_box'), $post_type, 'normal', $priority, $section['fields'] );
 			}
 		}
 	}
@@ -142,6 +144,9 @@ class kcPostSettings {
 		foreach ( $this->attachment_sections as $section ) {
 			foreach ( $section['fields'] as $field ) {
 				extract( $field, EXTR_OVERWRITE );
+
+				if ( !empty($field['file_type']) && !strstr($post->post_mime_type, $field['file_type']) )
+					continue;
 
 				$input_args = array(
 					'mode'			=> 'attachment',
