@@ -13,6 +13,11 @@ function mytheme_options2( $settings ) {
 					'desc'	=> 'Just a simple input field',
 					'type'	=> 'input'
 				),
+				'date' => array(
+					'id'		=> 'date',
+					'title'	=> 'Date input',
+					'type'	=> 'date'
+				),
 				'sample_textarea' => array(
 					'id'		=> 'sample_textarea',
 					'title'	=> 'Textarea',

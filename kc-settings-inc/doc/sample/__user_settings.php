@@ -22,6 +22,11 @@ function my_user_options( $groups ) {
 						'title'	=> 'Textarea',
 						'desc'	=> 'An ordinary text area where you can write some long texts',
 						'type'	=> 'textarea'
+					),
+					'date' => array(
+						'id'		=> 'date',
+						'title'	=> 'Date input',
+						'type'	=> 'date'
 					)
 				)
 			)

@@ -16,6 +16,11 @@ function mypost_options( $groups ) {
 						'desc'	=> 'Just a simple input field',		// option description (optional, default null)
 						'type'	=> 'input'							// option type, callback|input|textarea|checkbox|radio|select|multiselect (optional, default input)
 					),
+					'date' => array(
+						'id'		=> 'date',
+						'title'	=> 'Date input',
+						'type'	=> 'date'
+					),
 					'sample_textarea' => array(
 						'id'		=> 'sample_textarea',
 						'title'	=> 'Textarea',
