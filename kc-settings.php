@@ -159,7 +159,6 @@ class kcSettings {
 		wp_register_script( 'modernizr', "{$this->paths['scripts']}/modernizr-1.7.min.js", false, '1.7', true );
 		wp_register_script( 'jquery-ui-datepicker', "{$this->paths['scripts']}/jquery.ui.datepicker.min.js", array('jquery-ui-core'), '1.8.11', true );
 
-		wp_register_style( 'jquery-ui-smoothness', "{$this->paths['styles']}/jquery-ui-smoothness/jquery-ui-1.8.11.smoothness.css", false, '1.8.11' );
 		wp_register_style( $this->prefix, "{$this->paths['styles']}/{$this->prefix}.css", false, $this->version );
 	}
 
@@ -180,7 +179,6 @@ class kcSettings {
 
 	function styles() {
 		wp_enqueue_style( $this->prefix );
-		wp_enqueue_style( 'jquery-ui-smoothness' );
 	}
 
 
