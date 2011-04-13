@@ -4,7 +4,7 @@
 Plugin name: KC Settings
 Plugin URI: http://kucrut.org/2010/10/kc-settings/
 Description: Easily create plugin/theme settings page, custom fields metaboxes, term meta and user meta settings.
-Version: 1.3.6
+Version: 1.3.7
 Author: Dzikri Aziz
 Author URI: http://kucrut.org/
 License: GPL v2
@@ -18,7 +18,7 @@ class kcSettings {
 
 	function __construct() {
 		$this->prefix = 'kc-settings';
-		$this->version = '1.3.6';
+		$this->version = '1.3.7';
 		$this->paths();
 		$this->actions_n_filters();
 	}
@@ -50,7 +50,8 @@ class kcSettings {
 		add_action( 'admin_print_footer_scripts', array(&$this, 'scripts') );
 		add_action( 'admin_print_styles', array(&$this, 'styles') );
 
-		add_action( 'admin_footer', array(&$this, 'dev') );
+		# Development
+		//add_action( 'admin_footer', array(&$this, 'dev') );
 	}
 
 
@@ -77,7 +78,9 @@ class kcSettings {
 	}
 
 	function plugin_settings_init() {
-		require_once( $this->paths['inc'] . '/doc/sample/__theme_settings.php' );
+		# Testing
+		//require_once( $this->paths['inc'] . '/doc/sample/__theme_settings.php' );
+
 		$plugin_groups = apply_filters( 'kc_plugin_settings', array() );
 		if ( !is_array($plugin_groups) || empty( $plugin_groups ) )
 			return;
