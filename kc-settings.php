@@ -12,21 +12,56 @@ License: GPL v2
 */
 
 class kcSettings {
+	var $prefix;
+	var $version;
+	var $paths;
 
 	function __construct() {
-		$this->inc_path = dirname(__FILE__) . '/kc-settings-inc';
-
-		add_action( 'init', array($this, 'init'), 11 );
+		$this->prefix = 'kc-settings';
+		$this->version = '1.3.6';
+		$this->paths();
+		$this->actions_n_filters();
 	}
+
+
+	function paths() {
+		$paths = array();
+		$inc_prefix = "/{$this->prefix}-inc";
+		$fname = basename( __FILE__ );
+
+		if ( file_exists(WPMU_PLUGIN_DIR . "/{$fname}") )
+			$file = WPMU_PLUGIN_DIR . "/{$fname}";
+		else
+			$file = WP_PLUGIN_DIR . "/{$this->prefix}/{$fname}";
+
+		$paths['file']		= $file;
+		$paths['inc']			= dirname( $file ) . $inc_prefix;
+		$url							= plugins_url( '', $file );
+		$paths['url']			= $url;
+		$paths['scripts']	= "{$url}{$inc_prefix}/scripts";
+		$paths['styles']	= "{$url}{$inc_prefix}/styles";
+
+		$this->paths = $paths;
+	}
+
+
+	function actions_n_filters() {
+		add_action( 'init', array(&$this, 'init'), 11 );
+		add_action( 'admin_print_footer_scripts', array(&$this, 'scripts') );
+		add_action( 'admin_print_styles', array(&$this, 'styles') );
+
+		add_action( 'admin_footer', array(&$this, 'dev') );
+	}
+
 
 	function init() {
 		# i18n
 		$locale = get_locale();
-		$mo = "{$this->inc_path}/languages/kc-settings-{$locale}.mo";
+		$mo = "{$this->paths['inc']}/languages/kc-settings-{$locale}.mo";
 		if ( is_readable($mo) )
-			load_textdomain( 'kc-settings', "{$this->inc_path}/languages/kc-settings-{$locale}.mo" );
+			load_textdomain( 'kc-settings', "{$this->paths['inc']}/languages/kc-settings-{$locale}.mo" );
 
-		require_once( "{$this->inc_path}/metadata.php" );
+		require_once( "{$this->paths['inc']}/metadata.php" );
 
 		# 1. Plugin / Theme Settings
 		$this->plugin_settings_init();
@@ -38,7 +73,7 @@ class kcSettings {
 		$this->usermeta_init();
 
 		# Script & style
-		add_action( 'admin_print_scripts', array($this, 'admin_print_scripts') );
+		$this->scripts_n_styles();
 	}
 
 	function plugin_settings_init() {
@@ -46,7 +81,7 @@ class kcSettings {
 		if ( !is_array($plugin_groups) || empty( $plugin_groups ) )
 			return;
 
-		require_once( "{$this->inc_path}/theme.php" );
+		require_once( "{$this->paths['inc']}/theme.php" );
 		# Loop through the array and pass each item to kcThemeSettings
 		foreach ( $plugin_groups as $group ) {
 			if ( !is_array($group) || empty($group) )
@@ -55,8 +90,8 @@ class kcSettings {
 			$do = new kcThemeSettings;
 			$do->init( $group );
 
-			require_once( "{$this->inc_path}/helper.php" );
-			require_once( "{$this->inc_path}/form.php" );
+			require_once( "{$this->paths['inc']}/helper.php" );
+			require_once( "{$this->paths['inc']}/form.php" );
 		}
 	}
 
@@ -66,9 +101,9 @@ class kcSettings {
 		if ( !is_array($cfields) || empty( $cfields ) )
 			return;
 
-		require_once( "{$this->inc_path}/post.php" );
-		require_once( "{$this->inc_path}/helper.php" );
-		require_once( "{$this->inc_path}/form.php" );
+		require_once( "{$this->paths['inc']}/post.php" );
+		require_once( "{$this->paths['inc']}/helper.php" );
+		require_once( "{$this->paths['inc']}/form.php" );
 		$do = new kcPostSettings;
 		$do->init( $cfields );
 	}
@@ -79,9 +114,9 @@ class kcSettings {
 		if ( !is_array($term_options) || empty($term_options) )
 			return;
 
-		require_once( "{$this->inc_path}/term.php" );
-		require_once( "{$this->inc_path}/helper.php" );
-		require_once( "{$this->inc_path}/form.php" );
+		require_once( "{$this->paths['inc']}/term.php" );
+		require_once( "{$this->paths['inc']}/helper.php" );
+		require_once( "{$this->paths['inc']}/form.php" );
 
 		# Create & set termmeta table
 		add_action( 'init', 'kc_termmeta_table', 12 );
@@ -102,9 +137,9 @@ class kcSettings {
 		if ( !is_array($user_options) || empty($user_options) )
 			return;
 
-		require_once( "{$this->inc_path}/user.php" );
-		require_once( "{$this->inc_path}/helper.php" );
-		require_once( "{$this->inc_path}/form.php" );
+		require_once( "{$this->paths['inc']}/user.php" );
+		require_once( "{$this->paths['inc']}/helper.php" );
+		require_once( "{$this->paths['inc']}/form.php" );
 
 		# Display additional fields in user profile page
 		add_action( 'show_user_profile', 'kc_user_meta_field' );
@@ -116,10 +151,44 @@ class kcSettings {
 	}
 
 
-	function admin_print_scripts() {
-		#wp_print_scripts( array('jquery', 'media-upload', 'thickbox') );
-		wp_print_scripts( array('jquery') );
-		require_once( $this->inc_path . '/scripts.php' );
+	function scripts_n_styles() {
+		if ( !is_admin() )
+			return;
+
+		wp_register_script( $this->prefix, "{$this->paths['scripts']}/{$this->prefix}.js", array('jquery'), $this->version, true );
+		wp_register_script( 'modernizr', "{$this->paths['scripts']}/modernizr-1.7.min.js", false, '1.7', true );
+		wp_register_script( 'jquery-ui-datepicker', "{$this->paths['scripts']}/jquery.ui.datepicker.min.js", array('jquery-ui-core'), '1.8.11', true );
+
+		wp_register_style( 'jquery-ui-smoothness', "{$this->paths['styles']}/jquery-ui-smoothness/jquery-ui-1.8.11.smoothness.css", false, '1.8.11' );
+		wp_register_style( $this->prefix, "{$this->paths['styles']}/{$this->prefix}.css", false, $this->version );
+	}
+
+
+	function scripts() {
+		global $kc_settings_scripts;
+		if ( !isset($kc_settings_scripts) || empty($kc_settings_scripts) )
+			return;
+
+		wp_print_scripts( $this->prefix );
+
+		# Datepicker
+		if ( isset($kc_settings_scripts['date']) && $kc_settings_scripts['date'] ) {
+			wp_print_scripts( array('modernizr', 'jquery-ui-datepicker') );
+		}
+	}
+
+
+	function styles() {
+		wp_enqueue_style( $this->prefix );
+		wp_enqueue_style( 'jquery-ui-smoothness' );
+	}
+
+
+	function dev() {
+		echo '<pre>';
+
+
+		echo '</pre>';
 	}
 }
 

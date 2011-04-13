@@ -89,7 +89,8 @@ function kc_settings_field( $args ) {
 	//$r = wp_parse_args( $args, $defaults );
 	extract($args, EXTR_OVERWRITE);
 
-	$type = ( isset($field['type']) ) ? $field['type'] : 'input' ;
+	$input_types = array('input', 'textarea', 'checkbox', 'radio', 'select', 'multiselect', 'multiinput', 'date', 'special');
+	$type = ( isset($field['type']) && in_array($field['type'], $input_types) ) ? $field['type'] : 'input' ;
 	$br = ( isset($tabled) && $tabled ) ? '<br />' : null;
 
 	# setup the input id and name attributes, also get the current value from db
@@ -138,6 +139,18 @@ function kc_settings_field( $args ) {
 		$value = ( !empty($db_value) ) ? esc_html( stripslashes($db_value) ) : '';
 		$attr = ( isset($field['attr']) ) ? $field['attr'] : 'style="min-width:234px" ';
 		$output .= "\n\t<input type='text' {$name_id} value='{$value}' {$attr}/> {$desc}\n";
+	}
+
+	# Input
+	elseif ( $type == 'date' ) {
+		global $kc_settings_scripts;
+		if ( !isset($kc_settings_scripts) || !is_array($kc_settings_scripts) )
+			$kc_settings_scripts = array();
+		$kc_settings_scripts['date'] = true;
+
+		$value = ( !empty($db_value) ) ? esc_html( stripslashes($db_value) ) : '';
+		$attr = ( isset($field['attr']) ) ? $field['attr'] : 'style="width:auto"';
+		$output .= "\n\t<input type='date' {$name_id} class='widefat' value='{$value}' {$attr}/> {$desc}\n";
 	}
 
 	# Textarea
@@ -227,6 +240,11 @@ function kc_settings_field( $args ) {
  */
 
 function kc_pair_option_row( $name, $db_value, $type = 'multiinput' ) {
+	global $kc_settings_scripts;
+	if ( !isset($kc_settings_scripts) || !is_array($kc_settings_scripts) )
+		$kc_settings_scripts = array();
+	$kc_settings_scripts['multiinput'] = true;
+
 	$output = '';
 	$rownum = 0;
 
