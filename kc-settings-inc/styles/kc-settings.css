@@ -1,3 +1,22 @@
+/* Multiinput row */
+.kcs-multiinput-row {
+    overflow:hidden;
+    padding:2px 0}
+.kcs-multiinput-row input {
+    float:left;
+    width:20%}
+.kcs-multiinput-row textarea {
+    float:right;
+    width:77%}
+.kcs-multiinput-row .kc-rem {
+    float:left;
+    margin-top:7px}
+
+#wpcontent .kcs-multiselect {
+    height:7.5em;
+    padding-right:.5em}
+.kcs-date {width:auto}
+
 /*
  * jQuery UI CSS Framework 1.8.11
  *

@@ -77,6 +77,7 @@ class kcSettings {
 	}
 
 	function plugin_settings_init() {
+		require_once( $this->paths['inc'] . '/doc/sample/__theme_settings.php' );
 		$plugin_groups = apply_filters( 'kc_plugin_settings', array() );
 		if ( !is_array($plugin_groups) || empty( $plugin_groups ) )
 			return;

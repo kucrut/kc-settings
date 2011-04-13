@@ -137,8 +137,8 @@ function kc_settings_field( $args ) {
 	# Input
 	elseif ( $type == 'input' ) {
 		$value = ( !empty($db_value) ) ? esc_html( stripslashes($db_value) ) : '';
-		$attr = ( isset($field['attr']) ) ? $field['attr'] : 'style="min-width:234px" ';
-		$output .= "\n\t<input type='text' {$name_id} value='{$value}' {$attr}/> {$desc}\n";
+		$attr = ( isset($field['attr']) ) ? $field['attr'] : '';
+		$output .= "\n\t<input type='text' {$name_id} value='{$value}' class='kcs-{$type}' {$attr}/> {$desc}\n";
 	}
 
 	# Input
@@ -149,15 +149,15 @@ function kc_settings_field( $args ) {
 		$kc_settings_scripts['date'] = true;
 
 		$value = ( !empty($db_value) ) ? esc_html( stripslashes($db_value) ) : '';
-		$attr = ( isset($field['attr']) ) ? $field['attr'] : 'style="width:auto"';
-		$output .= "\n\t<input type='date' {$name_id} class='widefat' value='{$value}' {$attr}/> {$desc}\n";
+		$attr = ( isset($field['attr']) ) ? $field['attr'] : '';
+		$output .= "\n\t<input type='date' {$name_id} value='{$value}' class='widefat kcs-{$type}' {$attr}/> {$desc}\n";
 	}
 
 	# Textarea
 	elseif ( $type == 'textarea' ) {
 		$value = ( !empty($db_value) ) ? esc_html( stripslashes($db_value) ) : '';
-		$attr = ( isset($field['attr']) ) ? $field['attr'] : ' cols="40" rows="4" style="min-width:98%"';
-		$output .= "\n\t<textarea {$name_id}{$attr}>{$value}</textarea> {$desc}\n";
+		$attr = ( isset($field['attr']) ) ? $field['attr'] : 'cols="40" rows="4"';
+		$output .= "\n\t<textarea {$name_id} class='widefat kcs-{$type}' {$attr}'>{$value}</textarea> {$desc}\n";
 	}
 
 	# Checkboxes, Radioboxes, Dropdown options
@@ -172,7 +172,7 @@ function kc_settings_field( $args ) {
 			case 'checkbox' :
 				foreach ( $options as $c_id => $c_lbl ) {
 					$checked = ( is_array($db_value) && isset($db_value[$c_id]) && $db_value[$c_id] ) ? 'checked="checked" ' : null;
-					$output .= "\n\t<label><input type='checkbox' name='{$name}[{$c_id}]' value='1' {$checked}/> {$c_lbl}</label>{$br}\n";
+					$output .= "\n\t<label class='kcs-{$type}'><input type='checkbox' name='{$name}[{$c_id}]' value='1' {$checked}/> {$c_lbl}</label>{$br}\n";
 				}
 			break;
 
@@ -181,13 +181,13 @@ function kc_settings_field( $args ) {
 				foreach ( $options as $c_val => $c_lbl ) {
 					$db_value = ( empty($db_value) && isset($field['default']) ) ? $field['default'] : $db_value;
 					$checked = ( $db_value == $c_val ) ? 'checked="checked" ' : null;
-					$output .= "\n\t<label><input type='radio' name='{$name}' value='{$c_val}' {$checked}/> {$c_lbl}</label>{$br}\n";
+					$output .= "\n\t<label class='kcs-{$type}'><input type='radio' name='{$name}' value='{$c_val}' {$checked}/> {$c_lbl}</label>{$br}\n";
 				}
 			break;
 
 			# Dropdown
 			case 'select' :
-				$output  = "\n\t<select {$name_id}>\n";
+				$output  = "\n\t<select {$name_id} class='kcs-{$type}'>\n";
 				$output .= "\t\t<option value=''>&mdash;".__('Select')."&mdash;</option>\n";
 				foreach ( $options as $c_val => $c_lbl ) {
 					$selected = ( $db_value == $c_val ) ? ' selected="selected"' : null;
@@ -198,7 +198,7 @@ function kc_settings_field( $args ) {
 
 			# Dropdown (multi)
 			case 'multiselect' :
-				$output  = "\n\t<select {$name_id} multiple='multiple' size='3' style='height:7.5em;padding-right:.5em'>\n";
+				$output  = "\n\t<select {$name_id} multiple='multiple' size='3' class='kcs-{$type}'>\n";
 				$output .= "\t\t<option value='0'>&mdash;".__('Select')."&mdash;</option>\n";
 				foreach ( $options as $c_val => $c_lbl ) {
 					//$selected = ( $db_value == $c_val ) ? ' selected="selected" ' : null;
@@ -255,13 +255,13 @@ function kc_pair_option_row( $name, $db_value, $type = 'multiinput' ) {
 		foreach ( $db_value as $k => $v ) {
 			$p_lbl = ( isset($v[0]) ) ? esc_html( stripslashes($v[0]) ) : '';
 			$p_val = ( isset($v[1]) ) ? esc_html( stripslashes($v[1]) ) : '';
-			$output .= "\t\t<div class='{$name}' style='overflow:hidden;padding:2px 0'>\n";
+			$output .= "\t\t<div class='kcs-multiinput-row {$name}'>\n";
 			# label/key
-			$output .= "\t\t\t<input type='text' name='{$name}[{$k}][0]' value='{$p_lbl}' style='float:left;width:20%'/>&nbsp;\n";
+			$output .= "\t\t\t<input type='text' name='{$name}[{$k}][0]' value='{$p_lbl}' />&nbsp;\n";
 			# value
-			$output .= "\t\t\t<textarea name='{$name}[{$k}][1]' cols='100' rows='3' style='float:right;width:77%'>{$p_val}</textarea>\n";
+			$output .= "\t\t\t<textarea name='{$name}[{$k}][1]' cols='100' rows='3'>{$p_val}</textarea>\n";
 			# remove button
-			$output .= "\t\t\t<a class='kc-rem button' style='float:left;margin-top:7px'>".__('Delete', 'kc-settings')."</a>";
+			$output .= "\t\t\t<a class='kc-rem button'>".__('Delete', 'kc-settings')."</a>";
 			$output .= "\t\t</div>\n";
 
 			++$rownum;
@@ -269,9 +269,9 @@ function kc_pair_option_row( $name, $db_value, $type = 'multiinput' ) {
 	}
 
 	# empty row
-	$output .= "\t\t<div class='{$name}' style='overflow:hidden;padding:2px 0'>\n";
-	$output .= "\t\t\t<input type='text' name='{$name}[{$rownum}][0]' value='' style='float:left;width:20%'/>&nbsp;\n";
-	$output .= "\t\t\t<textarea name='{$name}[{$rownum}][1]' cols='100' rows='3' style='float:right;width:77%'></textarea>\n";
+	$output .= "\t\t<div class='kcs-multiinput-row {$name}'>\n";
+	$output .= "\t\t\t<input type='text' name='{$name}[{$rownum}][0]' value='' />&nbsp;\n";
+	$output .= "\t\t\t<textarea name='{$name}[{$rownum}][1]' cols='100' rows='3'></textarea>\n";
 	$output .= "\t\t</div>\n";
 
 	$output .= "\t</div>\n";
