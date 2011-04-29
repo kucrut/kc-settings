@@ -3,8 +3,8 @@ Contributors: kucrut
 Donate link: http://kucrut.org/
 Tags: theme-options, plugin-options, settings, options, term-meta, category-meta, post-meta, custom-fields, user-meta, attachment
 Requires at least: 3.0
-Tested up to: 3.1.1
-Stable tag: 1.3.7
+Tested up to: 3.1.2
+Stable tag: 1.3.8
 
 Easily create plugin/theme settings page, custom fields metaboxes and term meta settings.
 
@@ -31,6 +31,10 @@ Please find the readme.html file inside the plugin directory for the documentati
 4. Post settings
 
 == Changelog ==
+
+= 1.3.8 =
+* Load scripts and styles only when _really_ needed, props dinesh4monto
+* Better JS for handling multiinput
 
 = 1.3.7 =
 * New input type: date, supports both old (jQuery UI Datepicker) and new browsers (HTML5 forms)
