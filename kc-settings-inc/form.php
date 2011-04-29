@@ -253,13 +253,13 @@ function kc_pair_option_row( $name, $db_value, $type = 'multiinput' ) {
 	# If there's an array already, print it
 	if ( is_array($db_value) && !empty($db_value) ) {
 		foreach ( $db_value as $k => $v ) {
-			$p_lbl = ( isset($v[0]) ) ? esc_html( stripslashes($v[0]) ) : '';
-			$p_val = ( isset($v[1]) ) ? esc_html( stripslashes($v[1]) ) : '';
-			$output .= "\t\t<div class='kcs-multiinput-row {$name}'>\n";
+			$p_lbl = ( isset($v['key']) ) ? esc_html( stripslashes($v['key']) ) : '';
+			$p_val = ( isset($v['value']) ) ? esc_html( stripslashes($v['value']) ) : '';
+			$output .= "\t\t<div class='kcs-multiinput-row' title='Drag it'>\n";
 			# label/key
-			$output .= "\t\t\t<input type='text' name='{$name}[{$k}][0]' value='{$p_lbl}' />&nbsp;\n";
+			$output .= "\t\t\t<input type='text' name='{$name}[{$k}][key]' value='{$p_lbl}' />&nbsp;\n";
 			# value
-			$output .= "\t\t\t<textarea name='{$name}[{$k}][1]' cols='100' rows='3'>{$p_val}</textarea>\n";
+			$output .= "\t\t\t<textarea name='{$name}[{$k}][value]' cols='100' rows='3'>{$p_val}</textarea>\n";
 			# remove button
 			$output .= "\t\t\t<a class='kc-rem button'>".__('Delete', 'kc-settings')."</a>";
 			$output .= "\t\t</div>\n";
@@ -270,8 +270,8 @@ function kc_pair_option_row( $name, $db_value, $type = 'multiinput' ) {
 
 	# empty row
 	$output .= "\t\t<div class='kcs-multiinput-row {$name}'>\n";
-	$output .= "\t\t\t<input type='text' name='{$name}[{$rownum}][0]' value='' />&nbsp;\n";
-	$output .= "\t\t\t<textarea name='{$name}[{$rownum}][1]' cols='100' rows='3'></textarea>\n";
+	$output .= "\t\t\t<input type='text' name='{$name}[{$rownum}][key]' value='' />&nbsp;\n";
+	$output .= "\t\t\t<textarea name='{$name}[{$rownum}][value]' cols='100' rows='3'></textarea>\n";
 	$output .= "\t\t</div>\n";
 
 	$output .= "\t</div>\n";

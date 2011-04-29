@@ -4,20 +4,30 @@ jQuery(document).ready(function($) {
 		return false;
 	});
 
-	$('a.kc-add').live('click', function() {
-		var rows		= $(this).prev('div.kc-rows'),
-				lastRow	= rows.children(':last-child'),
-				rowNum	= lastRow.index() + 1,
-				nuRow		= lastRow.clone();
+	$('a.kc-add').live('click', function(e) {
+		e.preventDefault();
 
-		if ( $('input',lastRow).val() == '' && $('textarea',lastRow).val() == '' )
+		var $rows				= $(this).prev('div.kc-rows'),
+				$lastRow		= $rows.children().last();
+				console.log( $lastRow.index() );
+
+		if ( $('input', $lastRow).val() == '' && $('textarea', $lastRow).val() == '' )
 			return false;
 
-		$('input', nuRow).attr('name', lastRow.attr('class') + '['+ rowNum +'][0]').val('');
-		$('textarea', nuRow).attr('name', lastRow.attr('class') + '['+ rowNum +'][1]').val('');
+		var $nuRow	= $lastRow.clone(),
+				$inputs	= $nuRow.children(':input');
 
-		nuRow.appendTo(rows);
-		return false;
+		$inputs.each(function() {
+			$(this).val('');
+			this.name = this.name.replace(/\[(\d+)\]/, function(str, p1) {
+				return '[' + ( parseInt(p1,10) + 1 ) + ']';
+			});
+		});
+
+		//$('input', nuRow).attr('name', lastRow.attr('class') + '['+ rowNum +'][0]').val('');
+		//$('textarea', nuRow).attr('name', lastRow.attr('class') + '['+ rowNum +'][1]').val('');
+
+		$nuRow.appendTo($rows);
 	});
 
 	/*

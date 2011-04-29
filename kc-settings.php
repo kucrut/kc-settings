@@ -47,8 +47,7 @@ class kcSettings {
 
 	function actions_n_filters() {
 		add_action( 'init', array(&$this, 'init'), 11 );
-		add_action( 'admin_print_footer_scripts', array(&$this, 'scripts') );
-		add_action( 'admin_print_styles', array(&$this, 'styles') );
+		add_action( 'admin_init', array(&$this, 'scripts_n_styles') );
 
 		# Development
 		//add_action( 'admin_footer', array(&$this, 'dev') );
@@ -72,9 +71,6 @@ class kcSettings {
 		$this->termmeta_init();
 		# 4. User Meta
 		$this->usermeta_init();
-
-		# Script & style
-		$this->scripts_n_styles();
 	}
 
 	function plugin_settings_init() {
@@ -156,7 +152,9 @@ class kcSettings {
 
 
 	function scripts_n_styles() {
-		if ( !is_admin() )
+		global $plugin_page;
+		$kcspage = strpos($plugin_page, 'kc-settings-');
+		if ( $kcspage === false )
 			return;
 
 		wp_register_script( $this->prefix, "{$this->paths['scripts']}/{$this->prefix}.js", array('jquery'), $this->version, true );
@@ -164,6 +162,9 @@ class kcSettings {
 		wp_register_script( 'jquery-ui-datepicker', "{$this->paths['scripts']}/jquery.ui.datepicker.min.js", array('jquery-ui-core'), '1.8.11', true );
 
 		wp_register_style( $this->prefix, "{$this->paths['styles']}/{$this->prefix}.css", false, $this->version );
+
+		add_action( 'admin_print_footer_scripts', array(&$this, 'scripts') );
+		add_action( 'admin_print_styles', array(&$this, 'styles') );
 	}
 
 
