@@ -5,7 +5,7 @@
 .kcs-multiinput-row input {
     float:left;
     width:20%}
-.kcs-multiinput-row textarea {
+#profilepage .kcs-multiinput-row textarea {
     float:right;
     width:77%}
 .kcs-multiinput-row .kc-rem {

@@ -10,11 +10,10 @@ function mypost_options2( $groups ) {
 				'priority'	=> 'high',							// section priority, low|high (optional, default high)
 				'role'			=> array('administrator', 'editor'),			// user role, only user in this role will get this metabox. use an array for more than one role (optional, default none)
 				'fields'		=> array(								// here are the options for this metabox
-					'sample_input2' => array(
-						'id'		=> 'sample_input2',			// option ID
-						'title'	=> 'Simple input',			// option title/label
-						'desc'	=> 'Just a simple input field',		// option description (optional, default null)
-						'type'	=> 'input'							// option type, callback|input|textarea|checkbox|radio|select|multiselect (optional, default input)
+					'date2' => array(
+						'id'		=> 'date2',			// option ID
+						'title'	=> 'Date input',			// option title/label
+						'type'	=> 'date'							// option type, callback|input|textarea|checkbox|radio|select|multiselect (optional, default input)
 					),
 					'sample_textarea2' => array(
 						'id'		=> 'sample_textarea2',

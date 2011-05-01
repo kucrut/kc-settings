@@ -143,11 +143,6 @@ function kc_settings_field( $args ) {
 
 	# Input
 	elseif ( $type == 'date' ) {
-		global $kc_settings_scripts;
-		if ( !isset($kc_settings_scripts) || !is_array($kc_settings_scripts) )
-			$kc_settings_scripts = array();
-		$kc_settings_scripts['date'] = true;
-
 		$value = ( !empty($db_value) ) ? esc_html( stripslashes($db_value) ) : '';
 		$attr = ( isset($field['attr']) ) ? $field['attr'] : '';
 		$output .= "\n\t<input type='date' {$name_id} value='{$value}' class='widefat kcs-{$type}' {$attr}/> {$desc}\n";
@@ -240,11 +235,6 @@ function kc_settings_field( $args ) {
  */
 
 function kc_pair_option_row( $name, $db_value, $type = 'multiinput' ) {
-	global $kc_settings_scripts;
-	if ( !isset($kc_settings_scripts) || !is_array($kc_settings_scripts) )
-		$kc_settings_scripts = array();
-	$kc_settings_scripts['multiinput'] = true;
-
 	$output = '';
 	$rownum = 0;
 

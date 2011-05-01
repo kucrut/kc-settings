@@ -4,7 +4,7 @@
 Plugin name: KC Settings
 Plugin URI: http://kucrut.org/2010/10/kc-settings/
 Description: Easily create plugin/theme settings page, custom fields metaboxes, term meta and user meta settings.
-Version: 1.3.8
+Version: 1.3.9
 Author: Dzikri Aziz
 Author URI: http://kucrut.org/
 License: GPL v2
@@ -14,11 +14,12 @@ License: GPL v2
 class kcSettings {
 	var $prefix;
 	var $version;
-	var $paths;
+	var $kcs_pages;
 
 	function __construct() {
 		$this->prefix = 'kc-settings';
 		$this->version = '1.3.7';
+		$this->kcs_pages = array();
 		$this->paths();
 		$this->actions_n_filters();
 	}
@@ -47,19 +48,25 @@ class kcSettings {
 
 	function actions_n_filters() {
 		add_action( 'init', array(&$this, 'init'), 11 );
-		add_action( 'admin_init', array(&$this, 'scripts_n_styles') );
+		add_action( 'admin_head', array(&$this, 'scripts_n_styles') );
 
 		# Development
 		//add_action( 'admin_footer', array(&$this, 'dev') );
+		//require_once( $this->paths['inc'] . '/doc/sample/__theme_settings.php' );
+		//require_once( $this->paths['inc'] . '/doc/sample/settings2.php' );
+		//require_once( $this->paths['inc'] . '/doc/sample/__term_settings.php' );
+		//require_once( $this->paths['inc'] . '/doc/sample/__post_settings.php' );
+		//require_once( $this->paths['inc'] . '/doc/sample/__post_settings2.php' );
+		//require_once( $this->paths['inc'] . '/doc/sample/__user_settings.php' );
 	}
 
 
 	function init() {
 		# i18n
 		$locale = get_locale();
-		$mo = "{$this->paths['inc']}/languages/kc-settings-{$locale}.mo";
-		if ( is_readable($mo) )
-			load_textdomain( 'kc-settings', "{$this->paths['inc']}/languages/kc-settings-{$locale}.mo" );
+		$mo_file = "{$this->paths['inc']}/languages/{$this->prefix}-{$locale}.mo";
+		if ( is_readable($mo_file) )
+			load_textdomain( $this->prefix, $mo_file );
 
 		require_once( "{$this->paths['inc']}/metadata.php" );
 
@@ -74,9 +81,6 @@ class kcSettings {
 	}
 
 	function plugin_settings_init() {
-		# Testing
-		//require_once( $this->paths['inc'] . '/doc/sample/__theme_settings.php' );
-
 		$plugin_groups = apply_filters( 'kc_plugin_settings', array() );
 		if ( !is_array($plugin_groups) || empty( $plugin_groups ) )
 			return;
@@ -87,9 +91,15 @@ class kcSettings {
 			if ( !is_array($group) || empty($group) )
 				return;
 
+			if ( !isset($plugin_settings) )
+				$plugin_settings = true;
+
 			$do = new kcThemeSettings;
 			$do->init( $group );
 
+		}
+		if ( isset($plugin_settings) && $plugin_settings ) {
+			$this->kcs_pages[] = 'kc-settings-';
 			require_once( "{$this->paths['inc']}/helper.php" );
 			require_once( "{$this->paths['inc']}/form.php" );
 		}
@@ -101,6 +111,7 @@ class kcSettings {
 		if ( !is_array($cfields) || empty( $cfields ) )
 			return;
 
+		$this->kcs_pages[] = 'post';
 		require_once( "{$this->paths['inc']}/post.php" );
 		require_once( "{$this->paths['inc']}/helper.php" );
 		require_once( "{$this->paths['inc']}/form.php" );
@@ -114,6 +125,7 @@ class kcSettings {
 		if ( !is_array($term_options) || empty($term_options) )
 			return;
 
+		$this->kcs_pages[] = 'edit-tags';
 		require_once( "{$this->paths['inc']}/term.php" );
 		require_once( "{$this->paths['inc']}/helper.php" );
 		require_once( "{$this->paths['inc']}/form.php" );
@@ -137,6 +149,7 @@ class kcSettings {
 		if ( !is_array($user_options) || empty($user_options) )
 			return;
 
+		$this->kcs_pages[] = 'profile';
 		require_once( "{$this->paths['inc']}/user.php" );
 		require_once( "{$this->paths['inc']}/helper.php" );
 		require_once( "{$this->paths['inc']}/form.php" );
@@ -152,44 +165,30 @@ class kcSettings {
 
 
 	function scripts_n_styles() {
-		global $plugin_page;
-		$kcspage = strpos($plugin_page, 'kc-settings-');
-		if ( $kcspage === false )
+		if ( empty($this->kcs_pages) )
 			return;
 
-		wp_register_script( $this->prefix, "{$this->paths['scripts']}/{$this->prefix}.js", array('jquery'), $this->version, true );
-		wp_register_script( 'modernizr', "{$this->paths['scripts']}/modernizr-1.7.min.js", false, '1.7', true );
-		wp_register_script( 'jquery-ui-datepicker', "{$this->paths['scripts']}/jquery.ui.datepicker.min.js", array('jquery-ui-core'), '1.8.11', true );
+		#/*
+		global $hook_suffix;
+		foreach ( $this->kcs_pages as $current_page ) {
+			$kcspage = strpos($hook_suffix, $current_page);
+			if ( $kcspage !== false ) {
+				wp_register_script( 'modernizr', "{$this->paths['scripts']}/modernizr-1.7.min.js", false, '1.7', true );
+				wp_register_script( 'jquery-ui-datepicker', "{$this->paths['scripts']}/jquery.ui.datepicker.min.js", array('jquery-ui-core'), '1.8.11', true );
+				wp_register_script( $this->prefix, "{$this->paths['scripts']}/{$this->prefix}.js", array('modernizr', 'jquery-ui-datepicker'), $this->version, true );
+				wp_print_scripts( $this->prefix );
 
-		wp_register_style( $this->prefix, "{$this->paths['styles']}/{$this->prefix}.css", false, $this->version );
+				wp_register_style( $this->prefix, "{$this->paths['styles']}/{$this->prefix}.css", false, $this->version );
+				wp_print_styles( $this->prefix );
 
-		add_action( 'admin_print_footer_scripts', array(&$this, 'scripts') );
-		add_action( 'admin_print_styles', array(&$this, 'styles') );
-	}
-
-
-	function scripts() {
-		global $kc_settings_scripts;
-		if ( !isset($kc_settings_scripts) || empty($kc_settings_scripts) )
-			return;
-
-		wp_print_scripts( $this->prefix );
-
-		# Datepicker
-		if ( isset($kc_settings_scripts['date']) && $kc_settings_scripts['date'] ) {
-			wp_print_scripts( array('modernizr', 'jquery-ui-datepicker') );
+				break;
+			}
 		}
-	}
-
-
-	function styles() {
-		wp_enqueue_style( $this->prefix );
 	}
 
 
 	function dev() {
 		echo '<pre>';
-
 
 		echo '</pre>';
 	}

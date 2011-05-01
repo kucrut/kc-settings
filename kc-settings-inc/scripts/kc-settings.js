@@ -9,7 +9,6 @@ jQuery(document).ready(function($) {
 
 		var $rows				= $(this).prev('div.kc-rows'),
 				$lastRow		= $rows.children().last();
-				console.log( $lastRow.index() );
 
 		if ( $('input', $lastRow).val() == '' && $('textarea', $lastRow).val() == '' )
 			return false;

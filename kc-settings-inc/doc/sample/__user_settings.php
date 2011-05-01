@@ -17,6 +17,12 @@ function my_user_options( $groups ) {
 						'desc'	=> 'Just a simple input field',		// option description (optional, default null)
 						'type'	=> 'input'							// option type, callback|input|textarea|checkbox|radio|select|multiselect (optional, default input)
 					),
+					'date' => array(
+						'id'		=> 'sample_input',			// option ID
+						'title'	=> 'Simple input',			// option title/label
+						'desc'	=> 'Just a simple input field',		// option description (optional, default null)
+						'type'	=> 'input'							// option type, callback|input|textarea|checkbox|radio|select|multiselect (optional, default input)
+					),
 					'anything' => array(
 						'id'		=> 'anything',
 						'title'	=> 'Textarea',
@@ -26,6 +32,7 @@ function my_user_options( $groups ) {
 					'date' => array(
 						'id'		=> 'date',
 						'title'	=> 'Date input',
+						'desc'	=> 'Birtdate?',		// option description (optional, default null)
 						'type'	=> 'date'
 					)
 				)
