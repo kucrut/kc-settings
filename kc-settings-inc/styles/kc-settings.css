@@ -1,16 +1,51 @@
+.kcs-textarea,
+#wpcontent .kcs-rows textarea {
+    width:21.25em;
+    min-height:5em;
+    max-height:10em;
+    resize:vertical}
+
 /* Multiinput row */
-.kcs-multiinput-row {
+.kcs-rows .row {
     overflow:hidden;
-    padding:2px 0}
-.kcs-multiinput-row input {
-    float:left;
-    width:20%}
-#profilepage .kcs-multiinput-row textarea {
-    float:right;
-    width:77%}
-.kcs-multiinput-row .kc-rem {
-    float:left;
-    margin-top:7px}
+    position:relative;
+    width:350px;
+    line-height:1;
+    padding:5px;
+    -webkit-border-radius:3px;
+    -khtml-border-radius:3px;
+    -moz-border-radius:3px;
+    border-radius:3px}
+.kcs-rows .row li {margin-bottom:.25em}
+#wpbody-content .kcs-rows label {
+    display:inline-block;
+    width:50px;
+    vertical-align:top}
+#wpbody-content .kcs-rows input[type="text"],
+.kcs-rows input,
+#wpcontent .kcs-rows textarea {
+    width:270px;
+    margin:0}
+.kcs-rows .actions {
+    width:16px;
+    padding-top:4px;
+    position:absolute;
+    right:0;
+    top:0}
+.kcs-rows .actions li {margin-bottom:3px;line-height:1}
+.kcs-rows .actions a {
+    background:url(images/actions.png) no-repeat;
+    display:inline-block;
+    height:16px;
+    width:16px}
+.kcs-rows .actions .add {background-position:0 -80px}
+.kcs-rows .actions .del {background-position:0 -48px}
+.kcs-rows .actions .up {background-position:0 -16px}
+.kcs-rows .actions .clear {background-position:0 -64px}
+.kcs-rows .actions span {
+    position: absolute !important;
+    clip: rect(1px 1px 1px 1px);
+    clip: rect(1px, 1px, 1px, 1px)}
 
 #wpcontent .kcs-multiselect {
     height:7.5em;

@@ -16,7 +16,7 @@ class kcThemeSettings {
 
 	# Add settings menus and register the options
 	function init( $group ) {
-		if ( !is_array($group['options']) || empty($group['options']) )
+		if ( !isset($group['options']) || !is_array($group['options']) || empty($group['options']) )
 			return;
 
 		if ( !isset($group['menu_title']) || empty($group['menu_title']) ) {
@@ -138,6 +138,8 @@ class kcThemeSettings {
 		# apply validation/sanitation filter(s) on the new values
 		# filter by prefix
 		$user_val = apply_filters( "kcv_settings_{$prefix}", $user_val );
+		if ( empty($user_val) )
+			return apply_filters( "kc_psv", $user_val );
 
 		$nu_val = array();
 		foreach ( $user_val as $sk => $sv ) {
