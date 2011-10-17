@@ -14,6 +14,9 @@ class kcThemeSettings {
 		'index.php'							// Dashboard
 	);
 
+
+	var $setting_page;
+
 	# Add settings menus and register the options
 	function init( $group ) {
 		if ( !isset($group['options']) || !is_array($group['options']) || empty($group['options']) )
@@ -56,10 +59,10 @@ class kcThemeSettings {
 
 		if ( isset($this->parent) && $this->parent === true ) {
 			add_menu_page( $page_title, $parent_title, 'manage_options', "kc-settings-{$prefix}" );
-			add_submenu_page( "kc-settings-{$prefix}", $page_title, $menu_title, 'manage_options', "kc-settings-{$prefix}", array($this, 'settings_page') );
+			$this->setting_page = add_submenu_page( "kc-settings-{$prefix}", $page_title, $menu_title, 'manage_options', "kc-settings-{$prefix}", array($this, 'settings_page') );
 		}
 		else {
-			add_submenu_page( $menu_location, $page_title, $menu_title, 'manage_options', "kc-settings-{$prefix}", array($this, 'settings_page') );
+			$this->setting_page = add_submenu_page( $menu_location, $page_title, $menu_title, 'manage_options', "kc-settings-{$prefix}", array($this, 'settings_page') );
 		}
 	}
 
