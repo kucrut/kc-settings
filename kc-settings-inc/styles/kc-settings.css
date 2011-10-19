@@ -52,6 +52,23 @@
     padding-right:.5em}
 .kcs-date {width:auto}
 
+
+/* Filelist */
+.kcs-file .mid {vertical-align:middle}
+.kcs-file li a {
+  cursor:pointer;
+  display:inline-block;
+  height:16px;
+  width:16px;
+  background:url(images/actions.png) no-repeat 0 -48px}
+.kcs-file li a span {
+  position: absolute !important;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px)}
+input.kcs-files {margin-right:.5em}
+
+
+
 /*
  * jQuery UI CSS Framework 1.8.11
  *

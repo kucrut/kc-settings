@@ -367,4 +367,22 @@ function kc_create_code( $arr ) {
 }
 
 
+/**
+ * Sort query order by 'post__in'
+ *
+ * @credit Jake Goldman (Oomph, Inc)
+ * @links http://www.thinkoomph.com
+ * @links http://wordpress.org/extend/plugins/sort-query-by-post-in/
+ */
+function kcs_sort_query_by_post_in( $sortby, $query ) {
+	if ( isset($query->query['post__in']) && !empty($query->query['post__in']) && isset($query->query['orderby']) && $query->query['orderby'] == 'post__in' )
+		$sortby = "find_in_set(ID, '" . implode( ',', $query->query['post__in'] ) . "')";
+
+	return $sortby;
+}
+
+
+
+
+
 ?>

@@ -28,13 +28,13 @@ class kcSettings {
 
 	function paths() {
 		$paths = array();
-		$inc_prefix = "/{$this->prefix}-inc";
+		$inc_prefix = "/kc-settings-inc";
 		$fname = basename( __FILE__ );
 
 		if ( file_exists(WPMU_PLUGIN_DIR . "/{$fname}") )
 			$file = WPMU_PLUGIN_DIR . "/{$fname}";
 		else
-			$file = WP_PLUGIN_DIR . "/{$this->prefix}/{$fname}";
+			$file = WP_PLUGIN_DIR . "/kc-settings/{$fname}";
 
 		$paths['file']		= $file;
 		$paths['inc']			= dirname( $file ) . $inc_prefix;
@@ -51,13 +51,13 @@ class kcSettings {
 		require_once( "{$this->paths['inc']}/helper.php" );
 		$this->kcsb = kcsb_settings_bootsrap();
 
+		add_action( 'init', array(&$this, 'init'), 11 );
 		if ( is_admin() ) {
-			add_action( 'init', array(&$this, 'init'), 11 );
 			add_action( 'init', array(&$this, 'builder'), 20 );
 		}
 		add_action( 'admin_init', array(&$this, 'scripts_n_styles_register') );
 		add_action( 'admin_head', array(&$this, 'scripts_n_styles_print') );
-
+		add_action( 'admin_head-media-upload-popup', array(&$this, 'scripts_n_styles_uploader') );
 
 		# Development
 		//add_action( 'admin_footer', array(&$this, 'dev') );
@@ -73,9 +73,9 @@ class kcSettings {
 	function init() {
 		# i18n
 		$locale = get_locale();
-		$mo_file = "{$this->paths['inc']}/languages/{$this->prefix}-{$locale}.mo";
+		$mo_file = "{$this->paths['inc']}/languages/kc-settings-{$locale}.mo";
 		if ( is_readable($mo_file) )
-			load_textdomain( $this->prefix, $mo_file );
+			load_textdomain( 'kc-settings', $mo_file );
 
 		require_once( "{$this->paths['inc']}/metadata.php" );
 
@@ -157,8 +157,10 @@ class kcSettings {
 		# Common
 		wp_register_script( 'modernizr', "{$this->paths['scripts']}/modernizr.2.0.6.min.js", false, '2.0.6', true );
 		wp_register_script( 'kc-rowclone', "{$this->paths['scripts']}/kc-rowclone.js", array('jquery'), $this->version, true );
-		wp_register_script( $this->prefix, "{$this->paths['scripts']}/{$this->prefix}.js", array('modernizr', 'jquery-ui-datepicker', 'kc-rowclone'), $this->version, true );
-		wp_register_style( $this->prefix, "{$this->paths['styles']}/{$this->prefix}.css", false, $this->version );
+		wp_register_script( 'kc-settings', "{$this->paths['scripts']}/kc-settings.js", array('modernizr', 'jquery-ui-datepicker', 'kc-rowclone', 'media-upload', 'thickbox'), $this->version, true );
+		wp_register_style( 'kc-settings', "{$this->paths['styles']}/kc-settings.css", array('thickbox'), $this->version );
+
+		wp_register_script( "kc-settings-upload", "{$this->paths['scripts']}/upload.js", array('jquery'), $this->version );
 
 		# Builder script & style
 		wp_register_script( 'kcsb', "{$this->paths['scripts']}/kcsb.js", array('jquery'), $this->version, true );
@@ -174,16 +176,22 @@ class kcSettings {
 		foreach ( $this->kcs_pages as $current_page ) {
 			$kcspage = strpos($hook_suffix, $current_page);
 			if ( $kcspage !== false ) {
-				wp_enqueue_script('kc-settings');
-				wp_print_styles('kc-settings');
+				wp_enqueue_script( 'kc-settings' );
+				wp_print_styles( 'kc-settings' );
 				break;
 			}
 		}
 	}
 
+
+	function scripts_n_styles_uploader() {
+		wp_enqueue_script( "kc-settings-upload" );
+		wp_print_styles( 'kc-settings' );
+	}
+
+
 	function builder() {
 		$properties = array(
-			'prefix'		=> $this->prefix,
 			'version'		=> $this->version,
 			'paths'			=> $this->paths,
 			'settings'	=> $this->kcsb
