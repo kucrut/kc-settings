@@ -431,11 +431,11 @@ class kcsBuilder {
 											if ( $o !== false ) {
 												if ( !empty($o) ) {
 									?>
-									<span class="trash"><a href="<?php echo wp_nonce_url( admin_url("{$url_base}empty"), "__kcsb__{$sID}" ) ?>"><?php _e('Empty', 'kc-settings') ?></a> | </span>
+									<span class="trash"><a title="<?php _e('Reset options', 'kc-settings') ?>" href="<?php echo wp_nonce_url( admin_url("{$url_base}empty"), "__kcsb__{$sID}" ) ?>"><?php _e('Empty', 'kc-settings') ?></a> | </span>
 									<?php } ?>
-									<span class="trash"><a href="<?php echo wp_nonce_url( admin_url("{$url_base}purge"), "__kcsb__{$sID}" ) ?>"><?php _e('Purge', 'kc-settings') ?></a> | </span>
+									<span class="trash"><a title="<?php _e('Remove all sections and fields', 'kc-settings') ?>" href="<?php echo wp_nonce_url( admin_url("{$url_base}purge"), "__kcsb__{$sID}" ) ?>"><?php _e('Purge', 'kc-settings') ?></a> | </span>
 									<?php } } ?>
-									<span class="trash"><a href="<?php echo wp_nonce_url( admin_url("{$url_base}delete"), "__kcsb__{$sID}" ) ?>" title="<?php esc_attr_e('Delete') ?>" class="submitdelete"><?php _e('Delete') ?></a></span>
+									<span class="trash"><a title="<?php _e('Remove this setting', 'kc-settings') ?>" href="<?php echo wp_nonce_url( admin_url("{$url_base}delete"), "__kcsb__{$sID}" ) ?>" title="<?php esc_attr_e('Delete') ?>" class="submitdelete"><?php _e('Delete') ?></a></span>
 								</div>
 							</td>
 							<td><?php echo $this->kcsb_options['type'][$sVal['type']]['label'] ?></td>
