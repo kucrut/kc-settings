@@ -334,7 +334,7 @@ class kcsBuilder {
 
 	function style() {
 		wp_enqueue_style( 'kcsb' );
-	};
+	}
 
 	function help() {
 		$help  = "<h3>".__('Creating a setting', 'kc-settings')."</h3>\n";
