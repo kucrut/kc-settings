@@ -204,7 +204,6 @@ class kcSettings {
 
 	function scripts_n_styles_uploader() {
 		if ( isset($_REQUEST['kcsf']) && $_REQUEST['kcsf'] ) {
-			//$this->js_globals();
 			wp_enqueue_script( "kc-settings-upload" );
 			wp_print_styles( 'kc-settings' );
 		}
