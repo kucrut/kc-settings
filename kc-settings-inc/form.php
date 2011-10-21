@@ -354,10 +354,14 @@ function kcs_filelist_item( $name, $type, $pid = '', $fid = '', $title = '', $ch
 	if ( $hidden )
 		$output .= " class='hidden'";
 	$output .= ">\n";
-	// Image
+	// Image thumb or mime type icon
 	if ( $fid && wp_attachment_is_image($fid) ) {
-		$output .= wp_get_attachment_image($fid, array(50, 50));
+		$icon = wp_get_attachment_image_src($fid, array(46, 46));
+		$icon = $icon[0];
+	} else {
+		$icon = wp_mime_type_icon($fid);
 	}
+	$output .= "\t\t<img src='{$icon}' alt=''/>";
 	$output .= "\t\t<a class='del mid' title='".__('Remove from collection', 'kc-settings')."'><span>".__('Remove', 'kc-settings')."</span></a>\n";
 	$output .= "\t\t<label>";
 	$output .= "<input class='mid' type='{$type}' name='{$name}[selected][]' value='{$fid}' {$checked}/> ";
