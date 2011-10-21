@@ -163,7 +163,7 @@ class kcSettings {
 		foreach ( $this->kcs_pages as $current_page ) {
 			$kcspage = strpos($hook_suffix, $current_page);
 			if ( $kcspage !== false ) {
-				wp_register_script( 'modernizr', "{$this->paths['scripts']}/modernizr-1.7.min.js", false, '1.7', true );
+				wp_register_script( 'modernizr', "{$this->paths['scripts']}/modernizr.2.0.6.min.js", false, '2.0.6', true );
 				wp_register_script( 'jquery-ui-datepicker', "{$this->paths['scripts']}/jquery.ui.datepicker.min.js", array('jquery-ui-core'), '1.8.11', true );
 				wp_register_script( $this->prefix, "{$this->paths['scripts']}/{$this->prefix}.js", array('modernizr', 'jquery-ui-datepicker', 'kc-rowclone'), $this->version, true );
 				wp_print_scripts( $this->prefix );
