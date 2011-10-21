@@ -203,9 +203,7 @@ class kcsBuilder {
 
 		// Script n style
 		add_action( "admin_print_scripts-{$this->kcsb_page}", array(&$this, 'script'), 0);
-		add_action( "admin_print_styles-{$this->kcsb_page}", function() {
-			wp_enqueue_style('kcsb');
-		}, 0);
+		add_action( "admin_print_styles-{$this->kcsb_page}", array(&$this, 'style') );
 	}
 
 
@@ -333,6 +331,10 @@ class kcsBuilder {
 		wp_enqueue_script( 'kcsb' );
 	}
 
+
+	function style() {
+		wp_enqueue_style( 'kcsb' );
+	};
 
 	function help() {
 		$help  = "<h3>".__('Creating a setting', 'kc-settings')."</h3>\n";
