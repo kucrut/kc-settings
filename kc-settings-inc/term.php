@@ -145,6 +145,4 @@ class kcTermSettings {
 	}
 }
 
-
-
 ?>

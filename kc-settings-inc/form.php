@@ -89,7 +89,7 @@ function kc_settings_field( $args ) {
 	//$r = wp_parse_args( $args, $defaults );
 	extract($args, EXTR_OVERWRITE);
 
-	$input_types = array('input', 'textarea', 'checkbox', 'radio', 'select', 'multiselect', 'multiinput', 'date', 'special');
+	$input_types = array('input', 'textarea', 'checkbox', 'radio', 'select', 'multiselect', 'multiinput', 'date', 'file', 'special');
 	$type = ( isset($field['type']) && in_array($field['type'], $input_types) ) ? $field['type'] : 'input' ;
 	$br = ( isset($tabled) && $tabled ) ? '<br />' : null;
 
@@ -118,8 +118,9 @@ function kc_settings_field( $args ) {
 		break;
 	}
 
-	if ( in_array($type, array('multiselect')) )
+	if ( $type == 'multiselect' ) {
 		$name .= '[]';
+	}
 	$name_id = "name='{$name}' id='{$id}'";
 
 	$desc_tag = ( isset($desc_tag) ) ? $desc_tag : 'p';
@@ -134,21 +135,84 @@ function kc_settings_field( $args ) {
 		$output .= $desc;
 	}
 
-	# Input
+	# File
+	elseif ( $type == 'file' ) {
+		# Set mode
+		if ( !isset($field['mode']) || !in_array($field['mode'], array('radio', 'checkbox')) ) {
+			$field['mode'] = 'radio';
+		}
+
+		# Post ID
+		$p__id = ( isset($object_id) && $object_id != '' ) ? $object_id : '';
+
+		# Set default value
+		if ( empty($db_value) ) {
+			$value = array(
+				'files' => array(),
+				'selected' => array()
+			);
+		} else {
+			$value = $db_value;
+			if ( !isset($value['files']) || !is_array($value['files']) )
+				$value['files'] = array();
+			if ( !isset($value['selected']) || !is_array($value['selected']) )
+				$value['selected'] = array();
+		}
+
+		$output .= "<div id='{$id}' class='kcs-file'>";
+
+		# List files
+		$output .= "\t<ul>\n";
+
+		if ( !empty($value['files']) ) {
+
+			$q_args = array(
+				'post__in' => $value['files'],
+				'post_type' => 'attachment',
+				'post_status' => 'inherit',
+				'orderby' => 'post__in'
+			);
+
+			add_filter( 'posts_orderby', 'kcs_sort_query_by_post_in', 10, 2 );
+
+			$wp_query = new WP_Query($q_args);
+			if ( $wp_query->have_posts() ) {
+				while ( $wp_query->have_posts() ) {
+					$wp_query->the_post();
+					$f__id = get_the_ID();
+					$output .= kcs_filelist_item( $name, $field['mode'], $p__id, $f__id, get_the_title(), in_array($f__id, $value['selected']), false );
+				}
+			}
+
+			$wp_query = null;
+			wp_reset_query();
+			remove_filter( 'posts_orderby', 'kcs_sort_query_by_post_in' );
+		} else {
+			$output .= kcs_filelist_item( $name, $field['mode'] );
+		}
+
+		$output .= "\t</ul>\n";
+
+		$output .= "<a href='media-upload.php?post_id={$p__id}&amp;TB_iframe=1' class='button kcsf-upload' title='".__('Add files to collection', 'kc-settings')."'>".__('Add files', 'kc-settings')."</a>\n";
+		$output .= "<input type='hidden' class='kcsf-holder'>\n";
+		$output .= "</div>\n";
+	}
+
+	# Single line text input
 	elseif ( $type == 'input' ) {
 		$value = ( !empty($db_value) ) ? esc_html( stripslashes($db_value) ) : '';
 		$attr = ( isset($field['attr']) ) ? $field['attr'] : '';
 		$output .= "\n\t<input type='text' {$name_id} value='{$value}' class='kcs-{$type}' {$attr}/> {$desc}\n";
 	}
 
-	# Input
+	# Date
 	elseif ( $type == 'date' ) {
 		$value = ( !empty($db_value) ) ? esc_html( stripslashes($db_value) ) : '';
 		$attr = ( isset($field['attr']) ) ? $field['attr'] : '';
 		$output .= "\n\t<input type='date' {$name_id} value='{$value}' class='widefat kcs-{$type}' {$attr}/> {$desc}\n";
 	}
 
-	# Textarea
+	# Paragraph
 	elseif ( $type == 'textarea' ) {
 		$value = ( !empty($db_value) ) ? esc_html( stripslashes($db_value) ) : '';
 		$attr = ( isset($field['attr']) ) ? $field['attr'] : 'cols="40" rows="4"';
@@ -277,5 +341,24 @@ function kc_pair_option_row( $name, $db_value, $type = 'multiinput' ) {
 	return $output;
 }
 
+
+function kcs_filelist_item( $name, $type, $pid = '', $fid = '', $title = '', $checked = false, $hidden = true ) {
+	if ( $checked ) {
+		$checked = "checked='checked' ";
+	} else {
+		$checked = '';
+	}
+
+	$output  = "\t<li";
+	if ( $hidden )
+		$output .= " class='hidden'";
+	$output .= ">\n";
+	$output .= "\t\t<a class='del mid' title='".__('Remove from collection', 'kc-settings')."'><span>".__('Remove', 'kc-settings')."</span></a>\n";
+	$output .= "\t\t<label><input class='mid' type='{$type}' name='{$name}[selected][]' value='{$fid}' {$checked}/> <span class='title'>{$title}</span></label>\n";
+	$output .= "\t\t<input type='hidden' name='{$name}[files][]' value='{$fid}'/> ";
+	$output .= "\t</li>\n";
+
+	return $output;
+}
 
 ?>

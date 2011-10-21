@@ -119,6 +119,10 @@ class kcsBuilder {
 					'label'		=> 'Multiinput'
 				),
 				array(
+					'value'		=> 'file',
+					'label'		=> 'File'
+				),
+				array(
 					'value'		=> 'special',
 					'label'		=> __('Special', 'kc-settings')
 				)
@@ -174,6 +178,18 @@ class kcsBuilder {
 				)
 			);
 		}
+
+		$options['filemode'] = array(
+			array(
+				'value' => 'radio',
+				'label' => __('Single', 'kc-settings')
+			),
+			array(
+				'value' => 'checkbox',
+				'label' => __('Multiple', 'kc-settings'),
+				'default' => true
+			)
+		);
 
 		$this->kcsb_options = $options;
 	}
@@ -564,6 +580,11 @@ class kcsBuilder {
 													if ( !isset($f_val['options']) || !is_array($f_val['options']) )
 														$f_val['options'] = array( array( 'key' => '', 'label' => '' ) );
 												?>
+												<li class="idep_type file">
+													<?php if ( !isset($f_val['mode']) ) $f_val['mode'] = ''; ?>
+													<label class="kcsb-ml"><?php _e('Mode', 'kcsb') ?></label>
+													<?php kcs_select( $this->kcsb_options['filemode'], $f_val['mode'], array('name' => "{$f_name}[mode]", 'class' => 'kcsb-mi') ); ?>
+												</li>
 												<li class="idep_type radio checkbox select multiselect">
 													<label class="kcsb-ml"><?php _e('Options', 'kcsb') ?></label>
 													<ul class="kcsb-mi kcsb-options kc-rows">
