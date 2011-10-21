@@ -323,7 +323,7 @@ class kcsBuilder {
 		$help .= "<h4>".__('All Types', 'kc-settings')."</h4>\n";
 		$help .= "<ul>\n";
 		$help .= "\t<li>".__('All fields are required, unless the label is green.', 'kc-settings')."</li>\n";
-		$help .= "\t<li>".__('Some fields depend on other field, they will be shown when the dependency is selected/checked.', 'kc-settings')."</li>\n";
+		$help .= "\t<li>".__('Some fields depend on other field(s), they will be shown when the dependency is selected/checked.', 'kc-settings')."</li>\n";
 		$help .= "\t<li>".__('Some fields (eg. ID, Prefix) can only be filled with alphanumerics, dashes and underscores, must be unique, and cannot begin with dashes or underscores. ', 'kc-settings')."</li>\n";
 		$help .= "</ul>\n";
 		$help .= "<h3>".__('Links', 'kc-settings')."</h3>\n";
@@ -351,7 +351,7 @@ class kcsBuilder {
 						$values = wp_parse_args( $this->properties['settings']['_raw'][$id], $values );
 					}
 					else {
-						add_settings_error('general', 'warning', sprintf( __("There's no setting with ID &#8220;%s&#8221; Are you cheating? ;)", 'kc-settings'), $id) );
+						add_settings_error('general', 'warning', sprintf( __("There's no setting with ID %s. Are you cheating? ;)", 'kc-settings'), "&#8220;{$id}&#8221;") );
 					}
 				}
 				else {
@@ -360,7 +360,7 @@ class kcsBuilder {
 						$mode		= 'edit';
 						$values = wp_parse_args( $er, $values );
 						delete_transient( 'kcsb' );
-						add_settings_error('general', 'not_saved', __('Settings NOT saved! Please fill all the required fields.', 'kc-settings') );
+						add_settings_error('general', 'not_saved', __('Settings were NOT saved! Please fill all the required fields.', 'kc-settings') );
 						set_transient('settings_errors', get_settings_errors(), 30);
 					}
 				}
@@ -434,7 +434,7 @@ class kcsBuilder {
 										<em class="description"><?php _e("Don't forget to change the setting properties after cloning!", 'kc-settings') ?></em>
 									</div>
 								</div>
-								<p class="hide-if-js"><em><?php _e('Please enable javascript to use the tools', 'kc-settings') ?></em></p>
+								<p class="hide-if-js"><em><?php _e('Please enable javascript to use the tool', 'kc-settings') ?></em></p>
 							</td>
 						</tr>
 						<?php } } else { ?>
@@ -450,7 +450,7 @@ class kcsBuilder {
 			<p class="hide-if-js"><?php _e('To create a setting, please enable javascript in your browser and reload this page.', 'kc-settings') ?></p>
 			<div id="kcsb"<?php echo $form_class ?>>
 				<h3><?php _e('KC Settings Builder', 'kc-settings') ?></h3>
-				<p class="description"><?php _e('Please click the Help button on the top-right of the screen to read the guide before creating a setting.', 'kc-settings')?></p>
+				<p class="description"><?php _e('Please click the Help button to read the guide before creating a setting.', 'kc-settings')?></p>
 
 				<form class="kcsb" action="options.php" method="post">
 					<?php settings_fields('kcsb') ?>
