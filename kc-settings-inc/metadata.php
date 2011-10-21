@@ -79,10 +79,11 @@ function kc_update_meta( $meta_type = 'post', $object_type_name, $object_id, $se
 
 	#$db_val = ( isset($_POST['action']) && $_POST['action'] == $action ) ? get_metadata( $meta_type, $object_id, $meta_key, true ) : null;
 	$db_val = get_metadata( $meta_type, $object_id, $meta_key, true );
+	$nu_val = '';
 
 	# Get the new meta value from user
-	if ( $attachment ) {
-		$nu_val = array_key_exists($field['id'], $_POST['attachments'][$object_id]) ? $_POST['attachments'][$object_id][$field['id']] : '';
+	if ( $attachment && isset($_POST['attachments'][$object_id][$field['id']]) ) {
+		$nu_val = $_POST['attachments'][$object_id][$field['id']];
 	}
 	else {
 		$nu_val = $_POST["kc-{$meta_type}meta"][$section['id']][$field['id']];
