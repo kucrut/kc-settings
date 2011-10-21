@@ -1,56 +1,18 @@
 <?php
 
-/**
- * Save post custom fields values
- *
- * @param int $post_id
- *
- */
-
-function kc_save_cfields( $post_id ) {
-	if ( isset($_POST['action']) && $_POST['action'] == 'inline-save' )
-		return $post_id;
-
-	$cfields = kc_meta( 'post' );
-
-	if ( isset($_POST['post_type']) )
-		$post_type = $_POST['post_type'];
-	$post_cfields = ( isset($post_type) ) ? $cfields[$post_type] : null;
-
-	# empty options array? abort!
-	if ( empty($post_cfields) )
-		return $post_id;
-
-	$post_type_obj = get_post_type_object( $post_type );
-	if ( ( wp_verify_nonce($_POST["{$post_type}_kc_meta_box_nonce"], '___kc_meta_box_nonce___') && current_user_can($post_type_obj->cap->edit_post) ) !== true )
-		return $post_id;
-
-	# Loop through all of post meta box arguments.
-	foreach ( $post_cfields as $section ) {
-		# no fields? abort!
-		if ( !isset($section['fields']) || empty($section['fields']) )
-			return $post_id;
-
-		foreach ( $section['fields'] as $field ) {
-			kc_update_meta( 'post', $post_type, $post_id, $section, $field );
-		}
-	}
-}
-
-
 class kcPostSettings {
 
-	function init( $cfields ) {
-		$this->cfields = $cfields;
+	function __construct( $metadata ) {
+		$this->metadata = $metadata;
 
 		# Create metabox(es)
-		add_action( 'admin_menu', array($this, 'create_meta_box') );
+		add_action( 'admin_menu', array(&$this, 'create_meta_box') );
 		# Save the custom fields values
-		add_action( 'save_post', 'kc_save_cfields' );
+		add_action( 'save_post', array(&$this, 'save') );
 
 		# Attachment
-		if ( isset($this->cfields['attachment']) && is_array($this->cfields['attachment']) && !empty($this->cfields['attachment']) )
-			$this->attachment_init( $this->cfields['attachment'] );
+		if ( isset($this->metadata['attachment']) && is_array($this->metadata['attachment']) && !empty($this->metadata['attachment']) )
+			$this->attachment_init( $this->metadata['attachment'] );
 	}
 
 
@@ -58,7 +20,7 @@ class kcPostSettings {
 	function create_meta_box() {
 
 		# loop trough the post options array
-		foreach ( $this->cfields as $post_type => $sections ) {
+		foreach ( $this->metadata as $post_type => $sections ) {
 			$post_type_obj = get_post_type_object( $post_type );
 			# skip if no sections found
 			if ( !is_array($sections) || empty($sections) )
@@ -79,7 +41,7 @@ class kcPostSettings {
 
 				# add metabox
 				$title = ( !isset($section['title']) ) ? sprintf( __('%s Settings', 'kc-settings'), $post_type_obj->label ) : $section['title'];
-				add_meta_box( "kc-metabox-{$post_type}-{$section['id']}", $title, array($this, 'fill_meta_box'), $post_type, 'normal', $priority, $section['fields'] );
+				add_meta_box( "kc-metabox-{$post_type}-{$section['id']}", $title, array(&$this, 'fill_meta_box'), $post_type, 'normal', $priority, $section['fields'] );
 			}
 		}
 	}
@@ -113,6 +75,42 @@ class kcPostSettings {
 		$output .= "</table>\n";
 
 		echo $output;
+	}
+
+
+	/**
+	 * Save post custom fields values
+	 *
+	 * @param int $post_id
+	 *
+	 */
+
+	function save( $post_id ) {
+		if ( isset($_POST['action']) && $_POST['action'] == 'inline-save' )
+			return $post_id;
+
+		if ( isset($_POST['post_type']) )
+			$post_type = $_POST['post_type'];
+		$post_metadata = ( isset($post_type) ) ? $this->metadata[$post_type] : null;
+
+		# empty options array? abort!
+		if ( empty($post_metadata) )
+			return $post_id;
+
+		$post_type_obj = get_post_type_object( $post_type );
+		if ( ( wp_verify_nonce($_POST["{$post_type}_kc_meta_box_nonce"], '___kc_meta_box_nonce___') && current_user_can($post_type_obj->cap->edit_post) ) !== true )
+			return $post_id;
+
+		# Loop through all of post meta box arguments.
+		foreach ( $post_metadata as $section ) {
+			# no fields? abort!
+			if ( !isset($section['fields']) || empty($section['fields']) )
+				return $post_id;
+
+			foreach ( $section['fields'] as $field ) {
+				kc_update_meta( 'post', $post_type, $post_id, $section, $field );
+			}
+		}
 	}
 
 
@@ -174,8 +172,7 @@ class kcPostSettings {
 	function attachment_fields_to_save( $post, $attachment ) {
 		foreach ( $this->attachment_sections as $section ) {
 			foreach ( $section['fields'] as $field ) {
-				if ( isset($attachment[$field['id']]) )
-					kc_update_meta( 'post', 'attachment', $post['ID'], $section, $field, true );
+				kc_update_meta( 'post', 'attachment', $post['ID'], $section, $field, true );
 			}
 		}
 

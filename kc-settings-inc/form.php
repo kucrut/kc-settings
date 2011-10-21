@@ -152,7 +152,7 @@ function kc_settings_field( $args ) {
 	elseif ( $type == 'textarea' ) {
 		$value = ( !empty($db_value) ) ? esc_html( stripslashes($db_value) ) : '';
 		$attr = ( isset($field['attr']) ) ? $field['attr'] : 'cols="40" rows="4"';
-		$output .= "\n\t<textarea {$name_id} class='widefat kcs-{$type}' {$attr}'>{$value}</textarea> {$desc}\n";
+		$output .= "\n\t<textarea {$name_id} class='kcs-{$type}' {$attr}>{$value}</textarea> {$desc}\n";
 	}
 
 	# Checkboxes, Radioboxes, Dropdown options
@@ -235,40 +235,45 @@ function kc_settings_field( $args ) {
  */
 
 function kc_pair_option_row( $name, $db_value, $type = 'multiinput' ) {
+	preg_match_all('/\[(\w+)\]/', $name, $rel);
+	$rel = end( end($rel) );
 	$output = '';
 	$rownum = 0;
+	#print_r( $db_value );
+	if ( !is_array($db_value) || empty($db_value) )
+		$db_value = array(
+			array('key' => '', 'value' => '')
+		);
 
-	$output .= "\n\t<div class='kc-rows'>\n";
+	$output .= "\n\t<ul class='kcs-rows'>\n";
 
 	# If there's an array already, print it
 	if ( is_array($db_value) && !empty($db_value) ) {
 		foreach ( $db_value as $k => $v ) {
-			$p_lbl = ( isset($v['key']) ) ? esc_html( stripslashes($v['key']) ) : '';
+			$p_lbl = ( isset($v['key']) ) ? esc_attr( $v['key'] ) : '';
 			$p_val = ( isset($v['value']) ) ? esc_html( stripslashes($v['value']) ) : '';
-			$output .= "\t\t<div class='kcs-multiinput-row' title='Drag it'>\n";
+			$output .= "\t\t<li class='row'>\n";
+			$output .= "\t\t\t<ul>\n";
 			# label/key
-			$output .= "\t\t\t<input type='text' name='{$name}[{$k}][key]' value='{$p_lbl}' />&nbsp;\n";
+			$output .= "\t\t\t<li><label>".__('Key', 'kc-settings')."</label>&nbsp;<input type='text' name='{$name}[{$k}][key]' value='{$p_lbl}' /></li>\n";
 			# value
-			$output .= "\t\t\t<textarea name='{$name}[{$k}][value]' cols='100' rows='3'>{$p_val}</textarea>\n";
+			$output .= "\t\t\t<li><label>".__('Value', 'kc-settings')."</label>&nbsp;<textarea name='{$name}[{$k}][value]' cols='100' rows='3'>{$p_val}</textarea></li>\n";
+			$output .= "\t\t\t</ul>\n";
 			# remove button
-			$output .= "\t\t\t<a class='kc-rem button'>".__('Delete', 'kc-settings')."</a>";
-			$output .= "\t\t</div>\n";
+			$output .= "\t\t\t<ul class='actions'>\n";
+			$output .= "\t\t\t\t<li><a href='#' class='add' rel='{$rel}' title='".__('Add new row', 'kc-settings')."'><span>".__('Add', 'kc-settings')."</span></li></a>";
+			$output .= "\t\t\t\t<li><a href='#' class='del' rel='{$rel}' title='".__('Remove this row', 'kc-settings')."'><span>".__('Remove', 'kc-settings')."</span></li></a>";
+			$output .= "\t\t\t\t<li><a href='#' class='move up' rel='{$rel}' title='".__('Move this row up', 'kc-settings')."'><span>".__('Up', 'kc-settings')."</span></li></a>";
+			$output .= "\t\t\t\t<li><a href='#' class='move down' rel='{$rel}' title='".__('Move this row down', 'kc-settings')."'><span>".__('Down', 'kc-settings')."</span></a></li>";
+			$output .= "\t\t\t\t<li><a href='#' class='clear' rel='{$rel}' title='".__('Clear', 'kc-settings')."'><span>".__('Clear', 'kc-settings')."</span></a></li>";
+			$output .= "\t\t\t</ul>\n";
+			$output .= "\t\t</li>\n";
 
 			++$rownum;
 		}
 	}
 
-	# empty row
-	$output .= "\t\t<div class='kcs-multiinput-row {$name}'>\n";
-	$output .= "\t\t\t<input type='text' name='{$name}[{$rownum}][key]' value='' />&nbsp;\n";
-	$output .= "\t\t\t<textarea name='{$name}[{$rownum}][value]' cols='100' rows='3'></textarea>\n";
-	$output .= "\t\t</div>\n";
-
-	$output .= "\t</div>\n";
-
-	# add button
-	$output .= "\t<a class='kc-add button'>".__('Add new row', 'kc-settings')."</a>";
-
+	$output .= "\t</ul>\n";
 	return $output;
 }
 

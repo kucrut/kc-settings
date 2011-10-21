@@ -10,8 +10,8 @@
  *
  */
 
-function kc_meta( $meta_type ) {
-	$old = apply_filters( "kc_{$meta_type}_settings", array() );
+function kc_meta( $meta_type, $others = array() ) {
+	$old = apply_filters( "kc_{$meta_type}_settings", $others );
 	if ( !is_array($old) || empty($old) )
 		return;
 
@@ -81,10 +81,12 @@ function kc_update_meta( $meta_type = 'post', $object_type_name, $object_id, $se
 	$db_val = get_metadata( $meta_type, $object_id, $meta_key, true );
 
 	# Get the new meta value from user
-	if ( $attachment )
-		$nu_val = $_POST['attachments'][$object_id][$field['id']];
-	else
+	if ( $attachment ) {
+		$nu_val = array_key_exists($field['id'], $_POST['attachments'][$object_id]) ? $_POST['attachments'][$object_id][$field['id']] : '';
+	}
+	else {
 		$nu_val = $_POST["kc-{$meta_type}meta"][$section['id']][$field['id']];
+	}
 
 	# default sanitation
 	if ( $field['type'] == 'multiinput' ) {

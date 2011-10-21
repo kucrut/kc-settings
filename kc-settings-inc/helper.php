@@ -181,4 +181,190 @@ function kcs_check_roles( $roles = array() ) {
 	return $allowed;
 }
 
+
+
+function kcs_select($arr = array(), $val, $atts = array(), $echo = true) {
+	if ( empty($arr) )
+		return false;
+
+	//$current = ( empty($val) ) ?
+
+	$output  = "<select";
+	if ( !empty($atts) )
+		foreach ( $atts as $k => $v )
+			$output .= " {$k}='".esc_attr($v)."'";
+	$output .= ">\n";
+	foreach ( $arr as $i ) {
+		$output .= "\t<option value='".esc_attr($i['value'])."'";
+		if ( ($val == $i['value'] ) || (empty($val) && isset($i['default']) && $i['default'] === true) )
+			$output .= " selected='selected'";
+		$output .= ">{$i['label']}</option>\n";
+	}
+	$output .= "</select>\n";
+
+	if ( $echo )
+		echo $output;
+	else
+		return $output;
+}
+
+
+function kc_get_taxonomies( $args = array('public' => true) ) {
+	$taxonomies = array();
+	$arr = get_taxonomies( $args, 'object' );
+	if ( !empty($arr) )
+		foreach ( $arr as $tax )
+			$taxonomies[] = array( 'value' => $tax->name, 'label' => $tax->label );
+
+	return $taxonomies;
+}
+
+
+function kc_get_post_types( $args = array('publicly_queryable' => true) ) {
+	$post_types = array();
+	$arr = get_post_types( $args, 'object' );
+	if ( !empty($arr) )
+		foreach ( $arr as $pt )
+			$post_types[] = array( 'value' => $pt->name, 'label' => $pt->label );
+
+	return $post_types;
+}
+
+
+function kc_get_roles() {
+	$roles = array();
+
+	global $wp_roles;
+	if ( !is_object($wp_roles) )
+		return $roles;
+
+	foreach ( $wp_roles->roles as $k => $v ) {
+		$roles[] = array(
+			'value'	=> $k,
+			'label'	=> $v['name']
+		);
+	}
+
+	return $roles;
+}
+
+
+function kcsb_defaults() {
+	$defaults = array(
+		'id'								=> '',
+		'type'							=> 'post',
+		'prefix'						=> '',
+		'menu_location'			=> 'options-general.php',
+		'menu_title'				=> '',
+		'page_title'				=> '',
+		'post_type'					=> 'post',
+		'taxonomy'					=> '',
+		'sections'					=> array(
+			array(
+				'id'						=> '',
+				'title'					=> '',
+				'desc'					=> '',
+				'priority'			=> 'high',
+				'fields'				=> array(
+					array(
+						'id'				=> '',
+						'title'			=> '',
+						'desc'			=> '',
+						'type'			=> 'input',
+						'attr'			=> '',
+						'options'		=> array(
+							array(
+								'key'		=> '',
+								'label'	=> ''
+							)
+						)
+					)
+				)
+			)
+		)
+	);
+
+	return $defaults;
+}
+
+
+function kcsb_settings_bootsrap() {
+	$all = get_option( 'kcsb' );
+	$output = array(
+		'_raw'		=> $all,
+		'plugin'	=> array(),
+		'post'		=> array(),
+		'term'		=> array(),
+		'user'		=> array(),
+		'_ids'		=> array(
+			'settings'	=> array(),
+			'sections'	=> array(),
+			'fields'		=> array()
+		),
+	);
+
+	if ( empty($all) )
+		return $output;
+
+	foreach ( $all as $setting ) {
+		$sID = $setting['id'];
+		$output['_ids']['settings'][] = $sID;
+		$type = $setting['type'];
+		$sections = array();
+
+		foreach ( $setting['sections'] as $section ) {
+			$output['_ids']['sections'][] = $section['id'];
+			$fields = array();
+			foreach ( $section['fields'] as $field ) {
+				$output['_ids']['fields'][] = $field['id'];
+				if ( in_array($field['type'], array('checkbox', 'radio', 'select', 'multiselect')) ) {
+					$options = array();
+					foreach ( $field['options'] as $option ) {
+						$options[$option['key']] = $option['label'];
+					}
+					$field['options'] = $options;
+				}
+				$fields[$field['id']] = $field;
+			}
+			$section['fields'] = $fields;
+			$sections[$section['id']] = $section;
+		}
+
+		$setting['options'] = $sections;
+		unset ( $setting['sections'] );
+
+		if ( $type == 'plugin' ) {
+			$output[$type][$sID] = $setting;
+		}
+		elseif ( $type == 'user' ) {
+			$output[$type][$sID] = array( $setting['options'] );
+		}
+		else {
+			$object = ( $type == 'post') ? $setting['post_type'] : $setting['taxonomy'];
+			$output[$type][$sID] = array($object => $setting['options']);
+		}
+	}
+
+	return $output;
+}
+
+
+function kc_create_code( $arr ) {
+	$output = '';
+
+	foreach ( $arr as $k => $v ) {
+		$output .= "'{$k}' =&gt; ";
+		if ( is_array($v) ) {
+			$output .= " array(\n";
+			$output .= "\t".kc_create_code( $v );
+			$output .= "),\n";
+		}
+		else
+			$output .= "'{$v}',\n";
+	}
+
+	return $output;
+}
+
+
 ?>

@@ -15,6 +15,7 @@ class kcSettings {
 	var $prefix;
 	var $version;
 	var $kcs_pages;
+	var $kcsb;
 
 	function __construct() {
 		$this->prefix = 'kc-settings';
@@ -47,7 +48,14 @@ class kcSettings {
 
 
 	function actions_n_filters() {
-		add_action( 'init', array(&$this, 'init'), 11 );
+		require_once( "{$this->paths['inc']}/helper.php" );
+		$this->kcsb = kcsb_settings_bootsrap();
+
+		if ( is_admin() ) {
+			add_action( 'init', array(&$this, 'init'), 11 );
+			add_action( 'init', array(&$this, 'builder'), 20 );
+		}
+
 		add_action( 'admin_head', array(&$this, 'scripts_n_styles') );
 
 		# Development
@@ -81,7 +89,7 @@ class kcSettings {
 	}
 
 	function plugin_settings_init() {
-		$plugin_groups = apply_filters( 'kc_plugin_settings', array() );
+		$plugin_groups = apply_filters( 'kc_plugin_settings', $this->kcsb['plugin'] );
 		if ( !is_array($plugin_groups) || empty( $plugin_groups ) )
 			return;
 
@@ -100,82 +108,64 @@ class kcSettings {
 		}
 		if ( isset($plugin_settings) && $plugin_settings ) {
 			$this->kcs_pages[] = 'kc-settings-';
-			require_once( "{$this->paths['inc']}/helper.php" );
 			require_once( "{$this->paths['inc']}/form.php" );
 		}
 	}
 
 
 	function postmeta_init() {
-		$cfields = kc_meta( 'post' );
-		if ( !is_array($cfields) || empty( $cfields ) )
+		$post_options = kc_meta( 'post', $this->kcsb['post'] );
+		if ( !is_array($post_options) || empty( $post_options ) )
 			return;
 
 		$this->kcs_pages[] = 'post';
+		if ( array_key_exists('attachment', $post_options) )
+			$this->kcs_pages[] = 'media';
 		require_once( "{$this->paths['inc']}/post.php" );
-		require_once( "{$this->paths['inc']}/helper.php" );
 		require_once( "{$this->paths['inc']}/form.php" );
-		$do = new kcPostSettings;
-		$do->init( $cfields );
+		$do = new kcPostSettings( $post_options );
 	}
 
 
 	function termmeta_init() {
-		$term_options = kc_meta( 'term' );
+		$term_options = kc_meta( 'term', $this->kcsb['term'] );
 		if ( !is_array($term_options) || empty($term_options) )
 			return;
 
 		$this->kcs_pages[] = 'edit-tags';
 		require_once( "{$this->paths['inc']}/term.php" );
-		require_once( "{$this->paths['inc']}/helper.php" );
 		require_once( "{$this->paths['inc']}/form.php" );
-
-		# Create & set termmeta table
-		add_action( 'init', 'kc_termmeta_table', 12 );
-
-		# Add every term fields to its taxonomy add & edit screen
-		foreach ( $term_options as $tax => $sections ) {
-			add_action( "{$tax}_add_form_fields", 'kc_term_meta_field' );
-			add_action( "{$tax}_edit_form_fields", 'kc_term_meta_field', 20, 2 );
-		}
-		# Also add the saving routine
-		add_action( 'edit_term', 'kc_save_termmeta', 10, 3);
-		add_action( 'create_term', 'kc_save_termmeta', 10, 3);
+		$do = new kcTermSettings( $term_options );
 	}
 
 
 	function usermeta_init() {
-		$user_options = kc_meta( 'user' );
+		$user_options = kc_meta( 'user', $this->kcsb['user'] );
 		if ( !is_array($user_options) || empty($user_options) )
 			return;
 
 		$this->kcs_pages[] = 'profile';
 		require_once( "{$this->paths['inc']}/user.php" );
-		require_once( "{$this->paths['inc']}/helper.php" );
 		require_once( "{$this->paths['inc']}/form.php" );
-
-		# Display additional fields in user profile page
-		add_action( 'show_user_profile', 'kc_user_meta_field' );
-		add_action( 'edit_user_profile', 'kc_user_meta_field' );
-
-		# Save the additional data
-		add_action( 'personal_options_update', 'kc_user_meta_save' );
-		add_action( 'edit_user_profile_update', 'kc_user_meta_save' );
+		$do = new kcUserSettings( $user_options );
 	}
 
 
 	function scripts_n_styles() {
+		# Builder script
+		wp_register_script( 'kc-rowclone', "{$this->paths['scripts']}/kc-rowclone.js", array('jquery'), $this->version, true );
+		wp_register_script( 'kcsb', "{$this->paths['scripts']}/kcsb.js", array('jquery'), $this->version, true );
+
 		if ( empty($this->kcs_pages) )
 			return;
 
-		#/*
 		global $hook_suffix;
 		foreach ( $this->kcs_pages as $current_page ) {
 			$kcspage = strpos($hook_suffix, $current_page);
 			if ( $kcspage !== false ) {
 				wp_register_script( 'modernizr', "{$this->paths['scripts']}/modernizr-1.7.min.js", false, '1.7', true );
 				wp_register_script( 'jquery-ui-datepicker', "{$this->paths['scripts']}/jquery.ui.datepicker.min.js", array('jquery-ui-core'), '1.8.11', true );
-				wp_register_script( $this->prefix, "{$this->paths['scripts']}/{$this->prefix}.js", array('modernizr', 'jquery-ui-datepicker'), $this->version, true );
+				wp_register_script( $this->prefix, "{$this->paths['scripts']}/{$this->prefix}.js", array('modernizr', 'jquery-ui-datepicker', 'kc-rowclone'), $this->version, true );
 				wp_print_scripts( $this->prefix );
 
 				wp_register_style( $this->prefix, "{$this->paths['styles']}/{$this->prefix}.css", false, $this->version );
@@ -187,8 +177,23 @@ class kcSettings {
 	}
 
 
+	function builder() {
+		$properties = array(
+			'prefix'		=> $this->prefix,
+			'version'		=> $this->version,
+			'paths'			=> $this->paths,
+			'settings'	=> $this->kcsb
+		);
+		require_once( "{$this->paths['inc']}/builder.php" );
+		$kcsBuilder = new kcsBuilder;
+		$kcsBuilder->init( $properties );
+	}
+
+
 	function dev() {
 		echo '<pre>';
+
+		//print_r( $this->kcsb );
 
 		echo '</pre>';
 	}
