@@ -142,7 +142,7 @@ function kc_settings_field( $args ) {
 			$field['mode'] = 'radio';
 		}
 
-		# Post ID
+		# Post ID (for post meta only)
 		$p__id = ( isset($object_id) && $object_id != '' ) ? $object_id : '';
 
 		# Set default value
@@ -354,8 +354,15 @@ function kcs_filelist_item( $name, $type, $pid = '', $fid = '', $title = '', $ch
 	if ( $hidden )
 		$output .= " class='hidden'";
 	$output .= ">\n";
+	// Image
+	if ( $fid && wp_attachment_is_image($fid) ) {
+		$output .= wp_get_attachment_image($fid, array(50, 50));
+	}
 	$output .= "\t\t<a class='del mid' title='".__('Remove from collection', 'kc-settings')."'><span>".__('Remove', 'kc-settings')."</span></a>\n";
-	$output .= "\t\t<label><input class='mid' type='{$type}' name='{$name}[selected][]' value='{$fid}' {$checked}/> <span class='title'>{$title}</span></label>\n";
+	$output .= "\t\t<label>";
+	$output .= "<input class='mid' type='{$type}' name='{$name}[selected][]' value='{$fid}' {$checked}/> ";
+	$output .= "<span class='title'>{$title}</span>";
+	$output .= "</label>\n";
 	$output .= "\t\t<input type='hidden' name='{$name}[files][]' value='{$fid}'/> ";
 	$output .= "\t</li>\n";
 

@@ -54,14 +54,15 @@
 
 
 /* Filelist */
-.kcs-file .mid {vertical-align:middle}
-.kcs-file li a {
+.kcs-file label input, .kcs-file .del, .kcs-file img {vertical-align:middle}
+.kcs-file img {width:50px;height:auto}
+.kcs-file .del {
   cursor:pointer;
   display:inline-block;
   height:16px;
   width:16px;
   background:url(images/actions.png) no-repeat 0 -48px}
-.kcs-file li a span {
+.kcs-file .del span {
   position: absolute !important;
   clip: rect(1px 1px 1px 1px);
   clip: rect(1px, 1px, 1px, 1px)}
