@@ -168,6 +168,23 @@ class kcSettings {
 	}
 
 
+	function js_globals() {
+		$kcFiles_vars = array(
+			'text' => array(
+				'head' => __( 'KC Settings', 'kc-settings' ),
+				'empty' => __( 'Please upload some files and then go back to this tab.', 'kc-settings' ),
+				'checkAll' => __( 'Select all files', 'kc-settings' ),
+				'clear' => __( 'Clear selections', 'kc-settings' ),
+				'invert' => __( 'Invert selection', 'kc-settings' ),
+				'addFiles' => __( 'Add files to collection', 'kc-settings' )
+			)
+		); ?>
+<script>
+	var kcFiles = <?php echo json_encode( $kcFiles_vars ) ?>;
+</script>
+	<?php }
+
+
 	function scripts_n_styles_print() {
 		if ( empty($this->kcs_pages) )
 			return;
@@ -176,6 +193,7 @@ class kcSettings {
 		foreach ( $this->kcs_pages as $current_page ) {
 			$kcspage = strpos($hook_suffix, $current_page);
 			if ( $kcspage !== false ) {
+				$this->js_globals();
 				wp_enqueue_script( 'kc-settings' );
 				wp_print_styles( 'kc-settings' );
 				break;
@@ -185,8 +203,11 @@ class kcSettings {
 
 
 	function scripts_n_styles_uploader() {
-		wp_enqueue_script( "kc-settings-upload" );
-		wp_print_styles( 'kc-settings' );
+		if ( isset($_REQUEST['kcsf']) && $_REQUEST['kcsf'] ) {
+			//$this->js_globals();
+			wp_enqueue_script( "kc-settings-upload" );
+			wp_print_styles( 'kc-settings' );
+		}
 	}
 
 

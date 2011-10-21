@@ -165,7 +165,6 @@ function kc_settings_field( $args ) {
 		$output .= "\t<ul>\n";
 
 		if ( !empty($value['files']) ) {
-
 			$q_args = array(
 				'post__in' => $value['files'],
 				'post_type' => 'attachment',
@@ -182,6 +181,8 @@ function kc_settings_field( $args ) {
 					$f__id = get_the_ID();
 					$output .= kcs_filelist_item( $name, $field['mode'], $p__id, $f__id, get_the_title(), in_array($f__id, $value['selected']), false );
 				}
+			} else {
+				$output .= kcs_filelist_item( $name, $field['mode'] );
 			}
 
 			$wp_query = null;
@@ -193,7 +194,7 @@ function kc_settings_field( $args ) {
 
 		$output .= "\t</ul>\n";
 
-		$output .= "<a href='media-upload.php?post_id={$p__id}&amp;TB_iframe=1' class='button kcsf-upload' title='".__('Add files to collection', 'kc-settings')."'>".__('Add files', 'kc-settings')."</a>\n";
+		$output .= "<a href='media-upload.php?kcsf=true&amp;post_id={$p__id}&amp;TB_iframe=1' class='button kcsf-upload' title='".__('Add files to collection', 'kc-settings')."'>".__('Add files', 'kc-settings')."</a>\n";
 		$output .= "<input type='hidden' class='kcsf-holder'>\n";
 		$output .= "</div>\n";
 	}
