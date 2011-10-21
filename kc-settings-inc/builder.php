@@ -2,20 +2,17 @@
 
 class kcsBuilder {
 	var $kcsb_options;
-	var $kcsb_menu;
+	var $kcsb_page;
 	var $defaults;
-
-	/*
-	public function __construct() {
-		$this->properties['settings'] = get_option( 'kcsb' );
-	}
-	*/
 
 
 	function init( $properties ) {
 		$this->options();
-		$this->actions_n_filters();
 		$this->properties = $properties;
+
+		add_action( 'admin_init', array(&$this, 'register'), 21 );
+		add_action( 'admin_menu', array(&$this, 'create_page') );
+		add_action( 'update_option_kcsb', array($this, 'after_save'), 10, 2 );
 	}
 
 
@@ -182,12 +179,24 @@ class kcsBuilder {
 	}
 
 
-	function actions_n_filters() {
-		add_action( 'admin_init', array(&$this, 'register') );
-		add_action( 'admin_menu', array(&$this, 'create_menu'));
-		add_action( 'load-settings_page_kcsb', array(&$this, 'goback'));
-		add_action( 'update_option_kcsb', array($this, 'after_save'), 10, 2 );
-		add_action( 'admin_head', array(&$this, 'cosmetics'));
+	function create_page() {
+		$this->kcsb_page = add_options_page( __('KC Settings', 'kc-settings'), __('KC Settings', 'kc-settings'), 'manage_options', 'kcsb', array(&$this, 'builder') );
+
+		add_action( "load-{$this->kcsb_page}", array(&$this, 'goback') );
+		add_action( "load-{$this->kcsb_page}", array(&$this, 'help') );
+
+		// Script n style
+		add_action( "admin_print_scripts-{$this->kcsb_page}", array(&$this, 'script'), 0);
+		add_action( "admin_print_styles-{$this->kcsb_page}", function() {
+			wp_enqueue_style('kcsb');
+		}, 0);
+	}
+
+
+	function register() {
+		register_setting( 'kcsb', 'kcsb', array(&$this, 'validate') );
+		add_settings_section( 'kcsb', __('KC Settings Builder', 'kc-settings'), '', 'kcsb');
+		add_settings_field( 'kcsb', 'Plugin Text Input', 'plugin_setting_string', 'plugin', 'plugin_main' );
 	}
 
 
@@ -298,28 +307,14 @@ class kcsBuilder {
 	}
 
 
-	function create_menu() {
-		$this->kcsb_menu = add_options_page( __('KC Settings', 'kc-settings'), __('KC Settings', 'kc-settings'), 'manage_options', 'kcsb', array(&$this, 'builder') );
-	}
-
-
-	function register() {
-		register_setting( 'kcsb', 'kcsb', array(&$this, 'validate') );
-		add_settings_section( 'kcsb', __('KC Settings Builder', 'kc-settings'), '', 'kcsb');
-		add_settings_field( 'kcsb', 'Plugin Text Input', 'plugin_setting_string', 'plugin', 'plugin_main' );
-	}
-
-
-	function cosmetics() {
-		global $current_screen;
-		if ( $current_screen->id != $this->kcsb_menu )
-			return;
-
-		add_action( 'admin_head', array(&$this, 'style'), 11);
-		add_action( 'admin_head', array(&$this, 'help'), 11);
-		add_filter( 'admin_footer_text', array(&$this, 'footer_text'), 0);
-		add_action( 'admin_print_footer_scripts', array(&$this, 'script'), 0);
-
+	function script() { ?>
+<script type='text/javascript'>
+	// <![CDATA[
+	var kcsbIDs = <?php echo json_encode( $this->properties['settings']['_ids'] ) ?>;
+	// ]]>
+</script>
+		<?php
+		wp_enqueue_script( 'kcsb' );
 	}
 
 
@@ -336,59 +331,8 @@ class kcsBuilder {
 		$help .= "\t<li><a href='http://wordpress.org/tags/kc-settings?forum_id=10'>".__('Support', 'kc-settings')."</a></li>\n";
 		$help .= "</ul>\n";
 
-		add_contextual_help( $this->kcsb_menu, $help );
+		add_contextual_help( $this->kcsb_page, $help );
 	}
-
-
-	function footer_text( $text) {
-		$sep = ( strpos($text, '&bull') ) ? '&bull;' : '|'; // WP 3.2 support
-		$text .= sprintf(__(' %1$s %2$sKC Settings Support%3$s', 'kc-settings'), $sep, '<a href="http://wordpress.org/tags/kc-settings?forum_id=10">', '</a>');
-		return $text;
-	}
-
-
-	function script() { ?>
-<script type='text/javascript'>
-	// <![CDATA[
-	var kcsbIDs = <?php echo json_encode( $this->properties['settings']['_ids'] ) ?>;
-	// ]]>
-</script>
-		<?php
-		wp_print_scripts( 'kcsb' );
-	}
-
-
-	function style() {
-		$style_dir = $this->properties['paths']['styles'];
-		?>
-<style type="text/css">
-.kcsb {width:45em}
-.kcsb-block {margin-bottom:3em}
-.kcsb .checkbox {background:none}
-.kcsb-ml {display:inline-block;width:9em;margin-right:1em;vertical-align:top}
-.kcsb-mi {display:inline-block}
-input.kcsb-mi {width:23em}
-.kcsb-mi div.kcsb-mi, .kcsb-mi ul.kcsb-mi {width:23em}
-.kcsb-options label {display:block}
-.kcsb-options label span {display:inline-block;width:4em}
-.row {padding:0 2em 1em 0;position:relative}
-.actions {text-align:right;position:absolute;right:0;top:0}
-.actions li {font-size:.9em;line-height:1;margin-left:1em}
-.kcsb-options .actions li {margin:0 0 2px 0}
-.actions a, .kcsb-clone a {display:inline-block;height:16px;width:16px;background:url(<?php echo "{$style_dir}/images/actions.png" ?>) no-repeat}
-.actions a.add {background-position:0 -80px}
-.actions a.del {background-position:0 -48px}
-.actions a.up {background-position:0 -16px}
-.actions span, .kcsb-clone span {position: absolute !important;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px)}
-.kcsb-clone a {position:relative;top:4px;margin:0 3px}
-.kcsb-clone .clone-do {background-position:0 bottom}
-.kcsb-clone .close {background-position:0 -64px}
-.kcsb label.nr {color:#00892c}
-.kcsb-tools .widefat {width:auto}
-.kcsb-tools button {background:none;border:0;cursor:pointer}
-.kcsb-clone {padding-top:4px}
-</style>
-	<?php }
 
 
 	function builder() {

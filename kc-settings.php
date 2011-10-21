@@ -55,8 +55,9 @@ class kcSettings {
 			add_action( 'init', array(&$this, 'init'), 11 );
 			add_action( 'init', array(&$this, 'builder'), 20 );
 		}
+		add_action( 'admin_init', array(&$this, 'scripts_n_styles_register') );
+		add_action( 'admin_head', array(&$this, 'scripts_n_styles_print') );
 
-		add_action( 'admin_head', array(&$this, 'scripts_n_styles') );
 
 		# Development
 		//add_action( 'admin_footer', array(&$this, 'dev') );
@@ -87,6 +88,7 @@ class kcSettings {
 		# 4. User Meta
 		$this->usermeta_init();
 	}
+
 
 	function plugin_settings_init() {
 		$plugin_groups = apply_filters( 'kc_plugin_settings', $this->kcsb['plugin'] );
@@ -151,11 +153,20 @@ class kcSettings {
 	}
 
 
-	function scripts_n_styles() {
-		# Builder script
+	function scripts_n_styles_register() {
+		# Common
+		wp_register_script( 'modernizr', "{$this->paths['scripts']}/modernizr.2.0.6.min.js", false, '2.0.6', true );
 		wp_register_script( 'kc-rowclone', "{$this->paths['scripts']}/kc-rowclone.js", array('jquery'), $this->version, true );
-		wp_register_script( 'kcsb', "{$this->paths['scripts']}/kcsb.js", array('jquery'), $this->version, true );
+		wp_register_script( $this->prefix, "{$this->paths['scripts']}/{$this->prefix}.js", array('modernizr', 'jquery-ui-datepicker', 'kc-rowclone'), $this->version, true );
+		wp_register_style( $this->prefix, "{$this->paths['styles']}/{$this->prefix}.css", false, $this->version );
 
+		# Builder script & style
+		wp_register_script( 'kcsb', "{$this->paths['scripts']}/kcsb.js", array('jquery'), $this->version, true );
+		wp_register_style( 'kcsb', "{$this->paths['styles']}/kcsb.css", false, $this->version );
+	}
+
+
+	function scripts_n_styles_print() {
 		if ( empty($this->kcs_pages) )
 			return;
 
@@ -163,18 +174,12 @@ class kcSettings {
 		foreach ( $this->kcs_pages as $current_page ) {
 			$kcspage = strpos($hook_suffix, $current_page);
 			if ( $kcspage !== false ) {
-				wp_register_script( 'modernizr', "{$this->paths['scripts']}/modernizr.2.0.6.min.js", false, '2.0.6', true );
-				wp_register_script( $this->prefix, "{$this->paths['scripts']}/{$this->prefix}.js", array('modernizr', 'jquery-ui-datepicker', 'kc-rowclone'), $this->version, true );
-				wp_print_scripts( $this->prefix );
-
-				wp_register_style( $this->prefix, "{$this->paths['styles']}/{$this->prefix}.css", false, $this->version );
-				wp_print_styles( $this->prefix );
-
+				wp_enqueue_script('kc-settings');
+				wp_enqueue_style('kc-settings');
 				break;
 			}
 		}
 	}
-
 
 	function builder() {
 		$properties = array(
@@ -192,7 +197,8 @@ class kcSettings {
 	function dev() {
 		echo '<pre>';
 
-		//print_r( $this->kcsb );
+		global $hook_suffix;
+		print_r( $hook_suffix );
 
 		echo '</pre>';
 	}
