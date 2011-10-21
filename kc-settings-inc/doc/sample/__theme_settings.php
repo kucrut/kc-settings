@@ -101,6 +101,12 @@ function mytheme_options( $settings ) {
 					'title'	=> 'Multi input (multiinput)',
 					'desc'	=> 'Input field with your own custom label, to create an array',
 					'type'	=> 'multiinput'
+				),
+				'sample_file' => array(
+					'id'		=> 'sample_file',
+					'title'	=> 'File selection',
+					'type'	=> 'file',
+					'mode'	=> 'single'
 				)
 			)
 		)
