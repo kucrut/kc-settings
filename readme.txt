@@ -25,10 +25,11 @@ With this plugin, you can easily create a settings/options page for you theme or
 Please find the readme.html file inside the plugin directory for the documentation.
 
 == Screenshots ==
-1. Theme/Plugin settings
-2. Term settings (add new)
-3. Term settings (edit)
-4. Post settings
+1. Settings Builder
+2. Theme/Plugin settings
+3. Term settings (add new)
+4. Term settings (edit)
+5. Post settings
 
 == Changelog ==
 
