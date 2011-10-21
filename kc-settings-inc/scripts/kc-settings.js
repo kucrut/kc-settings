@@ -10,12 +10,23 @@ win.kcsInsertFiles = function() {
 
 		while ( count ) {
 			count--;
-			var $nuItem = $lastItem.clone();
+			var $nuItem = $lastItem.clone(),
+					$thumb	= $nuItem.find('img');
 
 			jQuery('input', $nuItem).each(function() {
 				this.value = win.kcFiles.nu[count][0];
 			});
 			jQuery('.title', $nuItem).text(win.kcFiles.nu[count][1]);
+
+			if ( win.kcFiles.nu[count][2] !== undefined ) {
+				if ( $thumb.length )
+					$thumb.attr('src', win.kcFiles.nu[count][2]);
+				else
+					$nuItem.prepend('<img src="'+win.kcFiles.nu[count][2]+'" />');
+			} else {
+				$thumb.remove();
+			}
+			console.log( win.kcFiles.nu[count][2] );
 
 			$nuEls = $nuEls.add( $nuItem );
 		}
@@ -44,7 +55,10 @@ jQuery(document).ready(function($) {
 	// File
 	$('.kcs-file a.del').live('click', function(e) {
 		e.preventDefault();
-		$(this).closest('li').remove();
+		$(this).closest('li').fadeOut(function() {
+			$(this).remove();
+		});
+
 	});
 
 	// Add files button
