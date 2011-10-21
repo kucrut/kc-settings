@@ -54,6 +54,11 @@
 
 
 /* Filelist */
+/*
+.kcs-file ul {
+  max-height:220px;
+  overflow:auto}
+*/
 .kcs-file label input, .kcs-file .del, .kcs-file img {vertical-align:middle}
 .kcs-file img {width:50px;height:auto}
 .kcs-file .del {

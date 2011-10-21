@@ -75,13 +75,7 @@ jQuery(document).ready(function($) {
 	$('input.kcs-files', $mItems).each(function() {
 	  var $el = $(this);
 	  if ( !in_array(this.value, win.kcFiles.files) && this.checked ) {
-	    var nuItem = [this.value, $el.siblings('.title').text()],
-		$thumb = $el.closest('.media-item').find('.thumbnail');
-
-	    if ( $el.closest('.media-item').find('.image-size').length )
-	      nuItem.push( $thumb.attr('src') );
-
-	    win.kcFiles.nu.push( nuItem );
+	    win.kcFiles.nu.push( [this.value, $el.siblings('.title').text(), $el.closest('.media-item').find('.pinkynail').attr('src')] );
 	  }
 	});
 	win.kcFiles.nuCount = nuCount;
