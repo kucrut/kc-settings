@@ -1,5 +1,5 @@
 var win = window.dialogArguments || opener || parent || top;
-win.pret = function() {
+win.kcsInsertFiles = function() {
 	var count = win.kcFiles.nu.length;
 
 

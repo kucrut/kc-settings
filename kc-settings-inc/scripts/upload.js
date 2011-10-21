@@ -33,7 +33,7 @@ jQuery(document).ready(function($) {
 	});
 	win.kcFiles.nuCount = nuCount;
 
-	win.pret();
+	win.kcsInsertFiles();
 	win.tb_remove();
       });
   }
@@ -50,7 +50,4 @@ jQuery(document).ready(function($) {
       .wrapInner('<label />');
   });
 
-
-
-  //console.log( win.kcFiles );
 });
