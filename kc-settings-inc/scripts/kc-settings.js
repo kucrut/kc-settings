@@ -1,7 +1,7 @@
 var win = window.dialogArguments || opener || parent || top;
+
 win.kcsInsertFiles = function() {
 	var count = win.kcFiles.nu.length;
-
 
 	if ( count ) {
 		var $list = jQuery('#'+win.kcFiles.id+' ul'),
@@ -28,7 +28,6 @@ win.kcsInsertFiles = function() {
 	}
 };
 
-win.kcFiles = {};
 
 
 jQuery(document).ready(function($) {
@@ -48,14 +47,13 @@ jQuery(document).ready(function($) {
 		$(this).closest('li').remove();
 	});
 
+	// Add files button
 	$('a.kcsf-upload').live('click', function(e) {
 		e.preventDefault();
 		var $el = $(this),
 				$group = $el.parent();
 
 		win.kcFiles.id = $group.attr('id');
-		win.kcFiles.name = $el.attr('rel');
-		win.kcFiles.addText = $el.attr('title');
 		win.kcFiles.files = [];
 		$('input.mid', $group).each(function() {
 			win.kcFiles.files.push(this.value);
