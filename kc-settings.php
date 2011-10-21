@@ -175,7 +175,7 @@ class kcSettings {
 			$kcspage = strpos($hook_suffix, $current_page);
 			if ( $kcspage !== false ) {
 				wp_enqueue_script('kc-settings');
-				wp_enqueue_style('kc-settings');
+				wp_print_styles('kc-settings');
 				break;
 			}
 		}
