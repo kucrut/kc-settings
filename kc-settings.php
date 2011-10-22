@@ -225,8 +225,8 @@ class kcSettings {
 	function dev() {
 		echo '<pre>';
 
-		global $hook_suffix;
-		print_r( $hook_suffix );
+		global $current_screen;
+		print_r( get_current_screen() );
 
 		echo '</pre>';
 	}
