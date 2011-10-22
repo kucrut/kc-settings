@@ -337,19 +337,26 @@ class kcsBuilder {
 	}
 
 	function help() {
-		$help  = "<h3>".__('Creating a setting', 'kc-settings')."</h3>\n";
-		$help .= "<h4>".__('All Types', 'kc-settings')."</h4>\n";
+		$help  = "<h2>".__('Creating a setting', 'kc-settings')."</h2>\n";
+		$help .= "<h3>".__('All Types', 'kc-settings')."</h3>\n";
 		$help .= "<ul>\n";
 		$help .= "\t<li>".__('All fields are required, unless the label is green.', 'kc-settings')."</li>\n";
 		$help .= "\t<li>".__('Some fields depend on other field(s), they will be shown when the dependency is selected/checked.', 'kc-settings')."</li>\n";
 		$help .= "\t<li>".__('Some fields (eg. ID, Prefix) can only be filled with alphanumerics, dashes and underscores, must be unique, and cannot begin with dashes or underscores. ', 'kc-settings')."</li>\n";
 		$help .= "</ul>\n";
-		$help .= "<h3>".__('Links', 'kc-settings')."</h3>\n";
+		$help .= "<h2>".__('Links', 'kc-settings')."</h2>\n";
 		$help .= "<ul>\n";
 		$help .= "\t<li><a href='http://wordpress.org/tags/kc-settings?forum_id=10'>".__('Support', 'kc-settings')."</a></li>\n";
 		$help .= "</ul>\n";
 
-		add_contextual_help( $this->kcsb_page, $help );
+		$screen = get_current_screen();
+		if ( is_object($screen) ) {
+		$screen->add_help_tab(array(
+			'id' => 'help-kcsb',
+			'title' => __( 'KC Settings Builder', 'kc-settings' ),
+			'content' => $help
+		));
+		}
 	}
 
 
