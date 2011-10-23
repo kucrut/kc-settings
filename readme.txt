@@ -34,7 +34,8 @@ Please find the readme.html file inside the plugin directory for the documentati
 == Changelog ==
 
 = 2.1 =
-Settings Builder help tab
+* Settings Builder help tab
+* Sortable file items
 
 = 2.0.1 =
 * PHP 5.2 support

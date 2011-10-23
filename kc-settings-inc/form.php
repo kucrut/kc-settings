@@ -131,6 +131,7 @@ function kc_settings_field( $args ) {
 
 	# Special option with callback
 	if ( $type == 'special' && function_exists($field['cb']) ) {
+		$args['field']['name'] = $name;
 		$output .= call_user_func( $field['cb'], $args, $db_value );
 		$output .= $desc;
 	}
@@ -162,7 +163,7 @@ function kc_settings_field( $args ) {
 		$output .= "<div id='{$id}' class='kcs-file'>";
 
 		# List files
-		$output .= "\t<ul>\n";
+		$output .= "\t<ul class='kc-sortable'>\n";
 
 		if ( !empty($value['files']) ) {
 			$q_args = array(
@@ -350,7 +351,7 @@ function kcs_filelist_item( $name, $type, $pid = '', $fid = '', $title = '', $ch
 		$checked = '';
 	}
 
-	$output  = "\t<li";
+	$output  = "\t<li title='".__('Drag to reorder the items', 'kc-settings')."'";
 	if ( $hidden )
 		$output .= " class='hidden'";
 	$output .= ">\n";

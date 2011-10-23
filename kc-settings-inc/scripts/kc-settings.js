@@ -66,4 +66,6 @@ jQuery(document).ready(function($) {
 		tb_show( '', $el.attr('href') );
 	});
 
+	$('ul.kc-sortable').sortable();
+
 });

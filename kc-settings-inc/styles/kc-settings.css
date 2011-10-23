@@ -60,7 +60,10 @@
   overflow:auto}
 */
 .kcs-file label input, .kcs-file .del, .kcs-file img {vertical-align:middle}
-.kcs-file img {width:50px;height:auto}
+.kcs-file img {
+  width:50px;
+  height:auto;
+  cursor:move}
 .kcs-file .del {
   cursor:pointer;
   display:inline-block;

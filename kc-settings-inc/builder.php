@@ -621,10 +621,10 @@ class kcsBuilder {
 														<?php } ?>
 													</ul>
 												</li>
-												<?php if ( !isset($f_val['callback']) ) $f_val['callback'] = ''; ?>
+												<?php if ( !isset($f_val['cb']) ) $f_val['cb'] = ''; ?>
 												<li class="idep_type special">
 													<label class="kcsb-ml"><?php _e('Callback', 'kcsb') ?></label>
-													<input class="kcsb-mi kcsb-slug required" type="text" name="<?php echo $f_name ?>[callback]" value="<?php esc_attr_e($f_val['callback']) ?>" />
+													<input class="kcsb-mi kcsb-slug required" type="text" name="<?php echo $f_name ?>[cb]" value="<?php esc_attr_e($f_val['cb']) ?>" />
 												</li>
 											</ul>
 											<ul class="actions">
