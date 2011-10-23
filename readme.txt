@@ -4,7 +4,7 @@ Donate link: http://kucrut.org/
 Tags: theme-options, plugin-options, settings, options, term-meta, category-meta, post-meta, custom-fields, user-meta, attachment
 Requires at least: 3.2
 Tested up to: 3.3-beta2
-Stable tag: 2.0.1
+Stable tag: 2.1
 
 Easily create plugin/theme settings page, custom fields metaboxes and term meta settings.
 
@@ -34,11 +34,13 @@ Please find the readme.html file inside the plugin directory for the documentati
 == Changelog ==
 
 = 2.1 =
+* Fixed file query, no using get_posts() to avoid messing up the main query
+* Fixed 'special' field type in settings builder
 * Settings Builder help tab
 * Sortable file items
-* Fixed 'special' field type in settings builder
 * Pass field name attribute to special's callback
 * Special field type created by the builder can now accept callback (strings or function name)
+* Settings builder improvements
 
 = 2.0.1 =
 * PHP 5.2 support
