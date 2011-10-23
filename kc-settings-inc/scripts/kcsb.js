@@ -94,10 +94,10 @@ function inArray(needle, haystack) {
 
 			$rows.each(function() {
 				var $row	 		= $(this),
-						$actions	= $row.children('.actions');
+						$actions	= $row.children('.actions'),
 						$add			= $actions.find('.add'),
-						$del			= $actions.find('.del');
-						$up				= $actions.find('.move.up');
+						$del			= $actions.find('.del'),
+						$up				= $actions.find('.move.up'),
 						$down			= $actions.find('.move.down');
 
 				if ( $row.is(':first-child') ) {
@@ -211,8 +211,8 @@ jQuery(document).ready(function($) {
 	// Remove
 	$('.row a.del').live('click', function(e) {
 		var $this		= $(this),
-				mode		= $this.attr('rel'),
 				$item		= $this.closest('.row'),
+				mode		= $item.data('mode'),
 				isLast	= $item.is(':last-child');
 				$wrap		= $item.parent();
 
@@ -235,11 +235,11 @@ jQuery(document).ready(function($) {
 
 	// Add
 	$('.row a.add').live('click', function(e) {
-		var $this			= $(this),
-				$item			= $this.closest('.row'),
-				mode			= $this.attr('rel'),
-				regex			= new RegExp(mode+'\\]\\[(\\d+)', 'g'),
-				$nu				= $item.clone(false);
+		var $this		= $(this),
+				$item		= $this.closest('.row'),
+				mode		= $item.data('mode'),
+				regex		= new RegExp(mode+'\\]\\[(\\d+)', 'g'),
+				$nu			= $item.clone(false);
 
 		$nu.find('.kc-rows').each(function() {
 			var $kids		= $(this).children('.row');
@@ -280,24 +280,15 @@ jQuery(document).ready(function($) {
 	});
 
 
-	// Move up/down
-	$('.row a.move').live('click', function(e) {
-		var $this 		= $(this),
-				isUp			= $this.is('.up'),
-				$item			= $this.closest('.row'),
-				mode			= $this.attr('rel');
-
-		if ( isUp ) {
-			var $bro	= $item.prev(),
-					$nu 	= $bro.before( $item.detach() );
+	// Sort
+	$('ul.kc-rows').sortable({
+		axis: 'y',
+		start: function(ev, ui) {
+			ui.placeholder.height( ui.item.outerHeight() );
+		},
+		stop: function(ev, ui) {
+			ui.item.parent().kcsbReorder( ui.item.data('mode') ).kcsbActions();
 		}
-		else {
-			var $bro	= $item.next(),
-					$nu		= $bro.after( $item.detach() );
-		}
-
-		$nu.parent().kcsbReorder( mode ).kcsbActions();
-		return false;
 	});
 
 

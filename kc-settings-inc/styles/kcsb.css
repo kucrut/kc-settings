@@ -7,11 +7,21 @@ input.kcsb-mi {width:23em}
 .kcsb-mi div.kcsb-mi, .kcsb-mi ul.kcsb-mi {width:23em}
 .kcsb-options label {display:block}
 .kcsb-options label span {display:inline-block;width:4em}
-.row {padding:0 2em 1em 0;position:relative}
+.row {
+  padding:0 2em 1em 0;
+  position:relative;
+  -webkit-border-radius:5px;
+  -khtml-border-radius:5px;
+  -moz-border-radius:5px;
+  border-radius:5px}
 .actions {text-align:right;position:absolute;right:0;top:0}
 .actions li {font-size:.9em;line-height:1;margin-left:1em}
 .kcsb-options .actions li {margin:0 0 2px 0}
-.actions a, .kcsb-clone a {display:inline-block;height:16px;width:16px;background:url(images/actions.png) no-repeat}
+.actions a, .kcsb-clone a {
+  display:inline-block;
+  height:16px;width:16px;
+  background:url(images/actions.png) no-repeat;
+  cursor:pointer}
 .actions a.add {background-position:0 -80px}
 .actions a.del {background-position:0 -48px}
 .actions a.up {background-position:0 -16px}
@@ -23,3 +33,28 @@ input.kcsb-mi {width:23em}
 .kcsb-tools .widefat {width:auto}
 .kcsb-tools button {background:none;border:0;cursor:pointer}
 .kcsb-clone {padding-top:4px}
+
+.kcsb .fields > ul {padding-left:1em}
+
+
+.kcsb .ui-sortable {position:relative}
+.kcsb .ui-sortable-helper {
+  border:1px solid #E5FF00;
+  background:#ffffc0;
+  padding:1em 0 1em 1em;
+  -webkit-border-radius:5px;
+  -khtml-border-radius:5px;
+  -moz-border-radius:5px;
+  border-radius:5px}
+.kcsb .ui-sortable-placeholder {
+  background:#fcfcfc;
+  border: 1px dashed #dfdfdf;
+  visibility: visible !important;
+  margin-top:1em 0;
+  -webkit-border-radius:5px;
+  -khtml-border-radius:5px;
+  -moz-border-radius:5px;
+  border-radius:5px}
+
+
+

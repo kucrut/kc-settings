@@ -163,7 +163,7 @@ class kcSettings {
 		wp_register_script( "kc-settings-upload", "{$this->paths['scripts']}/upload.js", array('jquery'), $this->version );
 
 		# Builder script & style
-		wp_register_script( 'kcsb', "{$this->paths['scripts']}/kcsb.js", array('jquery'), $this->version, true );
+		wp_register_script( 'kcsb', "{$this->paths['scripts']}/kcsb.js", array('jquery-ui-sortable'), $this->version, true );
 		wp_register_style( 'kcsb', "{$this->paths['styles']}/kcsb.css", false, $this->version );
 	}
 
