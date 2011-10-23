@@ -514,14 +514,23 @@ class kcsBuilder {
 						</li>
 					</ul>
 
-					<h4>Sections</h4>
+					<h4><?php _e('Sections', 'kc-settings') ?></h4>
 					<ul class="sections kc-rows">
 						<?php
+							$count_s = 0;
 							foreach ( $values['sections']  as $idxS => $section ) {
+								$count_s++;
 								$s_name	= "kcsb[sections][{$idxS}]";
 								$s_val	= $values['sections'][$idxS];
 						?>
-						<li class="row">
+						<li class="row" data-mode="sections">
+							<div class="actions">
+								<h5 title="<?php _e('Drag to reorder section', 'kc-settings') ?>"><?php _e( sprintf('Section #%s', "<span class='count'>{$count_s}</span>"), 'kc-settings') ?></h5>
+								<p>(
+									<a class="add" title="<?php _e('Add new section', 'kc-settings') ?>"><?php _e('Add') ?></a>
+									<a class="del" title="<?php _e('Remove this section', 'kc-settings') ?>"><?php _e('Remove') ?></a>
+								)</p>
+							</div>
 							<ul>
 								<li>
 									<label class="kcsb-ml"><?php _e('ID', 'kc-settings') ?></label>
@@ -555,14 +564,23 @@ class kcsBuilder {
 									<?php kcs_select( $options['priorities'], $s_val['priority'], array('name' => "{$s_name}[priority]", 'class' => 'kcsb-mi') ); ?>
 								</li>
 								<li class="fields">
-									<label class="kcsb-ml"><?php _e('Fields', 'kc-settings') ?></label>
+									<h4 class="kcsb-ml"><?php _e('Fields', 'kc-settings') ?></h4>
 									<ul class="kcsb-mi kc-rows">
 										<?php
+											$count_f = 0;
 											foreach ( $section['fields'] as $idxF => $field ) {
+												$count_f++;
 												$f_name	= "{$s_name}[fields][{$idxF}]";
 												$f_val	= $s_val['fields'][$idxF];
 										?>
-										<li class="row">
+										<li class="row" data-mode="fields">
+											<div class="actions">
+												<h5 title="<?php _e('Drag to reorder field', 'kc-settings') ?>"><?php _e( sprintf('Field #%s', "<span class='count'>{$count_f}</span>"), 'kc-settings') ?></h5>
+												<p>(
+													<a class="add" title="<?php _e('Add new field', 'kc-settings') ?>"><?php _e('Add') ?></a>
+													<a class="del" title="<?php _e('Remove this field', 'kc-settings') ?>"><?php _e('Remove') ?></a>
+												)</p>
+											</div>
 											<ul>
 												<li>
 													<label class="kcsb-ml"><?php _e('ID', 'kc-settings') ?></label>
@@ -596,13 +614,13 @@ class kcsBuilder {
 												</li>
 												<li class="idep_type radio checkbox select multiselect">
 													<label class="kcsb-ml"><?php _e('Options', 'kcsb') ?></label>
-													<ul class="kcsb-mi kcsb-options kc-rows">
+													<ul class="kcsb-mi kcsb-options kc-rows kc-sortable">
 														<?php
 															foreach ( $f_val['options'] as $idxO => $option ) {
 																$o_name	= "{$f_name}[options][{$idxO}]";
 																$o_val	= $f_val['options'][$idxO];
 														?>
-														<li class="row">
+														<li class="row" data-mode="options">
 															<label>
 																<span><?php _e('Value', 'kcsb') ?></span>
 																<input class="kcsb-slug required" type="text" name="<?php echo $o_name ?>[key]" value="<?php esc_attr_e($o_val['key']) ?>" />
@@ -611,12 +629,10 @@ class kcsBuilder {
 																<span><?php _e('Label') ?></span>
 																<input class="required" type="text" name="<?php echo $o_name ?>[label]" value="<?php esc_attr_e($o_val['label']) ?>" />
 															</label>
-															<ul class="actions">
-																<li><a class="add" href="#" rel="options" title="<?php _e('Add new option', 'kc-settings') ?>"><span><?php _e('Add') ?></span></a></li>
-																<li><a class="del" href="#" rel="options" title="<?php _e('Remove this option', 'kc-settings') ?>"><span><?php _e('Remove') ?></span></a></li>
-																<li><a class="move up" href="#" rel="options" title="<?php _e('Move this option up', 'kc-settings') ?>"><span><?php _e('Up', 'kc-settings') ?></span></a></li>
-																<li><a class="move down" href="#" rel="options" title="<?php _e('Move this option down', 'kc-settings') ?>"><span><?php _e('Down', 'kc-settings') ?></span></a></li>
-															</ul>
+															<p class="actions">
+																<a class="add" title="<?php _e('Add new option', 'kc-settings') ?>"><?php _e('Add') ?></a>
+																<a class="del" title="<?php _e('Remove this option', 'kc-settings') ?>"><?php _e('Remove') ?></a>
+															</p>
 														</li>
 														<?php } ?>
 													</ul>
@@ -626,26 +642,22 @@ class kcsBuilder {
 													<label class="kcsb-ml"><?php _e('Callback', 'kcsb') ?></label>
 													<input class="kcsb-mi kcsb-slug required" type="text" name="<?php echo $f_name ?>[cb]" value="<?php esc_attr_e($f_val['cb']) ?>" />
 												</li>
-											</ul>
-											<ul class="actions">
-												<li><a class="add" href="#" rel="fields" title="<?php _e('Add new field', 'kc-settings') ?>"><span><?php _e('Add') ?></span></a></li>
-												<li><a class="del" href="#" rel="fields" title="<?php _e('Remove this field', 'kc-settings') ?>"><span><?php _e('Remove') ?></span></a></li>
-												<li><a class="move up" href="#" rel="fields" title="<?php _e('Move this field up', 'kc-settings') ?>"><span><?php _e('Up', 'kc-settings') ?></span></a></li>
-												<li><a class="move down" href="#" rel="fields" title="<?php _e('Move this field down', 'kc-settings') ?>"><span><?php _e('Down', 'kc-settings') ?></span></a></li>
+												<?php if ( !isset($f_val['args']) ) $f_val['args'] = ''; ?>
+												<li class="idep_type special">
+													<label class="kcsb-ml">
+														<span class="nr"><?php _e('Arguments', 'kcsb') ?></span>
+														<br/><small><em>(<?php _e('String or function name', 'kc-settings') ?>)</em></small>
+													</label>
+													<input class="kcsb-mi kcsb-slug" type="text" name="<?php echo $f_name ?>[args]" value="<?php esc_attr_e($f_val['args']) ?>" />
+												</li>
 											</ul>
 										</li>
-										<?php } ?>
+										<?php } unset( $count_f ); ?>
 									</ul>
 								</li>
 							</ul>
-							<ul class="actions">
-								<li><a class="add" href="#" rel="sections" title="<?php _e('Add new section', 'kc-settings') ?>"><span><?php _e('Add') ?></span></a></li>
-								<li><a class="del" href="#" rel="sections" title="<?php _e('Remove this section', 'kc-settings') ?>"><span><?php _e('Remove') ?></span></a></li>
-								<li><a class="move up" href="#" rel="sections" title="<?php _e('Move this section up', 'kc-settings') ?>"><span><?php _e('Up', 'kc-settings') ?></span></a></li>
-								<li><a class="move down" href="#" rel="sections" title="<?php _e('Move this section down', 'kc-settings') ?>"><span><?php _e('Down', 'kc-settings') ?></span></a></li>
-							</ul>
 						</li>
-						<?php } ?>
+						<?php } unset( $count_s ); ?>
 					</ul>
 					<div class="submit">
 						<button class="button-primary" name="submit" type="submit"><?php echo $bt_txt; ?></button>

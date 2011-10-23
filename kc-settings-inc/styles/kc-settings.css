@@ -78,6 +78,25 @@ input.kcs-files {margin-right:.5em}
 
 .kcs-wrap .button {margin-right:1em}
 
+.kc-sortable .ui-sortable-helper {
+  border:1px solid #e6db55;
+  background:#ffffe0;
+  padding:1em;
+  -webkit-border-radius:5px;
+  -khtml-border-radius:5px;
+  -moz-border-radius:5px;
+  border-radius:5px}
+.kc-sortable .ui-sortable-placeholder {
+  background:#fcfcfc;
+  border: 1px dashed #dfdfdf;
+  visibility: visible !important;
+  margin-top:1em 0;
+  -webkit-border-radius:5px;
+  -khtml-border-radius:5px;
+  -moz-border-radius:5px;
+  border-radius:5px}
+
+
 
 /*
  * jQuery UI CSS Framework 1.8.11

@@ -4,6 +4,7 @@
 Plugin name: KC Settings
 Plugin URI: http://kucrut.org/2010/10/kc-settings/
 Description: Easily create plugin/theme settings page, custom fields metaboxes, term meta and user meta settings.
+Version: 2.1
 Version: 2.0.1
 Author: Dzikri Aziz
 Author URI: http://kucrut.org/
@@ -163,7 +164,7 @@ class kcSettings {
 		wp_register_script( "kc-settings-upload", "{$this->paths['scripts']}/upload.js", array('jquery'), $this->version );
 
 		# Builder script & style
-		wp_register_script( 'kcsb', "{$this->paths['scripts']}/kcsb.js", array('jquery'), $this->version, true );
+		wp_register_script( 'kcsb', "{$this->paths['scripts']}/kcsb.js", array('jquery-ui-sortable'), $this->version, true );
 		wp_register_style( 'kcsb', "{$this->paths['styles']}/kcsb.css", false, $this->version );
 	}
 
