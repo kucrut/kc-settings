@@ -130,9 +130,18 @@ function kc_settings_field( $args ) {
 	$output = apply_filters( 'kc_settings_field_before', '', $section, $field );
 
 	# Special option with callback
-	if ( $type == 'special' && function_exists($field['cb']) ) {
+	if ( $type == 'special' && function_exists($field['cb']) && is_callable($field['cb']) ) {
 		$args['field']['name'] = $name;
-		$output .= call_user_func( $field['cb'], $args, $db_value );
+		$cb_args = '';
+		if ( isset($field['args']) && !empty($field['args']) ) {
+			$cb_args = $field['args'];
+			// Is it a function?
+			if ( is_string($cb_args) && function_exists($cb_args) && is_callable($cb_args) ) {
+				$cb_args = call_user_func( $cb_args, $args, $db_value );
+			}
+		}
+
+		$output .= call_user_func( $field['cb'], $args, $db_value, $cb_args );
 		$output .= $desc;
 	}
 

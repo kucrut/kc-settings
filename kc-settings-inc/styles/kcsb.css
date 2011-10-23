@@ -19,7 +19,7 @@ input.kcsb-mi {width:23em}
 .kcsb-clone a {position:relative;top:4px;margin:0 3px}
 .kcsb-clone .clone-do {background-position:0 bottom}
 .kcsb-clone .close {background-position:0 -64px}
-.kcsb label.nr {color:#00892c}
+.kcsb .nr {color:#00892c}
 .kcsb-tools .widefat {width:auto}
 .kcsb-tools button {background:none;border:0;cursor:pointer}
 .kcsb-clone {padding-top:4px}

@@ -107,6 +107,22 @@ function mytheme_options( $settings ) {
 					'title'	=> 'File selection',
 					'type'	=> 'file',
 					'mode'	=> 'single'
+				),
+				'sample_callback_3' => array(
+					'id'		=> 'sample_callback_3',
+					'title'	=> 'Callback',
+					'desc'	=> 'Callback with static argument',
+					'type'	=> 'special',
+					'cb'		=> 'kcs_sample_callback_static',
+					'args'	=> "Hey, I'm the static callback argument"
+				),
+				'sample_callback_4' => array(
+					'id'		=> 'sample_callback_4',
+					'title'	=> 'Callback',
+					'desc'	=> 'Callback with dynamic argument (function return value)',
+					'type'	=> 'special',
+					'cb'		=> 'kcs_sample_callback_dynamic',
+					'args'	=> 'kcs_sample_callback_dynamic_args'
 				)
 			)
 		)
@@ -122,6 +138,26 @@ function mytheme_options( $settings ) {
 
 	$settings[] = $my_settings;
 	return $settings;
+}
+
+
+function kcs_sample_callback_static( $field, $db_value, $args ) {
+	return $args;
+}
+
+
+function kcs_sample_callback_dynamic( $field, $db_value, $args ) {
+	$output  = "I'm gonna give you the value from your argument function.<br />";
+	$output .= "Your field name is <b>{$args}</b>, right?";
+	return $output;
+}
+
+
+function kcs_sample_callback_dynamic_args( $field, $db_value ) {
+	// You can do whatever you want here and then return in
+	// So your callback function can process it.
+
+	return $field['field']['name'];
 }
 
 ?>

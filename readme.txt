@@ -36,6 +36,9 @@ Please find the readme.html file inside the plugin directory for the documentati
 = 2.1 =
 * Settings Builder help tab
 * Sortable file items
+* Fixed 'special' field type in settings builder
+* Pass field name attribute to special's callback
+* Special field type created by the builder can now accept callback (strings or function name)
 
 = 2.0.1 =
 * PHP 5.2 support

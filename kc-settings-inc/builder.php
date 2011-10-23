@@ -626,6 +626,14 @@ class kcsBuilder {
 													<label class="kcsb-ml"><?php _e('Callback', 'kcsb') ?></label>
 													<input class="kcsb-mi kcsb-slug required" type="text" name="<?php echo $f_name ?>[cb]" value="<?php esc_attr_e($f_val['cb']) ?>" />
 												</li>
+												<?php if ( !isset($f_val['args']) ) $f_val['args'] = ''; ?>
+												<li class="idep_type special">
+													<label class="kcsb-ml">
+														<span class="nr"><?php _e('Arguments', 'kcsb') ?></span>
+														<br/><small><em>(<?php _e('String or function name', 'kc-settings') ?>)</em></small>
+													</label>
+													<input class="kcsb-mi kcsb-slug" type="text" name="<?php echo $f_name ?>[args]" value="<?php esc_attr_e($f_val['args']) ?>" />
+												</li>
 											</ul>
 											<ul class="actions">
 												<li><a class="add" href="#" rel="fields" title="<?php _e('Add new field', 'kc-settings') ?>"><span><?php _e('Add') ?></span></a></li>
