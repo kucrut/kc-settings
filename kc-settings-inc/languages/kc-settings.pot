@@ -1,0 +1,494 @@
+# Copyright (C) 2010 KC Settings
+# This file is distributed under the same license as the KC Settings package.
+msgid ""
+msgstr ""
+"Project-Id-Version: KC Settings 2.0\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/kc-settings\n"
+"POT-Creation-Date: 2011-10-21 16:49:41+00:00\n"
+"PO-Revision-Date: 2011-10-22 01:18+0700\n"
+"Last-Translator: Dzikri Aziz <dzikri.aziz@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. #-#-#-#-#  plugin.pot (KC Settings 2.0)  #-#-#-#-#
+#. Plugin Name of the plugin/theme
+#: kc-settings.php:174
+#: kc-settings-inc/builder.php:199
+#: kc-settings-inc/builder.php:396
+msgid "KC Settings"
+msgstr "KC Settings"
+
+#: kc-settings.php:175
+msgid "Please upload some files and then go back to this tab."
+msgstr "Silakan unggah berkas anda terlebih dahulu, kemudian bukan kembali tab ini."
+
+#: kc-settings.php:176
+msgid "Select all files"
+msgstr "Pilih semua berkas"
+
+#: kc-settings.php:177
+msgid "Clear selections"
+msgstr "Hilangkan semua centang"
+
+#: kc-settings.php:178
+msgid "Invert selection"
+msgstr "Tukar centang"
+
+#: kc-settings.php:179
+#: kc-settings-inc/form.php:197
+msgid "Add files to collection"
+msgstr "Tambahkan berkas pada koleksi"
+
+#: kc-settings-inc/theme.php:26
+msgid "My Settings"
+msgstr "Pengaturan Saya"
+
+#: kc-settings-inc/theme.php:120
+#: kc-settings-inc/builder.php:390
+msgid "Save Changes"
+msgstr "Simpan Pengaturan"
+
+#: kc-settings-inc/builder.php:24
+msgid "Plugin / theme settings"
+msgstr "Pengaturan plugin/tema"
+
+#: kc-settings-inc/builder.php:28
+msgid "Post metadata (custom fields)"
+msgstr "Post metadata (custom fields)"
+
+#: kc-settings-inc/builder.php:33
+msgid "Term metadata"
+msgstr "Term metadata"
+
+#: kc-settings-inc/builder.php:37
+msgid "User metadata"
+msgstr "User metadata"
+
+#: kc-settings-inc/builder.php:43
+msgid "Settings"
+msgstr "Pengaturan"
+
+#: kc-settings-inc/builder.php:48
+msgid "Appearance"
+msgstr "Tampilan"
+
+#: kc-settings-inc/builder.php:52
+msgid "Dashboard"
+msgstr "Dasbor"
+
+#: kc-settings-inc/builder.php:56
+#: kc-settings-inc/builder.php:64
+msgid "Plugins"
+msgstr "Plugin"
+
+#: kc-settings-inc/builder.php:60
+#: kc-settings-inc/builder.php:405
+#: kc-settings-inc/builder.php:412
+msgid "Tools"
+msgstr "Peralatan"
+
+#: kc-settings-inc/builder.php:68
+msgid "Users"
+msgstr "Pengguna"
+
+#: kc-settings-inc/builder.php:72
+msgid "Media"
+msgstr "Media"
+
+#: kc-settings-inc/builder.php:76
+#: kc-settings-inc/builder.php:345
+msgid "Links"
+msgstr "Tautan"
+
+#: kc-settings-inc/builder.php:80
+msgid "Comments"
+msgstr "Komentar"
+
+#: kc-settings-inc/builder.php:84
+msgid "Posts"
+msgstr "Post"
+
+#: kc-settings-inc/builder.php:127
+msgid "Special"
+msgstr "Istimewa"
+
+#: kc-settings-inc/builder.php:133
+msgid "High"
+msgstr "Tinggi"
+
+#: kc-settings-inc/builder.php:138
+msgid "Normal"
+msgstr "Normal"
+
+#: kc-settings-inc/builder.php:151
+msgid "No public taxonomy found"
+msgstr "Taxonomi publik tidak ditemukan"
+
+#: kc-settings-inc/builder.php:164
+msgid "No public post type found"
+msgstr "Tipe post publik tidak ditemukan"
+
+#: kc-settings-inc/builder.php:177
+msgid "No role found"
+msgstr "Tidak ada role yang ditemukan"
+
+#: kc-settings-inc/builder.php:185
+msgid "Single"
+msgstr "Satu"
+
+#: kc-settings-inc/builder.php:189
+msgid "Multiple"
+msgstr "Banyak"
+
+#: kc-settings-inc/builder.php:214
+#: kc-settings-inc/builder.php:468
+msgid "KC Settings Builder"
+msgstr "Pembuat KC Settings"
+
+#: kc-settings-inc/builder.php:301
+msgid "Setting successfully deleted."
+msgstr "Pengaturan berhasil dihapus."
+
+#: kc-settings-inc/builder.php:304
+msgid "Setting successfully created."
+msgstr "Pengaturan berhasil dibuat."
+
+#: kc-settings-inc/builder.php:307
+msgid "Setting successfully saved."
+msgstr "Pengaturan telah disimpan."
+
+#: kc-settings-inc/builder.php:338
+msgid "Creating a setting"
+msgstr "Membuat pengaturan"
+
+#: kc-settings-inc/builder.php:339
+msgid "All Types"
+msgstr "Semua jenis"
+
+#: kc-settings-inc/builder.php:341
+msgid "All fields are required, unless the label is green."
+msgstr "Semua field harus diisi, kecuali field berlabel hijau"
+
+#: kc-settings-inc/builder.php:342
+msgid "Some fields depend on other field(s), they will be shown when the dependency is selected/checked."
+msgstr "Beberapa field hanya akan ditampilkan ketika field yang diperlukan terpilih."
+
+#: kc-settings-inc/builder.php:343
+msgid "Some fields (eg. ID, Prefix) can only be filled with alphanumerics, dashes and underscores, must be unique, and cannot begin with dashes or underscores. "
+msgstr "Beberapa field (mis. Prefiks) hanya dapat diisi dengan huruf dan angka, strip dan garis bawah, harus unik, dan tidak boleh dimulai dengan strip atau garis bawah."
+
+#: kc-settings-inc/builder.php:347
+msgid "Support"
+msgstr "Dukungan"
+
+#: kc-settings-inc/builder.php:357
+msgid "Create Setting"
+msgstr "Buat pengaturan"
+
+#: kc-settings-inc/builder.php:370
+msgid "There's no setting with ID %s. Are you cheating? ;)"
+msgstr "Tidak ditemukan pengaturan dengan ID %s. Jangan curang ya? ;)"
+
+#: kc-settings-inc/builder.php:379
+msgid "Settings were NOT saved! Please fill all the required fields."
+msgstr "Pengaturan tidak berhasil disimpan. Silakan isi semua field yang diperlukan."
+
+#: kc-settings-inc/builder.php:396
+msgid "Add New"
+msgstr "Buat baru"
+
+#: kc-settings-inc/builder.php:399
+msgid "Saved Settings"
+msgstr "Pengaturan tersimpan"
+
+#: kc-settings-inc/builder.php:403
+#: kc-settings-inc/builder.php:410
+#: kc-settings-inc/builder.php:476
+#: kc-settings-inc/builder.php:518
+#: kc-settings-inc/builder.php:559
+msgid "ID"
+msgstr "ID"
+
+#: kc-settings-inc/builder.php:404
+#: kc-settings-inc/builder.php:411
+#: kc-settings-inc/builder.php:480
+#: kc-settings-inc/builder.php:571
+msgid "Type"
+msgstr "Jenis"
+
+#: kc-settings-inc/builder.php:425
+#: kc-settings-inc/builder.php:427
+msgid "Edit this item"
+msgstr "Sunting"
+
+#: kc-settings-inc/builder.php:427
+msgid "Edit"
+msgstr "Sunting"
+
+#: kc-settings-inc/builder.php:434
+msgid "Reset options"
+msgstr "Reset semua pilihan"
+
+#: kc-settings-inc/builder.php:434
+msgid "Empty"
+msgstr "Kosongkan"
+
+#: kc-settings-inc/builder.php:436
+msgid "Remove all sections and fields"
+msgstr "Hapus semua seksi dan field"
+
+#: kc-settings-inc/builder.php:436
+msgid "Purge"
+msgstr "Bersihkan"
+
+#: kc-settings-inc/builder.php:438
+msgid "Remove this setting"
+msgstr "Hapus pengaturan ini"
+
+#: kc-settings-inc/builder.php:438
+msgid "Delete"
+msgstr "Hapus"
+
+#: kc-settings-inc/builder.php:444
+msgid "Get code"
+msgstr "Dapatkan kode"
+
+#: kc-settings-inc/builder.php:445
+#: kc-settings-inc/builder.php:448
+msgid "Clone"
+msgstr "Gandakan"
+
+#: kc-settings-inc/builder.php:449
+#: kc-settings-inc/builder.php:643
+msgid "Cancel"
+msgstr "Batal"
+
+#: kc-settings-inc/builder.php:450
+msgid "Don't forget to change the setting properties after cloning!"
+msgstr "Jangan lupa untuk merubah properti pengaturan setelah membuat duplikat"
+
+#: kc-settings-inc/builder.php:453
+msgid "Please enable javascript to use the tool"
+msgstr "Silakan aktifkan Javascript terlebih dahulu"
+
+#: kc-settings-inc/builder.php:458
+msgid "No setting found."
+msgstr "Tidak ada pengaturan yang ditemukan."
+
+#: kc-settings-inc/builder.php:466
+msgid "To create a setting, please enable javascript in your browser and reload this page."
+msgstr "Untuk membuat pengaturan, silakan aktifkan Javascript di peramban anda lalu buka kembali halaman ini."
+
+#: kc-settings-inc/builder.php:469
+msgid "Please click the Help button to read the guide before creating a setting."
+msgstr "Klik tombol Bantuan untuk membaca panduan tentang cara membuat pengaturan."
+
+#: kc-settings-inc/builder.php:484
+msgid "Prefix"
+msgstr "Prefiks"
+
+#: kc-settings-inc/builder.php:488
+msgid "Menu location"
+msgstr "Lokasi Menu"
+
+#: kc-settings-inc/builder.php:492
+msgid "Menu title"
+msgstr "Judul Menu"
+
+#: kc-settings-inc/builder.php:495
+msgid "Page title"
+msgstr "Judul Halaman"
+
+#: kc-settings-inc/builder.php:499
+msgid "Post type"
+msgstr "Jenis Post"
+
+#: kc-settings-inc/builder.php:503
+msgid "Taxonomies"
+msgstr "Taxonomi"
+
+#: kc-settings-inc/builder.php:522
+msgid "Title"
+msgstr "Judul"
+
+#: kc-settings-inc/builder.php:526
+#: kc-settings-inc/builder.php:567
+msgid "Description"
+msgstr "Penjelasan"
+
+#: kc-settings-inc/builder.php:530
+msgid "Roles"
+msgstr "Role"
+
+#: kc-settings-inc/builder.php:545
+msgid "Priority"
+msgstr "Prioritas"
+
+#: kc-settings-inc/builder.php:549
+msgid "Fields"
+msgstr "Field"
+
+#: kc-settings-inc/builder.php:563
+#: kc-settings-inc/builder.php:602
+msgid "Label"
+msgstr "Label"
+
+#: kc-settings-inc/builder.php:576
+msgid "Attributes"
+msgstr "Atribut"
+
+#: kc-settings-inc/builder.php:585
+msgid "Mode"
+msgstr "Modus"
+
+#: kc-settings-inc/builder.php:589
+msgid "Options"
+msgstr "Pilihan"
+
+#: kc-settings-inc/builder.php:598
+#: kc-settings-inc/form.php:325
+msgid "Value"
+msgstr "Isi"
+
+#: kc-settings-inc/builder.php:606
+msgid "Add new option"
+msgstr "Tambah pilihan baru"
+
+#: kc-settings-inc/builder.php:606
+#: kc-settings-inc/builder.php:622
+#: kc-settings-inc/builder.php:633
+#: kc-settings-inc/form.php:329
+msgid "Add"
+msgstr "Tambah"
+
+#: kc-settings-inc/builder.php:607
+msgid "Remove this option"
+msgstr "Hapus pilihan ini"
+
+#: kc-settings-inc/builder.php:607
+#: kc-settings-inc/builder.php:623
+#: kc-settings-inc/builder.php:634
+#: kc-settings-inc/form.php:330
+#: kc-settings-inc/form.php:365
+msgid "Remove"
+msgstr "Hapus"
+
+#: kc-settings-inc/builder.php:608
+msgid "Move this option up"
+msgstr "Pindahkan pilihan ini ke atas"
+
+#: kc-settings-inc/builder.php:608
+#: kc-settings-inc/builder.php:624
+#: kc-settings-inc/builder.php:635
+#: kc-settings-inc/form.php:331
+msgid "Up"
+msgstr "Naikkan"
+
+#: kc-settings-inc/builder.php:609
+msgid "Move this option down"
+msgstr "Pindahkan pilihan ini ke bawah"
+
+#: kc-settings-inc/builder.php:609
+#: kc-settings-inc/builder.php:625
+#: kc-settings-inc/builder.php:636
+#: kc-settings-inc/form.php:332
+msgid "Down"
+msgstr "Turunkan"
+
+#: kc-settings-inc/builder.php:617
+msgid "Callback"
+msgstr "Callback"
+
+#: kc-settings-inc/builder.php:622
+msgid "Add new field"
+msgstr "Tambah field baru"
+
+#: kc-settings-inc/builder.php:623
+msgid "Remove this field"
+msgstr "Hapus field ini"
+
+#: kc-settings-inc/builder.php:624
+msgid "Move this field up"
+msgstr "Pindahkan field ini ke atas"
+
+#: kc-settings-inc/builder.php:625
+msgid "Move this field down"
+msgstr "Pindahkan field ini ke bawah"
+
+#: kc-settings-inc/builder.php:633
+msgid "Add new section"
+msgstr "Tambah seksi baru"
+
+#: kc-settings-inc/builder.php:634
+msgid "Remove this section"
+msgstr "Hapus seksi ini"
+
+#: kc-settings-inc/builder.php:635
+msgid "Move this section up"
+msgstr "Pindahkan seksi ini ke atas"
+
+#: kc-settings-inc/builder.php:636
+msgid "Move this section down"
+msgstr "Pindahkan seksi ini ke bawah"
+
+#: kc-settings-inc/post.php:43
+msgid "%s Settings"
+msgstr "Pengaturan %s"
+
+#: kc-settings-inc/helper.php:115
+#: kc-settings-inc/form.php:251
+#: kc-settings-inc/form.php:262
+msgid "Select"
+msgstr "Pilih"
+
+#: kc-settings-inc/form.php:197
+msgid "Add files"
+msgstr "Tambah berkas"
+
+#: kc-settings-inc/form.php:323
+msgid "Key"
+msgstr "Kunci"
+
+#: kc-settings-inc/form.php:329
+msgid "Add new row"
+msgstr "Tambah baris"
+
+#: kc-settings-inc/form.php:330
+msgid "Remove this row"
+msgstr "Hapus baris ini"
+
+#: kc-settings-inc/form.php:331
+msgid "Move this row up"
+msgstr "Pindahkan baris ini ke atas"
+
+#: kc-settings-inc/form.php:332
+msgid "Move this row down"
+msgstr "Pindahkan baris ini ke bawah"
+
+#: kc-settings-inc/form.php:333
+msgid "Clear"
+msgstr "Bersihkan"
+
+#: kc-settings-inc/form.php:365
+msgid "Remove from collection"
+msgstr "Hapus dari koleksi"
+
+#. Plugin URI of the plugin/theme
+msgid "http://kucrut.org/2010/10/kc-settings/"
+msgstr "http://kucrut.org/2010/10/kc-settings/"
+
+#. Description of the plugin/theme
+msgid "Easily create plugin/theme settings page, custom fields metaboxes, term meta and user meta settings."
+msgstr "Plugin yang mempermudah anda untuk membuat pengaturan tema, plugin, metadata term, post, dan user."
+
+#. Author of the plugin/theme
+msgid "Dzikri Aziz"
+msgstr "Dzikri Aziz"
+
+#. Author URI of the plugin/theme
+msgid "http://kucrut.org/"
+msgstr "http://kucrut.org/"
+
