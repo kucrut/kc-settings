@@ -514,14 +514,17 @@ class kcsBuilder {
 						</li>
 					</ul>
 
-					<h4>Sections</h4>
+					<h4><?php _e('Sections', 'kc-settings') ?></h4>
 					<ul class="sections kc-rows">
 						<?php
+							$count_s = 0;
 							foreach ( $values['sections']  as $idxS => $section ) {
+								$count_s++;
 								$s_name	= "kcsb[sections][{$idxS}]";
 								$s_val	= $values['sections'][$idxS];
 						?>
 						<li class="row" data-mode="sections">
+							<h5 title="<?php _e('Drag to reorder section', 'kc-settings') ?>"><?php _e( sprintf('Section #%s', "<span class='count'>{$count_s}</span>"), 'kc-settings') ?></h5>
 							<ul>
 								<li>
 									<label class="kcsb-ml"><?php _e('ID', 'kc-settings') ?></label>
@@ -558,11 +561,14 @@ class kcsBuilder {
 									<h4 class="kcsb-ml"><?php _e('Fields', 'kc-settings') ?></h4>
 									<ul class="kcsb-mi kc-rows">
 										<?php
+											$count_f = 0;
 											foreach ( $section['fields'] as $idxF => $field ) {
+												$count_f++;
 												$f_name	= "{$s_name}[fields][{$idxF}]";
 												$f_val	= $s_val['fields'][$idxF];
 										?>
 										<li class="row" data-mode="fields">
+											<h5 title="<?php _e('Drag to reorder section', 'kc-settings') ?>"><?php _e( sprintf('Field #%s', "<span class='count'>{$count_f}</span>"), 'kc-settings') ?></h5>
 											<ul>
 												<li>
 													<label class="kcsb-ml"><?php _e('ID', 'kc-settings') ?></label>
@@ -638,7 +644,7 @@ class kcsBuilder {
 												<li><a class="del" title="<?php _e('Remove this field', 'kc-settings') ?>"><span><?php _e('Remove') ?></span></a></li>
 											</ul>
 										</li>
-										<?php } ?>
+										<?php } unset( $count_f ); ?>
 									</ul>
 								</li>
 							</ul>
@@ -647,7 +653,7 @@ class kcsBuilder {
 								<li><a class="del" title="<?php _e('Remove this section', 'kc-settings') ?>"><span><?php _e('Remove') ?></span></a></li>
 							</ul>
 						</li>
-						<?php } ?>
+						<?php } unset( $count_s ); ?>
 					</ul>
 					<div class="submit">
 						<button class="button-primary" name="submit" type="submit"><?php echo $bt_txt; ?></button>

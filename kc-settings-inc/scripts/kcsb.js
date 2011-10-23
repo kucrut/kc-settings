@@ -287,7 +287,14 @@ jQuery(document).ready(function($) {
 			ui.placeholder.height( ui.item.outerHeight() );
 		},
 		stop: function(ev, ui) {
-			ui.item.parent().kcsbReorder( ui.item.data('mode') ).kcsbActions();
+			// Reorder input names
+			ui.item.parent()
+				.kcsbReorder( ui.item.data('mode') )
+				.kcsbActions()
+				.children().each(function() {
+					// Reorder count
+					$('> h5 .count', this).text( $(this).index() + 1);
+				});
 		}
 	});
 

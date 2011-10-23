@@ -1,7 +1,11 @@
 .kcsb {width:45em}
 .kcsb-block {margin-bottom:3em}
 .kcsb .checkbox {background:none}
-.kcsb-ml {display:inline-block;width:9em;margin-right:1em;vertical-align:top}
+.kcsb-ml {
+  display:inline-block;
+  width:9em;
+  margin-right:1em;
+  vertical-align:top}
 .kcsb-mi {display:inline-block}
 input.kcsb-mi {width:23em}
 .kcsb-mi div.kcsb-mi, .kcsb-mi ul.kcsb-mi {width:23em}
@@ -35,6 +39,14 @@ input.kcsb-mi {width:23em}
 .kcsb-clone {padding-top:4px}
 
 .kcsb .fields > ul {padding-left:1em}
+
+
+h4.kcsb-ml {
+  display:block;
+  margin-bottom:0}
+.kcsb h5,
+.kcsb-options label {
+  cursor:move}
 
 
 .kcsb .ui-sortable {position:relative}
