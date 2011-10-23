@@ -66,6 +66,11 @@ jQuery(document).ready(function($) {
 		tb_show( '', $el.attr('href') );
 	});
 
-	$('ul.kc-sortable').sortable();
+	$('ul.kc-sortable').sortable({
+		axis: 'y',
+		start: function(ev, ui) {
+			ui.placeholder.height( ui.item.outerHeight() );
+		}
+	});
 
 });
