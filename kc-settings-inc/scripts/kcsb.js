@@ -261,6 +261,7 @@ jQuery(document).ready(function($) {
 	});
 
 
+	// Setting clone
 	$('a.clone-open').live('click', function() {
 		$(this).parent().children().hide().filter('div.kcsb-clone').fadeIn();
 		return false;

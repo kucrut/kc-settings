@@ -179,25 +179,29 @@ function kc_settings_field( $args ) {
 				'post__in' => $value['files'],
 				'post_type' => 'attachment',
 				'post_status' => 'inherit',
-				'orderby' => 'post__in'
+				'orderby' => 'post__in',
+				'suppress_filters' => false
 			);
 
 			add_filter( 'posts_orderby', 'kcs_sort_query_by_post_in', 10, 2 );
 
-			$wp_query = new WP_Query($q_args);
-			if ( $wp_query->have_posts() ) {
-				while ( $wp_query->have_posts() ) {
-					$wp_query->the_post();
+			global $post;
+			$tmp_post = $post;
+
+			$files = get_posts( $q_args );
+			if ( !empty($files) ) {
+				foreach ( $files as $post ) {
+					setup_postdata( $post );
 					$f__id = get_the_ID();
 					$output .= kcs_filelist_item( $name, $field['mode'], $p__id, $f__id, get_the_title(), in_array($f__id, $value['selected']), false );
 				}
+				$post = $tmp_post;
 			} else {
 				$output .= kcs_filelist_item( $name, $field['mode'] );
 			}
 
-			$wp_query = null;
-			wp_reset_query();
 			remove_filter( 'posts_orderby', 'kcs_sort_query_by_post_in' );
+
 		} else {
 			$output .= kcs_filelist_item( $name, $field['mode'] );
 		}
