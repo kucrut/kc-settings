@@ -79,9 +79,9 @@ input.kcs-files {margin-right:.5em}
 .kcs-wrap .button {margin-right:1em}
 
 .kc-sortable .ui-sortable-helper {
-  border:1px solid #E5FF00;
-  background:#ffffc0;
-  padding:1em 0 1em 1em;
+  border:1px solid #e6db55;
+  background:#ffffe0;
+  padding:1em;
   -webkit-border-radius:5px;
   -khtml-border-radius:5px;
   -moz-border-radius:5px;

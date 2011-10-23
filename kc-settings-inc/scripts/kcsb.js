@@ -76,54 +76,13 @@ function inArray(needle, haystack) {
 					i				= -1;
 
 			$items.each(function() {
+				$('> .actions .count', this).text( $(this).index() + 1);
 				i++;
 				$(this).find(':input').each(function() {
 					this.name = this.name.replace(regex, function(str, p1) {
 						return mode + '][' + i;
 					});
 				});
-			});
-		});
-	};
-
-
-	$.fn.kcsbActions = function() {
-		return this.each(function() {
-			var $this 	= $(this),
-					$rows	= $this.find('.row');
-
-			$rows.each(function() {
-				var $row	 		= $(this),
-						$actions	= $row.children('.actions'),
-						$add			= $actions.find('.add'),
-						$del			= $actions.find('.del'),
-						$up				= $actions.find('.move.up'),
-						$down			= $actions.find('.move.down');
-
-				if ( $row.is(':first-child') ) {
-					$add.hide();
-					$up.hide();
-				}
-
-				if ( $row.is(':last-child') ) {
-					$add.show();
-					$up.show();
-					$down.hide();
-				}
-				else {
-					$add.hide();
-					$down.show();
-				}
-
-				if ( $row.is(':only-child') ) {
-					$add.show();
-					$del.hide();
-					$up.hide();
-					$down.hide();
-				}
-				else {
-					$del.show();
-				}
 			});
 		});
 	};
@@ -183,7 +142,7 @@ jQuery(document).ready(function($) {
 	if ( !$builder.is('.hidden') )
 		$builder.kcsbGoto();
 
-	$('.row').parent().kcsbActions();
+	$('.row').parent();
 
 	$('.idep:input').kcsbIDep();
 
@@ -214,19 +173,16 @@ jQuery(document).ready(function($) {
 				$item		= $this.closest('.row'),
 				mode		= $item.data('mode'),
 				isLast	= $item.is(':last-child');
-				$wrap		= $item.parent();
 
-		if ( !$item.siblings('.row') )
+		if ( !$item.siblings('.row').length )
 			return false;
 
-		$item.fadeOut('fast', function() {
+		$item.addClass('removing').fadeOut('slow', function() {
 			$(this).remove();
-			// Reorder
+			// Reorder input names
 			if ( !isLast ) {
-				$wrap.kcsbReorder( mode );
+				$item.parent().kcsbReorder( mode );
 			}
-			// Action buttons
-			$wrap.kcsbActions();
 		});
 
 		return false;
@@ -239,7 +195,7 @@ jQuery(document).ready(function($) {
 				$item		= $this.closest('.row'),
 				mode		= $item.data('mode'),
 				regex		= new RegExp(mode+'\\]\\[(\\d+)', 'g'),
-				$nu			= $item.clone(false);
+				$nu			= $item.clone(false).addClass('adding');
 
 		$nu.find('.kc-rows').each(function() {
 			var $kids		= $(this).children('.row');
@@ -271,10 +227,13 @@ jQuery(document).ready(function($) {
 
 		});
 
-		$item.after( $nu )
-			.parent().kcsbActions();
+		$item.after( $nu );
+		setTimeout(function() {
+			$nu.removeClass('adding');
+		}, 500);
 
 		$('.idep:input').kcsbIDep();
+		$item.parent().kcsbReorder( mode );
 
 		return false;
 	});
@@ -289,12 +248,7 @@ jQuery(document).ready(function($) {
 		stop: function(ev, ui) {
 			// Reorder input names
 			ui.item.parent()
-				.kcsbReorder( ui.item.data('mode') )
-				.kcsbActions()
-				.children().each(function() {
-					// Reorder count
-					$('> h5 .count', this).text( $(this).index() + 1);
-				});
+				.kcsbReorder( ui.item.data('mode') );
 		}
 	});
 
