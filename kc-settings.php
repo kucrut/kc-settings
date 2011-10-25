@@ -4,7 +4,7 @@
 Plugin name: KC Settings
 Plugin URI: http://kucrut.org/2010/10/kc-settings/
 Description: Easily create plugin/theme settings page, custom fields metaboxes, term meta and user meta settings.
-Version: 2.1
+Version: 2.1.1
 Author: Dzikri Aziz
 Author URI: http://kucrut.org/
 License: GPL v2
