@@ -350,11 +350,15 @@ class kcsBuilder {
 
 		$screen = get_current_screen();
 		if ( is_object($screen) ) {
-		$screen->add_help_tab(array(
-			'id' => 'help-kcsb',
-			'title' => __( 'KC Settings Builder', 'kc-settings' ),
-			'content' => $help
-		));
+			if ( method_exists($screen, 'add_help_tab') ) {
+			$screen->add_help_tab(array(
+				'id' => 'help-kcsb',
+				'title' => __( 'KC Settings Builder', 'kc-settings' ),
+				'content' => $help
+			));
+			} else {
+				add_contextual_help( $screen, $help );
+			}
 		}
 	}
 
