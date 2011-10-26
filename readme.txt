@@ -4,7 +4,7 @@ Donate link: http://kucrut.org/
 Tags: theme-options, plugin-options, settings, options, term-meta, category-meta, post-meta, custom-fields, user-meta, attachment
 Requires at least: 3.2
 Tested up to: 3.3-beta2
-Stable tag: 2.1.1
+Stable tag: 2.1.2
 
 Easily create plugin/theme settings page, custom fields metaboxes and term meta settings.
 
@@ -32,6 +32,10 @@ Please find the readme.html file inside the plugin directory for the documentati
 5. Post settings
 
 == Changelog ==
+
+= 2.1.2 =
+* New helper class: kcForm
+* Deprecate kcs_select() and kc_dropdown_options()
 
 = 2.1.1 =
 * Backward compatibility for WP 3.2.1

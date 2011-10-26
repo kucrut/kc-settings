@@ -10,7 +10,7 @@
  */
 
 function kc_dropdown_options( $args = array() ) {
-	_deprecated_function( __FUNCTION__, '2.2', 'wp_dropdown_pages()' );
+	_deprecated_function( __FUNCTION__, '2.1.2', 'wp_dropdown_pages()' );
 
 	$defaults =  array(
 		'prefix'	=> 'kc',
@@ -41,7 +41,7 @@ function kc_dropdown_options( $args = array() ) {
 
 
 function kcs_select($arr = array(), $val, $atts = array(), $echo = true) {
-	_deprecated_function( __FUNCTION__, '2.2', 'kcForm::field()' );
+	_deprecated_function( __FUNCTION__, '2.1.2', 'kcForm::field()' );
 
 	if ( empty($arr) )
 		return false;
