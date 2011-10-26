@@ -579,8 +579,7 @@ class kcsBuilder {
 											if ( !isset($s_val['role']) )
 												$s_val['role'] = array();
 
-											echo kcForm::field(array(
-												'type'			=> 'checkbox',
+											echo kcForm::checkbox(array(
 												'attr'			=> array('name' => "{$s_name}[role][]", 'class' => 'kcsb-mi'),
 												'options'		=> $options['role'],
 												'current'		=> $s_val['role'],

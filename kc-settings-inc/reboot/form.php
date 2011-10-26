@@ -13,9 +13,6 @@ class kcForm {
     if ( in_array($args['type'], array('', 'text', 'date')) ) {
       $type = 'input';
     }
-    elseif ( in_array($args['type'], array('checkbox', 'radio')) ) {
-      $type = 'checkbox_radio';
-    }
     else {
       $type = $args['type'];
     }
@@ -53,7 +50,14 @@ class kcForm {
   }
 
 
-  public static function checkbox_radio( $args ) {
+  public static function radio( $args ) {
+    $args['type'] = 'radio';
+    return self::checkbox( $args );
+  }
+
+
+  public static function checkbox( $args ) {
+    $args['type'] = 'checkbox';
     if ( !is_array($args['current']) )
       $args['current'] = array($args['current']);
     if ( !isset($args['check_sep']) || !is_array($args['check_sep']) || count($args['check_sep']) < 2 )
