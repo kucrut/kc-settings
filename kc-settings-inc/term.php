@@ -106,7 +106,7 @@ class kcTermSettings {
 						$the_label = "\t<th scope='row'>\n{$the_label}\t</th>\n";
 					$output .= $the_label;
 
-					$the_field = "\t\t".kc_settings_field( $args )."\n";
+					$the_field = "\t\t".kcs_settings_field( $args )."\n";
 					# Wrap the field with <tr> if we're in edit mode
 					if ( $edit_mode )
 						$the_field = "\t<td>\n{$the_field}\t</td>\n";

@@ -202,7 +202,7 @@ function kcs_form_label( $title, $id = null, $ft = false, $echo = true  ) {
  *
  */
 
-function kc_settings_field( $args ) {
+function kcs_settings_field( $args ) {
 	extract($args, EXTR_OVERWRITE);
 
 	$input_types = array('special', 'date', 'text', 'textarea',

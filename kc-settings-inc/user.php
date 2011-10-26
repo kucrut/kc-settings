@@ -49,7 +49,7 @@ class kcUserSettings {
 
 					$output .= "\t\t<tr>\n";
 					$output .= "\t\t\t<th>".kcs_form_label($title, $label_for, false, false)."</th>\n";
-					$output .= "\t\t\t<td>".kc_settings_field( $args )."</td>\n";
+					$output .= "\t\t\t<td>".kcs_settings_field( $args )."</td>\n";
 					$output .= "\t\t</tr>\n";
 				}
 				$output .= "\t</tbody>\n";

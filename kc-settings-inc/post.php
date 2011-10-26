@@ -66,7 +66,7 @@ class kcPostSettings {
 
 			# print the option field
 			$output .= "\t\t<td>";
-			$output .= kc_settings_field( array( 'mode' => 'post', 'object_id' => $object->ID, 'section' => $section, 'field' => $field ) );
+			$output .= kcs_settings_field( array( 'mode' => 'post', 'object_id' => $object->ID, 'section' => $section, 'field' => $field ) );
 			$output .= "\t\t</td>\n";
 
 			$output .= "\t</tr>\n";
@@ -156,7 +156,7 @@ class kcPostSettings {
 				$nu_field = array(
 					'label' => $title,
 					'input' => 'html',
-					'html'  => kc_settings_field( $input_args )
+					'html'  => kcs_settings_field( $input_args )
 				);
 				if ( isset($desc) && !empty($desc) )
 					$nu_field['helps'] = $desc;
