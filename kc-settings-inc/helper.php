@@ -285,24 +285,6 @@ function kcsb_settings_bootsrap() {
 }
 
 
-function kc_create_code( $arr ) {
-	$output = '';
-
-	foreach ( $arr as $k => $v ) {
-		$output .= "'{$k}' =&gt; ";
-		if ( is_array($v) ) {
-			$output .= " array(\n";
-			$output .= "\t".kc_create_code( $v );
-			$output .= "),\n";
-		}
-		else
-			$output .= "'{$v}',\n";
-	}
-
-	return $output;
-}
-
-
 /**
  * Sort query order by 'post__in'
  *
