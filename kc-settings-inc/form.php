@@ -222,7 +222,7 @@ function kc_settings_field( $args ) {
 		if ( in_array($type, array('checkbox', 'select')) ) {
 			$field_attr['name'] .= '[]';
 		}
-		if ( !in_array($type, array('checkbox', 'radio', 'select')) ) {
+		if ( !in_array($type, array('checkbox', 'radio')) ) {
 			$field_attr['id'] = $id;
 		}
 		if ( in_array($type, array('text', 'date')) ) {
