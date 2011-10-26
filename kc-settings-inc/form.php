@@ -80,18 +80,10 @@ function kc_form_label( $title, $id = null, $ft = false, $echo = true  ) {
  */
 
 function kc_settings_field( $args ) {
-	$defaults = array(
-		'mode'			=> 'plugin',
-		'section'		=> null,
-		'field'			=> array(),
-		'label_for'	=> null
-	);
-	//$r = wp_parse_args( $args, $defaults );
 	extract($args, EXTR_OVERWRITE);
 
-	$input_types = array('input', 'textarea', 'checkbox', 'radio', 'select', 'multiselect', 'multiinput', 'date', 'file', 'special');
-	$type = ( isset($field['type']) && in_array($field['type'], $input_types) ) ? $field['type'] : 'input' ;
-	$br = ( isset($tabled) && $tabled ) ? '<br />' : null;
+	$input_types = array('text', 'textarea', 'checkbox', 'radio', 'select', 'multiselect', 'multiinput', 'date', 'file', 'special');
+	$type = ( isset($field['type']) && in_array($field['type'], $input_types) ) ? $field['type'] : 'text';
 
 	# setup the input id and name attributes, also get the current value from db
 	switch ( $mode ) {
@@ -118,10 +110,6 @@ function kc_settings_field( $args ) {
 		break;
 	}
 
-	if ( $type == 'multiselect' ) {
-		$name .= '[]';
-	}
-	$name_id = "name='{$name}' id='{$id}'";
 
 	$desc_tag = ( isset($desc_tag) ) ? $desc_tag : 'p';
 	$desc = ( $mode != 'attachment' && isset($field['desc']) && !empty($field['desc']) ) ? "<{$desc_tag} class='description'>{$field['desc']}</{$desc_tag}>" : null;
@@ -213,84 +201,55 @@ function kc_settings_field( $args ) {
 		$output .= "</div>\n";
 	}
 
-	# Single line text input
-	elseif ( $type == 'input' ) {
-		$value = ( !empty($db_value) ) ? esc_html( stripslashes($db_value) ) : '';
-		$attr = ( isset($field['attr']) ) ? $field['attr'] : '';
-		$output .= "\n\t<input type='text' {$name_id} value='{$value}' class='kcs-{$type}' {$attr}/> {$desc}\n";
-	}
-
-	# Date
-	elseif ( $type == 'date' ) {
-		$value = ( !empty($db_value) ) ? esc_html( stripslashes($db_value) ) : '';
-		$attr = ( isset($field['attr']) ) ? $field['attr'] : '';
-		$output .= "\n\t<input type='date' {$name_id} value='{$value}' class='widefat kcs-{$type}' {$attr}/> {$desc}\n";
-	}
-
-	# Paragraph
-	elseif ( $type == 'textarea' ) {
-		$value = ( !empty($db_value) ) ? esc_html( stripslashes($db_value) ) : '';
-		$attr = ( isset($field['attr']) ) ? $field['attr'] : 'cols="40" rows="4"';
-		$output .= "\n\t<textarea {$name_id} class='kcs-{$type}' {$attr}>{$value}</textarea> {$desc}\n";
-	}
-
-	# Checkboxes, Radioboxes, Dropdown options
-	elseif ( in_array($type, array('checkbox', 'radio', 'select', 'multiselect')) ) {
-		if ( !is_array($field['options']) || empty($field['options']) )
-			return;
-
-		$options = $field['options'];
-
-		switch ( $type ) {
-			# Checkboxes
-			case 'checkbox' :
-				foreach ( $options as $c_id => $c_lbl ) {
-					$checked = ( is_array($db_value) && isset($db_value[$c_id]) && $db_value[$c_id] ) ? 'checked="checked" ' : null;
-					$output .= "\n\t<label class='kcs-{$type}'><input type='checkbox' name='{$name}[{$c_id}]' value='1' {$checked}/> {$c_lbl}</label>{$br}\n";
-				}
-			break;
-
-			# Radioboxes
-			case 'radio' :
-				foreach ( $options as $c_val => $c_lbl ) {
-					$db_value = ( empty($db_value) && isset($field['default']) ) ? $field['default'] : $db_value;
-					$checked = ( $db_value == $c_val ) ? 'checked="checked" ' : null;
-					$output .= "\n\t<label class='kcs-{$type}'><input type='radio' name='{$name}' value='{$c_val}' {$checked}/> {$c_lbl}</label>{$br}\n";
-				}
-			break;
-
-			# Dropdown
-			case 'select' :
-				$output  = "\n\t<select {$name_id} class='kcs-{$type}'>\n";
-				$output .= "\t\t<option value=''>&mdash;".__('Select')."&mdash;</option>\n";
-				foreach ( $options as $c_val => $c_lbl ) {
-					$selected = ( $db_value == $c_val ) ? ' selected="selected"' : null;
-					$output .= "\t\t<option value='{$c_val}'{$selected}>{$c_lbl}</option>\n";
-				}
-				$output .= "\t</select>\n";
-			break;
-
-			# Dropdown (multi)
-			case 'multiselect' :
-				$output  = "\n\t<select {$name_id} multiple='multiple' size='3' class='kcs-{$type}'>\n";
-				$output .= "\t\t<option value='0'>&mdash;".__('Select')."&mdash;</option>\n";
-				foreach ( $options as $c_val => $c_lbl ) {
-					//$selected = ( $db_value == $c_val ) ? ' selected="selected" ' : null;
-					$selected = ( is_array($db_value) && in_array($c_val, $db_value) ) ? ' selected="selected" ' : null;
-					$output .= "\t\t<option value='{$c_val}'{$selected}>{$c_lbl}</option>\n";
-				}
-				$output .= "\t</select>\n";
-			break;
-		}
-		$output .= "\t{$desc}\n";
-
-	}
-
 	# pair Input
 	elseif ( $type == 'multiinput' ) {
 		$output .= kc_pair_option_row( $name, $db_value, $type );
 		$output .= "\t{$desc}\n";
 	}
+
+	# Others
+	else {
+		// Attributes
+		$field_attr = array(
+			'name'		=> $name,
+			'class'		=> "kcs-{$type}"
+		);
+
+		if ( $type == 'multiselect' ) {
+			$type = 'select';
+			$field_attr['multiple'] = true;
+		}
+		if ( in_array($type, array('checkbox', 'select')) ) {
+			$field_attr['name'] .= '[]';
+		}
+		if ( !in_array($type, array('checkbox', 'radio', 'select')) ) {
+			$field_attr['id'] = $id;
+		}
+		if ( in_array($type, array('text', 'date')) ) {
+			$field_attr['class'] .= ' widefat kcs-input';
+		}
+
+
+		$field_args = array(
+			'type'		=> $type,
+			'attr'		=> $field_attr,
+			'current'	=> $db_value
+		);
+
+		if ( isset($field['options']) ) {
+			$field_options = array();
+			foreach ( $field['options'] as $v => $l )
+				$field_options[] = array(
+					'value' => $v,
+					'label'	=> $l
+				);
+			$field_args['options'] = $field_options;
+		}
+
+		$output .= "\t" . kcForm::field( $field_args ) . "\n";
+		$output .= "\t{$desc}\n";
+	}
+
 
 	# Let user filter the output of the setting field
 	if ( isset($args['echo']) && $args['echo'] )
