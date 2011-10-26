@@ -7,10 +7,6 @@ class kcForm {
       'type'    => 'text',
       'attr'    => '',
       'current' => '',
-      'none'    => array(
-        'value'   => '-1',
-        'label'   => '&mdash;&nbsp;'.__('Select', 'kc-settings').'&nbsp;&mdash;'
-      ),
       'echo'    => false
     );
     $args = wp_parse_args( $args, $defaults );
@@ -78,7 +74,14 @@ class kcForm {
 
 
   public static function select( $args ) {
+    if ( !isset($args['none']) || !is_array($args['none']) || empty($args['none']) ) {
+      $args['none'] = array(
+        'value'   => '-1',
+        'label'   => '&mdash;&nbsp;'.__('Select', 'kc-settings').'&nbsp;&mdash;'
+      );
+    }
     $options = array_merge( array($args['none']), $args['options'] );
+
     if ( !is_array($args['current']) )
       $args['current'] = array($args['current']);
 
