@@ -582,12 +582,15 @@ class kcsBuilder {
 										<?php
 											if ( !isset($s_val['role']) )
 												$s_val['role'] = array();
-											foreach ( $options['role'] as $r ) {
+
+											echo kcForm::field(array(
+												'type'			=> 'checkbox',
+												'attr'			=> array('name' => "{$s_name}[role][]", 'class' => 'kcsb-mi'),
+												'options'		=> $options['role'],
+												'current'		=> $s_val['role'],
+												'check_sep'	=> array("\t<li>", "</li>\n")
+											));
 										?>
-										<li>
-											<label><input class="optional" type="checkbox" name="<?php echo $s_name ?>[role][]" value="<?php esc_attr_e($r['value']) ?>" <?php checked(in_array($r['value'], $s_val['role'])) ?>/> <?php echo $r['label'] ?></label>
-										</li>
-										<?php } ?>
 									</ul>
 								</li>
 								<?php if ( !isset($s_val['priority']) ) $s_val['priority'] = 'high' ?>
