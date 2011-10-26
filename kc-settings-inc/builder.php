@@ -491,7 +491,14 @@ class kcsBuilder {
 						</li>
 						<li>
 							<label class="kcsb-ml"><?php _e('Type') ?></label>
-							<?php kcs_select( $options['type'], $values['type'], array('name' => 'kcsb[type]', 'class' => 'idep global kcsb-mi') ); ?>
+							<?php
+								echo kcForm::field(array(
+									'type'		=> 'select',
+									'attr'		=> array('name' => 'kcsb[type]', 'class' => 'idep global kcsb-mi'),
+									'options'	=> $options['type'],
+									'current'	=> $values['type']
+								));
+							?>
 						</li>
 						<li class="idep_type plugin">
 							<label class="kcsb-ml"><?php _e('Prefix', 'kc-settings') ?></label>
@@ -499,7 +506,14 @@ class kcsBuilder {
 						</li>
 						<li class="idep_type plugin">
 							<label class="kcsb-ml"><?php _e('Menu location', 'kc-settings') ?></label>
-							<?php kcs_select( $options['menu_location'],  $values['menu_location'], array('name' => 'kcsb[menu_location]', 'class' => 'kcsb-mi') ); ?>
+							<?php
+								echo kcForm::field(array(
+									'type'		=> 'select',
+									'attr'		=> array('name' => 'kcsb[menu_location]', 'class' => 'kcsb-mi'),
+									'options'	=> $options['menu_location'],
+									'current'	=> $values['menu_location']
+								));
+							?>
 						</li>
 						<li class="idep_type plugin">
 							<label class="kcsb-ml"><?php _e('Menu title', 'kc-settings') ?></label>
@@ -510,11 +524,25 @@ class kcsBuilder {
 						</li>
 						<li class="idep_type post">
 							<label class="kcsb-ml"><?php _e('Post type', 'kc-settings') ?></label>
-							<?php kcs_select( $options['post_types'], $values['post_type'], array('name' => 'kcsb[post_type]', 'class' => 'kcsb-mi') ); ?>
+							<?php
+								echo kcForm::field(array(
+									'type'		=> 'select',
+									'attr'		=> array('name' => 'kcsb[post_type]', 'class' => 'kcsb-mi'),
+									'options'	=> $options['post_types'],
+									'current'	=> $values['post_type']
+								));
+							?>
 						</li>
 						<li class="idep_type term">
 							<label class="kcsb-ml"><?php _e('Taxonomies', 'kc-settings') ?></label>
-							<?php kcs_select( $options['taxonomies'], $values['taxonomy'], array('name' => 'kcsb[taxonomy]', 'class' => 'kcsb-mi') ); ?>
+							<?php
+								echo kcForm::field(array(
+									'type'		=> 'select',
+									'attr'		=> array('name' => 'kcsb[taxonomy]', 'class' => 'kcsb-mi'),
+									'options'	=> $options['taxonomies'],
+									'current'	=> $values['taxonomy']
+								));
+							?>
 						</li>
 					</ul>
 
@@ -565,7 +593,14 @@ class kcsBuilder {
 								<?php if ( !isset($s_val['priority']) ) $s_val['priority'] = 'high' ?>
 								<li class="global_idep_type post">
 									<label class="kcsb-ml nr"><?php _e('Priority', 'kc-settings') ?></label>
-									<?php kcs_select( $options['priorities'], $s_val['priority'], array('name' => "{$s_name}[priority]", 'class' => 'kcsb-mi') ); ?>
+									<?php
+										echo kcForm::field(array(
+											'type'		=> 'select',
+											'attr'		=> array('name' => "{$s_name}[priority]", 'class' => 'kcsb-mi'),
+											'options'	=> $options['priorities'],
+											'current'	=> $s_val['priority']
+										));
+									?>
 								</li>
 								<li class="fields">
 									<h4 class="kcsb-ml"><?php _e('Fields', 'kc-settings') ?></h4>
@@ -600,7 +635,14 @@ class kcsBuilder {
 												</li>
 												<li>
 													<label class="kcsb-ml"><?php _e('Type') ?></label>
-													<?php kcs_select( $options['field'], $f_val['type'], array('name' => "{$f_name}[type]", 'class' => 'idep kcsb-mi') ); ?>
+													<?php
+														echo kcForm::field(array(
+															'type'		=> 'select',
+															'attr'		=> array('name' => "{$f_name}[type]", 'class' => 'idep kcsb-mi'),
+															'options'	=> $options['field'],
+															'current'	=> $f_val['type']
+														));
+													?>
 												</li>
 												<?php if ( !isset($f_val['attr']) ) $f_val['attr'] = ''; ?>
 												<li class="idep_type input textarea date">
@@ -614,7 +656,14 @@ class kcsBuilder {
 												<li class="idep_type file">
 													<?php if ( !isset($f_val['mode']) ) $f_val['mode'] = ''; ?>
 													<label class="kcsb-ml"><?php _e('Mode', 'kcsb') ?></label>
-													<?php kcs_select( $options['filemode'], $f_val['mode'], array('name' => "{$f_name}[mode]", 'class' => 'kcsb-mi') ); ?>
+													<?php
+														echo kcForm::field(array(
+															'type'		=> 'select',
+															'attr'		=> array('name' => "{$f_name}[mode]", 'class' => 'kcsb-mi'),
+															'options'	=> $options['filemode'],
+															'current'	=> $f_val['mode']
+														));
+													?>
 												</li>
 												<li class="idep_type radio checkbox select multiselect">
 													<label class="kcsb-ml"><?php _e('Options', 'kcsb') ?></label>
