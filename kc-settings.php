@@ -49,6 +49,7 @@ class kcSettings {
 
 	function actions_n_filters() {
 		require_once( "{$this->paths['inc']}/helper.php" );
+		require_once( "{$this->paths['inc']}/reboot/form.php" );
 		$this->kcsb = kcsb_settings_bootsrap();
 
 		add_action( 'init', array(&$this, 'init'), 11 );
