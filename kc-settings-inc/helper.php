@@ -37,7 +37,7 @@ function kc_array_rebuild_index( $arr, $cleanup = true ) {
  * @link http://www.php.net/manual/en/function.array-search.php#69232
  */
 
-function array_search_recursive( $needle, $haystack, $needlekey = '', $strict = false, $path = array() ) {
+function kcs_array_search_recursive( $needle, $haystack, $needlekey = '', $strict = false, $path = array() ) {
 	if( !is_array($haystack) )
 		return false;
 

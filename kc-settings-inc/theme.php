@@ -115,7 +115,7 @@ class kcThemeSettings {
 				settings_fields( "{$prefix}_settings" );
 
 				# Print the setting sections of this group/page
-				kc_do_settings_sections( $prefix, $this->group );
+				kcs_settings_sections( $prefix, $this->group );
 			?>
 			<p class="submit"><input class="button-primary" name="submit" type="submit" value="<?php esc_attr_e( 'Save Changes', 'kc-settings' ); ?>" /></p>
 		</form>

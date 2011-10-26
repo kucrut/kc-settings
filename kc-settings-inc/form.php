@@ -127,7 +127,7 @@ class kcForm {
  * Prints out all settings sections added to a particular settings page
  *
  */
-function kc_do_settings_sections( $prefix, $group ) {
+function kcs_settings_sections( $prefix, $group ) {
 	$page = "{$prefix}_settings";
 	global $wp_settings_sections, $wp_settings_fields;
 
