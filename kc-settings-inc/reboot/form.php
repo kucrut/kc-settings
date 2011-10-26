@@ -5,7 +5,7 @@ class kcForm {
   public static function field( $args = array() ) {
     $defaults = array(
       'type'    => 'text',
-      'attr'    => array( 'name' => '' ),
+      'attr'    => '',
       'current' => '',
       'none'    => '&mdash;&nbsp;'.__('Select', 'kc-settings').'&nbsp;&mdash;',
       'echo'    => false
