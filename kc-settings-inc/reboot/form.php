@@ -16,12 +16,14 @@ class kcForm {
       $type = 'input' :
       $type = $args['type'];
 
+    if ( !method_exists(__CLASS__, $type) )
+      return false;
+
     if ( in_array($type, array('select', 'radio', 'checkbox'))
           && (!isset($args['options']) || !is_array($args['options'])) )
       return false;
 
-    if ( method_exists(__CLASS__, $type) )
-      return call_user_func( array(__CLASS__, $type), $args );
+    return call_user_func( array(__CLASS__, $type), $args );
   }
 
 
