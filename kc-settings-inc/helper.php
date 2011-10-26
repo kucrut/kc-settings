@@ -31,7 +31,7 @@ function kc_array_rebuild_index( $arr, $cleanup = true ) {
  * @param $needle The searched value
  * @param $haystack The array
  * @param $needlekey Optional key
- * @mixed array_search_recursive(mixed $needle, array $haystack [,$key [,bool $trict[,array $path]]])
+ * @mixed kcs_array_search_recursive(mixed $needle, array $haystack [,$key [,bool $trict[,array $path]]])
  *
  * @credit ob at babcom dot biz
  * @link http://www.php.net/manual/en/function.array-search.php#69232
@@ -42,7 +42,7 @@ function kcs_array_search_recursive( $needle, $haystack, $needlekey = '', $stric
 		return false;
 
 	foreach( $haystack as $key => $val ) {
-		if ( is_array($val) && $subpath = array_search_recursive( $needle, $val, $needlekey, $strict, $path) ) {
+		if ( is_array($val) && $subpath = kcs_array_search_recursive( $needle, $val, $needlekey, $strict, $path) ) {
 			$path = array_merge( $path, array($key), $subpath );
 			return $path;
 		}
