@@ -6,12 +6,6 @@ class kcForm {
     $defaults = array(
       'type'    => 'text',
       'attr'    => array( 'name' => '' ),
-      'options' => array(
-        array(
-          'value'   => '',
-          'label'   => ''
-        )
-      ),
       'current' => '',
       'none'    => '&mdash;&nbsp;'.__('Select', 'kc-settings').'&nbsp;&mdash;',
       'echo'    => false
@@ -21,6 +15,10 @@ class kcForm {
     ( in_array($args['type'], array('', 'text', 'date')) ) ?
       $type = 'input' :
       $type = $args['type'];
+
+    if ( in_array($type, array('select', 'radio', 'checkbox'))
+          && (!isset($args['options']) || !is_array($args['options'])) )
+      return false;
 
     if ( method_exists(__CLASS__, $type) )
       return call_user_func( array(__CLASS__, $type), $args );
@@ -49,9 +47,6 @@ class kcForm {
 
 
   public static function select( $args ) {
-    if ( !isset($args['options']) || !is_array($args['options']) )
-      return;
-
     $options = array_merge( array(array('value' => '0', 'label' => $args['none'])), $args['options'] );
     if ( !is_array($args['current']) )
       $args['current'] = array($args['current']);
