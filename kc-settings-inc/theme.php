@@ -154,8 +154,8 @@ class kcThemeSettings {
 
 				# rebuild and cleanup array for multiinput type options
 				if ( $type == 'multiinput' ) {
-					$fv = kc_array_remove_empty( $fv );
-					$fv = kc_array_rebuild_index( $fv );
+					$fv = kcs_array_remove_empty( $fv );
+					$fv = kcs_array_rebuild_index( $fv );
 				}
 				elseif ( in_array($type, array('input', 'textarea')) ) {
 					$fv = trim( $fv );

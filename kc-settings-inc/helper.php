@@ -9,7 +9,7 @@
  * @return $nu_arr array
  */
 
-function kc_array_rebuild_index( $arr, $cleanup = true ) {
+function kcs_array_rebuild_index( $arr, $cleanup = true ) {
 	$nu_arr = array();
 	$rownum = 0;
 	foreach ( $arr as $row ) {
@@ -64,11 +64,11 @@ function kcs_array_search_recursive( $needle, $haystack, $needlekey = '', $stric
  * @return array
  */
 
-function kc_array_remove_empty( $arr, $rm_zero = true ) {
+function kcs_array_remove_empty( $arr, $rm_zero = true ) {
 	$narr = array();
 	while ( list($key, $val) = each($arr) ) {
 		if ( is_array($val) ) {
-			$val = kc_array_remove_empty( $val );
+			$val = kcs_array_remove_empty( $val );
 			if ( count($val) != 0 )
 				$narr[$key] = $val;
 		}

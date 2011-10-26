@@ -91,8 +91,8 @@ function kc_update_meta( $meta_type = 'post', $object_type_name, $object_id, $se
 
 	# default sanitation
 	if ( $field['type'] == 'multiinput' ) {
-		$nu_val = kc_array_remove_empty( $nu_val );
-		$nu_val = kc_array_rebuild_index( $nu_val );
+		$nu_val = kcs_array_remove_empty( $nu_val );
+		$nu_val = kcs_array_rebuild_index( $nu_val );
 		if ( empty($nu_val) )
 			$nu_val = '';
 	}
