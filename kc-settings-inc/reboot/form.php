@@ -6,8 +6,7 @@ class kcForm {
     $defaults = array(
       'type'    => 'text',
       'attr'    => '',
-      'current' => '',
-      'echo'    => false
+      'current' => ''
     );
     $args = wp_parse_args( $args, $defaults );
 
