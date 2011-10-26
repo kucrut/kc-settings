@@ -7,7 +7,10 @@ class kcForm {
       'type'    => 'text',
       'attr'    => '',
       'current' => '',
-      'none'    => '&mdash;&nbsp;'.__('Select', 'kc-settings').'&nbsp;&mdash;',
+      'none'    => array(
+        'value'   => '-1',
+        'label'   => '&mdash;&nbsp;'.__('Select', 'kc-settings').'&nbsp;&mdash;'
+      ),
       'echo'    => false
     );
     $args = wp_parse_args( $args, $defaults );
@@ -75,7 +78,7 @@ class kcForm {
 
 
   public static function select( $args ) {
-    $options = array_merge( array(array('value' => '0', 'label' => $args['none'])), $args['options'] );
+    $options = array_merge( array($args['none']), $args['options'] );
     if ( !is_array($args['current']) )
       $args['current'] = array($args['current']);
 
@@ -84,7 +87,7 @@ class kcForm {
     $output .= ">\n";
     foreach ( $options as $o ) {
       $output .= "\t<option value='".esc_attr($o['value'])."'";
-      if ( in_array($o['value'], $args['current']) )
+      if ( in_array($o['value'], $args['current']) && ($o['value'] != $args['none']['value']) )
         $output .= " selected='true'\n";
       $output .= ">{$o['label']}</option>\n";
     }
