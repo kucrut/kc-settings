@@ -62,7 +62,7 @@ class kcPostSettings {
 			# don't use label's for attribute for these types of options
 			$label_for = ( !in_array($field['type'], array('checkbox', 'radio')) ) ? $field['id'] : null;
 			# label for each option field
-			$output .= kc_form_label( $field['title'], $label_for, true, false );
+			$output .= kcs_form_label( $field['title'], $label_for, true, false );
 
 			# print the option field
 			$output .= "\t\t<td>";

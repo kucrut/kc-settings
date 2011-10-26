@@ -100,7 +100,7 @@ class kcTermSettings {
 
 					$output .= "<{$row_tag} class='form-field'>\n";
 
-					$the_label = "\t".kc_form_label( $field['title'], $label_for, false, false  )."\n";
+					$the_label = "\t".kcs_form_label( $field['title'], $label_for, false, false  )."\n";
 					# Wrap the field with <tr> if we're in edit mode
 					if ( $edit_mode )
 						$the_label = "\t<th scope='row'>\n{$the_label}\t</th>\n";
