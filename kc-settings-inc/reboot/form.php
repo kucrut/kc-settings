@@ -12,9 +12,16 @@ class kcForm {
     );
     $args = wp_parse_args( $args, $defaults );
 
-    ( in_array($args['type'], array('', 'text', 'date')) ) ?
-      $type = 'input' :
+    if ( in_array($args['type'], array('', 'text', 'date')) ) {
+      $type = 'input';
+    }
+    elseif ( in_array($args['type'], array('checkbox', 'radio')) ) {
+      $type = 'checkbox_radio';
+    }
+    else {
       $type = $args['type'];
+    }
+
 
     if ( !method_exists(__CLASS__, $type) )
       return false;
@@ -43,6 +50,25 @@ class kcForm {
     $output .= ">";
     $output .= esc_textarea( $args['current'] );
     $output .= "</textarea>";
+
+    return $output;
+  }
+
+
+  public static function checkbox_radio( $args ) {
+    if ( !is_array($args['current']) )
+      $args['current'] = array($args['current']);
+    if ( !isset($args['check_sep']) || !is_array($args['check_sep']) || count($args['check_sep']) < 2 )
+      $args['check_sep'] = array('', '<br />');
+    $attr = self::_build_attr( $args['attr'] );
+
+    $output  = '';
+    foreach ( $args['options'] as $o ) {
+      $output .= "{$args['check_sep'][0]}<label><input type='{$args['type']}' value='{$o['value']}'{$attr}";
+      if ( in_array($o['value'], $args['current']) || ( isset($args['current'][$o['value']]) && $args['current'][$o['value']]) )
+        $output .= " checked='true'";
+      $output .= " />{$o['label']}</label>{$args['check_sep'][1]}\n";
+    }
 
     return $output;
   }
