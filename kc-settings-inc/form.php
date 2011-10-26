@@ -82,8 +82,10 @@ function kc_form_label( $title, $id = null, $ft = false, $echo = true  ) {
 function kc_settings_field( $args ) {
 	extract($args, EXTR_OVERWRITE);
 
-	$input_types = array('text', 'textarea', 'checkbox', 'radio', 'select', 'multiselect', 'multiinput', 'date', 'file', 'special');
-	$type = ( isset($field['type']) && in_array($field['type'], $input_types) ) ? $field['type'] : 'text';
+	$input_types = array('special', 'date', 'text', 'textarea',
+		'checkbox', 'radio', 'select', 'multiselect', 'multiinput', 'file'
+	);
+	$type = ( isset($field['type']) && in_array($field['type'], $input_types) ) ? $field['type'] : 'input';
 
 	# setup the input id and name attributes, also get the current value from db
 	switch ( $mode ) {
@@ -225,7 +227,7 @@ function kc_settings_field( $args ) {
 		if ( !in_array($type, array('checkbox', 'radio')) ) {
 			$field_attr['id'] = $id;
 		}
-		if ( in_array($type, array('text', 'date')) ) {
+		if ( in_array($type, array('text', 'date', 'input', 'textarea')) ) {
 			$field_attr['class'] .= ' widefat kcs-input';
 		}
 
