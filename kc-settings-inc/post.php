@@ -108,7 +108,7 @@ class kcPostSettings {
 				return $post_id;
 
 			foreach ( $section['fields'] as $field ) {
-				kc_update_meta( 'post', $post_type, $post_id, $section, $field );
+				kcs_update_meta( 'post', $post_type, $post_id, $section, $field );
 			}
 		}
 	}
@@ -172,7 +172,7 @@ class kcPostSettings {
 	function attachment_fields_to_save( $post, $attachment ) {
 		foreach ( $this->attachment_sections as $section ) {
 			foreach ( $section['fields'] as $field ) {
-				kc_update_meta( 'post', 'attachment', $post['ID'], $section, $field, true );
+				kcs_update_meta( 'post', 'attachment', $post['ID'], $section, $field, true );
 			}
 		}
 

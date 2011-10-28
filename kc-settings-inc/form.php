@@ -60,7 +60,7 @@ class kcForm {
 
 
   public static function checkbox( $args ) {
-    $args['type'] = 'checkbox';
+    //$args['type'] = 'checkbox';
     if ( !is_array($args['current']) )
       $args['current'] = array($args['current']);
     if ( !isset($args['check_sep']) || !is_array($args['check_sep']) || count($args['check_sep']) < 2 )
@@ -69,7 +69,7 @@ class kcForm {
 
     $output  = '';
     foreach ( $args['options'] as $o ) {
-      $output .= "{$args['check_sep'][0]}<label><input type='{$args['type']}' value='{$o['value']}'{$attr}";
+      $output .= "{$args['check_sep'][0]}<label class='kcs-check {$args['type']}'><input type='{$args['type']}' value='{$o['value']}'{$attr}";
       if ( in_array($o['value'], $args['current']) || ( isset($args['current'][$o['value']]) && $args['current'][$o['value']]) )
         $output .= " checked='true'";
       $output .= " /> {$o['label']}</label>{$args['check_sep'][1]}\n";
@@ -342,7 +342,7 @@ function kcs_settings_field( $args ) {
 
 		if ( $type == 'multiselect' ) {
 			$type = 'select';
-			$field_attr['multiple'] = true;
+			$field_attr['multiple'] = 'true';
 		}
 		if ( in_array($type, array('checkbox', 'select')) ) {
 			$field_attr['name'] .= '[]';
@@ -351,7 +351,7 @@ function kcs_settings_field( $args ) {
 			$field_attr['id'] = $id;
 		}
 		if ( in_array($type, array('text', 'date', 'input', 'textarea')) ) {
-			$field_attr['class'] .= ' widefat kcs-input';
+			$field_attr['class'] .= 'kcs-input';
 		}
 
 

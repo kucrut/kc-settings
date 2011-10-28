@@ -139,7 +139,7 @@ class kcTermSettings {
 
 			foreach ( $sections as $section ) {
 				foreach ( $section['fields'] as $field )
-					kc_update_meta( 'term', $tax, $term_id, $section, $field );
+					kcs_update_meta( 'term', $tax, $term_id, $section, $field );
 			}
 		}
 	}

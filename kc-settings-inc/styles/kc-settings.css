@@ -51,7 +51,7 @@
     height:7.5em;
     padding-right:.5em}
 .kcs-input {width:auto}
-
+.kcs-check, .form-wrap .kcs-check {display:inline-block}
 
 /* Filelist */
 /*

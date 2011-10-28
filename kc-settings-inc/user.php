@@ -82,7 +82,7 @@ class kcUserSettings {
 					return false;
 
 				foreach ( $section['fields'] as $field )
-					kc_update_meta( 'user', null, $user_id, $section, $field );
+					kcs_update_meta( 'user', null, $user_id, $section, $field );
 			}
 		}
 	}
