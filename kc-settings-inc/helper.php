@@ -156,7 +156,7 @@ function kc_get_taxonomies( $args = array('public' => true) ) {
 }
 
 
-function kc_get_post_types( $args = array('publicly_queryable' => true) ) {
+function kc_get_post_types( $args = array('public' => true) ) {
 	$post_types = array();
 	$arr = get_post_types( $args, 'object' );
 	if ( !empty($arr) )
