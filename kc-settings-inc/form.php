@@ -60,7 +60,9 @@ class kcForm {
 
 
   public static function checkbox( $args ) {
-    //$args['type'] = 'checkbox';
+		if ( !isset($args['type']) || !$args['type'] )
+			$args['type'] = 'checkbox';
+
     if ( !is_array($args['current']) )
       $args['current'] = array($args['current']);
     if ( !isset($args['check_sep']) || !is_array($args['check_sep']) || count($args['check_sep']) < 2 )
