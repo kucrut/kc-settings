@@ -22,7 +22,7 @@ class kcSettings {
 		self::$paths = self::_paths();
 
 		# Include samples (for development)
-		self::_samples();
+		//self::_samples();
 
 		# Get all settings
 		self::$settings	= self::_bootsrap_settings();
@@ -309,7 +309,7 @@ class kcSettings {
 		//require_once( self::$paths['inc'] . '/doc/sample/__term_settings.php' );
 		//require_once( self::$paths['inc'] . '/doc/sample/__post_settings.php' );
 		//require_once( self::$paths['inc'] . '/doc/sample/__post_settings2.php' );
-		require_once( self::$paths['inc'] . '/doc/sample/__user_settings.php' );
+		//require_once( self::$paths['inc'] . '/doc/sample/__user_settings.php' );
 	}
 
 
