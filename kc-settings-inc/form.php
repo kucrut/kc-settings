@@ -33,6 +33,9 @@ class kcForm {
 
 
   public static function input( $args ) {
+		if ( !isset($args['type']) || in_array($args['type'], array('', 'input') ) )
+			$args['type'] = 'text';
+
     $output  = "<input type='{$args['type']}'";
     $output .= self::_build_attr( $args['attr'] );
     $output .= "value='{$args['current']}' ";
