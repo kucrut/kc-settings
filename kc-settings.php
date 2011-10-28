@@ -27,6 +27,10 @@ class kcSettings {
 
 	public static function init() {
 		self::$data['paths'] = self::_paths();
+		self::$data['errors'] = array(
+			'no_menu_title'	=> __( "One of your settings doesn't have <b>menu title</b> set. It's been set to default value. Please consider setting it.", 'kc-settings'),
+			'no_page_title'	=> __( "One of your settings doesn't have <b>page title</b> set. It's been set to default value. Please consider setting it.", 'kc-settings')
+		);
 
 		# Include samples (for development)
 		//self::_samples();

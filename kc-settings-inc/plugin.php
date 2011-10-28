@@ -4,14 +4,16 @@ class kcSettings_plugin {
 
 	# Add settings menus and register the options
 	function init( $group ) {
+		# Set menu title if not found
 		if ( !isset($group['menu_title']) || empty($group['menu_title']) ) {
-			$title = __( 'My Settings', 'kc-settings' );
-			# Set menu title if not found
-			$group['menu_title'] = $title;
+			$group['menu_title'] = __( 'My Settings', 'kc-settings' );
+			trigger_error( kcSettings::$data['errors']['no_menu_title'] );
+		}
 
-			# Set page title if not found
-			if ( !isset($group['page_title']) || empty($group['page_title']) )
-				$group['page_title'] = $title;
+		# Set page title if not found
+		if ( !isset($group['page_title']) || empty($group['page_title']) ) {
+			$group['page_title'] = $group['menu_title'];
+			trigger_error( kcSettings::$data['errors']['no_page_title'] );
 		}
 
 		$this->group = $group;
