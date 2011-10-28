@@ -201,10 +201,8 @@ class kcSettings {
 		require_once( self::$data['paths']['inc'].'/plugin.php' );
 
 		# Loop through the array and pass each item to kcSettings_plugin
-		foreach ( $settings as $group ) {
-			$do = new kcSettings_plugin;
-			$do->init( $group );
-		}
+		foreach ( $settings as $group )
+			$do = new kcSettings_plugin( $group );
 	}
 
 

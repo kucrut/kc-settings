@@ -3,7 +3,7 @@
 class kcSettings_plugin {
 
 	# Add settings menus and register the options
-	function init( $group ) {
+	function __construct( $group ) {
 		# Set menu title if not found
 		if ( !isset($group['menu_title']) || empty($group['menu_title']) ) {
 			$group['menu_title'] = __( 'My Settings', 'kc-settings' );
