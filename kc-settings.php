@@ -12,43 +12,45 @@ License: GPL v2
 */
 
 class kcSettings {
-	public static $version	= '2.1.2';
-	public static $pages		= array();
-	public static $paths;
-	public static $settings;
+	public static $data	= array(
+		'version'		=> '2.1.2',
+		'pages'			=> array(),
+		'paths'			=> '',
+		'settings'	=> array()
+	);
 
 
 	public static function init() {
-		self::$paths = self::_paths();
+		self::$data['paths'] = self::_paths();
 
 		# Include samples (for development)
 		//self::_samples();
 
 		# Get all settings
-		self::$settings	= self::_bootsrap_settings();
-		require_once( self::$paths['inc'].'/form.php' );
-		require_once( self::$paths['inc'].'/helper.php' );
-		require_once( self::$paths['inc'].'/_deprecated.php' );
+		self::$data['settings']	= self::_bootsrap_settings();
+		require_once( self::$data['paths']['inc'].'/form.php' );
+		require_once( self::$data['paths']['inc'].'/helper.php' );
+		require_once( self::$data['paths']['inc'].'/_deprecated.php' );
 
 		$ok = false;
 		foreach ( array('plugin', 'post', 'term', 'user') as $type ) {
-			if ( empty(self::$settings[$type]) )
+			if ( empty(self::$data['settings'][$type]) )
 				continue;
 
 			$ok = true;
-			call_user_func( array(__CLASS__, "_{$type}_init"), self::$settings[$type] );
+			call_user_func( array(__CLASS__, "_{$type}_init"), self::$data['settings'][$type] );
 		}
 
 		self::_locale();
 		self::_admin_actions();
 
 		# Builder
-		require_once( self::$paths['inc'].'/builder.php' );
+		require_once( self::$data['paths']['inc'].'/builder.php' );
 		$kcsBuilder = new kcsBuilder;
 		$kcsBuilder->init(array(
-			'version'		=> self::$version,
-			'paths'			=> self::$paths,
-			'settings'	=> self::$settings
+			'version'		=> self::$data['version'],
+			'paths'			=> self::$data['paths'],
+			'settings'	=> self::$data['settings']
 		));
 	}
 
@@ -193,49 +195,49 @@ class kcSettings {
 
 	private static function _plugin_init( $settings ) {
 		$plugin_settings = false;
-		require_once( self::$paths['inc'].'/plugin.php' );
+		require_once( self::$data['paths']['inc'].'/plugin.php' );
 
-		# Loop through the array and pass each item to kcThemeSettings
+		# Loop through the array and pass each item to kcSettings_plugin
 		foreach ( $settings as $group ) {
 			if ( !is_array($group) || empty($group) )
 				continue;
 
 			$plugin_settings = true;
-			$do = new kcThemeSettings;
+			$do = new kcSettings_plugin;
 			$do->init( $group );
 
 		}
 		if ( $plugin_settings ) {
-			self::$pages[] = 'kc-settings-';
+			self::$data['pages'][] = 'kc-settings-';
 		}
 	}
 
 
 	private static function _post_init( $settings ) {
-		self::$pages[] = 'post';
+		self::$data['pages'][] = 'post';
 		if ( array_key_exists('attachment', $settings) )
-			self::$pages[] = 'media';
-		require_once( self::$paths['inc'].'/post.php' );
-		$do = new kcPostSettings( $settings );
+			self::$data['pages'][] = 'media';
+		require_once( self::$data['paths']['inc'].'/post.php' );
+		$do = new kcSettings_post( $settings );
 	}
 
 
 	private static function _term_init( $settings ) {
-		self::$pages[] = 'edit-tags';
-		require_once( self::$paths['inc'].'/term.php' );
-		$do = new kcTermSettings( $settings );
+		self::$data['pages'][] = 'edit-tags';
+		require_once( self::$data['paths']['inc'].'/term.php' );
+		$do = new kcSettings_term( $settings );
 	}
 
 
 	private static function _user_init( $settings ) {
-		self::$pages[] = 'profile';
-		require_once( self::$paths['inc'].'/user.php' );
-		$do = new kcUserSettings( $settings );
+		self::$data['pages'][] = 'profile';
+		require_once( self::$data['paths']['inc'].'/user.php' );
+		$do = new kcSettings_user( $settings );
 	}
 
 
 	private static function _locale() {
-		$mo_file = self::$paths['inc'].'/languages/kc-settings-'.get_locale().'.mo';
+		$mo_file = self::$data['paths']['inc'].'/languages/kc-settings-'.get_locale().'.mo';
 		if ( is_readable($mo_file) )
 			load_textdomain( 'kc-settings', $mo_file );
 	}
@@ -252,19 +254,19 @@ class kcSettings {
 	public static function _sns_register() {
 		# WP < 3.3
 		if ( version_compare(get_bloginfo('version'), '3.3', '<') )
-			wp_register_script( 'jquery-ui-datepicker', self::$paths['scripts']."/jquery.ui.datepicker.min.js", array('jquery-ui-core'), '1.8.11', true );
+			wp_register_script( 'jquery-ui-datepicker', self::$data['paths']['scripts']."/jquery.ui.datepicker.min.js", array('jquery-ui-core'), '1.8.11', true );
 
 		# Common
-		wp_register_script( 'modernizr',		self::$paths['scripts'].'/modernizr.2.0.6.min.js', false, '2.0.6', true );
-		wp_register_script( 'kc-rowclone',	self::$paths['scripts'].'/kc-rowclone.js', array('jquery'), self::$version, true );
-		wp_register_script( 'kc-settings',	self::$paths['scripts'].'/kc-settings.js', array('modernizr', 'jquery-ui-sortable', 'jquery-ui-datepicker', 'kc-rowclone', 'media-upload', 'thickbox'), self::$version, true );
-		wp_register_style( 'kc-settings',		self::$paths['styles'].'/kc-settings.css', array('thickbox'), self::$version );
+		wp_register_script( 'modernizr',		self::$data['paths']['scripts'].'/modernizr.2.0.6.min.js', false, '2.0.6', true );
+		wp_register_script( 'kc-rowclone',	self::$data['paths']['scripts'].'/kc-rowclone.js', array('jquery'), self::$data['version'], true );
+		wp_register_script( 'kc-settings',	self::$data['paths']['scripts'].'/kc-settings.js', array('modernizr', 'jquery-ui-sortable', 'jquery-ui-datepicker', 'kc-rowclone', 'media-upload', 'thickbox'), self::$data['version'], true );
+		wp_register_style( 'kc-settings',		self::$data['paths']['styles'].'/kc-settings.css', array('thickbox'), self::$data['version'] );
 
-		wp_register_script( "kc-settings-upload", self::$paths['scripts'].'/upload.js', array('jquery'), self::$version );
+		wp_register_script( "kc-settings-upload", self::$data['paths']['scripts'].'/upload.js', array('jquery'), self::$data['version'] );
 
 		# Builder
-		wp_register_script( 'kcsb', self::$paths['scripts'].'/kcsb.js', array('jquery-ui-sortable'), self::$version, true );
-		wp_register_style( 'kcsb', self::$paths['styles'].'/kcsb.css', false, self::$version );
+		wp_register_script( 'kcsb', self::$data['paths']['scripts'].'/kcsb.js', array('jquery-ui-sortable'), self::$data['version'], true );
+		wp_register_style( 'kcsb', self::$data['paths']['styles'].'/kcsb.css', false, self::$data['version'] );
 	}
 
 
@@ -274,7 +276,7 @@ class kcSettings {
 			wp_enqueue_style( 'kc-settings' );
 		}
 
-		foreach ( self::$pages as $current_page ) {
+		foreach ( self::$data['pages'] as $current_page ) {
 			$kcspage = strpos($hook_suffix, $current_page);
 			if ( $kcspage !== false ) {
 				self::js_globals();
@@ -304,12 +306,12 @@ class kcSettings {
 
 
 	private static function _samples() {
-		//require_once( self::$paths['inc'] . '/doc/sample/__theme_settings.php' );
-		//require_once( self::$paths['inc'] . '/doc/sample/__settings2.php' );
-		//require_once( self::$paths['inc'] . '/doc/sample/__term_settings.php' );
-		//require_once( self::$paths['inc'] . '/doc/sample/__post_settings.php' );
-		//require_once( self::$paths['inc'] . '/doc/sample/__post_settings2.php' );
-		//require_once( self::$paths['inc'] . '/doc/sample/__user_settings.php' );
+		//require_once( self::$data['paths']['inc'] . '/doc/sample/__theme_settings.php' );
+		//require_once( self::$data['paths']['inc'] . '/doc/sample/__settings2.php' );
+		//require_once( self::$data['paths']['inc'] . '/doc/sample/__term_settings.php' );
+		//require_once( self::$data['paths']['inc'] . '/doc/sample/__post_settings.php' );
+		//require_once( self::$data['paths']['inc'] . '/doc/sample/__post_settings2.php' );
+		//require_once( self::$data['paths']['inc'] . '/doc/sample/__user_settings.php' );
 	}
 
 

@@ -1,6 +1,6 @@
 <?php
 
-class kcThemeSettings {
+class kcSettings_plugin {
 
 	private $locations = array(
 		'options-general.php',	// Settings

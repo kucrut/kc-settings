@@ -1,6 +1,6 @@
 <?php
 
-class kcPostSettings {
+class kcSettings_post {
 
 	function __construct( $metadata ) {
 		$this->metadata = $metadata;

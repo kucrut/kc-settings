@@ -1,7 +1,7 @@
 <?php
 
 
-class kcUserSettings {
+class kcSettings_user {
 	function __construct( $metadata ) {
 		$this->metadata = $metadata;
 

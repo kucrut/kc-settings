@@ -1,7 +1,7 @@
 <?php
 
 
-class kcTermSettings {
+class kcSettings_term {
 
 	function __construct( $metadata ) {
 		$this->metadata = $metadata;
