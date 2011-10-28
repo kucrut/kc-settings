@@ -198,15 +198,10 @@ class kcSettings {
 
 
 	private static function _plugin_init( $settings ) {
-		$plugin_settings = false;
 		require_once( self::$data['paths']['inc'].'/plugin.php' );
 
 		# Loop through the array and pass each item to kcSettings_plugin
 		foreach ( $settings as $group ) {
-			if ( !is_array($group) || empty($group) )
-				continue;
-
-			$plugin_settings = true;
 			$do = new kcSettings_plugin;
 			$do->init( $group );
 		}
