@@ -1,10 +1,10 @@
 var win = window.dialogArguments || opener || parent || top;
 
 win.kcsInsertFiles = function() {
-	var count = win.kcFiles.nu.length;
+	var count = win.kcSettings.upload.nu.length;
 
 	if ( count ) {
-		var $list = jQuery('#'+win.kcFiles.id+' ul'),
+		var $list = jQuery('#'+win.kcSettings.upload.id+' ul'),
 				$lastItem = $list.children().last(),
 				$nuEls = jQuery();
 
@@ -13,10 +13,10 @@ win.kcsInsertFiles = function() {
 			var $nuItem = $lastItem.clone();
 
 			jQuery('input', $nuItem).each(function() {
-				this.value = win.kcFiles.nu[count][0];
+				this.value = win.kcSettings.upload.nu[count][0];
 			});
-			jQuery('.title', $nuItem).text(win.kcFiles.nu[count][1]);
-			$nuItem.find('img').attr('src', win.kcFiles.nu[count][2]);
+			jQuery('.title', $nuItem).text(win.kcSettings.upload.nu[count][1]);
+			$nuItem.find('img').attr('src', win.kcSettings.upload.nu[count][2]);
 
 			$nuEls = $nuEls.add( $nuItem );
 		}

@@ -112,7 +112,7 @@ function inArray(needle, haystack) {
 							olVal		= $this.data('olVal'),
 							nuVal		= $input.val();
 
-					if ( nuVal != olVal && inArray(nuVal, kcsbIDs[$input.data('ids')]) )
+					if ( nuVal != olVal && inArray(nuVal, kcSettings._ids[$input.data('ids')]) )
 						$input.val('');
 				});
 		});

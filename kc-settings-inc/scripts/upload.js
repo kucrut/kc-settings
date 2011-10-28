@@ -14,7 +14,7 @@ jQuery(document).ready(function($) {
   // If we're in the Gallery or Library tab
   if ( $form.length ) {
     var $mItems = $('#media-items'),
-	texts = win.kcFiles.text,
+	texts = win.kcSettings.upload.text,
 	$btWrapper = $('<div class="kcs-wrap"><h4>'+texts.head+'</h4></div>');
 
     if ( !$mItems.children().length ) {
@@ -30,7 +30,7 @@ jQuery(document).ready(function($) {
       $('.new', $mItems).each(function(e) {
 	var $el = $(this).parent(),
 	    pID = $el.attr('id').split("-")[2],
-	    iCheck = ( in_array(pID, win.kcFiles.files) ) ? ' checked="checked"' : '';
+	    iCheck = ( in_array(pID, win.kcSettings.upload.files) ) ? ' checked="checked"' : '';
 
 	    $input = $('<input type="checkbox" value="'+pID+'" '+iCheck+'class="kcs-files" style="margin-right:.5em"/>');
 
@@ -71,14 +71,14 @@ jQuery(document).ready(function($) {
 	e.preventDefault();
 	var nuCount = 0;
 
-	win.kcFiles.nu = [];
+	win.kcSettings.upload.nu = [];
 	$('input.kcs-files', $mItems).each(function() {
 	  var $el = $(this);
-	  if ( !in_array(this.value, win.kcFiles.files) && this.checked ) {
-	    win.kcFiles.nu.push( [this.value, $el.siblings('.title').text(), $el.closest('.media-item').find('.pinkynail').attr('src')] );
+	  if ( !in_array(this.value, win.kcSettings.upload.files) && this.checked ) {
+	    win.kcSettings.upload.nu.push( [this.value, $el.siblings('.title').text(), $el.closest('.media-item').find('.pinkynail').attr('src')] );
 	  }
 	});
-	win.kcFiles.nuCount = nuCount;
+	win.kcSettings.upload.nuCount = nuCount;
 
 	win.kcsInsertFiles();
 	win.tb_remove();

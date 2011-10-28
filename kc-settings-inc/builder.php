@@ -1,21 +1,53 @@
 <?php
 
-class kcsBuilder {
-	var $kcsb_options;
-	var $kcsb_page;
-	var $defaults;
+class kcSettings_builder {
+	public static $data = array(
+		'defaults' => array(
+			'id'								=> '',
+			'type'							=> 'post',
+			'prefix'						=> '',
+			'menu_location'			=> 'options-general.php',
+			'menu_title'				=> '',
+			'page_title'				=> '',
+			'post_type'					=> 'post',
+			'taxonomy'					=> '',
+			'sections'					=> array(
+				array(
+					'id'						=> '',
+					'title'					=> '',
+					'desc'					=> '',
+					'priority'			=> 'high',
+					'fields'				=> array(
+						array(
+							'id'				=> '',
+							'title'			=> '',
+							'desc'			=> '',
+							'type'			=> 'input',
+							'attr'			=> '',
+							'options'		=> array(
+								array(
+									'key'		=> '',
+									'label'	=> ''
+								)
+							)
+						)
+					)
+				)
+			)
+		)
+	);
 
 
-	function init( $properties ) {
-		$this->properties = $properties;
+	public static function init() {
+		self::$data['options'] = self::_options();
 
-		add_action( 'admin_init', array(&$this, 'register'), 21 );
-		add_action( 'admin_menu', array(&$this, 'create_page') );
-		add_action( 'update_option_kcsb', array($this, 'after_save'), 10, 2 );
+		add_action( 'admin_init', array(__CLASS__, 'register'), 21 );
+		add_action( 'admin_menu', array(__CLASS__, 'create_page') );
+		add_action( 'update_option_kcsb', array(__CLASS__, 'after_save'), 10, 2 );
 	}
 
 
-	function options() {
+	private static function _options() {
 		$options = array(
 			'type'		=> array(
 				'plugin' => array(
@@ -194,34 +226,32 @@ class kcsBuilder {
 	}
 
 
-	function create_page() {
-		$this->kcsb_page = add_options_page( __('KC Settings', 'kc-settings'), __('KC Settings', 'kc-settings'), 'manage_options', 'kcsb', array(&$this, 'builder') );
+	public static function create_page() {
+		$page = add_options_page( __('KC Settings', 'kc-settings'), __('KC Settings', 'kc-settings'), 'manage_options', 'kcsb', array(__CLASS__, 'builder') );
 
-		add_action( "load-{$this->kcsb_page}", array(&$this, 'goback') );
-		add_action( "load-{$this->kcsb_page}", array(&$this, 'help') );
+		# Set scripts and styles
+		kcSettings::$data['pages'][$page] = array(
+			'script'	=> array( 'kc-settings-builder' ),
+			'style'	=> array( 'kc-settings' )
+		);
 
-		// Script n style
-		add_action( "admin_print_scripts-{$this->kcsb_page}", array(&$this, 'script'), 0);
-		add_action( "admin_print_styles-{$this->kcsb_page}", array(&$this, 'style') );
+		add_action( "load-{$page}", array(__CLASS__, 'goback') );
+		add_action( "load-{$page}", array(__CLASS__, 'help') );
 	}
 
 
-	function register() {
-		register_setting( 'kcsb', 'kcsb', array(&$this, 'validate') );
-		add_settings_section( 'kcsb', __('KC Settings Builder', 'kc-settings'), '', 'kcsb');
-		add_settings_field( 'kcsb', 'Plugin Text Input', 'plugin_setting_string', 'plugin', 'plugin_main' );
+	public static function register() {
+		register_setting( 'kcsb', 'kcsb', array(__CLASS__, 'validate') );
 	}
 
 
-	function goback() {
-		#echo wp_get_referer();
-		#exit;
+	public static function goback() {
 		if ( isset($_GET['action']) && $_GET['action'] != 'edit' && isset($_GET['id']) && !empty($_GET['id']) ) {
 			$sID = $_GET['id'];
 			check_admin_referer( "__kcsb__{$sID}" );
 
 			$action = $_GET['action'];
-			$settings = $this->properties['settings']['_raw'];
+			$settings = kcSettings::$data['settings']['_raw'];
 
 			switch ( $action ) {
 				case 'clone' :
@@ -249,7 +279,7 @@ class kcsBuilder {
 				break;
 			}
 
-			$this->success();
+			self::_success();
 		}
 		else {
 			$er = get_transient( 'kcsb' );
@@ -266,9 +296,9 @@ class kcsBuilder {
 	}
 
 
-	function validate( $new ) {
+	public static function validate( $new ) {
 		# Delete
-		$old = $this->properties['settings']['_raw'];
+		$old = kcSettings::$data['settings']['_raw'];
 		if ( !isset($new['id']) ) {
 			return $new;
 		}
@@ -284,7 +314,7 @@ class kcsBuilder {
 
 				# No change?
 				if ( $_temp == $old )
-					$this->success();
+					self::_success();
 			}
 		}
 
@@ -292,7 +322,7 @@ class kcsBuilder {
 	}
 
 
-	function after_save( $old, $new ) {
+	public static function after_save( $old, $new ) {
 		# Delete
 		if ( count($old) > count($new) )
 			$message = __('Setting successfully deleted.', 'kc-settings');
@@ -307,11 +337,11 @@ class kcsBuilder {
 			add_settings_error('general', 'settings_updated', $message, 'updated');
 		set_transient('settings_errors', get_settings_errors(), 30);
 
-		$this->success();
+		self::_success();
 	}
 
 
-	function success() {
+	private static function _success() {
 		$goto = wp_get_referer();
 		$goto = remove_query_arg( array('id', 'action'), $goto );
 		$goto = add_query_arg( 'settings-updated', 'true', $goto );
@@ -320,22 +350,12 @@ class kcsBuilder {
 	}
 
 
-	function script() { ?>
-<script type='text/javascript'>
-	// <![CDATA[
-	var kcsbIDs = <?php echo json_encode( $this->properties['settings']['_ids'] ) ?>;
-	// ]]>
-</script>
-		<?php
+	public static function sns() {
 		wp_enqueue_script( 'kcsb' );
 	}
 
 
-	function style() {
-		wp_enqueue_style( 'kcsb' );
-	}
-
-	function help() {
+	public static function help() {
 		$help  = "<h2>".__('Creating a setting', 'kc-settings')."</h2>\n";
 		$help .= "<h3>".__('All Types', 'kc-settings')."</h3>\n";
 		$help .= "<ul>\n";
@@ -363,21 +383,21 @@ class kcsBuilder {
 	}
 
 
-	function builder() {
-		$values	= kcsb_defaults();
-		$form_class = ' class="hidden"';
-		$bt_txt = __('Create Setting', 'kc-settings');
-		$mode		= 'default';
-		$options = $this->options();
+	public static function builder() {
+		$options		= self::$data['options'];
+		$values			= self::$data['defaults'];
+		$form_class	= ' class="hidden"';
+		$button_txt	= __('Create Setting', 'kc-settings');
+		$mode				= 'default';
 
 		if ( isset($_GET['action']) ) {
 			$action = $_GET['action'];
 			if ( $action == 'edit' ) {
 				if ( isset($_GET['id']) && !empty($_GET['id']) ) {
 					$id = $_GET['id'];
-					if ( isset($this->properties['settings']['_raw'][$id]) ) {
+					if ( isset(kcSettings::$data['settings']['_raw'][$id]) ) {
 						$mode		= 'edit';
-						$values = wp_parse_args( $this->properties['settings']['_raw'][$id], $values );
+						$values = wp_parse_args( kcSettings::$data['settings']['_raw'][$id], $values );
 					}
 					else {
 						add_settings_error('general', 'warning', sprintf( __("There's no setting with ID %s. Are you cheating? ;)", 'kc-settings'), "&#8220;{$id}&#8221;") );
@@ -400,7 +420,7 @@ class kcsBuilder {
 
 		if ( $mode == 'edit' ) {
 			$form_class = '';
-			$bt_txt	= __('Save Changes');
+			$button_txt	= __('Save Changes');
 		}
 
 		?>
@@ -427,9 +447,9 @@ class kcsBuilder {
 					</tfoot>
 					<tbody id="the-list">
 						<?php
-							if ( !empty($this->properties['settings']['_raw']) ) {
+							if ( !empty(kcSettings::$data['settings']['_raw']) ) {
 								$i = 0;
-								foreach( $this->properties['settings']['_raw'] as $sID => $sVal ) {
+								foreach( kcSettings::$data['settings']['_raw'] as $sID => $sVal ) {
 									++$i;
 									$url_base = "options-general.php?page=kcsb&amp;id={$sVal['id']}&amp;action=";
 						?>
@@ -708,7 +728,7 @@ class kcsBuilder {
 						<?php } unset( $count_s ); ?>
 					</ul>
 					<div class="submit">
-						<button class="button-primary" name="submit" type="submit"><?php echo $bt_txt; ?></button>
+						<button class="button-primary" name="submit" type="submit"><?php echo $button_txt; ?></button>
 						<a href="#" class="button alignright kcsb-cancel"><?php _e('Cancel') ?></a>
 					</div>
 				</form>

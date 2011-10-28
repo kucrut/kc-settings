@@ -14,7 +14,12 @@ License: GPL v2
 class kcSettings {
 	public static $data	= array(
 		'version'		=> '2.1.2',
-		'pages'			=> array(),
+		'pages'			=> array(
+			'media-upload-popup' => array(
+				'script'	=> array( 'kc-settings', 'kc-settings-upload' ),
+				'style'		=> array( 'kc-settings' )
+			)
+		),
 		'paths'			=> '',
 		'settings'	=> array()
 	);
@@ -46,12 +51,7 @@ class kcSettings {
 
 		# Builder
 		require_once( self::$data['paths']['inc'].'/builder.php' );
-		$kcsBuilder = new kcsBuilder;
-		$kcsBuilder->init(array(
-			'version'		=> self::$data['version'],
-			'paths'			=> self::$data['paths'],
-			'settings'	=> self::$data['settings']
-		));
+		kcSettings_builder::init();
 	}
 
 
@@ -205,10 +205,6 @@ class kcSettings {
 			$plugin_settings = true;
 			$do = new kcSettings_plugin;
 			$do->init( $group );
-
-		}
-		if ( $plugin_settings ) {
-			self::$data['pages'][] = 'kc-settings-';
 		}
 	}
 
@@ -262,45 +258,45 @@ class kcSettings {
 		wp_register_script( 'kc-settings',	self::$data['paths']['scripts'].'/kc-settings.js', array('modernizr', 'jquery-ui-sortable', 'jquery-ui-datepicker', 'kc-rowclone', 'media-upload', 'thickbox'), self::$data['version'], true );
 		wp_register_style( 'kc-settings',		self::$data['paths']['styles'].'/kc-settings.css', array('thickbox'), self::$data['version'] );
 
-		wp_register_script( "kc-settings-upload", self::$data['paths']['scripts'].'/upload.js', array('jquery'), self::$data['version'] );
+		wp_register_script( 'kc-settings-upload', self::$data['paths']['scripts'].'/upload.js', array('jquery'), self::$data['version'] );
 
 		# Builder
-		wp_register_script( 'kcsb', self::$data['paths']['scripts'].'/kcsb.js', array('jquery-ui-sortable'), self::$data['version'], true );
-		wp_register_style( 'kcsb', self::$data['paths']['styles'].'/kcsb.css', false, self::$data['version'] );
+		wp_register_script( 'kc-settings-builder', self::$data['paths']['scripts'].'/builder.js', array('jquery-ui-sortable'), self::$data['version'], true );
 	}
 
 
-	public static function _sns_enqueue( $hook_suffix ) {
-		if ( $hook_suffix == 'media-upload-popup' ) {
-			wp_enqueue_script( "kc-settings-upload" );
-			wp_enqueue_style( 'kc-settings' );
-		}
+	public static function _sns_enqueue( $page ) {
+		if ( !isset(self::$data['pages'][$page])
+					|| !is_array(self::$data['pages'][$page])
+					|| ( $page == 'media-upload-popup' && !isset($_REQUEST['kcsf']) ) )
+			return;
 
-		foreach ( self::$data['pages'] as $current_page ) {
-			$kcspage = strpos($hook_suffix, $current_page);
-			if ( $kcspage !== false ) {
-				self::js_globals();
-				wp_enqueue_script( 'kc-settings' );
-				wp_enqueue_style( 'kc-settings' );
-				break;
-			}
-		}
+		foreach ( self::$data['pages'][$page] as $t => $s )
+			foreach ( $s as $handle )
+				call_user_func( "wp_enqueue_{$t}", $handle );
+
+		self::js_globals();
 	}
 
 
 	function js_globals() {
-		$kcFiles_vars = array(
-			'text' => array(
-				'head' => __( 'KC Settings', 'kc-settings' ),
-				'empty' => __( 'Please upload some files and then go back to this tab.', 'kc-settings' ),
-				'checkAll' => __( 'Select all files', 'kc-settings' ),
-				'clear' => __( 'Clear selections', 'kc-settings' ),
-				'invert' => __( 'Invert selection', 'kc-settings' ),
-				'addFiles' => __( 'Add files to collection', 'kc-settings' )
-			)
-		); ?>
+		$kcSettings_vars = array(
+			'upload' => array(
+				'text' => array(
+					'head' => __( 'KC Settings', 'kc-settings' ),
+					'empty' => __( 'Please upload some files and then go back to this tab.', 'kc-settings' ),
+					'checkAll' => __( 'Select all files', 'kc-settings' ),
+					'clear' => __( 'Clear selections', 'kc-settings' ),
+					'invert' => __( 'Invert selection', 'kc-settings' ),
+					'addFiles' => __( 'Add files to collection', 'kc-settings' )
+				)
+			),
+			'_ids' => self::$data['settings']['_ids']
+		);
+
+		?>
 <script>
-	var kcFiles = <?php echo json_encode( $kcFiles_vars ) ?>;
+	var kcSettings = <?php echo json_encode( $kcSettings_vars ) ?>;
 </script>
 	<?php }
 
@@ -317,6 +313,9 @@ class kcSettings {
 
 	public static function _dev() {
 		echo '<pre>';
+		//global $hook_suffix;
+		//echo $hook_suffix;
+		print_r( self::$data['pages'] );
 
 		echo '</pre>';
 	}

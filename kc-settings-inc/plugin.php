@@ -59,11 +59,15 @@ class kcSettings_plugin {
 
 		if ( isset($this->parent) && $this->parent === true ) {
 			add_menu_page( $page_title, $parent_title, 'manage_options', "kc-settings-{$prefix}" );
-			$this->setting_page = add_submenu_page( "kc-settings-{$prefix}", $page_title, $menu_title, 'manage_options', "kc-settings-{$prefix}", array($this, 'settings_page') );
+			$page = add_submenu_page( "kc-settings-{$prefix}", $page_title, $menu_title, 'manage_options', "kc-settings-{$prefix}", array($this, 'settings_page') );
 		}
 		else {
-			$this->setting_page = add_submenu_page( $menu_location, $page_title, $menu_title, 'manage_options', "kc-settings-{$prefix}", array($this, 'settings_page') );
+			$page = add_submenu_page( $menu_location, $page_title, $menu_title, 'manage_options', "kc-settings-{$prefix}", array($this, 'settings_page') );
 		}
+		kcSettings::$data['pages'][$page] = array(
+			'script'	=> array( 'kc-settings' ),
+			'style'	=> array( 'kc-settings' )
+		);
 	}
 
 
