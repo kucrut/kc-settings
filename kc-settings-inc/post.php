@@ -2,73 +2,56 @@
 
 class kcSettings_post {
 
-	function __construct( $metadata ) {
-		$this->metadata = $metadata;
+	public static function init() {
+		add_action( 'add_meta_boxes', array(__CLASS__, '_create_meta_box'), 11, 2 );
+		add_action( 'save_post', array(__CLASS__, '_save'), 11, 2 );
 
-		# Create metabox(es)
-		add_action( 'admin_menu', array(&$this, 'create_meta_box') );
-		# Save the custom fields values
-		add_action( 'save_post', array(&$this, 'save') );
+		if ( isset(kcSettings::$data['settings']['post']['attachment']) ) {
+			kcSettings::$data['pages'][] = 'media.php';
+			kcSettings::$data['pages'][] = 'media-upload-popup';
 
-		# Attachment
-		if ( isset($this->metadata['attachment']) && is_array($this->metadata['attachment']) && !empty($this->metadata['attachment']) )
-			$this->attachment_init( $this->metadata['attachment'] );
+			add_filter( 'attachment_fields_to_edit', array(__CLASS__, '_attachment_fields_to_edit'), 10, 2 );
+			add_filter( 'attachment_fields_to_save', array(__CLASS__, '_attachment_fields_to_save'), 10, 2 );
+		}
 	}
 
 
 	# Create metabox
-	function create_meta_box() {
+	public static function _create_meta_box( $post_type, $post ) {
+		if ( !isset(kcSettings::$data['settings']['post'][$post_type]) )
+			return;
 
-		# loop trough the post options array
-		foreach ( $this->metadata as $post_type => $sections ) {
-			$post_type_obj = get_post_type_object( $post_type );
-			# skip if no sections found
-			if ( !is_array($sections) || empty($sections) )
+		kcSettings::$data['pages'][] = 'post.php';
+		kcSettings::$data['pages'][] = 'post-new.php';
+
+		foreach ( kcSettings::$data['settings']['post'][$post_type] as $section ) {
+			# does this section have role set?
+			if ( (isset($section['role']) && !empty($section['role'])) && !kcs_check_roles($section['role']) )
 				continue;
 
-			foreach ( $sections as $section ) {
-				# skip if no options found
-				if ( !isset($section['fields']) || empty($section['fields']) )
-					continue;
+			# set metabox priority
+			$priority = ( isset($section['priority']) && in_array($section['priority'], array('low', 'high')) ) ? $section['priority'] : 'high';
 
-				# does this section have role set?
-				if ( isset($section['role']) && !empty($section['role']) )
-					if ( !kcs_check_roles($section['role']) )
-						continue;
-
-				# set metabox priority
-				$priority = ( isset($section['priority']) && in_array($section['priority'], array('low', 'high')) ) ? $section['priority'] : 'high';
-
-				# add metabox
-				$title = ( !isset($section['title']) ) ? sprintf( __('%s Settings', 'kc-settings'), $post_type_obj->label ) : $section['title'];
-				add_meta_box( "kc-metabox-{$post_type}-{$section['id']}", $title, array(&$this, 'fill_meta_box'), $post_type, 'normal', $priority, $section['fields'] );
-			}
+			# add metabox
+			add_meta_box( "kc-metabox-{$post_type}-{$section['id']}", $section['title'], array(__CLASS__, '_fill_meta_box'), $post_type, 'normal', $priority, $section );
 		}
 	}
 
 
 	# Populate metabox
-	function fill_meta_box( $object, $box ) {
-		$section = str_replace( "kc-metabox-{$object->post_type}-", '', $box['id'] );
+	public static function _fill_meta_box( $object, $box ) {
+		$section = $box['args'];
 
 		$output  = "<input type='hidden' name='{$object->post_type}_kc_meta_box_nonce' value='".wp_create_nonce( '___kc_meta_box_nonce___' )."' />";
 		$output .= "<table class='form-table'>\n";
 
-		$fields = $box['args'];
-
-		foreach ( $fields as $field ) {
-			$output .= "\t<tr>\n";
-
-			# don't use label's for attribute for these types of options
+		foreach ( $section['fields'] as $field ) {
 			$label_for = ( !in_array($field['type'], array('checkbox', 'radio')) ) ? $field['id'] : null;
-			# label for each option field
+			$output .= "\t<tr>\n";
 			$output .= kcs_form_label( $field['title'], $label_for, true, false );
-
-			# print the option field
 			$output .= "\t\t<td>";
-			$output .= kcs_settings_field( array( 'mode' => 'post', 'object_id' => $object->ID, 'section' => $section, 'field' => $field ) );
+			$output .= kcs_settings_field( array( 'mode' => 'post', 'object_id' => $object->ID, 'section' => $section['id'], 'field' => $field ) );
 			$output .= "\t\t</td>\n";
-
 			$output .= "\t</tr>\n";
 		}
 
@@ -78,71 +61,27 @@ class kcSettings_post {
 	}
 
 
-	/**
-	 * Save post custom fields values
-	 *
-	 * @param int $post_id
-	 *
-	 */
-
-	function save( $post_id ) {
-		if ( isset($_POST['action']) && $_POST['action'] == 'inline-save' )
+	# Save post metadata/custom fields values
+	public static function _save( $post_id, $post ) {
+		if ( !isset(kcSettings::$data['settings']['post'][$post->post_type])
+					|| ( isset($_POST['action']) && $_POST['action'] == 'inline-save' )
+					|| $post->post_status == 'auto-draft' )
 			return $post_id;
 
-		if ( isset($_POST['post_type']) )
-			$post_type = $_POST['post_type'];
-		$post_metadata = ( isset($post_type) ) ? $this->metadata[$post_type] : null;
-
-		# empty options array? abort!
-		if ( empty($post_metadata) )
+		$post_type_obj = get_post_type_object( $post->post_type );
+		if ( ( wp_verify_nonce($_POST["{$post->post_type}_kc_meta_box_nonce"], '___kc_meta_box_nonce___') && current_user_can($post_type_obj->cap->edit_post) ) !== true )
 			return $post_id;
 
-		$post_type_obj = get_post_type_object( $post_type );
-		if ( ( wp_verify_nonce($_POST["{$post_type}_kc_meta_box_nonce"], '___kc_meta_box_nonce___') && current_user_can($post_type_obj->cap->edit_post) ) !== true )
-			return $post_id;
-
-		# Loop through all of post meta box arguments.
-		foreach ( $post_metadata as $section ) {
-			# no fields? abort!
-			if ( !isset($section['fields']) || empty($section['fields']) )
-				return $post_id;
-
-			foreach ( $section['fields'] as $field ) {
-				kcs_update_meta( 'post', $post_type, $post_id, $section, $field );
-			}
+		foreach ( kcSettings::$data['settings']['post'][$post->post_type] as $section ) {
+			foreach ( $section['fields'] as $field )
+				kcs_update_meta( 'post', $post->post_type, $post_id, $section, $field );
 		}
 	}
 
 
-	function attachment_init( $sections ) {
-		$this->attachment_sections = array();
-
-		foreach ( $sections as $section ) {
-			# skip if no options found
-			if ( !isset($section['fields']) || empty($section['fields']) )
-				continue;
-
-			# does this section have role set?
-			if ( isset($section['role']) && !empty($section['role']) )
-				if ( !kcs_check_roles($section['role']) )
-					continue;
-
-			$this->attachment_sections[] = $section;
-		}
-
-		if ( empty($this->attachment_sections) )
-			return;
-
-		add_filter( 'attachment_fields_to_edit', array($this, 'attachment_fields_to_edit'), 10, 2 );
-		add_filter( 'attachment_fields_to_save', array($this, 'attachment_fields_to_save'), 10, 2 );
-	}
-
-
-	function attachment_fields_to_edit( $fields, $post ) {
-		foreach ( $this->attachment_sections as $section ) {
+	public static function _attachment_fields_to_edit( $fields, $post ) {
+		foreach ( kcSettings::$data['settings']['post']['attachment'] as $section ) {
 			foreach ( $section['fields'] as $field ) {
-				extract( $field, EXTR_OVERWRITE );
-
 				if ( !empty($field['file_type']) && !strstr($post->post_mime_type, $field['file_type']) )
 					continue;
 
@@ -154,14 +93,14 @@ class kcSettings_post {
 				);
 
 				$nu_field = array(
-					'label' => $title,
+					'label' => $field['title'],
 					'input' => 'html',
 					'html'  => kcs_settings_field( $input_args )
 				);
 				if ( isset($desc) && !empty($desc) )
-					$nu_field['helps'] = $desc;
+					$nu_field['helps'] = $field['desc'];
 
-				$fields[$id] = $nu_field;
+				$fields[$field['id']] = $nu_field;
 			}
 		}
 
@@ -169,17 +108,13 @@ class kcSettings_post {
 	}
 
 
-	function attachment_fields_to_save( $post, $attachment ) {
-		foreach ( $this->attachment_sections as $section ) {
-			foreach ( $section['fields'] as $field ) {
+	public static function _attachment_fields_to_save( $post, $attachment ) {
+		foreach ( kcSettings::$data['settings']['post']['attachment'] as $section ) {
+			foreach ( $section['fields'] as $field )
 				kcs_update_meta( 'post', 'attachment', $post['ID'], $section, $field, true );
-			}
 		}
 
 		return $post;
 	}
-
 }
-
-
 ?>

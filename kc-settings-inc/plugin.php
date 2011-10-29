@@ -21,7 +21,7 @@ class kcSettings_plugin {
 		# Register the menus to WP
 		add_action( 'admin_menu', array(&$this, 'create_menu'));
 		# Register the options
-		add_action( 'admin_init', array(&$this, 'register_options') );
+		add_action( 'admin_init', array(&$this, 'register_options'), 11 );
 	}
 
 
@@ -34,10 +34,7 @@ class kcSettings_plugin {
 			$menu_location = 'options-general.php';
 
 		$page = add_submenu_page( $menu_location, $page_title, $menu_title, 'manage_options', "kc-settings-{$prefix}", array(&$this, 'settings_page') );
-		kcSettings::$data['pages'][$page] = array(
-			'script'	=> array( 'kc-settings' ),
-			'style'		=> array( 'kc-settings' )
-		);
+		kcSettings::$data['pages'][] = $page;
 	}
 
 

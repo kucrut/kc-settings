@@ -14,12 +14,7 @@ License: GPL v2
 class kcSettings {
 	public static $data	= array(
 		'version'		=> '2.1.2',
-		'pages'			=> array(
-			'media-upload-popup' => array(
-				'script'	=> array( 'kc-settings', 'kc-settings-upload' ),
-				'style'		=> array( 'kc-settings' )
-			)
-		),
+		'pages'			=> array(),
 		'paths'			=> '',
 		'settings'	=> array()
 	);
@@ -41,13 +36,9 @@ class kcSettings {
 		require_once( self::$data['paths']['inc'].'/helper.php' );
 		require_once( self::$data['paths']['inc'].'/_deprecated.php' );
 
-		$ok = false;
 		foreach ( array('plugin', 'post', 'term', 'user') as $type ) {
-			if ( empty(self::$data['settings'][$type]) )
-				continue;
-
-			$ok = true;
-			call_user_func( array(__CLASS__, "_{$type}_init"), self::$data['settings'][$type] );
+			if ( !empty(self::$data['settings'][$type]) )
+				call_user_func( array(__CLASS__, "_{$type}_init") );
 		}
 
 		self::_locale();
@@ -197,35 +188,33 @@ class kcSettings {
 	}
 
 
-	private static function _plugin_init( $settings ) {
+	private static function _plugin_init() {
 		require_once( self::$data['paths']['inc'].'/plugin.php' );
-
-		# Loop through the array and pass each item to kcSettings_plugin
-		foreach ( $settings as $group )
+		foreach ( self::$data['settings']['plugin'] as $group )
 			$do = new kcSettings_plugin( $group );
 	}
 
 
-	private static function _post_init( $settings ) {
-		self::$data['pages'][] = 'post';
-		if ( array_key_exists('attachment', $settings) )
-			self::$data['pages'][] = 'media';
-		require_once( self::$data['paths']['inc'].'/post.php' );
-		$do = new kcSettings_post( $settings );
+	private static function _post_init() {
+		require_once( self::$data['paths']['inc']."/post.php" );
+		kcSettings_post::init();
 	}
 
 
-	private static function _term_init( $settings ) {
-		self::$data['pages'][] = 'edit-tags';
+	private static function _term_init() {
+		self::$data['pages'][] = 'edit-tags.php';
+
 		require_once( self::$data['paths']['inc'].'/term.php' );
-		$do = new kcSettings_term( $settings );
+		$do = new kcSettings_term();
 	}
 
 
-	private static function _user_init( $settings ) {
-		self::$data['pages'][] = 'profile';
+	private static function _user_init() {
+		self::$data['pages'][] = 'profile.php';
+		self::$data['pages'][] = 'user-edit.php';
+
 		require_once( self::$data['paths']['inc'].'/user.php' );
-		$do = new kcSettings_user( $settings );
+		$do = new kcSettings_user();
 	}
 
 
@@ -262,21 +251,22 @@ class kcSettings {
 	}
 
 
-	public static function _sns_enqueue( $page ) {
-		if ( !isset(self::$data['pages'][$page])
-					|| !is_array(self::$data['pages'][$page])
-					|| ( $page == 'media-upload-popup' && !isset($_REQUEST['kcsf']) ) )
+	public static function _sns_enqueue( $hook_suffix ) {
+		if ( !in_array($hook_suffix, self::$data['pages']) )
 			return;
 
-		foreach ( self::$data['pages'][$page] as $t => $s )
-			foreach ( $s as $handle )
-				call_user_func( "wp_enqueue_{$t}", $handle );
+		wp_enqueue_style( 'kc-settings' );
+		wp_enqueue_script( 'kc-settings' );
+		self::_js_globals();
 
-		self::js_globals();
+		if ( $page == 'media-upload-popup' && isset($_REQUEST['kcsf']) && $_REQUEST['kcsf'] )
+			wp_enqueue_script( 'kc-settings-upload' );
+		if ( strpos($hook_suffix, 'kcsb') !== false )
+			wp_enqueue_script( 'kc-settings-builder' );
 	}
 
 
-	function js_globals() {
+	private static function _js_globals() {
 		$kcSettings_vars = array(
 			'upload' => array(
 				'text' => array(
@@ -310,9 +300,7 @@ class kcSettings {
 
 	public static function _dev() {
 		echo '<pre>';
-		//global $hook_suffix;
-		//echo $hook_suffix;
-		print_r( self::$data['pages'] );
+
 
 		echo '</pre>';
 	}

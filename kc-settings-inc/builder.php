@@ -230,10 +230,7 @@ class kcSettings_builder {
 		$page = add_options_page( __('KC Settings', 'kc-settings'), __('KC Settings', 'kc-settings'), 'manage_options', 'kcsb', array(__CLASS__, 'builder') );
 
 		# Set scripts and styles
-		kcSettings::$data['pages'][$page] = array(
-			'script'	=> array( 'kc-settings-builder' ),
-			'style'	=> array( 'kc-settings' )
-		);
+		kcSettings::$data['pages'][] = $page;
 
 		add_action( "load-{$page}", array(__CLASS__, 'goback') );
 		add_action( "load-{$page}", array(__CLASS__, 'help') );
