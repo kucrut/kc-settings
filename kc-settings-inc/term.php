@@ -4,8 +4,9 @@
 class kcSettings_term {
 
 	public static function init() {
-		# Create and/or set termmeta table
 		add_action( 'init', array(__CLASS__, '_create_table'), 12 );
+
+		kcSettings::$data['pages'][] = 'edit-tags.php';
 
 		foreach ( array_keys(kcSettings::$data['settings']['term']) as $tax ) {
 			add_action( "{$tax}_add_form_fields", array(__CLASS__, '_fields'), 20, 1 );
@@ -18,7 +19,7 @@ class kcSettings_term {
 
 
 	/**
-	 * Create termmeta table
+	 * Create and/or set termmeta table
 	 *
 	 * @credit Simple Term Meta
 	 * @link http://www.cmurrayconsulting.com/software/wordpress-simple-term-meta/

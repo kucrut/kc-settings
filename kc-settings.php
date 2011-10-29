@@ -202,10 +202,7 @@ class kcSettings {
 
 
 	private static function _term_init() {
-		self::$data['pages'][] = 'edit-tags.php';
-
 		require_once( self::$data['paths']['inc'].'/term.php' );
-		//$do = new kcSettings_term();
 		kcSettings_term::init();
 	}
 
