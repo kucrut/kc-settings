@@ -208,11 +208,8 @@ class kcSettings {
 
 
 	private static function _user_init() {
-		self::$data['pages'][] = 'profile.php';
-		self::$data['pages'][] = 'user-edit.php';
-
 		require_once( self::$data['paths']['inc'].'/user.php' );
-		$do = new kcSettings_user();
+		kcSettings_user::init();
 	}
 
 
