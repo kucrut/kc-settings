@@ -205,7 +205,8 @@ class kcSettings {
 		self::$data['pages'][] = 'edit-tags.php';
 
 		require_once( self::$data['paths']['inc'].'/term.php' );
-		$do = new kcSettings_term();
+		//$do = new kcSettings_term();
+		kcSettings_term::init();
 	}
 
 
@@ -259,7 +260,7 @@ class kcSettings {
 		wp_enqueue_script( 'kc-settings' );
 		self::_js_globals();
 
-		if ( $page == 'media-upload-popup' && isset($_REQUEST['kcsf']) && $_REQUEST['kcsf'] )
+		if ( $hook_suffix == 'media-upload-popup' && isset($_REQUEST['kcsf']) && $_REQUEST['kcsf'] )
 			wp_enqueue_script( 'kc-settings-upload' );
 		if ( strpos($hook_suffix, 'kcsb') !== false )
 			wp_enqueue_script( 'kc-settings-builder' );

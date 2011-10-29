@@ -3,21 +3,19 @@
 
 class kcSettings_term {
 
-	function __construct( $metadata ) {
-		$this->metadata = $metadata;
-		# Create & set termmeta table
-		add_action( 'init', array(&$this, 'create_table'), 12 );
+	public static function init() {
+		# Create and/or set termmeta table
+		add_action( 'init', array(__CLASS__, '_create_table'), 12 );
 
-		# Add every term fields to its taxonomy add & edit screen
-		foreach ( $this->metadata as $tax => $sections ) {
-			add_action( "{$tax}_add_form_fields", array(&$this, 'fields') );
-			add_action( "{$tax}_edit_form_fields", array(&$this, 'fields'), 20, 2 );
+		foreach ( array_keys(kcSettings::$data['settings']['term']) as $tax ) {
+			add_action( "{$tax}_add_form_fields", array(__CLASS__, '_fields'), 20, 1 );
+			add_action( "{$tax}_edit_form_fields", array(__CLASS__, '_fields'), 20, 2 );
 		}
-		# Also add the saving routine
-		add_action( 'edit_term', array(&$this, 'save'), 10, 3);
-		add_action( 'create_term', array(&$this, 'save'), 10, 3);
 
+		add_action( 'edit_term', array(__CLASS__, '_save'), 10, 3);
+		add_action( 'create_term', array(__CLASS__, '_save'), 10, 3);
 	}
+
 
 	/**
 	 * Create termmeta table
@@ -26,7 +24,7 @@ class kcSettings_term {
 	 * @link http://www.cmurrayconsulting.com/software/wordpress-simple-term-meta/
 	 *
 	 */
-	function create_table() {
+	public static function _create_table() {
 		global $wpdb;
 
 		$table_name = $wpdb->prefix . 'termmeta';
@@ -49,6 +47,7 @@ class kcSettings_term {
 		$wpdb->termmeta = $table_name;
 	}
 
+
 	/**
 	 * Generate term meta field HTML.
 	 *
@@ -56,7 +55,7 @@ class kcSettings_term {
 	 * $return string $output Input field HTML
 	 *
 	 */
-	function fields( $args ) {
+	public static function _fields( $args ) {
 		# Where are we? add/edit
 		#	a. Edit screen
 		if ( is_object($args) ) {
@@ -73,51 +72,54 @@ class kcSettings_term {
 			$tabled = false;
 		}
 
+		if ( !isset(kcSettings::$data['settings']['term'][$taxonomy]) )
+			return $args;
+
 		# Set the field wrapper tag? Why the incosistencies WP? :P
 		$row_tag = ( $tabled ) ? 'tr' : 'div';
+		$output = '';
 
-		foreach ( $this->metadata as $tax => $sections ) {
-			if ( $taxonomy != $tax )
-				continue;
+		foreach ( kcSettings::$data['settings']['term'][$taxonomy] as $section ) {
 
-			$output = '';
-			foreach ( $sections as $section ) {
-				if ( !isset($section['fields']) || !is_array($section['fields']) || empty($section['fields']) )
-					continue 2;
+			$section_head = "\t\t\t\t<h4>{$section['title']}</h4>\n";
+			if ( isset($section['desc']) && $section['desc'] )
+				$section_head .= "\t\t\t\t{$section['desc']}\n";
+			if ( $tabled )
+				$section_head = "<tr class='form-field'>\n\t\t\t<th colspan='2'>\n{$section_head}\t\t\t</th>\n\t\t</tr>\n";
+			$output .= $section_head;
 
-				foreach ( $section['fields'] as $field ) {
-					$args = array(
-						'mode' 		=> 'term',
-						'section' => $section['id'],
-						'field' 	=> $field,
-						'tabled'	=> $tabled,
-						'echo' 		=> false
-					);
-					if ( isset($term_id) )
-						$args['object_id'] = $term_id;
+			foreach ( $section['fields'] as $field ) {
+				$args = array(
+					'mode' 		=> 'term',
+					'section' => $section['id'],
+					'field' 	=> $field,
+					'tabled'	=> $tabled,
+					'echo' 		=> false
+				);
+				if ( isset($term_id) )
+					$args['object_id'] = $term_id;
 
-					$label_for = ( !in_array($field['type'], array('checkbox', 'radio')) ) ? $field['id'] : null;
+				$label_for = ( !in_array($field['type'], array('checkbox', 'radio', 'multiinput')) ) ? $field['id'] : null;
 
-					$output .= "<{$row_tag} class='form-field'>\n";
+				$output .= "\t\t<{$row_tag} class='form-field'>\n";
 
-					$the_label = "\t".kcs_form_label( $field['title'], $label_for, false, false  )."\n";
-					# Wrap the field with <tr> if we're in edit mode
-					if ( $edit_mode )
-						$the_label = "\t<th scope='row'>\n{$the_label}\t</th>\n";
-					$output .= $the_label;
+				$the_label = kcs_form_label( $field['title'], $label_for, false, false  );
+				# Wrap the field with <tr> if we're in edit mode
+				if ( $edit_mode )
+					$the_label = "\t\t\t<th scope='row'>{$the_label}</th>\n";
+				$output .= $the_label;
 
-					$the_field = "\t\t".kcs_settings_field( $args )."\n";
-					# Wrap the field with <tr> if we're in edit mode
-					if ( $edit_mode )
-						$the_field = "\t<td>\n{$the_field}\t</td>\n";
-					$output .= $the_field;
+				$the_field = "\t\t\t\t".kcs_settings_field( $args )."\n";
+				# Wrap the field with <tr> if we're in edit mode
+				if ( $edit_mode )
+					$the_field = "\t\t\t<td>\n{$the_field}\t\t\t</td>\n";
+				$output .= $the_field;
 
-					$output .= "</{$row_tag}>";
-				}
+				$output .= "\t\t</{$row_tag}>\n";
 			}
 
-			echo $output;
 		}
+		echo $output;
 	}
 
 
@@ -129,18 +131,14 @@ class kcSettings_term {
 	 * @param string $taxonomy Taxonomy name
 	 *
 	 */
-	function save( $term_id, $tt_id, $taxonomy ) {
-		if ( isset($_POST['action']) && $_POST['action'] == 'inline-save-tax' )
+	public static function _save( $term_id, $tt_id, $taxonomy ) {
+		if ( !isset(kcSettings::$data['settings']['term'][$taxonomy])
+					|| ( isset($_POST['action']) && $_POST['action'] == 'inline-save-tax' ) )
 			return $term_id;
 
-		foreach ( $this->metadata as $tax => $sections ) {
-			if ( $taxonomy != $tax )
-				continue;
-
-			foreach ( $sections as $section ) {
-				foreach ( $section['fields'] as $field )
-					kcs_update_meta( 'term', $tax, $term_id, $section, $field );
-			}
+		foreach ( kcSettings::$data['settings']['term'][$taxonomy] as $section ) {
+			foreach ( $section['fields'] as $field )
+				kcs_update_meta( 'term', $tax, $term_id, $section, $field );
 		}
 	}
 }
