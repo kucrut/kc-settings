@@ -248,7 +248,7 @@ class kcSettings_builder {
 			check_admin_referer( "__kcsb__{$sID}" );
 
 			$action = $_GET['action'];
-			$settings = kcSettings::$data['settings']['_raw'];
+			$settings = kcSettings::$data['kcsb']['settings'];
 
 			switch ( $action ) {
 				case 'clone' :
@@ -295,7 +295,7 @@ class kcSettings_builder {
 
 	public static function validate( $new ) {
 		# Delete
-		$old = kcSettings::$data['settings']['_raw'];
+		$old = kcSettings::$data['kcsb']['settings'];
 		if ( !isset($new['id']) ) {
 			return $new;
 		}
@@ -392,9 +392,9 @@ class kcSettings_builder {
 			if ( $action == 'edit' ) {
 				if ( isset($_GET['id']) && !empty($_GET['id']) ) {
 					$id = $_GET['id'];
-					if ( isset(kcSettings::$data['settings']['_raw'][$id]) ) {
+					if ( isset(kcSettings::$data['kcsb']['settings'][$id]) ) {
 						$mode		= 'edit';
-						$values = wp_parse_args( kcSettings::$data['settings']['_raw'][$id], $values );
+						$values = wp_parse_args( kcSettings::$data['kcsb']['settings'][$id], $values );
 					}
 					else {
 						add_settings_error('general', 'warning', sprintf( __("There's no setting with ID %s. Are you cheating? ;)", 'kc-settings'), "&#8220;{$id}&#8221;") );
@@ -444,9 +444,9 @@ class kcSettings_builder {
 					</tfoot>
 					<tbody id="the-list">
 						<?php
-							if ( !empty(kcSettings::$data['settings']['_raw']) ) {
+							if ( !empty(kcSettings::$data['kcsb']['settings']) ) {
 								$i = 0;
-								foreach( kcSettings::$data['settings']['_raw'] as $sID => $sVal ) {
+								foreach( kcSettings::$data['kcsb']['settings'] as $sID => $sVal ) {
 									++$i;
 									$url_base = "options-general.php?page=kcsb&amp;id={$sVal['id']}&amp;action=";
 						?>

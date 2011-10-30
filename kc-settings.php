@@ -16,7 +16,8 @@ class kcSettings {
 		'version'		=> '2.1.2',
 		'pages'			=> array(),
 		'paths'			=> '',
-		'settings'	=> array()
+		'settings'	=> array(),
+		'kcsb'			=> array()
 	);
 
 
@@ -31,12 +32,13 @@ class kcSettings {
 		//self::_samples();
 
 		# Get all settings
-		self::$data['settings']	= self::_bootsrap_settings();
+		self::_bootsrap_settings();
+
 		require_once( self::$data['paths']['inc'].'/form.php' );
 		require_once( self::$data['paths']['inc'].'/helper.php' );
 		require_once( self::$data['paths']['inc'].'/_deprecated.php' );
 
-		foreach ( array('plugin', 'post', 'term', 'user') as $type ) {
+		foreach ( array_keys(self::$data['settings']) as $type ) {
 			if ( !empty(self::$data['settings'][$type]) )
 				call_user_func( array(__CLASS__, "_{$type}_init") );
 		}
@@ -78,32 +80,34 @@ class kcSettings {
 	 * Get all settings
 	 */
 	private static function _bootsrap_settings() {
-		$kcsb = get_option( 'kcsb' );
-		$settings = array(
-			'_raw'		=> $kcsb,
-			'plugin'	=> array(),
-			'post'		=> array(),
-			'term'		=> array(),
-			'user'		=> array(),
-			'_ids'		=> array(
+		$kcsb = array(
+			'settings'	=> get_option( 'kcsb' ),
+			'_ids'			=> array(
 				'settings'	=> array(),
 				'sections'	=> array(),
 				'fields'		=> array()
 			)
 		);
 
-		if ( is_array($kcsb) && !empty($kcsb) ) {
-			foreach ( $kcsb as $setting ) {
+		$settings = array(
+			'plugin'	=> array(),
+			'post'		=> array(),
+			'term'		=> array(),
+			'user'		=> array()
+		);
+
+		if ( is_array($kcsb['settings']) && !empty($kcsb['settings']) ) {
+			foreach ( $kcsb['settings'] as $setting ) {
 				$sID = $setting['id'];
-				$settings['_ids']['settings'][] = $sID;
+				$kcsb['_ids']['settings'][] = $sID;
 				$type = $setting['type'];
 				$sections = array();
 
 				foreach ( $setting['sections'] as $section ) {
-					$settings['_ids']['sections'][] = $section['id'];
+					$kcsb['_ids']['sections'][] = $section['id'];
 					$fields = array();
 					foreach ( $section['fields'] as $field ) {
-						$settings['_ids']['fields'][] = $field['id'];
+						$kcsb['_ids']['fields'][] = $field['id'];
 						if ( in_array($field['type'], array('checkbox', 'radio', 'select', 'multiselect')) ) {
 							$options = array();
 							foreach ( $field['options'] as $option ) {
@@ -139,7 +143,8 @@ class kcSettings {
 		$settings['term'] = self::_bootsrap_meta( 'term', $settings['term'] );
 		$settings['user'] = self::_bootsrap_meta( 'user', $settings['user'] );
 
-		return $settings;
+		self::$data['settings']	=  $settings;
+		self::$data['kcsb']	=  $kcsb;
 	}
 
 
@@ -273,7 +278,7 @@ class kcSettings {
 					'addFiles' => __( 'Add files to collection', 'kc-settings' )
 				)
 			),
-			'_ids' => self::$data['settings']['_ids']
+			'_ids' => self::$data['kcsb']['_ids']
 		);
 
 		?>
