@@ -23,9 +23,16 @@ class kcSettings {
 
 	public static function init() {
 		self::$data['paths'] = self::_paths();
-		self::$data['errors'] = array(
-			'no_menu_title'	=> __( "One of your settings doesn't have <b>menu title</b> set. It's been set to default value. Please consider setting it.", 'kc-settings'),
-			'no_page_title'	=> __( "One of your settings doesn't have <b>page title</b> set. It's been set to default value. Please consider setting it.", 'kc-settings')
+		self::$data['messages'] = array(
+			'no_prefix'				=> __( "One of your settings doesn't have <b>prefix</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'no_menu_title'		=> __( "One of your settings doesn't have <b>menu title</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'no_page_title'		=> __( "One of your settings doesn't have <b>page title</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'no_sections'			=> __( "One of your settings doesn't have <b>sections</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'no_fields'				=> __( "One of your settings' section doesn't have <b>fields</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'field_no_title'	=> __( "One of your fields doesn't have <b>title</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'field_no_type'		=> __( "One of your fields doesn't have <b>type</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'field_no_opt'		=> __( "One of your fields doesn't have the required <b>options</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'field_no_cb'			=> __( "One of your fields doesn't have the required <b>callback</b> set. Therefore it has NOT been added.", 'kc-settings')
 		);
 
 		# Include samples (for development)
@@ -159,28 +166,14 @@ class kcSettings {
 	 */
 
 	private static function _bootsrap_meta( $meta_type, $others = array() ) {
-		$old = apply_filters( "kc_{$meta_type}_settings", $others );
-		if ( !is_array($old) || empty($old) )
+		$ol = apply_filters( "kc_{$meta_type}_settings", $others );
+
+		if ( !is_array($ol) || empty($ol) )
 			return array();
 
 		$nu = array();
-		foreach ( $old as $group ) {
-			if ( !is_array($group) || empty($group) )
-				return;
-
-			# Loop through each taxonomy/post type to see if it has sections
+		foreach ( $ol as $group ) {
 			foreach ( $group as $object => $sections ) {
-				# Skip this taxonomy/post type if it has no sections
-				if ( !is_array($sections) )
-					continue;
-
-				# Loop through each section to see if it has fields
-				foreach ( $sections as $section )
-					# Skip the section if it doesn't have them
-					if ( !isset($section['fields']) || !is_array($section['fields']) || empty($section['fields']) )
-						continue 2;
-
-				# Rebuild the array
 				if ( isset($nu[$object]) )
 					foreach ( $sections as $sk => $sv )
 						$nu[$object][$sk] = $sv;
