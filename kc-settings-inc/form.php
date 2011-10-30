@@ -85,13 +85,13 @@ class kcForm {
 
 
   public static function select( $args ) {
-    if ( !isset($args['none']) || !is_array($args['none']) || empty($args['none']) ) {
+    if ( !isset($args['none']) || $args['none'] !== false ) {
       $args['none'] = array(
         'value'   => '-1',
         'label'   => '&mdash;&nbsp;'.__('Select', 'kc-settings').'&nbsp;&mdash;'
       );
+			$args['options'] = array_merge( array($args['none']), $args['options'] );
     }
-    $options = array_merge( array($args['none']), $args['options'] );
 
     if ( !is_array($args['current']) )
       $args['current'] = array($args['current']);
@@ -99,9 +99,9 @@ class kcForm {
     $output  = "<select";
     $output .= self::_build_attr( $args['attr'] );
     $output .= ">\n";
-    foreach ( $options as $o ) {
+    foreach ( $args['options'] as $o ) {
       $output .= "\t<option value='".esc_attr($o['value'])."'";
-      if ( in_array($o['value'], $args['current']) && ($o['value'] != $args['none']['value']) )
+      if ( in_array($o['value'], $args['current']) )
         $output .= " selected='true'\n";
       $output .= ">{$o['label']}</option>\n";
     }
@@ -125,46 +125,6 @@ class kcForm {
     return $output;
   }
 
-}
-
-
-/**
- * Prints out all settings sections added to a particular settings page
- *
- */
-function kcs_settings_sections( $prefix, $group ) {
-	$page = "{$prefix}_settings";
-	global $wp_settings_sections, $wp_settings_fields;
-
-	if ( !isset($wp_settings_sections) || !isset($wp_settings_sections[$page]) )
-		return;
-
-	foreach ( (array) $wp_settings_sections[$page] as $section ) {
-		if ( !strpos($section['title'], '-section-') )
-			echo "<h3>{$section['title']}</h3>\n";
-		call_user_func( $section['callback'], $section );
-		if ( !isset($wp_settings_fields) || !isset($wp_settings_fields[$page]) || !isset($wp_settings_fields[$page][$section['id']]) )
-			continue;
-
-		$opt_section = $group['options'][$section['id']];
-
-		# Wanna do something before the options table?
-		do_action( 'kc_settings_section_before', $prefix, $opt_section );
-
-		# Call user callback function for printing the section when specified
-		if ( isset($opt_section['cb']) && is_callable($opt_section['cb']) ) {
-			call_user_func( $opt_section['cb'], $opt_section );
-		}
-		# Defaults to WordPress' Settings API
-		else {
-			echo '<table class="form-table">';
-			do_settings_fields( $page, $section['id'] );
-			echo '</table>';
-		}
-
-		# Wanna do something after the options table?
-		do_action( 'kc_settings_section_after', $prefix, $section );
-	}
 }
 
 

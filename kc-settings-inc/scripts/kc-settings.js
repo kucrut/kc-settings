@@ -4,7 +4,7 @@ win.kcsInsertFiles = function() {
 	var count = win.kcSettings.upload.nu.length;
 
 	if ( count ) {
-		var $list = jQuery('#'+win.kcSettings.upload.id+' ul'),
+		var $list = win.kcSettings.upload.id,
 				$lastItem = $list.children().last(),
 				$nuEls = jQuery();
 
@@ -23,7 +23,7 @@ win.kcsInsertFiles = function() {
 
 		$list.append( $nuEls );
 		if ( $lastItem.is('.hidden') ) {
-			$nuEls.fadeIn();
+			$nuEls.show();
 			$lastItem.remove();
 		}
 	}
@@ -57,10 +57,10 @@ jQuery(document).ready(function($) {
 		var $el = $(this),
 				$group = $el.parent();
 
-		win.kcFiles.id = $group.attr('id');
-		win.kcFiles.files = [];
+		win.kcSettings.upload.id = $( '#'+$group.attr('id')+' > ul' );
+		win.kcSettings.upload.files = [];
 		$('input.mid', $group).each(function() {
-			win.kcFiles.files.push(this.value);
+			win.kcSettings.upload.files.push(this.value);
 		});
 
 		tb_show( '', $el.attr('href') );

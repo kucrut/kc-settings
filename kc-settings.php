@@ -14,7 +14,7 @@ License: GPL v2
 class kcSettings {
 	public static $data	= array(
 		'version'		=> '2.1.2',
-		'pages'			=> array(),
+		'pages'			=> array('media-upload-popup'),
 		'paths'			=> '',
 		'settings'	=> array(),
 		'kcsb'			=> array()
@@ -328,10 +328,13 @@ class kcSettings {
 
 		wp_enqueue_style( 'kc-settings' );
 		wp_enqueue_script( 'kc-settings' );
-		self::_js_globals();
+
+		if ( $hook_suffix != 'media-upload-popup' )
+			self::_js_globals();
 
 		if ( $hook_suffix == 'media-upload-popup' && isset($_REQUEST['kcsf']) && $_REQUEST['kcsf'] )
 			wp_enqueue_script( 'kc-settings-upload' );
+
 		if ( strpos($hook_suffix, 'kcsb') !== false )
 			wp_enqueue_script( 'kc-settings-builder' );
 	}

@@ -9,6 +9,7 @@ class kcSettings_builder {
 			'menu_location'			=> 'options-general.php',
 			'menu_title'				=> '',
 			'page_title'				=> '',
+			'metabox'						=> 'true',
 			'post_type'					=> 'post',
 			'taxonomy'					=> '',
 			'sections'					=> array(
@@ -49,6 +50,16 @@ class kcSettings_builder {
 
 	private static function _options() {
 		$options = array(
+			'yesno'		=> array(
+				array(
+					'value'	=> 1,
+					'label'	=> __('Yes', 'kc-settings')
+				),
+				array(
+					'value'	=> 0,
+					'label'	=> __('No', 'kc-settings')
+				)
+			),
 			'type'		=> array(
 				'plugin' => array(
 					'value'		=> 'plugin',
@@ -512,7 +523,8 @@ class kcSettings_builder {
 								echo kcForm::select(array(
 									'attr'		=> array('name' => 'kcsb[type]', 'class' => 'idep global kcsb-mi'),
 									'options'	=> $options['type'],
-									'current'	=> $values['type']
+									'current'	=> $values['type'],
+									'none'		=> false
 								));
 							?>
 						</li>
@@ -526,7 +538,8 @@ class kcSettings_builder {
 								echo kcForm::select(array(
 									'attr'		=> array('name' => 'kcsb[menu_location]', 'class' => 'kcsb-mi'),
 									'options'	=> $options['menu_location'],
-									'current'	=> $values['menu_location']
+									'current'	=> $values['menu_location'],
+									'none'		=> false
 								));
 							?>
 						</li>
@@ -534,8 +547,19 @@ class kcSettings_builder {
 							<label class="kcsb-ml"><?php _e('Menu title', 'kc-settings') ?></label>
 							<input class="kcsb-mi required" type="text" name="kcsb[menu_title]" value="<?php esc_attr_e( $values['menu_title'] ) ?>"/></li>
 						<li class="idep_type plugin">
-							<label class="kcsb-ml"><?php _e('Page title') ?></label>
+							<label class="kcsb-ml"><?php _e('Page title', 'kc-settings') ?></label>
 							<input class="kcsb-mi required" type="text" name="kcsb[page_title]" value="<?php esc_attr_e( $values['page_title'] ) ?>" />
+						</li>
+						<li class="idep_type plugin">
+							<label class="kcsb-ml"><?php _e('Use metabox?', 'kc-settings') ?></label>
+							<?php
+								echo kcForm::select(array(
+									'attr'		=> array('name' => 'kcsb[metabox]', 'class' => 'kcsb-mi'),
+									'options'	=> $options['yesno'],
+									'current'	=> $values['metabox'],
+									'none'		=> false
+								));
+							?>
 						</li>
 						<li class="idep_type post">
 							<label class="kcsb-ml"><?php _e('Post type', 'kc-settings') ?></label>
@@ -543,7 +567,8 @@ class kcSettings_builder {
 								echo kcForm::select(array(
 									'attr'		=> array('name' => 'kcsb[post_type]', 'class' => 'kcsb-mi'),
 									'options'	=> $options['post_types'],
-									'current'	=> $values['post_type']
+									'current'	=> $values['post_type'],
+									'none'		=> false
 								));
 							?>
 						</li>
@@ -553,7 +578,8 @@ class kcSettings_builder {
 								echo kcForm::select(array(
 									'attr'		=> array('name' => 'kcsb[taxonomy]', 'class' => 'kcsb-mi'),
 									'options'	=> $options['taxonomies'],
-									'current'	=> $values['taxonomy']
+									'current'	=> $values['taxonomy'],
+									'none'		=> false
 								));
 							?>
 						</li>
@@ -612,7 +638,8 @@ class kcSettings_builder {
 										echo kcForm::select(array(
 											'attr'		=> array('name' => "{$s_name}[priority]", 'class' => 'kcsb-mi'),
 											'options'	=> $options['priorities'],
-											'current'	=> $s_val['priority']
+											'current'	=> $s_val['priority'],
+											'none'		=> false
 										));
 									?>
 								</li>
@@ -653,7 +680,8 @@ class kcSettings_builder {
 														echo kcForm::select(array(
 															'attr'		=> array('name' => "{$f_name}[type]", 'class' => 'idep kcsb-mi'),
 															'options'	=> $options['field'],
-															'current'	=> $f_val['type']
+															'current'	=> $f_val['type'],
+															'none'		=> false
 														));
 													?>
 												</li>
@@ -673,7 +701,8 @@ class kcSettings_builder {
 														echo kcForm::select(array(
 															'attr'		=> array('name' => "{$f_name}[mode]", 'class' => 'kcsb-mi'),
 															'options'	=> $options['filemode'],
-															'current'	=> $f_val['mode']
+															'current'	=> $f_val['mode'],
+															'none'		=> false
 														));
 													?>
 												</li>

@@ -33,8 +33,13 @@ class kcSettings_plugin {
 		if ( !isset($menu_location) )
 			$menu_location = 'options-general.php';
 
-		$page = add_submenu_page( $menu_location, $page_title, $menu_title, 'manage_options', "kc-settings-{$prefix}", array(&$this, 'settings_page') );
-		kcSettings::$data['pages'][] = $page;
+		$this->page = add_submenu_page( $menu_location, $page_title, $menu_title, 'manage_options', "kc-settings-{$prefix}", array(&$this, 'settings_page') );
+		kcSettings::$data['pages'][] = $this->page;
+
+		if ( isset($this->group['metabox']) && $this->group['metabox'] ) {
+			add_action( "load-{$this->page}", array(&$this, 'create_meta_box') );
+			add_action( "load-{$this->page}", array(&$this, 'metabox_scripts') );
+		}
 	}
 
 
@@ -50,7 +55,7 @@ class kcSettings_plugin {
 			foreach ( $options as $section ) {
 				$section_title = ( isset($section['title']) ) ? $section['title'] : "{$prefix}-section-{$section['id']}";
 				# Add sections
-				add_settings_section( $section['id'], $section_title, array(&$this, 'section_desc'), "{$prefix}_settings" );
+				add_settings_section( $section['id'], $section_title, '', "{$prefix}_settings" );
 				foreach ( $section['fields'] as $field ) {
 					# add fields on each sections
 					$args = array(
@@ -85,22 +90,66 @@ class kcSettings_plugin {
 				# The hidden fields
 				settings_fields( "{$prefix}_settings" );
 
-				# Print the setting sections of this group/page
-				kcs_settings_sections( $prefix, $this->group );
+				# Use metaboxes ?
+				if ( isset($this->group['metabox']) && $this->group['metabox'] ) {
+					wp_nonce_field('closedpostboxes', 'closedpostboxesnonce', false );
+					wp_nonce_field('meta-box-order', 'meta-box-order-nonce', false );
+
+					echo "<div class='metabox-holder has-right-sidebar'>\n";
+					do_meta_boxes( $this->page, 'normal', $this->group );
+					do_meta_boxes( $this->page, 'advanced', $this->group );
+					echo "</div>\n";
+				}
+				else {
+					foreach ( $this->group['options'] as $section ) {
+						echo "<h3>{$section['title']}</h3>\n";
+						$this->settings_section( $section );
+					}
+					echo "<p class='submit'><input class='button-primary' name='submit' type='submit' value='".esc_attr( 'Save Changes', 'kc-settings' )."' /></p>";
+				}
 			?>
-			<p class="submit"><input class="button-primary" name="submit" type="submit" value="<?php esc_attr_e( 'Save Changes', 'kc-settings' ); ?>" /></p>
 		</form>
 		<?php do_action( "{$prefix}_kc_settings_page_after", $this->group ) ?>
 	</div>
 	<?php }
 
 
-	# Settings section description
-	function section_desc( $section ) {
-		$options = $this->group['options'];
+	function settings_section( $section ) {
+		if ( isset($section['desc']) && !empty($section['desc']) )
+			echo "{$section['desc']}\n";
 
-		if ( isset($options[$section['id']]['desc']) && !empty($options[$section['id']]['desc']) )
-			echo "{$options[$section['id']]['desc']}\n";
+		do_action( 'kc_settings_section_before', $this->group['prefix'], $section );
+
+		# Call user callback function for displaying the section ( if set )
+		if ( isset($section['cb']) && is_callable($section['cb']) ) {
+			call_user_func( $opt_section['cb'], $opt_section );
+		}
+		# Defaults to WordPress' Settings API
+		else {
+			echo "<table class='form-table'>\n";
+			do_settings_fields( "{$this->group['prefix']}_settings", $section['id'] );
+			echo "</table>\n";
+		}
+
+		# Wanna do something after the options table?
+		do_action( 'kc_settings_section_after', $this->group['prefix'], $section );
+	}
+
+
+	function create_meta_box() {
+		foreach ( $this->group['options'] as $section )
+			add_meta_box( "kc-metabox-{$this->page}-{$section['id']}", $section['title'], array(&$this, 'fill_meta_box'), $this->page, 'normal', 'high', $section );
+	}
+
+
+	function fill_meta_box( $object, $box ) {
+		$this->settings_section( $box['args'] );
+		echo "<p class=''><input class='button-primary' name='submit' type='submit' value='".esc_attr( 'Save Changes', 'kc-settings' )."' /></p>";
+	}
+
+
+	function metabox_scripts() {
+		wp_enqueue_script( 'post' );
 	}
 
 
