@@ -24,15 +24,18 @@ class kcSettings {
 	public static function init() {
 		self::$data['paths'] = self::_paths();
 		self::$data['messages'] = array(
-			'no_prefix'				=> __( "One of your settings doesn't have <b>prefix</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'no_menu_title'		=> __( "One of your settings doesn't have <b>menu title</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'no_page_title'		=> __( "One of your settings doesn't have <b>page title</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'no_sections'			=> __( "One of your settings doesn't have <b>sections</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'no_fields'				=> __( "One of your settings' section doesn't have <b>fields</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'field_no_title'	=> __( "One of your fields doesn't have <b>title</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'field_no_type'		=> __( "One of your fields doesn't have <b>type</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'field_no_opt'		=> __( "One of your fields doesn't have the required <b>options</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'field_no_cb'			=> __( "One of your fields doesn't have the required <b>callback</b> set. Therefore it has NOT been added.", 'kc-settings')
+			'no_prefix'					=> __( "One of your settings doesn't have <b>prefix</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'no_menu_title'			=> __( "One of your settings doesn't have <b>menu title</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'no_page_title'			=> __( "One of your settings doesn't have <b>page title</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'no_options'				=> __( "One of your settings doesn't have <b>options</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'section_no_fields'	=> __( "One of your settings' section doesn't have <b>fields</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'section_no_id'			=> __( "One of your settings' sections doesn't have <b>ID</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'section_no_title'	=> __( "One of your settings' sections doesn't have <b>title</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'field_no_id'				=> __( "One of your fields doesn't have <b>ID</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'field_no_title'		=> __( "One of your fields doesn't have <b>title</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'field_no_type'			=> __( "One of your fields doesn't have <b>type</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'field_no_opt'			=> __( "One of your fields doesn't have the required <b>options</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'field_no_cb'				=> __( "One of your fields doesn't have the required <b>callback</b> set. Therefore it has NOT been added.", 'kc-settings')
 		);
 
 		# Include samples (for development)
@@ -45,8 +48,8 @@ class kcSettings {
 		require_once( self::$data['paths']['inc'].'/helper.php' );
 		require_once( self::$data['paths']['inc'].'/_deprecated.php' );
 
-		foreach ( array_keys(self::$data['settings']) as $type ) {
-			if ( !empty(self::$data['settings'][$type]) )
+		if ( !empty(self::$data['settings']) ) {
+			foreach ( array_keys(self::$data['settings']) as $type )
 				call_user_func( array(__CLASS__, "_{$type}_init") );
 		}
 
@@ -144,14 +147,93 @@ class kcSettings {
 			}
 		}
 
-		// Add the others (from themes/plugins )
-		$settings['plugin'] = apply_filters( 'kc_plugin_settings', $settings['plugin'] );
-		$settings['post']	= self::_bootsrap_meta( 'post', $settings['post'] );
-		$settings['term'] = self::_bootsrap_meta( 'term', $settings['term'] );
-		$settings['user'] = self::_bootsrap_meta( 'user', $settings['user'] );
+		self::$data['settings']	= self::_validate_settings( $settings );
+		self::$data['kcsb']	= $kcsb;
+	}
 
-		self::$data['settings']	=  $settings;
-		self::$data['kcsb']	=  $kcsb;
+
+	# Validate settings
+	private static function _validate_settings( $settings ) {
+		$nu = array();
+
+		foreach ( $settings as $type => $groups ) {
+			$groups = apply_filters( "kc_{$type}_settings", $settings[$type] );
+			if ( empty($groups) ) {
+				unset( $settings[$type] );
+				continue;
+			}
+
+			foreach ( $groups as $g_idx => $group ) {
+				if ( !is_array($group) || empty($group) ) {
+					trigger_error( self::$data['messages']['no_options'] );
+					unset( $groups[$g_idx] );
+					continue;
+				}
+
+				if ( $type == 'plugin' ) {
+					foreach ( array('prefix', 'menu_title', 'page_title', 'options') as $c ) {
+						if ( !isset($group[$c]) || empty($group[$c]) || ($c == 'options' && !is_array($group[$c])) ) {
+							trigger_error( self::$data['messages']["no_{$c}"] );
+							unset( $groups[$g_idx] );
+							continue 2;
+						}
+					}
+
+					$group['options'] = self::_validate_sections( $group['options'] );
+					if ( empty($group['options']) )
+						$group = null;
+				}
+
+				elseif ( in_array($type, array('post', 'term', 'user')) ) {
+					foreach ( $group as $obj => $sections ) {
+						$group[$obj] = self::_validate_sections( $sections );
+						if ( empty($group[$obj]) )
+							$group = null;
+					}
+				}
+
+				if ( !empty($group) )
+					$nu[$type][$g_idx] = $group;
+			}
+
+		}
+
+		foreach ( array('post', 'term', 'user') as $type ) {
+			if ( isset($nu[$type]) )
+				$nu[$type] = self::_bootsrap_meta( $nu[$type] );
+		}
+
+		return $nu;
+	}
+
+
+	# Validate each setting's section
+	private static function _validate_sections( $sections ) {
+		foreach ( $sections as $s_idx => $section ) {
+			foreach ( array('id', 'title', 'fields') as $c ) {
+				if ( !isset($section[$c]) || empty($section[$c]) || ($c == 'fields' && !is_array($section[$c])) ) {
+					trigger_error( self::$data['messages']["section_no_{$c}"] );
+					unset( $sections[$s_idx] );
+					continue 2;
+				}
+			}
+
+			foreach ( $section['fields'] as $f_idx => $field ) {
+				foreach ( array('id', 'title', 'type') as $c ) {
+					if ( !isset($field[$c]) || empty($field[$c]) ) {
+						trigger_error( self::$data['messages']["field_no_{$c}"] );
+						unset( $section['fields'][$f_idx] );
+						continue 2;
+					}
+				}
+			}
+
+			if ( empty($section['fields']) )
+				unset( $sections[$s_idx] );
+			else
+				$sections[$s_idx] = $section;
+		}
+		return $sections;
 	}
 
 
@@ -165,14 +247,10 @@ class kcSettings {
 	 *
 	 */
 
-	private static function _bootsrap_meta( $meta_type, $others = array() ) {
-		$ol = apply_filters( "kc_{$meta_type}_settings", $others );
-
-		if ( !is_array($ol) || empty($ol) )
-			return array();
-
+	private static function _bootsrap_meta( $settings ) {
 		$nu = array();
-		foreach ( $ol as $group ) {
+
+		foreach ( $settings as $group ) {
 			foreach ( $group as $object => $sections ) {
 				if ( isset($nu[$object]) )
 					foreach ( $sections as $sk => $sv )
