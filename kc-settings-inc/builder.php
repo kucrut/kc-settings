@@ -9,7 +9,7 @@ class kcSettings_builder {
 			'menu_location'			=> 'options-general.php',
 			'menu_title'				=> '',
 			'page_title'				=> '',
-			'metabox'						=> 'true',
+			'display'						=> 'plain',
 			'post_type'					=> 'post',
 			'taxonomy'					=> '',
 			'sections'					=> array(
@@ -125,6 +125,16 @@ class kcSettings_builder {
 					'value'		=> 'edit.php',
 					'label'		=> __('Posts')
 				),
+			),
+			'display'		=> array(
+				array(
+					'value'	=> 'metabox',
+					'label'	=> __('Metaboxes', 'kc-settings')
+				),
+				array(
+					'value'	=> 'plain',
+					'label'	=> __('Plain', 'kc-settings')
+				)
 			),
 			'field'		=> array(
 				array(
@@ -551,12 +561,12 @@ class kcSettings_builder {
 							<input class="kcsb-mi required" type="text" name="kcsb[page_title]" value="<?php esc_attr_e( $values['page_title'] ) ?>" />
 						</li>
 						<li class="idep_type plugin">
-							<label class="kcsb-ml"><?php _e('Use metabox?', 'kc-settings') ?></label>
+							<label class="kcsb-ml"><?php _e('Page mode', 'kc-settings') ?></label>
 							<?php
 								echo kcForm::select(array(
-									'attr'		=> array('name' => 'kcsb[metabox]', 'class' => 'kcsb-mi'),
-									'options'	=> $options['yesno'],
-									'current'	=> $values['metabox'],
+									'attr'		=> array('name' => 'kcsb[display]', 'class' => 'kcsb-mi'),
+									'options'	=> $options['display'],
+									'current'	=> $values['display'],
 									'none'		=> false
 								));
 							?>

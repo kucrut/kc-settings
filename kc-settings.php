@@ -177,6 +177,9 @@ class kcSettings {
 							unset( $groups[$g_idx] );
 							continue 2;
 						}
+
+						if ( !isset($group['display']) )
+							$group['display'] = 'plain';
 					}
 
 					$group['options'] = self::_validate_sections( $group['options'] );

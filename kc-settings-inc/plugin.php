@@ -36,7 +36,7 @@ class kcSettings_plugin {
 		$this->page = add_submenu_page( $menu_location, $page_title, $menu_title, 'manage_options', "kc-settings-{$prefix}", array(&$this, 'settings_page') );
 		kcSettings::$data['pages'][] = $this->page;
 
-		if ( isset($this->group['metabox']) && $this->group['metabox'] ) {
+		if ( $this->group['display'] == 'metabox' ) {
 			add_action( "load-{$this->page}", array(&$this, 'create_meta_box') );
 			add_action( "load-{$this->page}", array(&$this, 'metabox_scripts') );
 		}
@@ -90,22 +90,23 @@ class kcSettings_plugin {
 				# The hidden fields
 				settings_fields( "{$prefix}_settings" );
 
-				# Use metaboxes ?
-				if ( isset($this->group['metabox']) && $this->group['metabox'] ) {
-					wp_nonce_field('closedpostboxes', 'closedpostboxesnonce', false );
-					wp_nonce_field('meta-box-order', 'meta-box-order-nonce', false );
+				switch ( $this->group['display'] ) {
+					case 'metabox' :
+						wp_nonce_field('closedpostboxes', 'closedpostboxesnonce', false );
+						wp_nonce_field('meta-box-order', 'meta-box-order-nonce', false );
 
-					echo "<div class='metabox-holder has-right-sidebar'>\n";
-					do_meta_boxes( $this->page, 'normal', $this->group );
-					do_meta_boxes( $this->page, 'advanced', $this->group );
-					echo "</div>\n";
-				}
-				else {
-					foreach ( $this->group['options'] as $section ) {
-						echo "<h3>{$section['title']}</h3>\n";
-						$this->settings_section( $section );
-					}
-					echo "<p class='submit'><input class='button-primary' name='submit' type='submit' value='".esc_attr( 'Save Changes', 'kc-settings' )."' /></p>";
+						echo "<div class='metabox-holder has-right-sidebar'>\n";
+						do_meta_boxes( $this->page, 'normal', $this->group );
+						echo "</div>\n";
+					break;
+
+					case 'plain' :
+						foreach ( $this->group['options'] as $section ) {
+							echo "<h3>{$section['title']}</h3>\n";
+							$this->settings_section( $section );
+						}
+						echo "<p class='submit'><input class='button-primary' name='submit' type='submit' value='".esc_attr( 'Save Changes', 'kc-settings' )."' /></p>";
+					break;
 				}
 			?>
 		</form>
