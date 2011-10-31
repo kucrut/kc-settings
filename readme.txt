@@ -36,6 +36,7 @@ Please find the readme.html file inside the plugin directory for the documentati
 = 2.2 =
 * Code Improvements
 * Metaboxes for plugin/theme settings page
+* New field type: color
 
 = 2.1.2 =
 * Deprecate kcs_select() and kc_dropdown_options()

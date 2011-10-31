@@ -138,8 +138,8 @@ class kcSettings_builder {
 			),
 			'field'		=> array(
 				array(
-					'value'		=> 'input',
-					'label'		=> __('Input', 'kc-settings'),
+					'value'		=> 'text',
+					'label'		=> __('Text', 'kc-settings'),
 					'default'	=> true
 				),
 				array(
@@ -147,12 +147,24 @@ class kcSettings_builder {
 					'label'		=> __('Textarea', 'kc-settings')
 				),
 				array(
-					'value'		=> 'radio',
-					'label'		=> __('Radio', 'kc-settings')
-				),
-				array(
 					'value'		=> 'checkbox',
 					'label'		=> __('Checkbox', 'kc-settings')
+				),
+				array(
+					'value'		=> 'color',
+					'label'		=> __('Color', 'kc-settings')
+				),
+				array(
+					'value'		=> 'date',
+					'label'		=> __('Date', 'kc-settings')
+				),
+				array(
+					'value'		=> 'file',
+					'label'		=> __('File', 'kc-settings')
+				),
+				array(
+					'value'		=> 'radio',
+					'label'		=> __('Radio', 'kc-settings')
 				),
 				array(
 					'value'		=> 'select',
@@ -160,19 +172,11 @@ class kcSettings_builder {
 				),
 				array(
 					'value'		=> 'multiselect',
-					'label'		=> __('Multiselect', 'kc-settings')
-				),
-				array(
-					'value'		=> 'date',
-					'label'		=> __('Date', 'kc-settings')
+					'label'		=> __('Select (multiple)', 'kc-settings')
 				),
 				array(
 					'value'		=> 'multiinput',
 					'label'		=> __('Multiinput', 'kc-settings')
-				),
-				array(
-					'value'		=> 'file',
-					'label'		=> __('File', 'kc-settings')
 				),
 				array(
 					'value'		=> 'special',
@@ -694,11 +698,6 @@ class kcSettings_builder {
 															'none'		=> false
 														));
 													?>
-												</li>
-												<?php if ( !isset($f_val['attr']) ) $f_val['attr'] = ''; ?>
-												<li class="idep_type input textarea date">
-													<label class="kcsb-ml nr"><?php _e('Attributes') ?></label>
-													<input class="kcsb-mi" type="text" name="<?php echo $f_name ?>[attr]" value="<?php esc_attr_e($f_val['attr']) ?>" />
 												</li>
 												<?php
 													if ( !isset($f_val['options']) || !is_array($f_val['options']) )

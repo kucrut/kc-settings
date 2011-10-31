@@ -13,7 +13,7 @@ class kcForm {
     );
     $args = wp_parse_args( $args, $defaults );
 
-    if ( in_array($args['type'], array('', 'text', 'date')) ) {
+    if ( in_array($args['type'], array('', 'text', 'date', 'color')) ) {
       $type = 'input';
     }
     else {
@@ -170,7 +170,7 @@ function kcs_form_label( $title, $id = null, $ft = false, $echo = true  ) {
 function kcs_settings_field( $args ) {
 	extract($args, EXTR_OVERWRITE);
 
-	$input_types = array('special', 'date', 'text', 'textarea',
+	$input_types = array('special', 'date', 'text', 'textarea', 'color',
 		'checkbox', 'radio', 'select', 'multiselect', 'multiinput', 'file'
 	);
 	$type = ( isset($field['type']) && in_array($field['type'], $input_types) ) ? $field['type'] : 'input';

@@ -271,6 +271,24 @@ jQuery(document).ready(function($) {
 		});
 	}
 
+	var $colorInputs = $('input[type=color]');
+	if ( $colorInputs.length && Modernizr.inputtypes.color === false ) {
+		Modernizr.load([{
+			load: [win.kcSettings.paths.scripts+'/colorpicker/js/colorpicker.js', win.kcSettings.paths.scripts+'/colorpicker/css/colorpicker.css'],
+			complete: function () {
+				$colorInputs.ColorPicker({
+					onBeforeShow: function () {
+						$(this).ColorPickerSetColor(this.value);
+					},
+					onSubmit: function(hsb, hex, rgb, el) {
+						$(el).val('#'+hex);
+						$(el).ColorPickerHide();
+					}
+				});
+			}
+		}]);
+	}
+
 	// File
 	$('.kcs-file a.rm').live('click', function(e) {
 		e.preventDefault();
