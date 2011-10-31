@@ -26,6 +26,7 @@ p.actions {padding-left:4.5em}
 	line-height:1}
 .kcs-multiinput .row li {margin-bottom:.25em}
 #wpbody-content .kcs-multiinput label {
+	cursor:move;
 	display:inline-block;
 	width:50px;
 	vertical-align:top}

@@ -318,7 +318,7 @@ function kcs_settings_field( $args ) {
 			$field_attr['id'] = $id;
 		}
 		if ( in_array($type, array('text', 'date', 'input', 'textarea')) ) {
-			$field_attr['class'] .= 'kcs-input';
+			$field_attr['class'] .= ' kcs-input';
 		}
 
 
