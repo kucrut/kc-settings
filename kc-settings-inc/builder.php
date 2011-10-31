@@ -443,8 +443,8 @@ class kcSettings_builder {
 
 		?>
 		<div class="wrap">
-			<?php screen_icon(); ?>
-			<h2><?php echo __('KC Settings', 'kc-settings')." <a id='new-kcsb' class='button add-new-h2' href='#'>".__('Add New')."</a>" ?></h2>
+			<?php screen_icon('tools'); ?>
+			<h2><?php echo __('KC Settings', 'kc-settings')." <a id='new-kcsb' class='add-new-h2' href='#'>".__('Add New')."</a>" ?></h2>
 
 			<div class="kcsb-block">
 				<h3><?php _e('Saved Settings', 'kc-settings') ?></h3>
@@ -615,7 +615,7 @@ class kcSettings_builder {
 							<ul>
 								<li>
 									<label class="kcsb-ml"><?php _e('ID', 'kc-settings') ?></label>
-									<input class="kcsb-mi kcsb-slug required" type="text" name="<?php echo $s_name ?>[id]" value="<?php esc_attr_e($s_val['id']) ?>" data-ids="sections" />
+									<input class="kcsb-mi kcsb-slug kcsb-ids required" type="text" name="<?php echo $s_name ?>[id]" value="<?php esc_attr_e($s_val['id']) ?>" data-ids="sections" />
 								</li>
 								<li>
 									<label class="kcsb-ml"><?php _e('Title') ?></label>
@@ -623,7 +623,7 @@ class kcSettings_builder {
 								</li>
 								<li>
 									<label class="kcsb-ml nr"><?php _e('Description') ?></label>
-									<input class="kcsb-mi" type="text" name="<?php echo $s_name ?>[desc]" value="<?php esc_attr_e($s_val['desc']) ?>" />
+									<textarea class="kcsb-mi" name="<?php echo $s_name ?>[desc]" cols="25" rows="4"><?php echo esc_textarea($s_val['desc']) ?></textarea>
 								</li>
 								<li class="global_idep_type post">
 									<label class="kcsb-ml nr"><?php _e('Roles', 'kc-settings') ?></label>
@@ -682,7 +682,7 @@ class kcSettings_builder {
 												</li>
 												<li>
 													<label class="kcsb-ml nr"><?php _e('Description') ?></label>
-													<input class="kcsb-mi" type="text" name="<?php echo $f_name ?>[desc]" value="<?php esc_attr_e($f_val['desc']) ?>" />
+													<textarea class="kcsb-mi" name="<?php echo $f_name ?>[desc]" cols="25" rows="4"><?php echo esc_textarea($f_val['desc']) ?></textarea>
 												</li>
 												<li>
 													<label class="kcsb-ml"><?php _e('Type') ?></label>

@@ -38,7 +38,7 @@ class kcForm {
 
     $output  = "<input type='{$args['type']}'";
     $output .= self::_build_attr( $args['attr'] );
-    $output .= "value='{$args['current']}' ";
+    $output .= "value='".esc_attr($args['current'])."' ";
     $output .= " />";
 
     return $output;
@@ -250,7 +250,7 @@ function kcs_settings_field( $args ) {
 		$output .= "<div id='{$id}' class='kcs-file'>";
 
 		# List files
-		$output .= "\t<ul class='kc-sortable'>\n";
+		$output .= "\t<ul class='kc-rows sortable'>\n";
 
 		if ( !empty($value['files']) ) {
 			$q_args = array(
@@ -288,12 +288,14 @@ function kcs_settings_field( $args ) {
 
 		$output .= "<a href='media-upload.php?kcsf=true&amp;post_id={$p__id}&amp;TB_iframe=1' class='button kcsf-upload' title='".__('Add files to collection', 'kc-settings')."'>".__('Add files', 'kc-settings')."</a>\n";
 		$output .= "<input type='hidden' class='kcsf-holder'>\n";
+		if ( isset($field['desc']) && !empty($field['desc']) )
+			$output .= wpautop( $field['desc'] );
 		$output .= "</div>\n";
 	}
 
 	# pair Input
 	elseif ( $type == 'multiinput' ) {
-		$output .= kc_pair_option_row( $name, $db_value, $type );
+		$output .= kcs_multiinput( $name, $db_value, $field );
 		$output .= "\t{$desc}\n";
 	}
 
@@ -362,39 +364,38 @@ function kcs_settings_field( $args ) {
  *
  */
 
-function kc_pair_option_row( $name, $db_value, $type = 'multiinput' ) {
-	preg_match_all('/\[(\w+)\]/', $name, $rel);
-	$rel = end( end($rel) );
-	$output = '';
-	$rownum = 0;
-	#print_r( $db_value );
+function kcs_multiinput( $name, $db_value, $field ) {
 	if ( !is_array($db_value) || empty($db_value) )
-		$db_value = array(
-			array('key' => '', 'value' => '')
-		);
+		$db_value = array(array('key' => '', 'value' => ''));
 
-	$output .= "\n\t<ul class='kcs-rows'>\n";
+	$rownum = 0;
+	$output = "\n\t<ul class='sortable kc-rows kcs-multiinput'>\n";
 
 	# If there's an array already, print it
 	if ( is_array($db_value) && !empty($db_value) ) {
 		foreach ( $db_value as $k => $v ) {
-			$p_lbl = ( isset($v['key']) ) ? esc_attr( $v['key'] ) : '';
-			$p_val = ( isset($v['value']) ) ? esc_html( stripslashes($v['value']) ) : '';
-			$output .= "\t\t<li class='row'>\n";
+			$r_key = ( isset($v['key']) ) ? esc_attr( $v['key'] ) : '';
+			$r_val = ( isset($v['value']) ) ? esc_textarea( $v['value'] ) : '';
+
+			$output .= "\t\t<li class='row' data-mode='{$field['id']}'>\n";
 			$output .= "\t\t\t<ul>\n";
-			# label/key
-			$output .= "\t\t\t<li><label>".__('Key', 'kc-settings')."</label>&nbsp;<input type='text' name='{$name}[{$k}][key]' value='{$p_lbl}' /></li>\n";
+			# key
+			$output .= "\t\t\t<li>\n";
+			$output .= "\t\t\t\t<label>".__('Key', 'kc-settings')."</label>\n";
+			$output .= "\t\t\t\t<input class='regular-text' type='text' name='{$name}[{$k}][key]' value='{$r_key}' />\n";
+			$output .= "\t\t\t</li>\n";
 			# value
-			$output .= "\t\t\t<li><label>".__('Value', 'kc-settings')."</label>&nbsp;<textarea name='{$name}[{$k}][value]' cols='100' rows='3'>{$p_val}</textarea></li>\n";
+			$output .= "\t\t\t<li>\n";
+			$output .= "\t\t\t\t<label>".__('Value', 'kc-settings')."</label>\n";
+			$output .= "\t\t\t\t<textarea name='{$name}[{$k}][value]' cols='100' rows='3'>{$r_val}</textarea>\n";
+			$output .= "\t\t\t</li>\n";
 			$output .= "\t\t\t</ul>\n";
-			# remove button
-			$output .= "\t\t\t<ul class='actions'>\n";
-			$output .= "\t\t\t\t<li><a href='#' class='add' rel='{$rel}' title='".__('Add new row', 'kc-settings')."'><span>".__('Add', 'kc-settings')."</span></li></a>";
-			$output .= "\t\t\t\t<li><a href='#' class='del' rel='{$rel}' title='".__('Remove this row', 'kc-settings')."'><span>".__('Remove', 'kc-settings')."</span></li></a>";
-			$output .= "\t\t\t\t<li><a href='#' class='move up' rel='{$rel}' title='".__('Move this row up', 'kc-settings')."'><span>".__('Up', 'kc-settings')."</span></li></a>";
-			$output .= "\t\t\t\t<li><a href='#' class='move down' rel='{$rel}' title='".__('Move this row down', 'kc-settings')."'><span>".__('Down', 'kc-settings')."</span></a></li>";
-			$output .= "\t\t\t\t<li><a href='#' class='clear' rel='{$rel}' title='".__('Clear', 'kc-settings')."'><span>".__('Clear', 'kc-settings')."</span></a></li>";
-			$output .= "\t\t\t</ul>\n";
+			# actions
+			$output .= "\t\t\t<p class='actions'>";
+			$output .= "<a class='add' title='".__('Add new row', 'kc-settings')."'>".__('Add', 'kc-settings')."</a>";
+			$output .= "<a class='del' title='".__('Remove this row', 'kc-settings')."'>".__('Remove', 'kc-settings')."</a>";
+			$output .= "<a class='clear' title='".__('Clear', 'kc-settings')."'>".__('Clear', 'kc-settings')."</a>";
+			$output .= "</p>\n";
 			$output .= "\t\t</li>\n";
 
 			++$rownum;
@@ -407,16 +408,12 @@ function kc_pair_option_row( $name, $db_value, $type = 'multiinput' ) {
 
 
 function kcs_filelist_item( $name, $type, $pid = '', $fid = '', $title = '', $checked = false, $hidden = true ) {
-	if ( $checked ) {
-		$checked = "checked='checked' ";
-	} else {
-		$checked = '';
-	}
+	$checked = ( $checked ) ? "checked='checked' " : '';
 
-	$output  = "\t<li title='".__('Drag to reorder the items', 'kc-settings')."'";
+	$output  = "\t<li title='".__('Drag to reorder the items', 'kc-settings')."' class='row";
 	if ( $hidden )
-		$output .= " class='hidden'";
-	$output .= ">\n";
+		$output .= " hidden";
+	$output .= "'>\n";
 	// Image thumb or mime type icon
 	if ( $fid && wp_attachment_is_image($fid) ) {
 		$icon = wp_get_attachment_image_src($fid, array(46, 46));
@@ -425,7 +422,7 @@ function kcs_filelist_item( $name, $type, $pid = '', $fid = '', $title = '', $ch
 		$icon = wp_mime_type_icon($fid);
 	}
 	$output .= "\t\t<img src='{$icon}' alt=''/>";
-	$output .= "\t\t<a class='del mid' title='".__('Remove from collection', 'kc-settings')."'><span>".__('Remove', 'kc-settings')."</span></a>\n";
+	$output .= "\t\t<a class='rm mid' title='".__('Remove from collection', 'kc-settings')."'><span>".__('Remove', 'kc-settings')."</span></a>\n";
 	$output .= "\t\t<label>";
 	$output .= "<input class='mid' type='{$type}' name='{$name}[selected][]' value='{$fid}' {$checked}/> ";
 	$output .= "<span class='title'>{$title}</span>";

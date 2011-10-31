@@ -4,7 +4,7 @@
 Plugin name: KC Settings
 Plugin URI: http://kucrut.org/2010/10/kc-settings/
 Description: Easily create plugin/theme settings page, custom fields metaboxes, term meta and user meta settings.
-Version: 2.1.2
+Version: 2.2
 Author: Dzikri Aziz
 Author URI: http://kucrut.org/
 License: GPL v2
@@ -13,7 +13,7 @@ License: GPL v2
 
 class kcSettings {
 	public static $data	= array(
-		'version'		=> '2.1.2',
+		'version'		=> '2.2',
 		'pages'			=> array('media-upload-popup'),
 		'paths'			=> '',
 		'settings'	=> array(),
@@ -314,14 +314,11 @@ class kcSettings {
 
 		# Common
 		wp_register_script( 'modernizr',		self::$data['paths']['scripts'].'/modernizr.2.0.6.min.js', false, '2.0.6', true );
-		wp_register_script( 'kc-rowclone',	self::$data['paths']['scripts'].'/kc-rowclone.js', array('jquery'), self::$data['version'], true );
-		wp_register_script( 'kc-settings',	self::$data['paths']['scripts'].'/kc-settings.js', array('modernizr', 'jquery-ui-sortable', 'jquery-ui-datepicker', 'kc-rowclone', 'media-upload', 'thickbox'), self::$data['version'], true );
+		wp_register_script( 'kc-settings',	self::$data['paths']['scripts'].'/kc-settings.js', array('modernizr', 'jquery-ui-sortable', 'jquery-ui-datepicker', 'media-upload', 'thickbox'), self::$data['version'], true );
 		wp_register_style( 'kc-settings',		self::$data['paths']['styles'].'/kc-settings.css', array('thickbox'), self::$data['version'] );
 
+		# Uploader
 		wp_register_script( 'kc-settings-upload', self::$data['paths']['scripts'].'/upload.js', array('jquery'), self::$data['version'] );
-
-		# Builder
-		wp_register_script( 'kc-settings-builder', self::$data['paths']['scripts'].'/builder.js', array('jquery-ui-sortable'), self::$data['version'], true );
 	}
 
 
@@ -335,11 +332,9 @@ class kcSettings {
 		if ( $hook_suffix != 'media-upload-popup' )
 			self::_js_globals();
 
-		if ( $hook_suffix == 'media-upload-popup' && isset($_REQUEST['kcsf']) && $_REQUEST['kcsf'] )
+		if ( $hook_suffix == 'media-upload-popup' &&
+				( (isset($_REQUEST['kcsf']) && $_REQUEST['kcsf']) || strpos( wp_get_referer(), 'kcsf') !== false ) )
 			wp_enqueue_script( 'kc-settings-upload' );
-
-		if ( strpos($hook_suffix, 'kcsb') !== false )
-			wp_enqueue_script( 'kc-settings-builder' );
 	}
 
 
@@ -352,15 +347,18 @@ class kcSettings {
 					'checkAll' => __( 'Select all files', 'kc-settings' ),
 					'clear' => __( 'Clear selections', 'kc-settings' ),
 					'invert' => __( 'Invert selection', 'kc-settings' ),
-					'addFiles' => __( 'Add files to collection', 'kc-settings' )
+					'addFiles' => __( 'Add files to collection', 'kc-settings' ),
+					'info' => __( 'Click the "Media Library" tab to insert files that are already upload, or, upload your files, close this popup window, then click the "add files" button again to go to the "Media Library" tab to insert the files you just uploaded.', 'kc-settings' )
 				)
 			),
 			'_ids' => self::$data['kcsb']['_ids']
 		);
 
 		?>
-<script>
+<script type="text/javascript">
+	//<![CDATA[
 	var kcSettings = <?php echo json_encode( $kcSettings_vars ) ?>;
+	//]]>
 </script>
 	<?php }
 

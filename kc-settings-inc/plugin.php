@@ -95,7 +95,7 @@ class kcSettings_plugin {
 						wp_nonce_field('closedpostboxes', 'closedpostboxesnonce', false );
 						wp_nonce_field('meta-box-order', 'meta-box-order-nonce', false );
 
-						echo "<div class='metabox-holder has-right-sidebar'>\n";
+						echo "<div class='metabox-holder'>\n";
 						do_meta_boxes( $this->page, 'normal', $this->group );
 						echo "</div>\n";
 					break;
@@ -105,7 +105,7 @@ class kcSettings_plugin {
 							echo "<h3>{$section['title']}</h3>\n";
 							$this->settings_section( $section );
 						}
-						echo "<p class='submit'><input class='button-primary' name='submit' type='submit' value='".esc_attr( 'Save Changes', 'kc-settings' )."' /></p>";
+						echo "<p class='submit'><input class='button-primary' name='submit' type='submit' value='".esc_attr( 'Save Changes', 'kc-settings' )."' /></p>\n";
 					break;
 				}
 			?>
@@ -116,8 +116,11 @@ class kcSettings_plugin {
 
 
 	function settings_section( $section ) {
-		if ( isset($section['desc']) && !empty($section['desc']) )
-			echo "{$section['desc']}\n";
+		if ( isset($section['desc']) && !empty($section['desc']) ) {
+			echo "<div class='section-desc'>\n";
+			echo wpautop( $section['desc'] );
+			echo "</div>\n";
+		}
 
 		do_action( 'kc_settings_section_before', $this->group['prefix'], $section );
 
@@ -145,7 +148,7 @@ class kcSettings_plugin {
 
 	function fill_meta_box( $object, $box ) {
 		$this->settings_section( $box['args'] );
-		echo "<p class=''><input class='button-primary' name='submit' type='submit' value='".esc_attr( 'Save Changes', 'kc-settings' )."' /></p>";
+		echo "<p><input class='button-primary' name='submit' type='submit' value='".esc_attr( 'Save Changes', 'kc-settings' )."' /></p>";
 	}
 
 

@@ -9,12 +9,13 @@ function in_array(needle, haystack) {
 
 
 jQuery(document).ready(function($) {
-  var $form = $('#library-form, #gallery-form');
+  var $form1	= $('#library-form, #gallery-form'),
+			$form2	= $('#file-form')
+			$mItems	= $('#media-items');
 
   // If we're in the Gallery or Library tab
-  if ( $form.length ) {
-    var $mItems			= $('#media-items'),
-				texts				= win.kcSettings.upload.text,
+  if ( $form1.length ) {
+    var texts				= win.kcSettings.upload.text,
 				$btWrapper	= $('<div class="kcs-wrap"><h4>'+texts.head+'</h4></div>');
 
 		if ( !$mItems.children().length ) {
@@ -87,7 +88,11 @@ jQuery(document).ready(function($) {
       $btWrapper.append( $btCheckAll, $btClear, $btInvert, $btAdd );
     }
 
+		$form1.append( $btWrapper );
   }
 
-  $form.append( $btWrapper );
+	else if ( $form2.length ) {
+		$form2.after('<div class="kcs-file-info"><h3>'+win.kcSettings.upload.text.head+'</h3><p>'+win.kcSettings.upload.text.info+'</p><div>');
+	}
+
 });
