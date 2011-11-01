@@ -168,6 +168,9 @@ function kcs_form_label( $title, $id = null, $ft = false, $echo = true  ) {
  */
 
 function kcs_settings_field( $args ) {
+	if ( !isset($args['field']['attr']) )
+		$args['field']['attr'] = array();
+
 	extract($args, EXTR_OVERWRITE);
 
 	$input_types = array('special', 'date', 'text', 'textarea', 'color',
@@ -302,10 +305,7 @@ function kcs_settings_field( $args ) {
 	# Others
 	else {
 		// Attributes
-		$field_attr = array(
-			'name'		=> $name,
-			'class'		=> "kcs-{$type}"
-		);
+		$field_attr = wp_parse_args( $field['attr'], array('name'		=> $name, 'class'		=> "kcs-{$type}" ));
 
 		if ( $type == 'multiselect' ) {
 			$type = 'select';
