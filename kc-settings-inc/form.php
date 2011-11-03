@@ -74,7 +74,7 @@ class kcForm {
 
     $output  = '';
     foreach ( $args['options'] as $o ) {
-      $output .= "{$args['check_sep'][0]}<label class='kcs-check {$args['type']}'><input type='{$args['type']}' value='{$o['value']}'{$attr}";
+      $output .= "{$args['check_sep'][0]}<label class='kcs-check kcs-{$args['type']}'><input type='{$args['type']}' value='{$o['value']}'{$attr}";
       if ( in_array($o['value'], $args['current']) || ( isset($args['current'][$o['value']]) && $args['current'][$o['value']]) )
         $output .= " checked='true'";
       $output .= " /> {$o['label']}</label>{$args['check_sep'][1]}\n";
@@ -87,7 +87,7 @@ class kcForm {
   public static function select( $args ) {
     if ( !isset($args['none']) || $args['none'] !== false ) {
       $args['none'] = array(
-        'value'   => '-1',
+        'value'   => '',
         'label'   => '&mdash;&nbsp;'.__('Select', 'kc-settings').'&nbsp;&mdash;'
       );
 			$args['options'] = array_merge( array($args['none']), $args['options'] );
@@ -305,7 +305,7 @@ function kcs_settings_field( $args ) {
 	# Others
 	else {
 		// Attributes
-		$field_attr = wp_parse_args( $field['attr'], array('name'		=> $name, 'class'		=> "kcs-{$type}" ));
+		$field_attr = wp_parse_args( $field['attr'], array('name' => $name, 'class' => "kcs-{$type}" ));
 
 		if ( $type == 'multiselect' ) {
 			$type = 'select';
