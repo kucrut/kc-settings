@@ -281,9 +281,14 @@ jQuery(document).ready(function($) {
 						$(this).ColorPickerSetColor(this.value);
 					},
 					onSubmit: function(hsb, hex, rgb, el) {
-						$(el).val('#'+hex);
-						$(el).ColorPickerHide();
+						var clr = '#'+hex;
+						$(el).css('backgroundColor', clr )
+							.val( clr )
+							.ColorPickerHide();
 					}
+				}).each(function() {
+					if ( $(this).val() !== '' )
+						$(this).css('backgroundColor', $(this).val() );
 				});
 			}
 		}]);
