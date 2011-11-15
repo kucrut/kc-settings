@@ -22,9 +22,12 @@ class kcSettings {
 
 
 	public static function init() {
-		if ( !$paths = self::_paths( __FILE__ ) )
+		$paths = self::_paths( __FILE__ );
+		if ( !is_array($paths) )
 			return false;
-		self::$data['paths'] = self::_paths( __FILE__ );
+
+		self::$data['options'] = get_option('kc_settings');
+		self::$data['paths'] = $paths;
 		self::$data['messages'] = array(
 			'no_prefix'					=> __( "One of your settings doesn't have <b>prefix</b> set. Therefore it has NOT been added.", 'kc-settings'),
 			'no_menu_title'			=> __( "One of your settings doesn't have <b>menu title</b> set. Therefore it has NOT been added.", 'kc-settings'),
@@ -68,6 +71,9 @@ class kcSettings {
 	 * Set plugin paths
 	 */
 	public static function _paths( $file, $inc_suffix = '-inc' ) {
+		if ( !file_exists($file) )
+			return false;
+
 		$file_info = pathinfo( $file );
 		$file_info['parent'] = basename( $file_info['dirname'] );
 		$locations = array(
@@ -76,22 +82,25 @@ class kcSettings {
 			'themes'			=> array( get_theme_root(), get_theme_root_uri() )
 		);
 
+		$valid = false;
 		foreach ( $locations as $key => $loc ) {
 			$dir = $loc[0];
 			if ( $file_info['parent'] != $key )
 			$dir .= "/{$file_info['parent']}";
-			if ( is_dir( $dir ) ) {
-				$url = "{$locations[$key][1]}/{$file_info['parent']}";
+			if ( file_exists($dir) && is_dir( $dir ) ) {
+				$valid = true;
 				break;
 			}
 		}
-		if ( !isset($url) )
+		if ( !$valid )
 			return false;
 
 		$paths = array();
+		$url = "{$locations[$key][1]}/{$file_info['parent']}";
 		$inc_prefix = "{$file_info['filename']}{$inc_suffix}";
 
 		$paths['file']		= $file;
+		$paths['p_file']	= kc_plugin_file( $file );
 		$paths['inc']			= "{$dir}/{$inc_prefix}";
 		$paths['url']			= $url;
 		$paths['scripts']	= "{$url}/{$inc_prefix}/scripts";
@@ -318,7 +327,9 @@ class kcSettings {
 		add_action( 'admin_init', array(__CLASS__, '_sns_register') );
 		add_action( 'admin_enqueue_scripts', array(__CLASS__, '_sns_enqueue') );
 
-		//add_action( 'admin_footer', array(__CLASS__, '_dev') );
+		add_filter( 'plugin_action_links', array(__CLASS__, '_lock'), 10, 4 );
+
+		#add_action( 'admin_footer', array(__CLASS__, '_dev') );
 	}
 
 
@@ -389,10 +400,34 @@ class kcSettings {
 	}
 
 
+	# Activation
+	public static function _activate() {
+		$options = (array) get_option( 'kc_settings' );
+		if ( !isset($options['kids']) )
+			$options['kids'] = array();
+		update_option( 'kc_settings', $options );
+	}
+
+	# Activation
+	public static function _lock( $actions, $plugin_file, $plugin_data, $context ) {
+		if ( $plugin_file == self::$data['paths']['p_file'] && !empty(self::$data['options']['kids']) ) {
+			echo $context;
+			unset( $actions['deactivate'] );
+		}
+
+		return $actions;
+	}
+
+
+	# Deactivation
+	public static function _deactivate() {
+		# TODO: Anything else?
+		delete_option( 'kc_settings' );
+	}
+
+
 	public static function _dev() {
 		echo '<pre>';
-
-
 		echo '</pre>';
 	}
 }
@@ -414,5 +449,10 @@ if ( !function_exists('kc_plugin_file') ) {
 		return $file;
 	}
 }
+
+
+$plugin_file = kc_plugin_file( __FILE__ );
+register_activation_hook( $plugin_file, array('kcSettings', '_activate') );
+register_deactivation_hook( $plugin_file, array('kcSettings', '_deactivate') );
 
 ?>
