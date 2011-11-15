@@ -22,7 +22,9 @@ class kcSettings {
 
 
 	public static function init() {
-		self::$data['paths'] = self::_paths();
+		if ( !$paths = self::_paths( __FILE__ ) )
+			return false;
+		self::$data['paths'] = self::_paths( __FILE__ );
 		self::$data['messages'] = array(
 			'no_prefix'					=> __( "One of your settings doesn't have <b>prefix</b> set. Therefore it has NOT been added.", 'kc-settings'),
 			'no_menu_title'			=> __( "One of your settings doesn't have <b>menu title</b> set. Therefore it has NOT been added.", 'kc-settings'),
@@ -65,22 +67,35 @@ class kcSettings {
 	/*
 	 * Set plugin paths
 	 */
-	private static function _paths() {
-		$paths = array();
-		$inc_prefix = '/kc-settings-inc';
-		$fname = basename( __FILE__ );
+	public static function _paths( $file, $inc_suffix = '-inc' ) {
+		$file_info = pathinfo( $file );
+		$file_info['parent'] = basename( $file_info['dirname'] );
+		$locations = array(
+			'plugins'			=> array( WP_PLUGIN_DIR, plugins_url() ),
+			'mu-plugins'	=> array( WPMU_PLUGIN_DIR, WPMU_PLUGIN_URL ),
+			'themes'			=> array( get_theme_root(), get_theme_root_uri() )
+		);
 
-		if ( file_exists(WPMU_PLUGIN_DIR . "/{$fname}") )
-			$file = WPMU_PLUGIN_DIR . "/{$fname}";
-		else
-			$file = WP_PLUGIN_DIR . "/kc-settings/{$fname}";
+		foreach ( $locations as $key => $loc ) {
+			$dir = $loc[0];
+			if ( $file_info['parent'] != $key )
+			$dir .= "/{$file_info['parent']}";
+			if ( is_dir( $dir ) ) {
+				$url = "{$locations[$key][1]}/{$file_info['parent']}";
+				break;
+			}
+		}
+		if ( !isset($url) )
+			return false;
+
+		$paths = array();
+		$inc_prefix = "{$file_info['filename']}{$inc_suffix}";
 
 		$paths['file']		= $file;
-		$paths['inc']			= dirname( $file ) . $inc_prefix;
-		$url							= plugins_url( '', $file );
+		$paths['inc']			= "{$dir}/{$inc_prefix}";
 		$paths['url']			= $url;
-		$paths['scripts']	= "{$url}{$inc_prefix}/scripts";
-		$paths['styles']	= "{$url}{$inc_prefix}/styles";
+		$paths['scripts']	= "{$url}/{$inc_prefix}/scripts";
+		$paths['styles']	= "{$url}/{$inc_prefix}/styles";
 
 		return $paths;
 	}
@@ -383,5 +398,21 @@ class kcSettings {
 }
 
 add_action( 'init', array('kcSettings', 'init'), 11 );
+
+
+# A hack for symlinks
+if ( !function_exists('kc_plugin_file') ) {
+	function kc_plugin_file( $file ) {
+		if ( !file_exists($file) )
+			return $file;
+
+		$file_info = pathinfo( $file );
+		$parent = basename( $file_info['dirname'] );
+
+		$file = ( $parent == $file_info['filename'] ) ? "{$parent}/{$file_info['basename']}" : $file_info['basename'];
+
+		return $file;
+	}
+}
 
 ?>
