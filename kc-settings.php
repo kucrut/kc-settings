@@ -17,7 +17,8 @@ class kcSettings {
 		'pages'			=> array('media-upload-popup'),
 		'paths'			=> '',
 		'settings'	=> array(),
-		'kcsb'			=> array()
+		'kcsb'			=> array(),
+		'notices'		=> array()
 	);
 
 
@@ -326,10 +327,11 @@ class kcSettings {
 	private static function _admin_actions() {
 		add_action( 'admin_init', array(__CLASS__, '_sns_register') );
 		add_action( 'admin_enqueue_scripts', array(__CLASS__, '_sns_enqueue') );
+		add_action( 'admin_notices', array(__CLASS__, '_admin_notice') );
 
 		add_filter( 'plugin_action_links', array(__CLASS__, '_lock'), 10, 4 );
 
-		#add_action( 'admin_footer', array(__CLASS__, '_dev') );
+		//add_action( 'admin_footer', array(__CLASS__, '_dev') );
 	}
 
 
@@ -397,6 +399,21 @@ class kcSettings {
 		//require_once( self::$data['paths']['inc'] . '/doc/sample/__post_settings.php' );
 		//require_once( self::$data['paths']['inc'] . '/doc/sample/__post_settings2.php' );
 		//require_once( self::$data['paths']['inc'] . '/doc/sample/__user_settings.php' );
+	}
+
+
+	public static function _admin_notice() {
+		if ( empty(self::$data['notices']) )
+			return;
+
+		foreach ( self::$data['notices'] as $notice ) {
+			if ( !$notice['message'] )
+				continue;
+			if ( !isset($notice['class']) )
+				$notice['class'] = 'updated';
+
+			echo "<div class='message {$notice['class']}'>\n\t{$notice['message']}\n</div>\n";
+		}
 	}
 
 
