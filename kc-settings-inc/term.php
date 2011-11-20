@@ -4,8 +4,6 @@
 class kcSettings_term {
 
 	public static function init() {
-		add_action( 'init', array(__CLASS__, '_create_table'), 12 );
-
 		kcSettings::$data['pages'][] = 'edit-tags.php';
 
 		foreach ( array_keys(kcSettings::$data['settings']['term']) as $tax ) {
@@ -15,37 +13,6 @@ class kcSettings_term {
 
 		add_action( 'edit_term', array(__CLASS__, '_save'), 10, 3);
 		add_action( 'create_term', array(__CLASS__, '_save'), 10, 3);
-	}
-
-
-	/**
-	 * Create and/or set termmeta table
-	 *
-	 * @credit Simple Term Meta
-	 * @link http://www.cmurrayconsulting.com/software/wordpress-simple-term-meta/
-	 *
-	 */
-	public static function _create_table() {
-		global $wpdb;
-
-		$table_name = $wpdb->prefix . 'termmeta';
-
-		if ( $wpdb->get_var("SHOW TABLES LIKE '{$table_name}'") != $table_name ) {
-			$sql = "CREATE TABLE {$table_name} (
-				meta_id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-				term_id bigint(20) unsigned NOT NULL DEFAULT '0',
-				meta_key varchar(255) DEFAULT NULL,
-				meta_value longtext,
-				PRIMARY KEY (meta_id),
-				KEY term_id (term_id),
-				KEY meta_key (meta_key)
-			);";
-
-			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-			dbDelta( $sql );
-		}
-
-		$wpdb->termmeta = $table_name;
 	}
 
 

@@ -29,6 +29,30 @@ class kcSettings {
 
 		self::$data['options'] = get_option('kc_settings');
 		self::$data['paths'] = $paths;
+
+		require_once( self::$data['paths']['inc'].'/form.php' );
+		require_once( self::$data['paths']['inc'].'/helper.php' );
+		require_once( self::$data['paths']['inc'].'/_deprecated.php' );
+
+		# Setup termmeta table
+		self::_setup_termmeta_table();
+
+		# Scripts n styles
+		self::_sns_register();
+		add_action( 'admin_enqueue_scripts', array(__CLASS__, '_sns_admin') );
+
+		add_action( 'init', array(__CLASS__, '_admin_init'), 100 );
+	}
+
+
+	public static function _admin_init() {
+		if ( !is_admin() )
+			return;
+
+		# i18n
+		self::_locale();
+
+		# Settings bootstrap error messages
 		self::$data['messages'] = array(
 			'no_prefix'					=> __( "One of your settings doesn't have <b>prefix</b> set. Therefore it has NOT been added.", 'kc-settings'),
 			'no_menu_title'			=> __( "One of your settings doesn't have <b>menu title</b> set. Therefore it has NOT been added.", 'kc-settings'),
@@ -45,26 +69,23 @@ class kcSettings {
 		);
 
 		# Include samples (for development)
-		//self::_samples();
+		self::_samples();
 
 		# Get all settings
-		self::_bootsrap_settings();
+		self::_bootstrap_settings();
 
-		require_once( self::$data['paths']['inc'].'/form.php' );
-		require_once( self::$data['paths']['inc'].'/helper.php' );
-		require_once( self::$data['paths']['inc'].'/_deprecated.php' );
+		# Lock
+		add_filter( 'plugin_action_links', array(__CLASS__, '_lock'), 10, 4 );
 
-		if ( !empty(self::$data['settings']) ) {
-			foreach ( array_keys(self::$data['settings']) as $type )
-				call_user_func( array(__CLASS__, "_{$type}_init") );
-		}
-
-		self::_locale();
-		self::_admin_actions();
+		# Admin notices
+		add_action( 'admin_notices', array(__CLASS__, '_admin_notice') );
 
 		# Builder
 		require_once( self::$data['paths']['inc'].'/builder.php' );
 		kcSettings_builder::init();
+
+		# Dev stuff
+		//add_action( 'admin_footer', array(__CLASS__, '_dev') );
 	}
 
 
@@ -114,7 +135,7 @@ class kcSettings {
 	/*
 	 * Get all settings
 	 */
-	private static function _bootsrap_settings() {
+	private static function _bootstrap_settings() {
 		$kcsb = array(
 			'settings'	=> get_option( 'kcsb' ),
 			'_ids'			=> array(
@@ -172,8 +193,15 @@ class kcSettings {
 			}
 		}
 
-		self::$data['settings']	= self::_validate_settings( $settings );
 		self::$data['kcsb']	= $kcsb;
+		$settings = self::_validate_settings( $settings );
+		if ( !empty($settings) ) {
+			self::$data['settings'] = $settings;
+
+			foreach ( array_keys($settings) as $type )
+				call_user_func( array(__CLASS__, "_{$type}_init") );
+		}
+
 	}
 
 
@@ -228,7 +256,7 @@ class kcSettings {
 
 		foreach ( array('post', 'term', 'user') as $type ) {
 			if ( isset($nu[$type]) )
-				$nu[$type] = self::_bootsrap_meta( $nu[$type] );
+				$nu[$type] = self::_bootstrap_meta( $nu[$type] );
 		}
 
 		return $nu;
@@ -275,7 +303,7 @@ class kcSettings {
 	 *
 	 */
 
-	private static function _bootsrap_meta( $settings ) {
+	private static function _bootstrap_meta( $settings ) {
 		$nu = array();
 
 		foreach ( $settings as $group ) {
@@ -324,17 +352,6 @@ class kcSettings {
 	}
 
 
-	private static function _admin_actions() {
-		add_action( 'admin_init', array(__CLASS__, '_sns_register') );
-		add_action( 'admin_enqueue_scripts', array(__CLASS__, '_sns_enqueue') );
-		add_action( 'admin_notices', array(__CLASS__, '_admin_notice') );
-
-		add_filter( 'plugin_action_links', array(__CLASS__, '_lock'), 10, 4 );
-
-		//add_action( 'admin_footer', array(__CLASS__, '_dev') );
-	}
-
-
 	public static function _sns_register() {
 		# WP < 3.3
 		if ( version_compare(get_bloginfo('version'), '3.3', '<') )
@@ -350,7 +367,7 @@ class kcSettings {
 	}
 
 
-	public static function _sns_enqueue( $hook_suffix ) {
+	public static function _sns_admin( $hook_suffix ) {
 		if ( !in_array($hook_suffix, self::$data['pages']) )
 			return;
 
@@ -368,19 +385,19 @@ class kcSettings {
 
 	private static function _js_globals() {
 		$kcSettings_vars = array(
-			'upload' => array(
-				'text' => array(
-					'head' => __( 'KC Settings', 'kc-settings' ),
-					'empty' => __( 'Please upload some files and then go back to this tab.', 'kc-settings' ),
-					'checkAll' => __( 'Select all files', 'kc-settings' ),
-					'clear' => __( 'Clear selections', 'kc-settings' ),
-					'invert' => __( 'Invert selection', 'kc-settings' ),
-					'addFiles' => __( 'Add files to collection', 'kc-settings' ),
-					'info' => __( 'Click the "Media Library" tab to insert files that are already upload, or, upload your files, close this popup window, then click the "add files" button again to go to the "Media Library" tab to insert the files you just uploaded.', 'kc-settings' )
+			'upload'	=> array(
+				'text'	=> array(
+					'head'			=> __( 'KC Settings', 'kc-settings' ),
+					'empty'			=> __( 'Please upload some files and then go back to this tab.', 'kc-settings' ),
+					'checkAll'	=> __( 'Select all files', 'kc-settings' ),
+					'clear'			=> __( 'Clear selections', 'kc-settings' ),
+					'invert'		=> __( 'Invert selection', 'kc-settings' ),
+					'addFiles'	=> __( 'Add files to collection', 'kc-settings' ),
+					'info'			=> __( 'Click the "Media Library" tab to insert files that are already upload, or, upload your files, close this popup window, then click the "add files" button again to go to the "Media Library" tab to insert the files you just uploaded.', 'kc-settings' )
 				)
 			),
-			'_ids' => self::$data['kcsb']['_ids'],
-			'paths' => self::$data['paths']
+			'_ids'		=> self::$data['kcsb']['_ids'],
+			'paths'		=> self::$data['paths']
 		);
 
 		?>
@@ -393,12 +410,12 @@ class kcSettings {
 
 
 	private static function _samples() {
-		//require_once( self::$data['paths']['inc'] . '/doc/sample/__theme_settings.php' );
-		//require_once( self::$data['paths']['inc'] . '/doc/sample/__settings2.php' );
-		//require_once( self::$data['paths']['inc'] . '/doc/sample/__term_settings.php' );
-		//require_once( self::$data['paths']['inc'] . '/doc/sample/__post_settings.php' );
-		//require_once( self::$data['paths']['inc'] . '/doc/sample/__post_settings2.php' );
-		//require_once( self::$data['paths']['inc'] . '/doc/sample/__user_settings.php' );
+		require_once( self::$data['paths']['inc'] . '/doc/sample/__theme_settings.php' );
+		require_once( self::$data['paths']['inc'] . '/doc/sample/__settings2.php' );
+		require_once( self::$data['paths']['inc'] . '/doc/sample/__term_settings.php' );
+		require_once( self::$data['paths']['inc'] . '/doc/sample/__post_settings.php' );
+		require_once( self::$data['paths']['inc'] . '/doc/sample/__post_settings2.php' );
+		require_once( self::$data['paths']['inc'] . '/doc/sample/__user_settings.php' );
 	}
 
 
@@ -414,6 +431,37 @@ class kcSettings {
 
 			echo "<div class='message {$notice['class']}'>\n\t{$notice['message']}\n</div>\n";
 		}
+	}
+
+
+	/**
+	 * Create and/or set termmeta table
+	 *
+	 * @credit Simple Term Meta
+	 * @link http://www.cmurrayconsulting.com/software/wordpress-simple-term-meta/
+	 *
+	 */
+	private static function _setup_termmeta_table() {
+		global $wpdb;
+
+		$table_name = $wpdb->prefix . 'termmeta';
+
+		if ( $wpdb->get_var("SHOW TABLES LIKE '{$table_name}'") != $table_name ) {
+			$sql = "CREATE TABLE {$table_name} (
+				meta_id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+				term_id bigint(20) unsigned NOT NULL DEFAULT '0',
+				meta_key varchar(255) DEFAULT NULL,
+				meta_value longtext,
+				PRIMARY KEY (meta_id),
+				KEY term_id (term_id),
+				KEY meta_key (meta_key)
+			);";
+
+			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+			dbDelta( $sql );
+		}
+
+		$wpdb->termmeta = $table_name;
 	}
 
 
@@ -448,8 +496,7 @@ class kcSettings {
 		echo '</pre>';
 	}
 }
-
-add_action( 'init', array('kcSettings', 'init'), 11 );
+add_action( 'init', array('kcSettings', 'init') );
 
 
 # A hack for symlinks
