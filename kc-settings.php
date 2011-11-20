@@ -15,10 +15,7 @@ class kcSettings {
 	public static $data	= array(
 		'version'		=> '2.2',
 		'pages'			=> array('media-upload-popup'),
-		'paths'			=> '',
-		'settings'	=> array(),
-		'kcsb'			=> array(),
-		'notices'		=> array()
+		'paths'			=> ''
 	);
 
 
@@ -37,10 +34,10 @@ class kcSettings {
 		# Setup termmeta table
 		self::_setup_termmeta_table();
 
-		# Scripts n styles
+		# Register scripts n styles
 		self::_sns_register();
-		add_action( 'admin_enqueue_scripts', array(__CLASS__, '_sns_admin') );
 
+		# Backend-only stuff
 		add_action( 'init', array(__CLASS__, '_admin_init'), 100 );
 	}
 
@@ -77,7 +74,11 @@ class kcSettings {
 		# Lock
 		add_filter( 'plugin_action_links', array(__CLASS__, '_lock'), 10, 4 );
 
+		# Admin scripts n styles
+		add_action( 'admin_enqueue_scripts', array(__CLASS__, '_sns_admin') );
+
 		# Admin notices
+		self::$data['notices'] = array();
 		add_action( 'admin_notices', array(__CLASS__, '_admin_notice') );
 
 		# Builder
@@ -489,6 +490,7 @@ class kcSettings {
 
 	public static function _dev() {
 		echo '<pre>';
+		print_r( self::$data );
 		echo '</pre>';
 	}
 }
