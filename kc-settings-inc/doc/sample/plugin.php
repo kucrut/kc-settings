@@ -1,7 +1,7 @@
 <?php
 add_filter( 'kc_plugin_settings', 'mytheme_options2' );
 function mytheme_options2( $settings ) {
-	$klean_options = array(
+	$options = array(
 		'sample_section' => array(
 			'id'			=> 'sample_section',
 			'title'		=> 'Sample Options',
@@ -30,9 +30,9 @@ function mytheme_options2( $settings ) {
 
 	$my_settings = array(
 		'prefix'				=> 'whatever',
-		'menu_title'		=> 'More Settings',
-		'page_title'		=> 'Additional Klean Theme Settings',
-		'options'				=> $klean_options
+		'menu_title'		=> 'My Plugin Settings',
+		'page_title'		=> 'My Plugin Settings Page',
+		'options'				=> $options
 	);
 
 	$settings[] = $my_settings;

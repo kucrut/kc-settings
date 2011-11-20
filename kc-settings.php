@@ -69,7 +69,7 @@ class kcSettings {
 		);
 
 		# Include samples (for development)
-		self::_samples();
+		//self::_samples( array('theme') );
 
 		# Get all settings
 		self::_bootstrap_settings();
@@ -409,13 +409,9 @@ class kcSettings {
 	<?php }
 
 
-	private static function _samples() {
-		require_once( self::$data['paths']['inc'] . '/doc/sample/__theme_settings.php' );
-		require_once( self::$data['paths']['inc'] . '/doc/sample/__settings2.php' );
-		require_once( self::$data['paths']['inc'] . '/doc/sample/__term_settings.php' );
-		require_once( self::$data['paths']['inc'] . '/doc/sample/__post_settings.php' );
-		require_once( self::$data['paths']['inc'] . '/doc/sample/__post_settings2.php' );
-		require_once( self::$data['paths']['inc'] . '/doc/sample/__user_settings.php' );
+	private static function _samples( $types ) {
+		foreach ( $types as $type )
+			require_once( self::$data['paths']['inc'] . "/doc/sample/{$type}.php" );
 	}
 
 

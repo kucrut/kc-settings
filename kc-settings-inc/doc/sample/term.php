@@ -1,38 +1,31 @@
 <?php
 
-add_filter( 'kc_user_settings', 'my_user_options' );
-function my_user_options( $groups ) {
+add_filter( 'kc_term_settings', 'myterm_options' );
+function myterm_options( $groups ) {
 	$my_group = array(
-		array(
-			'sample_section' => array(
-				'id'				=> 'sample_section',		// section ID for each metabox
-				'title'			=> 'Sample Options',		// section title
-				'desc'			=> '<p>Some description about this options group</p>',	// section description (optional, default null)
-				'priority'	=> 'high',							// section priority, low|high (optional, default high)
-				'role'			=> array('administrator', 'editor'),			// user role, only user in this role will get this metabox. use an array for more than one role (optional, default none)
-				'fields'		=> array(								// here are the options for this metabox
-					'sample_input' => array(
-						'id'		=> 'sample_input',			// option ID
-						'title'	=> 'Simple input',			// option title/label
-						'desc'	=> 'Just a simple input field',		// option description (optional, default null)
-						'type'	=> 'input'							// option type, callback|input|textarea|checkbox|radio|select|multiselect (optional, default input)
+		'category'	=> array(
+			array(
+				'id'				=> 'sample_section',
+				'title'			=> 'Sample Options',
+				'desc'			=> '<p>Some description about this options group</p>',
+				'priority'	=> 'high',
+				'role'			=> array('administrator', 'editor'),
+				'fields'		=> array(
+					array(
+						'id'		=> 'sample_input',
+						'title'	=> 'Simple input',
+						'desc'	=> 'Just a simple input field',
+						'type'	=> 'input'
 					),
-					'date' => array(
-						'id'		=> 'sample_input',			// option ID
-						'title'	=> 'Simple input',			// option title/label
-						'desc'	=> 'Just a simple input field',		// option description (optional, default null)
-						'type'	=> 'input'							// option type, callback|input|textarea|checkbox|radio|select|multiselect (optional, default input)
-					),
-					'anything' => array(
+					array(
 						'id'		=> 'anything',
 						'title'	=> 'Textarea',
 						'desc'	=> 'An ordinary text area where you can write some long texts',
 						'type'	=> 'textarea'
 					),
-					'date' => array(
+					array(
 						'id'		=> 'date',
 						'title'	=> 'Date input',
-						'desc'	=> 'Birtdate?',		// option description (optional, default null)
 						'type'	=> 'date'
 					)
 				)
@@ -44,40 +37,40 @@ function my_user_options( $groups ) {
 	return $groups;
 }
 
-add_filter( 'kc_user_settings', 'my_user_options2' );
-function my_user_options2( $groups ) {
+add_filter( 'kc_term_settings', 'myterm_options2' );
+function myterm_options2( $groups ) {
 	$my_group = array(
-		array(
-			'sample_section2' => array(
+		'category'	=> array(
+			array(
 				'id'				=> 'sample_section2',
 				'title'			=> 'Sample Options 2',
 				'desc'			=> '<p>Some description about this options group</p>',
 				'priority'	=> 'high',
 				'role'			=> array('administrator', 'editor'),
 				'fields'		=> array(
-					'sample_input2' => array(
+					array(
 						'id'		=> 'sample_input2',
 						'title'	=> 'Simple input 2',
 						'desc'	=> 'Just a simple input field',
 						'type'	=> 'input'
 					),
-					'sample_textarea2' => array(
+					array(
 						'id'		=> 'sample_textarea2',
 						'title'	=> 'Textarea 2',
 						'desc'	=> 'An ordinary text area where you can write some long texts',
 						'type'	=> 'textarea'
 					),
-					'sample_checkbox' => array(
+					array(
 						'id'			=> 'sample_checkbox',
 						'title'		=> 'Checkboxes (checkbox)',
 						'desc'		=> 'You can select one or more',
 						'type'		=> 'checkbox',
-						'options'	=> array(					// checkbox, radio, select and multiselect option type must have options array
+						'options'	=> array(
 							'cbox1'	=> 'Option #1',
 							'cbox2'	=> 'Option #2'
 						)
 					),
-					'sample_radio' => array(
+					array(
 						'id'			=> 'sample_radio',
 						'title'		=> 'Radioboxes (radio)',
 						'desc'		=> 'You can only select one here',
@@ -86,10 +79,9 @@ function my_user_options2( $groups ) {
 							'radio1'	=> 'Option #1',
 							'radio2'	=> 'Option #2 (Default)',
 							'radio3'	=> 'Option #3'
-						),
-						'default'	=> 'radio2'
+						)
 					),
-					'sample_select' => array(
+					array(
 						'id'			=> 'sample_select',
 						'title'		=> 'Dropdown options (select)',
 						'desc'		=> 'You can only select one option here',
@@ -100,7 +92,7 @@ function my_user_options2( $groups ) {
 							'select1'	=> 'Option #3'
 						)
 					),
-					'sample_multiselect' => array(
+					array(
 						'id'			=> 'sample_multiselect',
 						'title'		=> 'Dropdown options (multiple select)',
 						'desc'		=> 'You can select more than one option here',
@@ -114,7 +106,7 @@ function my_user_options2( $groups ) {
 							'select6'	=> 'Option #6'
 						)
 					),
-					'sample_multiinput' => array(
+					array(
 						'id'		=> 'sample_multiinput',
 						'title'	=> 'Pair input',
 						'desc'	=> 'Input field with your own custom label, to create an array',
