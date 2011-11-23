@@ -278,7 +278,7 @@ function kcs_update_meta( $meta_type = 'post', $object_type_name, $object_id, $s
 		update_metadata( $meta_type, $object_id, $meta_key, $nu_val );
 
 	# If there is no new meta value but an old value exists, delete it.
-	elseif ( '' == $nu_val && $db_val )
+	elseif ( !$nu_val && $db_val )
 		delete_metadata( $meta_type, $object_id, $meta_key, $nu_val );
 }
 

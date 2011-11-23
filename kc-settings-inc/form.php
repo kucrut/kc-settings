@@ -85,7 +85,7 @@ class kcForm {
 
 
   public static function select( $args ) {
-    if ( !isset($args['none']) || $args['none'] !== false ) {
+    if ( !isset($args['none']) || ( isset($args['none']) && $args['none'] !== false ) ) {
       $args['none'] = array(
         'value'   => '',
         'label'   => '&mdash;&nbsp;'.__('Select', 'kc-settings').'&nbsp;&mdash;'
@@ -101,7 +101,7 @@ class kcForm {
     $output .= ">\n";
     foreach ( $args['options'] as $o ) {
       $output .= "\t<option value='".esc_attr($o['value'])."'";
-      if ( in_array($o['value'], $args['current']) )
+      if ( $o['value'] == $args['current'] || in_array($o['value'], $args['current']) )
         $output .= " selected='true'\n";
       $output .= ">{$o['label']}</option>\n";
     }
@@ -310,8 +310,9 @@ function kcs_settings_field( $args ) {
 		if ( $type == 'multiselect' ) {
 			$type = 'select';
 			$field_attr['multiple'] = 'true';
+			$field_attr['name'] .= '[]';
 		}
-		if ( in_array($type, array('checkbox', 'select')) ) {
+		if ( $type == 'checkbox' ) {
 			$field_attr['name'] .= '[]';
 		}
 		if ( !in_array($type, array('checkbox', 'radio')) ) {
@@ -337,6 +338,8 @@ function kcs_settings_field( $args ) {
 				);
 			$field_args['options'] = $field_options;
 		}
+		if ( isset($field['none']) )
+			$field_args['none'] = $field['none'];
 
 		$output .= "\t" . kcForm::field( $field_args ) . "\n";
 		$output .= "\t{$desc}\n";
