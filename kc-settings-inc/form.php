@@ -211,7 +211,7 @@ function kcs_settings_field( $args ) {
 	$output = apply_filters( 'kc_settings_field_before', '', $section, $field );
 
 	# Special option with callback
-	if ( $type == 'special' && function_exists($field['cb']) && is_callable($field['cb']) ) {
+	if ( $type == 'special' && isset($field['cb']) && function_exists($field['cb']) && is_callable($field['cb']) ) {
 		$args['field']['name'] = $name;
 		$cb_args = '';
 		if ( isset($field['args']) && !empty($field['args']) ) {
