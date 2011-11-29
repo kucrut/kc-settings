@@ -36,10 +36,19 @@ class kcSettings_plugin {
 		$this->page = add_submenu_page( $menu_location, $page_title, $menu_title, 'manage_options', "kc-settings-{$prefix}", array(&$this, 'settings_page') );
 		kcSettings::$data['pages'][] = $this->page;
 
-		if ( $this->group['display'] == 'metabox' ) {
+		if ( $display == 'metabox' ) {
 			add_action( "load-{$this->page}", array(&$this, 'create_meta_box') );
 			add_action( "load-{$this->page}", array(&$this, 'metabox_scripts') );
 		}
+
+		if ( isset($load_actions) )
+			add_action( "load-{$this->page}", array(&$this, 'load_actions'), 99 );
+	}
+
+
+	function load_actions() {
+		foreach ( (array) $this->group['load_actions'] as $func )
+			call_user_func( $func, $this );
 	}
 
 
