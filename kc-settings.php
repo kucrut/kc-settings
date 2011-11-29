@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @package KC_Settings
+ * @version 2.2
+ */
+
+
 /*
 Plugin name: KC Settings
 Plugin URI: http://kucrut.org/2010/10/kc-settings/
