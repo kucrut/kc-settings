@@ -94,7 +94,7 @@ class kcSettings_plugin {
 		<?php screen_icon(); ?>
 		<h2><?php echo $page_title ?></h2>
 		<?php do_action( "{$prefix}_kc_settings_page_before", $this->group ) ?>
-		<form action="options.php" method="post">
+		<form action="options.php" method="post" id="kc-settings-form">
 			<?php
 				# The hidden fields
 				settings_fields( "{$prefix}_settings" );
@@ -104,7 +104,7 @@ class kcSettings_plugin {
 						wp_nonce_field('closedpostboxes', 'closedpostboxesnonce', false );
 						wp_nonce_field('meta-box-order', 'meta-box-order-nonce', false );
 
-						echo "<div class='metabox-holder'>\n";
+						echo "<div class='metabox-holder' id='kc-metabox-{$this->page}'>\n";
 						do_meta_boxes( $this->page, 'normal', $this->group );
 						echo "</div>\n";
 					break;

@@ -165,7 +165,35 @@ function kcsbSlug( str ) {
 
 jQuery(document).ready(function($) {
 	var $builder	= $('#kcsb'),
-			$kcsbForm = $('form.kcsb');
+			$kcsbForm = $('form.kcsb'),
+			$components = $('#kc-settings-form').find('div.postbox').find('#kcs-components');
+
+	// Plugin/theme settings components
+	if ( $components.length ) {
+		var mbPrefix = '#'+$components.closest('div.metabox-holder').attr('id')+'-',
+				$generalChecks = $components.find(':checkbox'),
+				$sectionChecks = $();
+
+		$generalChecks.each(function() {
+			if ( !$( mbPrefix+this.value ).length )
+				return;
+
+			var $check = $(this),
+					$target = $(mbPrefix+this.value+'-hide');
+
+			$check.data( 'sectTarget', $target );
+			if ( !(this.checked === $target[0].checked) ) {
+				$target.prop('checked', this.checked).triggerHandler('click');
+			}
+			$sectionChecks = $sectionChecks.add( $check );
+		});
+
+		if ( $sectionChecks.length ) {
+			$sectionChecks.change(function() {
+				$(this).data('sectTarget').prop('checked', this.checked).triggerHandler('click');
+			});
+		}
+	}
 
 	// Sort
 	$('ul.kc-rows').sortable({
