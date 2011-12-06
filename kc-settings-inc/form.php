@@ -65,6 +65,7 @@ class kcForm {
   public static function checkbox( $args ) {
 		if ( !isset($args['type']) || !$args['type'] )
 			$args['type'] = 'checkbox';
+		unset( $args['attr']['id'] );
 
     if ( !is_array($args['current']) )
       $args['current'] = array($args['current']);
@@ -113,7 +114,7 @@ class kcForm {
 
   private static function _build_attr( $attr ) {
     if ( !is_array($attr) || empty($attr) )
-      return;
+      return '';
 
     foreach ( array('type', 'value', 'checked', 'selected') as $x )
       unset( $attr[$x] );
