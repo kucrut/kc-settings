@@ -478,10 +478,8 @@ class kcSettings {
 
 	# Activation
 	public static function _lock( $actions, $plugin_file, $plugin_data, $context ) {
-		if ( $plugin_file == self::$data['paths']['p_file'] && !empty(self::$data['options']['kids']) ) {
-			echo $context;
+		if ( $plugin_file == self::$data['paths']['p_file'] && !empty(self::$data['options']['kids']) )
 			unset( $actions['deactivate'] );
-		}
 
 		return $actions;
 	}
