@@ -44,6 +44,7 @@ class kcSettings_builder {
 
 		add_action( 'admin_init', array(__CLASS__, 'register'), 21 );
 		add_action( 'admin_menu', array(__CLASS__, 'create_page') );
+		add_filter( 'plugin_row_meta', array(__CLASS__, 'builder_link'), 10, 3 );
 		add_action( 'update_option_kcsb', array(__CLASS__, 'after_save'), 10, 2 );
 	}
 
@@ -259,6 +260,14 @@ class kcSettings_builder {
 
 		add_action( "load-{$page}", array(__CLASS__, 'goback') );
 		add_action( "load-{$page}", array(__CLASS__, 'help') );
+	}
+
+
+	public static function builder_link( $plugin_meta, $plugin_file, $plugin_data ) {
+		if ( $plugin_data['Name'] == 'KC Settings' )
+			$plugin_meta[] = '<a href="'.admin_url('options-general.php?page=kcsb').'">'.__('KC Settings Builder', 'kc-settings').'</a>';
+
+		return $plugin_meta;
 	}
 
 
