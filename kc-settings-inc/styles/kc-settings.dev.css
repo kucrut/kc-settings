@@ -13,14 +13,29 @@ p.actions {padding-left:4.5em}
 .actions a:first-child:before {content:''}
 
 
+input.kcs-input {
+	width:25em;
+	border-width:1px;
+	border-style:solid;
+	border-radius:3px;
+	padding:3px;
+	margin:1px;
+	background-color:#fff;
+	border-color:#dfdfdf;
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	box-sizing:border-box;
+}
 .kcs-textarea,
 #wpcontent .kcs-rows textarea {
-    width:21.25em;
-    min-height:5em;
-    max-height:10em;
-    resize:vertical}
+	width:99%;
+	min-height:8em;
+	max-height:10em;
+	resize:vertical;
+}
 
 /* Multiinput */
+.kcs-multiinput {margin:0 0 .5em;}
 .kcs-multiinput .row {
 	width:350px;
 	line-height:1}
@@ -38,7 +53,6 @@ p.actions {padding-left:4.5em}
 #wpcontent .kcs-multiselect {
     height:7.5em;
     padding-right:.5em}
-.kcs-input {width:auto}
 .kcs-check, .form-wrap .kcs-check {
 	display:inline-block;
 	background:none}
@@ -87,6 +101,9 @@ input.kcs-files {margin-right:.5em}
   -khtml-border-radius:5px;
   -moz-border-radius:5px;
   border-radius:5px}
+
+.description .impo {color:#cc0000}
+
 
 
 /*** Builder style ***/
