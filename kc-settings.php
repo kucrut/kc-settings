@@ -282,19 +282,20 @@ class kcSettings {
 			}
 
 			foreach ( $section['fields'] as $f_idx => $field ) {
+				unset( $section['fields'][$f_idx] );
 				foreach ( array('id', 'title', 'type') as $c ) {
 					if ( !isset($field[$c]) || empty($field[$c]) ) {
 						trigger_error( self::$data['messages']["field_no_{$c}"] );
-						unset( $section['fields'][$f_idx] );
 						continue 2;
 					}
 				}
+				$section['fields'][$field['id']] = $field;
 			}
 
-			if ( empty($section['fields']) )
-				unset( $sections[$s_idx] );
-			else
-				$sections[$s_idx] = $section;
+			unset( $sections[$s_idx] );
+
+			if ( !empty($section['fields']) )
+				$sections[$section['id']] = $section;
 		}
 		return $sections;
 	}
