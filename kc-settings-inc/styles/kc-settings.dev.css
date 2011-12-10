@@ -95,14 +95,18 @@ input.kcs-files {margin-right:.5em}
 .kcsb .checkbox {background:none}
 .kcsb-ml {
   display:inline-block;
-  width:9em;
+  width:13em;
   margin-right:1em;
   vertical-align:top}
 .kcsb-mi {display:inline-block}
-input.kcsb-mi {width:23em}
+input.kcsb-mi, textarea.kcsb-mi {width:23em}
+.kcsb textarea {
+	min-height:8em;
+	resize:vertical}
 .kcsb-mi div.kcsb-mi, .kcsb-mi ul.kcsb-mi {width:23em}
 .kcsb-options label {display:block}
 .kcsb-options label span {display:inline-block;width:4em}
+.kcsb-options input {width:18.5em}
 .row {position:relative;margin:0}
 .kcsb-clone a {position:relative;top:4px;margin:0 3px}
 .kcsb-clone .clone-do {background-position:0 bottom}
@@ -113,11 +117,13 @@ input.kcsb-mi {width:23em}
 .kcsb-clone {padding-top:4px}
 
 .kcsb .fields > ul {padding-left:1em}
+.kcsb .fields .kcsb-ml {width:12em}
 
 .kcsb h4 {
   font-size:1.2em;
   display:block;
   margin-bottom:0}
+.kcsb h4 + .sections {margin-top:0;}
 div.actions {cursor:move}
 .actions h5 {
   display:inline-block;
