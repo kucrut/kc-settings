@@ -238,8 +238,13 @@ class kcSettings {
 							continue 2;
 						}
 
+						# Set page display type
 						if ( !isset($group['display']) )
 							$group['display'] = 'plain';
+						# Set the location
+						if ( !isset($group['menu_location']) )
+							$group['menu_location'] = 'options-general.php';
+
 					}
 
 					$group['options'] = self::_validate_sections( $group['options'] );
@@ -495,7 +500,7 @@ class kcSettings {
 
 	public static function _dev() {
 		echo '<pre>';
-		print_r( self::$data );
+		print_r( self::$data['options'] );
 		echo '</pre>';
 	}
 }

@@ -22,6 +22,8 @@ class kcSettings_plugin {
 		add_action( 'admin_menu', array(&$this, 'create_menu'));
 		# Register the options
 		add_action( 'admin_init', array(&$this, 'register_options'), 11 );
+		# Plugin setting link
+		add_filter( 'plugin_row_meta', array(&$this, 'setting_link'), 10, 3 );
 	}
 
 
@@ -29,11 +31,8 @@ class kcSettings_plugin {
 	function create_menu() {
 		extract( $this->group, EXTR_OVERWRITE );
 
-		# Set the location
-		if ( !isset($menu_location) )
-			$menu_location = 'options-general.php';
-
 		$this->page = add_submenu_page( $menu_location, $page_title, $menu_title, 'manage_options', "kc-settings-{$prefix}", array(&$this, 'settings_page') );
+		$this->url = admin_url( "{$menu_location}?page=kc-settings-{$prefix}" );
 		kcSettings::$data['pages'][] = $this->page;
 
 		if ( $display == 'metabox' ) {
@@ -83,6 +82,15 @@ class kcSettings_plugin {
 			}
 
 		}
+	}
+
+
+	# Setting link on the plugins listing page
+	function setting_link( $plugin_meta, $plugin_file, $plugin_data ) {
+		if ( $plugin_data['Name'] == $this->group['menu_title'] )
+			$plugin_meta[] = '<a href="'.$this->url.'">'.__('Settings', 'kc-settings').'</a>';
+
+		return $plugin_meta;
 	}
 
 
