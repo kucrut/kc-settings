@@ -294,9 +294,15 @@ jQuery(document).ready(function($) {
 	// Datepicker
 	var $dateInputs = $('input[type=date]');
 	if ( $dateInputs.length && Modernizr.inputtypes.date === false ) {
-		$dateInputs.datepicker({
-			dateFormat: 'yy-mm-dd'
-		});
+		var jquiTheme = $('body').is('.admin-color-classic') ? 'cupertino' : 'flick';
+		Modernizr.load([{
+			load: win.kcSettings.paths.styles+'/jquery-ui/'+jquiTheme+'/style.css',
+			complete: function() {
+				$dateInputs.datepicker({
+					dateFormat: 'yy-mm-dd'
+				});
+			}
+		}]);
 	}
 
 	var $colorInputs = $('input[type=color]');
