@@ -46,6 +46,7 @@ class kcSettings_builder {
 		add_action( 'admin_menu', array(__CLASS__, 'create_page') );
 		add_filter( 'plugin_row_meta', array(__CLASS__, 'builder_link'), 10, 3 );
 		add_action( 'update_option_kcsb', array(__CLASS__, 'after_save'), 10, 2 );
+
 	}
 
 
@@ -258,8 +259,27 @@ class kcSettings_builder {
 		# Set scripts and styles
 		kcSettings::$data['pages'][] = $page;
 
+		# Help
+		kcSettings::$data['help'][$page] = array(
+			array(
+				'id'			=> 'kcsb',
+				'title' 	=> __( 'KC Settings Builder', 'kc-settings' ),
+				'content'	=>
+					"<h2>".__('Creating a setting', 'kc-settings')."</h2>\n" .
+					"<h3>".__('All Types', 'kc-settings')."</h3>\n" .
+					"<ul>\n" .
+					"\t<li>".__('All fields are required, unless the label is green.', 'kc-settings')."</li>\n" .
+					"\t<li>".__('Some fields depend on other field(s), they will be shown when the dependency is selected/checked.', 'kc-settings')."</li>\n" .
+					"\t<li>".__('Some fields (eg. ID, Prefix) can only be filled with alphanumerics, dashes and underscores, must be unique, and cannot begin with dashes or underscores. ', 'kc-settings')."</li>\n" .
+					"</ul>\n" .
+					"<h2>".__('Links', 'kc-settings')."</h2>\n" .
+					"<ul>\n" .
+					"\t<li><a href='http://wordpress.org/tags/kc-settings?forum_id=10'>".__('Support', 'kc-settings')."</a></li>\n" .
+					"</ul>\n"
+			)
+		);
+
 		add_action( "load-{$page}", array(__CLASS__, 'goback') );
-		add_action( "load-{$page}", array(__CLASS__, 'help') );
 	}
 
 
@@ -383,34 +403,6 @@ class kcSettings_builder {
 
 	public static function sns() {
 		wp_enqueue_script( 'kcsb' );
-	}
-
-
-	public static function help() {
-		$help  = "<h2>".__('Creating a setting', 'kc-settings')."</h2>\n";
-		$help .= "<h3>".__('All Types', 'kc-settings')."</h3>\n";
-		$help .= "<ul>\n";
-		$help .= "\t<li>".__('All fields are required, unless the label is green.', 'kc-settings')."</li>\n";
-		$help .= "\t<li>".__('Some fields depend on other field(s), they will be shown when the dependency is selected/checked.', 'kc-settings')."</li>\n";
-		$help .= "\t<li>".__('Some fields (eg. ID, Prefix) can only be filled with alphanumerics, dashes and underscores, must be unique, and cannot begin with dashes or underscores. ', 'kc-settings')."</li>\n";
-		$help .= "</ul>\n";
-		$help .= "<h2>".__('Links', 'kc-settings')."</h2>\n";
-		$help .= "<ul>\n";
-		$help .= "\t<li><a href='http://wordpress.org/tags/kc-settings?forum_id=10'>".__('Support', 'kc-settings')."</a></li>\n";
-		$help .= "</ul>\n";
-
-		$screen = get_current_screen();
-		if ( is_object($screen) ) {
-			if ( method_exists($screen, 'add_help_tab') ) {
-			$screen->add_help_tab(array(
-				'id' => 'help-kcsb',
-				'title' => __( 'KC Settings Builder', 'kc-settings' ),
-				'content' => $help
-			));
-			} else {
-				add_contextual_help( $screen, $help );
-			}
-		}
 	}
 
 

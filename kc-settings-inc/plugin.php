@@ -35,6 +35,10 @@ class kcSettings_plugin {
 		$this->url = admin_url( "{$menu_location}?page=kc-settings-{$prefix}" );
 		kcSettings::$data['pages'][] = $this->page;
 
+		# Help
+		if ( isset($help) )
+			kcSettings::add_help( $this->page, $help );
+
 		if ( $display == 'metabox' ) {
 			add_action( "load-{$this->page}", array(&$this, 'create_meta_box') );
 			add_action( "load-{$this->page}", array(&$this, 'metabox_scripts') );

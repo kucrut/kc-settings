@@ -21,7 +21,8 @@ class kcSettings {
 	public static $data	= array(
 		'version'		=> '2.2',
 		'pages'			=> array('media-upload-popup'),
-		'paths'			=> ''
+		'paths'			=> '',
+		'help'			=> array()
 	);
 
 
@@ -91,12 +92,15 @@ class kcSettings {
 		require_once( self::$data['paths']['inc'].'/builder.php' );
 		kcSettings_builder::init();
 
+		# Contextual help
+		add_action( 'admin_head', array(__CLASS__, '_help') );
+
 		# Dev stuff
 		//add_action( 'admin_footer', array(__CLASS__, '_dev') );
 	}
 
 
-	/*
+	/**
 	 * Set plugin paths
 	 */
 	public static function _paths( $file, $inc_suffix = '-inc' ) {
@@ -139,7 +143,7 @@ class kcSettings {
 	}
 
 
-	/*
+	/**
 	 * Get all settings
 	 */
 	private static function _bootstrap_settings() {
@@ -365,6 +369,46 @@ class kcSettings {
 	}
 
 
+	public static function add_help( $page, $helps ) {
+		if ( !is_array($helps) || empty($helps) )
+			return;
+
+		foreach ( $helps as $idx => $help ) {
+			foreach ( array('id', 'title', 'content') as $c ) {
+				if ( !isset($help[$c]) || empty($help[$c]) ) {
+					unset( $helps[$idx] );
+					continue 2;
+				}
+			}
+		}
+
+		if ( !empty($helps) )
+			self::$data['help'][$page] = $helps;
+	}
+
+
+	/**
+	 * Register contextual help
+	 */
+	public static function _help() {
+		global $hook_suffix;
+		$screen = get_current_screen();
+		if ( empty(self::$data['help']) || !isset(self::$data['help'][$hook_suffix]) || !is_object($screen) )
+			return;
+
+		$helps = self::$data['help'][$hook_suffix];
+		# WP >= 3.3
+		if ( method_exists($screen, 'add_help_tab') ) {
+			foreach ( $helps as $help )
+				$screen->add_help_tab( $help );
+		}
+		# WP < 3.3
+		else {
+			foreach ( $helps as $help )
+				add_contextual_help( $screen, "<h2>{$help['title']}</h2>\n{$help['content']}" );
+		}
+	}
+
 	public static function _sns_register() {
 		# WP < 3.3
 		if ( version_compare(get_bloginfo('version'), '3.3', '<') )
@@ -500,7 +544,7 @@ class kcSettings {
 
 	public static function _dev() {
 		echo '<pre>';
-		print_r( self::$data['options'] );
+		print_r( self::$data['help'] );
 		echo '</pre>';
 	}
 }
