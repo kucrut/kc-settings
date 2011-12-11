@@ -54,7 +54,9 @@ class kcSettings {
 			return;
 
 		# i18n
-		self::_locale();
+		$mo_file = self::$data['paths']['inc'].'/languages/kc-settings-'.get_locale().'.mo';
+		if ( is_readable($mo_file) )
+			load_textdomain( 'kc-settings', $mo_file );
 
 		# Settings bootstrap error messages
 		self::$data['messages'] = array(
@@ -209,8 +211,16 @@ class kcSettings {
 		if ( !empty($settings) ) {
 			self::$data['settings'] = $settings;
 
-			foreach ( array_keys($settings) as $type )
-				call_user_func( array(__CLASS__, "_{$type}_init") );
+			foreach ( array_keys($settings) as $type ) {
+				require_once( self::$data['paths']['inc']."/{$type}.php" );
+				if ( $type == 'plugin' ) {
+					foreach ( $settings['plugin'] as $group )
+						$do = new kcSettings_plugin( $group );
+				}
+				else {
+					call_user_func( array("kcSettings_{$type}", 'init') );
+				}
+			}
 		}
 
 	}
@@ -334,38 +344,6 @@ class kcSettings {
 		}
 
 		return $nu;
-	}
-
-
-	private static function _plugin_init() {
-		require_once( self::$data['paths']['inc'].'/plugin.php' );
-		foreach ( self::$data['settings']['plugin'] as $group )
-			$do = new kcSettings_plugin( $group );
-	}
-
-
-	private static function _post_init() {
-		require_once( self::$data['paths']['inc']."/post.php" );
-		kcSettings_post::init();
-	}
-
-
-	private static function _term_init() {
-		require_once( self::$data['paths']['inc'].'/term.php' );
-		kcSettings_term::init();
-	}
-
-
-	private static function _user_init() {
-		require_once( self::$data['paths']['inc'].'/user.php' );
-		kcSettings_user::init();
-	}
-
-
-	private static function _locale() {
-		$mo_file = self::$data['paths']['inc'].'/languages/kc-settings-'.get_locale().'.mo';
-		if ( is_readable($mo_file) )
-			load_textdomain( 'kc-settings', $mo_file );
 	}
 
 
@@ -544,7 +522,7 @@ class kcSettings {
 
 	public static function _dev() {
 		echo '<pre>';
-		print_r( self::$data['help'] );
+		print_r( self::$data['settings'] );
 		echo '</pre>';
 	}
 }
