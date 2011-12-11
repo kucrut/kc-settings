@@ -165,7 +165,9 @@ class kcSettings {
 			'user'		=> array()
 		);
 
+		# Process settings from the builder
 		if ( is_array($kcsb['settings']) && !empty($kcsb['settings']) ) {
+			self::$data['kcsb']	= $kcsb;
 			foreach ( $kcsb['settings'] as $setting ) {
 				$sID = $setting['id'];
 				$kcsb['_ids']['settings'][] = $sID;
@@ -206,23 +208,21 @@ class kcSettings {
 			}
 		}
 
-		self::$data['kcsb']	= $kcsb;
 		$settings = self::_validate_settings( $settings );
-		if ( !empty($settings) ) {
-			self::$data['settings'] = $settings;
+		if ( empty($settings) )
+			return;
 
-			foreach ( array_keys($settings) as $type ) {
-				require_once( self::$data['paths']['inc']."/{$type}.php" );
-				if ( $type == 'plugin' ) {
-					foreach ( $settings['plugin'] as $group )
-						$do = new kcSettings_plugin( $group );
-				}
-				else {
-					call_user_func( array("kcSettings_{$type}", 'init') );
-				}
+		self::$data['settings'] = $settings;
+		foreach ( array_keys($settings) as $type ) {
+			require_once( self::$data['paths']['inc']."/{$type}.php" );
+			if ( $type == 'plugin' ) {
+				foreach ( $settings['plugin'] as $group )
+					$do = new kcSettings_plugin( $group );
+			}
+			else {
+				call_user_func( array("kcSettings_{$type}", 'init') );
 			}
 		}
-
 	}
 
 
