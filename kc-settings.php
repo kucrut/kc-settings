@@ -436,7 +436,7 @@ class kcSettings {
 					'info'			=> __( 'Click the "Media Library" tab to insert files that are already upload, or, upload your files, close this popup window, then click the "add files" button again to go to the "Media Library" tab to insert the files you just uploaded.', 'kc-settings' )
 				)
 			),
-			'_ids'		=> self::$data['kcsb']['_ids'],
+			'_ids'		=> isset( self::$data['kcsb']['_ids'] ) ? self::$data['kcsb']['_ids'] : '',
 			'paths'		=> self::$data['paths']
 		);
 
