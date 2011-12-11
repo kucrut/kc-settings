@@ -265,17 +265,20 @@ class kcSettings_builder {
 				'id'			=> 'kcsb',
 				'title' 	=> __( 'KC Settings Builder', 'kc-settings' ),
 				'content'	=>
-					"<h2>".__('Creating a setting', 'kc-settings')."</h2>\n" .
-					"<h3>".__('All Types', 'kc-settings')."</h3>\n" .
-					"<ul>\n" .
-					"\t<li>".__('All fields are required, unless the label is green.', 'kc-settings')."</li>\n" .
-					"\t<li>".__('Some fields depend on other field(s), they will be shown when the dependency is selected/checked.', 'kc-settings')."</li>\n" .
-					"\t<li>".__('Some fields (eg. ID, Prefix) can only be filled with alphanumerics, dashes and underscores, must be unique, and cannot begin with dashes or underscores. ', 'kc-settings')."</li>\n" .
-					"</ul>\n" .
-					"<h2>".__('Links', 'kc-settings')."</h2>\n" .
-					"<ul>\n" .
-					"\t<li><a href='http://wordpress.org/tags/kc-settings?forum_id=10'>".__('Support', 'kc-settings')."</a></li>\n" .
-					"</ul>\n"
+					'<ul>
+						<li>'.__('All fields are required, unless the label is green.', 'kc-settings').'</li>
+						<li>'.__('Some fields depend on other field(s), they will be shown when the dependency is selected/checked.', 'kc-settings').'</li>
+						<li>'.__('Some fields (eg. ID, Prefix) can only be filled with alphanumerics, dashes and underscores, must be unique, and cannot begin with dashes or underscores. ', 'kc-settings').'</li>
+					</ul>'
+			),
+			array(
+				'id'			=> 'kcsb-side',
+				'title'		=> 'Links',
+				'sidebar'	=> true,
+				'content'	=>
+					'<ul>
+						<li><a href="http://wordpress.org/tags/kc-settings?forum_id=10">'.__('Support', 'kc-settings').'</a></li>
+					</ul>'
 			)
 		);
 
@@ -522,7 +525,7 @@ class kcSettings_builder {
 			<p class="hide-if-js"><?php _e('To create a setting, please enable javascript in your browser and reload this page.', 'kc-settings') ?></p>
 			<div id="kcsb"<?php echo $form_class ?>>
 				<h3><?php _e('KC Settings Builder', 'kc-settings') ?></h3>
-				<p class="description"><?php _e('Please click the Help button to read the guide before creating a setting.', 'kc-settings')?></p>
+				<p class="description"><?php _e('Please <a href="#" class="kc-help-trigger">read the guide</a> before creating a setting.', 'kc-settings') ?></p>
 
 				<form class="kcsb" action="options.php" method="post">
 					<?php settings_fields('kcsb') ?>

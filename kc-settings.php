@@ -377,8 +377,12 @@ class kcSettings {
 		$helps = self::$data['help'][$hook_suffix];
 		# WP >= 3.3
 		if ( method_exists($screen, 'add_help_tab') ) {
-			foreach ( $helps as $help )
-				$screen->add_help_tab( $help );
+			foreach ( $helps as $help ) {
+				if ( isset($help['sidebar']) && $help['sidebar'] )
+					$screen->set_help_sidebar( $help['content'] );
+				else
+					$screen->add_help_tab( $help );
+			}
 		}
 		# WP < 3.3
 		else {

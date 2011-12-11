@@ -469,4 +469,11 @@ jQuery(document).ready(function($) {
 			return false;
 	});
 
+	// Help trigger
+	$('a.kc-help-trigger').live('click', function() {
+		$('#contextual-help-link').click();
+		$('#screen-meta').kcsbGoto();
+		return false;
+	});
+
 });
