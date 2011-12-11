@@ -533,7 +533,7 @@ class kcSettings_builder {
 					<ul>
 						<li>
 							<label class="kcsb-ml"><?php _e('ID', 'kc-settings') ?></label>
-							<input class="kcsb-mi kcsb-slug kcsb-ids required" type="text" name="kcsb[id]" value="<?php echo $values['id'] ?>" data-ids="settings" />
+							<input class="kcsb-mi kcsb-slug kcsb-ids required" type="text" name="kcsb[id]" value="<?php echo $values['id'] ?>" data-ids="settings" <?php if ( $mode == 'edit' ) echo 'disabled="disabled" ' ?>/>
 						</li>
 						<li>
 							<label class="kcsb-ml"><?php _e('Type') ?></label>
