@@ -496,15 +496,9 @@ class kcSettings {
 	}
 
 
-	# Activation
-	public static function _activate() {
-		$options = (array) get_option( 'kc_settings' );
-		if ( !isset($options['kids']) )
-			$options['kids'] = array();
-		update_option( 'kc_settings', $options );
-	}
-
-	# Activation
+	/**
+	 * Lock plugin when there are other plugins/themes using it
+	 */
 	public static function _lock( $actions, $plugin_file, $plugin_data, $context ) {
 		if ( $plugin_file == self::$data['paths']['p_file'] && !empty(self::$data['options']['kids']) )
 			unset( $actions['deactivate'] );
@@ -513,16 +507,28 @@ class kcSettings {
 	}
 
 
+	# Activation
+	public static function _activate() {
+		$options = get_option( 'kc_settings' );
+		if ( !$options )
+			$options = array();
+
+		if ( !isset($options['kids']) )
+			$options['kids'] = array();
+		update_option( 'kc_settings', $options );
+	}
+
 	# Deactivation
 	public static function _deactivate() {
 		# TODO: Anything else?
-		delete_option( 'kc_settings' );
+		//delete_option( 'kc_settings' );
 	}
 
 
 	public static function _dev() {
 		echo '<pre>';
-		print_r( self::$data['settings'] );
+		//print_r( self::$data['settings'] );
+		//print_r( get_option('kc_settings') );
 		echo '</pre>';
 	}
 }
