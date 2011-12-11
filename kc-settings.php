@@ -167,7 +167,6 @@ class kcSettings {
 
 		# Process settings from the builder
 		if ( is_array($kcsb['settings']) && !empty($kcsb['settings']) ) {
-			self::$data['kcsb']	= $kcsb;
 			foreach ( $kcsb['settings'] as $setting ) {
 				$sID = $setting['id'];
 				$kcsb['_ids']['settings'][] = $sID;
@@ -206,6 +205,8 @@ class kcSettings {
 					$settings[$type][$sID] = array($object => $setting['options']);
 				}
 			}
+
+			self::$data['kcsb']	= $kcsb;
 		}
 
 		$settings = self::_validate_settings( $settings );
