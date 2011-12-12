@@ -404,6 +404,10 @@ class kcSettings {
 
 		# Uploader
 		wp_register_script( 'kc-settings-upload', self::$data['paths']['scripts'].'/upload.js', array('jquery'), self::$data['version'] );
+
+		# Misc
+		# Lightbox Me http://buckwilson.me/lightboxme/
+		wp_register_script( 'jquery-lightbox_me', self::$data['paths']['scripts'].'/jquery.lightbox_me.js', array('jquery'), '2.3', true );
 	}
 
 
