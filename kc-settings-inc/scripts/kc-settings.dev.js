@@ -175,13 +175,15 @@ jQuery(document).ready(function($) {
 				$sectionChecks = $();
 
 		$generalChecks.each(function() {
-			if ( !$( mbPrefix+this.value ).length )
+			var $mBox = $( mbPrefix+this.value );
+			if ( !$mBox.length )
 				return;
 
 			var $check = $(this),
 					$target = $(mbPrefix+this.value+'-hide');
 
-			$check.data( 'sectTarget', $target );
+			$check.data( 'sectTarget', $target )
+						.data( 'mBox', $mBox );
 			if ( !(this.checked === $target[0].checked) ) {
 				$target.prop('checked', this.checked).triggerHandler('click');
 			}
@@ -190,7 +192,12 @@ jQuery(document).ready(function($) {
 
 		if ( $sectionChecks.length ) {
 			$sectionChecks.change(function() {
-				$(this).data('sectTarget').prop('checked', this.checked).triggerHandler('click');
+				var $el = $(this);
+				$el.data('sectTarget').prop('checked', this.checked).triggerHandler('click');
+
+				// Scroll to
+				if ( this.checked )
+					$el.data('mBox').kcsbGoto();
 			});
 		}
 	}
