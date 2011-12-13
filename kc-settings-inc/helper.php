@@ -84,32 +84,42 @@ function kcs_array_remove_empty( $arr, $rm_zero = true ) {
 }
 
 
+function kcs_array_multi_get_value( $array, $keys ) {
+	foreach ( $keys as $idx => $key ) {
+		unset( $keys[$idx] );
+		if ( !isset($array[$key]) )
+			return false;
+
+		if ( count($keys) )
+			$array = $array[$key];
+	}
+
+	if ( !isset($array[$key]) )
+		return false;
+
+	return $array[$key];
+}
+
+
 /**
  * Get theme option
  *
- * @param string $group (Optional) Theme options group, default null
- * @param string $option (Optional) Theme option, default null
+ * @param string $prefix Options prefix, required
+ * @param string $section Section id, optional
+ * @param string $field Field id, optional
  *
- * @return array|string
+ * @return bool|array|string
  *
  */
 
-function kc_get_option( $prefix, $section = null, $field = null ) {
-	$kc_settings = get_option( "{$prefix}_settings" );
-	if ( empty($kc_settings) )
-		return;
+function kc_get_option( $prefix, $section = '', $field = '') {
+	$values = get_option( "{$prefix}_settings" );
+	if ( !is_array($values) || func_num_args() < 2 )
+		return $values;
 
-	if ( !$section ) {
-		return $kc_settings;
-	}
-	else {
-		if ( !empty($section) && isset($kc_settings[$section]) ) {
-			if ( $field && isset($kc_settings[$section][$field]) )
-				return $kc_settings[$section][$field];
-			elseif ( !$field )
-				return $kc_settings[$section];
-		}
-	}
+	$keys = func_get_args();
+	unset( $keys[0] );
+	return kcs_array_multi_get_value( $values, $keys );
 }
 
 

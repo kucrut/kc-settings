@@ -2,11 +2,13 @@
 
 
 class kcSettings_term {
+	protected static $settings;
 
 	public static function init() {
+		self::$settings = kcSettings::get_data('settings', 'term' );
 		kcSettings::$data['pages'][] = 'edit-tags.php';
 
-		foreach ( array_keys(kcSettings::$data['settings']['term']) as $tax ) {
+		foreach ( array_keys(self::$settings) as $tax ) {
 			add_action( "{$tax}_add_form_fields", array(__CLASS__, '_fields'), 20, 1 );
 			add_action( "{$tax}_edit_form_fields", array(__CLASS__, '_fields'), 20, 2 );
 		}
@@ -40,14 +42,14 @@ class kcSettings_term {
 			$tabled = false;
 		}
 
-		if ( !isset(kcSettings::$data['settings']['term'][$taxonomy]) )
+		if ( !isset(self::$settings[$taxonomy]) )
 			return $args;
 
 		# Set the field wrapper tag? Why the incosistencies WP? :P
 		$row_tag = ( $tabled ) ? 'tr' : 'div';
 		$output = '';
 
-		foreach ( kcSettings::$data['settings']['term'][$taxonomy] as $section ) {
+		foreach ( self::$settings[$taxonomy] as $section ) {
 
 			$section_head = "\t\t\t\t<h4>{$section['title']}</h4>\n";
 			if ( isset($section['desc']) && $section['desc'] )
@@ -100,11 +102,11 @@ class kcSettings_term {
 	 *
 	 */
 	public static function _save( $term_id, $tt_id, $taxonomy ) {
-		if ( !isset(kcSettings::$data['settings']['term'][$taxonomy])
+		if ( !isset(self::$settings[$taxonomy])
 					|| ( isset($_POST['action']) && $_POST['action'] == 'inline-save-tax' ) )
 			return $term_id;
 
-		foreach ( kcSettings::$data['settings']['term'][$taxonomy] as $section ) {
+		foreach ( self::$settings[$taxonomy] as $section ) {
 			foreach ( $section['fields'] as $field )
 				kcs_update_meta( 'term', $tax, $term_id, $section, $field );
 		}

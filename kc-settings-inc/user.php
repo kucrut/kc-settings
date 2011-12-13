@@ -1,8 +1,10 @@
 <?php
 
 class kcSettings_user {
+	protected static $settings;
 
 	public static function init() {
+		self::$settings = kcSettings::get_data('settings', 'user' );
 		kcSettings::$data['pages'][] = 'profile.php';
 		kcSettings::$data['pages'][] = 'user-edit.php';
 
@@ -27,7 +29,7 @@ class kcSettings_user {
 	 */
 	public static function _fields( $user ) {
 		$output = '';
-		foreach ( kcSettings::$data['settings']['user'] as $group ) {
+		foreach ( self::$settings as $group ) {
 			foreach ( $group as $section ) {
 				# Section title & desc
 				$output .= "<h3>{$section['title']}</h3>\n";
@@ -67,7 +69,7 @@ class kcSettings_user {
 		if ( !current_user_can( 'edit_user', $user_id ) )
 			return $user_id;
 
-		foreach ( kcSettings::$data['settings']['user'] as $group ) {
+		foreach ( self::$settings as $group ) {
 			foreach ( $group as $section )
 				foreach ( $section['fields'] as $field )
 					kcs_update_meta( 'user', null, $user_id, $section, $field );

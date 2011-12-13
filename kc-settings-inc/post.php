@@ -1,12 +1,14 @@
 <?php
 
 class kcSettings_post {
+	protected static $settings;
 
 	public static function init() {
+		self::$settings = kcSettings::get_data('settings', 'post' );
 		add_action( 'add_meta_boxes', array(__CLASS__, '_create_meta_box'), 11, 2 );
 		add_action( 'save_post', array(__CLASS__, '_save'), 11, 2 );
 
-		if ( isset(kcSettings::$data['settings']['post']['attachment']) ) {
+		if ( isset(self::$settings['attachment']) ) {
 			kcSettings::$data['pages'][] = 'media.php';
 			kcSettings::$data['pages'][] = 'media-upload-popup';
 
@@ -18,13 +20,13 @@ class kcSettings_post {
 
 	# Create metabox
 	public static function _create_meta_box( $post_type, $post ) {
-		if ( !isset(kcSettings::$data['settings']['post'][$post_type]) )
+		if ( !isset(self::$settings[$post_type]) )
 			return;
 
 		kcSettings::$data['pages'][] = 'post.php';
 		kcSettings::$data['pages'][] = 'post-new.php';
 
-		foreach ( kcSettings::$data['settings']['post'][$post_type] as $section ) {
+		foreach ( self::$settings[$post_type] as $section ) {
 			# does this section have role set?
 			if ( (isset($section['role']) && !empty($section['role'])) && !kcs_check_roles($section['role']) )
 				continue;
@@ -63,7 +65,7 @@ class kcSettings_post {
 
 	# Save post metadata/custom fields values
 	public static function _save( $post_id, $post ) {
-		if ( !isset(kcSettings::$data['settings']['post'][$post->post_type])
+		if ( !isset(self::$settings[$post->post_type])
 					|| ( isset($_POST['action']) && $_POST['action'] == 'inline-save' )
 					|| $post->post_status == 'auto-draft' )
 			return $post_id;
@@ -72,7 +74,7 @@ class kcSettings_post {
 		if ( ( wp_verify_nonce($_POST["{$post->post_type}_kc_meta_box_nonce"], '___kc_meta_box_nonce___') && current_user_can($post_type_obj->cap->edit_post) ) !== true )
 			return $post_id;
 
-		foreach ( kcSettings::$data['settings']['post'][$post->post_type] as $section ) {
+		foreach ( self::$settings[$post->post_type] as $section ) {
 			foreach ( $section['fields'] as $field )
 				kcs_update_meta( 'post', $post->post_type, $post_id, $section, $field );
 		}
@@ -80,7 +82,7 @@ class kcSettings_post {
 
 
 	public static function _attachment_fields_to_edit( $fields, $post ) {
-		foreach ( kcSettings::$data['settings']['post']['attachment'] as $section ) {
+		foreach ( self::$settings['attachment'] as $section ) {
 			foreach ( $section['fields'] as $field ) {
 				if ( !empty($field['file_type']) && !strstr($post->post_mime_type, $field['file_type']) )
 					continue;
@@ -109,7 +111,7 @@ class kcSettings_post {
 
 
 	public static function _attachment_fields_to_save( $post, $attachment ) {
-		foreach ( kcSettings::$data['settings']['post']['attachment'] as $section ) {
+		foreach ( self::$settings['attachment'] as $section ) {
 			foreach ( $section['fields'] as $field )
 				kcs_update_meta( 'post', 'attachment', $post['ID'], $section, $field, true );
 		}

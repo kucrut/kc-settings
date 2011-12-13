@@ -18,10 +18,15 @@ License: GPL v2
 */
 
 class kcSettings {
-	public static $data	= array(
+	protected static $pdata = array(
 		'version'		=> '2.2',
-		'pages'			=> array('media-upload-popup'),
 		'paths'			=> '',
+		'settings'	=> array(),
+		'kcsb'			=> array()
+	);
+
+	public static $data	= array(
+		'pages'			=> array('media-upload-popup'),
 		'help'			=> array()
 	);
 
@@ -32,11 +37,11 @@ class kcSettings {
 			return false;
 
 		self::$data['options'] = get_option('kc_settings');
-		self::$data['paths'] = $paths;
+		self::$pdata['paths'] = $paths;
 
-		require_once( self::$data['paths']['inc'].'/form.php' );
-		require_once( self::$data['paths']['inc'].'/helper.php' );
-		require_once( self::$data['paths']['inc'].'/_deprecated.php' );
+		require_once "{$paths['inc']}/form.php";
+		require_once "{$paths['inc']}/helper.php";
+		require_once "{$paths['inc']}/_deprecated.php";
 
 		# Setup termmeta table
 		self::_setup_termmeta_table();
@@ -44,19 +49,8 @@ class kcSettings {
 		# Register scripts n styles
 		self::_sns_register();
 
-		# Backend-only stuff
-		add_action( 'init', array(__CLASS__, '_admin_init'), 100 );
-	}
-
-
-	public static function _admin_init() {
-		if ( !is_admin() )
-			return;
-
-		# i18n
-		$mo_file = self::$data['paths']['inc'].'/languages/kc-settings-'.get_locale().'.mo';
-		if ( is_readable($mo_file) )
-			load_textdomain( 'kc-settings', $mo_file );
+		# Include samples (for development)
+		//self::_samples( array('theme') );
 
 		# Settings bootstrap error messages
 		self::$data['messages'] = array(
@@ -74,11 +68,37 @@ class kcSettings {
 			'field_no_cb'				=> __( "One of your fields doesn't have the required <b>callback</b> set. Therefore it has NOT been added.", 'kc-settings')
 		);
 
-		# Include samples (for development)
-		//self::_samples( array('theme') );
-
 		# Get all settings
 		self::_bootstrap_settings();
+
+		# Backend-only stuff
+		add_action( 'init', array(__CLASS__, '_admin_init'), 100 );
+	}
+
+
+	public static function _admin_init() {
+		if ( !is_admin() )
+			return;
+
+		# i18n
+		$mo_file = self::$pdata['paths']['inc'].'/languages/kc-settings-'.get_locale().'.mo';
+		if ( is_readable($mo_file) )
+			load_textdomain( 'kc-settings', $mo_file );
+
+		# Register settings
+		if ( self::$pdata['settings'] ) {
+			foreach ( array_keys(self::$pdata['settings']) as $type ) {
+				require_once self::$pdata['paths']['inc']."/{$type}.php";
+
+				if ( $type == 'plugin' ) {
+					foreach ( self::$pdata['settings']['plugin'] as $group )
+						$do = new kcSettings_plugin( $group );
+				}
+				else {
+					call_user_func( array("kcSettings_{$type}", 'init') );
+				}
+			}
+		}
 
 		# Lock
 		add_filter( 'plugin_action_links', array(__CLASS__, '_lock'), 10, 4 );
@@ -91,14 +111,14 @@ class kcSettings {
 		add_action( 'admin_notices', array(__CLASS__, '_admin_notice') );
 
 		# Builder
-		require_once( self::$data['paths']['inc'].'/builder.php' );
+		require_once( self::$pdata['paths']['inc'].'/builder.php' );
 		kcSettings_builder::init();
 
 		# Contextual help
 		add_action( 'admin_head', array(__CLASS__, '_help') );
 
 		# Dev stuff
-		//add_action( 'admin_footer', array(__CLASS__, '_dev') );
+		add_action( 'admin_footer', array(__CLASS__, '_dev') );
 	}
 
 
@@ -206,24 +226,14 @@ class kcSettings {
 				}
 			}
 
-			self::$data['kcsb']	= $kcsb;
+			self::$pdata['kcsb'] = $kcsb;
 		}
 
 		$settings = self::_validate_settings( $settings );
 		if ( empty($settings) )
 			return;
 
-		self::$data['settings'] = $settings;
-		foreach ( array_keys($settings) as $type ) {
-			require_once( self::$data['paths']['inc']."/{$type}.php" );
-			if ( $type == 'plugin' ) {
-				foreach ( $settings['plugin'] as $group )
-					$do = new kcSettings_plugin( $group );
-			}
-			else {
-				call_user_func( array("kcSettings_{$type}", 'init') );
-			}
-		}
+		self::$pdata['settings'] = $settings;
 	}
 
 
@@ -395,19 +405,19 @@ class kcSettings {
 	public static function _sns_register() {
 		# WP < 3.3
 		if ( version_compare(get_bloginfo('version'), '3.3', '<') )
-			wp_register_script( 'jquery-ui-datepicker', self::$data['paths']['scripts']."/jquery.ui.datepicker.min.js", array('jquery-ui-core'), '1.8.11', true );
+			wp_register_script( 'jquery-ui-datepicker', self::$pdata['paths']['scripts']."/jquery.ui.datepicker.min.js", array('jquery-ui-core'), '1.8.11', true );
 
 		# Common
-		wp_register_script( 'modernizr',		self::$data['paths']['scripts'].'/modernizr.2.0.6.min.js', false, '2.0.6', true );
-		wp_register_script( 'kc-settings',	self::$data['paths']['scripts'].'/kc-settings.js', array('modernizr', 'jquery-ui-sortable', 'jquery-ui-datepicker', 'media-upload', 'thickbox'), self::$data['version'], true );
-		wp_register_style( 'kc-settings',		self::$data['paths']['styles'].'/kc-settings.css', array('thickbox'), self::$data['version'] );
+		wp_register_script( 'modernizr',		self::$pdata['paths']['scripts'].'/modernizr.2.0.6.min.js', false, '2.0.6', true );
+		wp_register_script( 'kc-settings',	self::$pdata['paths']['scripts'].'/kc-settings.js', array('modernizr', 'jquery-ui-sortable', 'jquery-ui-datepicker', 'media-upload', 'thickbox'), self::$pdata['version'], true );
+		wp_register_style( 'kc-settings',		self::$pdata['paths']['styles'].'/kc-settings.css', array('thickbox'), self::$pdata['version'] );
 
 		# Uploader
-		wp_register_script( 'kc-settings-upload', self::$data['paths']['scripts'].'/upload.js', array('jquery'), self::$data['version'] );
+		wp_register_script( 'kc-settings-upload', self::$pdata['paths']['scripts'].'/upload.js', array('jquery'), self::$pdata['version'] );
 
 		# Misc
 		# Lightbox Me http://buckwilson.me/lightboxme/
-		wp_register_script( 'jquery-lightbox_me', self::$data['paths']['scripts'].'/jquery.lightbox_me.js', array('jquery'), '2.3', true );
+		wp_register_script( 'jquery-lightbox_me', self::$pdata['paths']['scripts'].'/jquery.lightbox_me.js', array('jquery'), '2.3', true );
 	}
 
 
@@ -440,8 +450,8 @@ class kcSettings {
 					'info'			=> __( 'Click the "Media Library" tab to insert files that are already upload, or, upload your files, close this popup window, then click the "add files" button again to go to the "Media Library" tab to insert the files you just uploaded.', 'kc-settings' )
 				)
 			),
-			'_ids'		=> isset( self::$data['kcsb']['_ids'] ) ? self::$data['kcsb']['_ids'] : '',
-			'paths'		=> self::$data['paths']
+			'_ids'		=> isset( self::$pdata['kcsb']['_ids'] ) ? self::$pdata['kcsb']['_ids'] : '',
+			'paths'		=> self::$pdata['paths']
 		);
 
 		?>
@@ -455,7 +465,7 @@ class kcSettings {
 
 	private static function _samples( $types ) {
 		foreach ( $types as $type )
-			require_once( self::$data['paths']['inc'] . "/doc/sample/{$type}.php" );
+			require_once self::$pdata['paths']['inc'] . "/doc/sample/{$type}.php";
 	}
 
 
@@ -509,7 +519,7 @@ class kcSettings {
 	 * Lock plugin when there are other plugins/themes using it
 	 */
 	public static function _lock( $actions, $plugin_file, $plugin_data, $context ) {
-		if ( $plugin_file == self::$data['paths']['p_file'] && !empty(self::$data['options']['kids']) )
+		if ( $plugin_file == self::$pdata['paths']['p_file'] && !empty(self::$data['options']['kids']) )
 			unset( $actions['deactivate'] );
 
 		return $actions;
@@ -536,9 +546,18 @@ class kcSettings {
 
 	public static function _dev() {
 		echo '<pre>';
-		//print_r( self::$data['settings'] );
+		//print_r( self::get_data( 'settings', 'term', 'category', 'sample_section', 'priority' ) );
 		//print_r( get_option('kc_settings') );
 		echo '</pre>';
+	}
+
+
+	public static function get_data() {
+		$data = self::$pdata;
+		if ( !func_num_args() )
+			return $data;
+
+		return kcs_array_multi_get_value( $data, func_get_args() );
 	}
 }
 add_action( 'init', array('kcSettings', 'init') );
