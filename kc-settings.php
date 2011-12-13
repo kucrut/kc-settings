@@ -46,6 +46,11 @@ class kcSettings {
 		require_once "{$paths['inc']}/helper.php";
 		require_once "{$paths['inc']}/_deprecated.php";
 
+		# i18n
+		$mo_file = $paths['inc'].'/languages/kc-settings-'.get_locale().'.mo';
+		if ( is_readable($mo_file) )
+			load_textdomain( 'kc-settings', $mo_file );
+
 		# Setup termmeta table
 		self::_setup_termmeta_table();
 
@@ -66,11 +71,6 @@ class kcSettings {
 	public static function _admin_init() {
 		if ( !is_admin() )
 			return;
-
-		# i18n
-		$mo_file = self::$pdata['paths']['inc'].'/languages/kc-settings-'.get_locale().'.mo';
-		if ( is_readable($mo_file) )
-			load_textdomain( 'kc-settings', $mo_file );
 
 		# Register settings
 		if ( self::$pdata['settings'] ) {
