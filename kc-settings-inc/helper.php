@@ -83,7 +83,14 @@ function kcs_array_remove_empty( $arr, $rm_zero = true ) {
 	return $narr;
 }
 
-
+/**
+ * Get value of multidimensional array
+ *
+ * @param array $array Source array.
+ * @param array $keys Array of keys of the $array value to get
+ *
+ * @return mixed
+ */
 function kcs_array_multi_get_value( $array, $keys ) {
 	foreach ( $keys as $idx => $key ) {
 		unset( $keys[$idx] );
