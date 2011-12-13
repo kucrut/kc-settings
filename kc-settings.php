@@ -526,24 +526,6 @@ class kcSettings {
 	}
 
 
-	# Activation
-	public static function _activate() {
-		$options = get_option( 'kc_settings' );
-		if ( !$options )
-			$options = array();
-
-		if ( !isset($options['kids']) )
-			$options['kids'] = array();
-		update_option( 'kc_settings', $options );
-	}
-
-	# Deactivation
-	public static function _deactivate() {
-		# TODO: Anything else?
-		//delete_option( 'kc_settings' );
-	}
-
-
 	public static function _dev() {
 		echo '<pre>';
 		//print_r( self::get_data( 'settings', 'term', 'category', 'sample_section', 'priority' ) );
@@ -580,7 +562,25 @@ if ( !function_exists('kc_plugin_file') ) {
 
 
 $plugin_file = kc_plugin_file( __FILE__ );
-register_activation_hook( $plugin_file, array('kcSettings', '_activate') );
-register_deactivation_hook( $plugin_file, array('kcSettings', '_deactivate') );
+
+# Activation
+public static function kcSettings_activate() {
+	$options = get_option( 'kc_settings' );
+	if ( !$options )
+		$options = array();
+
+	if ( !isset($options['kids']) )
+		$options['kids'] = array();
+	update_option( 'kc_settings', $options );
+}
+
+# Deactivation
+public static function kcSettings_deactivate() {
+	# TODO: Anything else?
+	//delete_option( 'kc_settings' );
+}
+
+register_activation_hook( $plugin_file, 'kcSettings_activate' );
+#register_deactivation_hook( $plugin_file, 'kcSettings_deactivate' );
 
 ?>
