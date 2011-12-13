@@ -22,6 +22,7 @@ class kcSettings {
 		'version'		=> '2.2',
 		'paths'			=> '',
 		'settings'	=> array(),
+		'defaults'	=> array(),
 		'kcsb'			=> array()
 	);
 
@@ -118,7 +119,7 @@ class kcSettings {
 		add_action( 'admin_head', array(__CLASS__, '_help') );
 
 		# Dev stuff
-		add_action( 'admin_footer', array(__CLASS__, '_dev') );
+		//add_action( 'admin_footer', array(__CLASS__, '_dev') );
 	}
 
 
@@ -564,7 +565,7 @@ if ( !function_exists('kc_plugin_file') ) {
 $plugin_file = kc_plugin_file( __FILE__ );
 
 # Activation
-public static function kcSettings_activate() {
+function kcSettings_activate() {
 	$options = get_option( 'kc_settings' );
 	if ( !$options )
 		$options = array();
@@ -575,7 +576,7 @@ public static function kcSettings_activate() {
 }
 
 # Deactivation
-public static function kcSettings_deactivate() {
+function kcSettings_deactivate() {
 	# TODO: Anything else?
 	//delete_option( 'kc_settings' );
 }
