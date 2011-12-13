@@ -272,10 +272,9 @@ class kcSettings {
 						# Set the location
 						if ( !isset($group['menu_location']) )
 							$group['menu_location'] = 'options-general.php';
-
 					}
 
-					$group['options'] = self::_validate_sections( $group['options'] );
+					$group['options'] = self::_validate_sections( $group['options'], $type, $group['prefix'] );
 					if ( empty($group['options']) )
 						$group = null;
 				}
@@ -304,7 +303,8 @@ class kcSettings {
 
 
 	# Validate each setting's section
-	private static function _validate_sections( $sections ) {
+	private static function _validate_sections( $sections, $type = '', $prefix = '' ) {
+		$defaults = array();
 		foreach ( $sections as $s_idx => $section ) {
 			foreach ( array('id', 'title', 'fields') as $c ) {
 				if ( !isset($section[$c]) || empty($section[$c]) || ($c == 'fields' && !is_array($section[$c])) ) {
@@ -321,14 +321,22 @@ class kcSettings {
 						trigger_error( self::$xdata['bootsrap_messages']["field_no_{$c}"] );
 						continue 2;
 					}
+
 				}
+
 				$section['fields'][$field['id']] = $field;
+				# Default
+				if ( $type == 'plugin' && isset($field['default']) )
+					$defaults['plugin'][$prefix][$section['id']][$field['id']] = $field['default'];
 			}
 
 			unset( $sections[$s_idx] );
 
-			if ( !empty($section['fields']) )
+			if ( !empty($section['fields']) ) {
 				$sections[$section['id']] = $section;
+				if ( $type == 'plugin' && !empty($defaults) )
+				self::$pdata['defaults'] = array_merge_recursive( self::$pdata['defaults'], $defaults );
+			}
 		}
 		return $sections;
 	}

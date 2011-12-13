@@ -131,6 +131,30 @@ function kc_get_option( $prefix, $section = '', $field = '') {
 
 
 /**
+ * Get default values
+ *
+ * @param string $type Options type, required
+ * @param string $prefix Options prefix, required
+ * @param string $section Section id, optional
+ * @param string $field Field id, optional
+ *
+ * @return bool|array|string
+ *
+ * @since 2.5
+ */
+function kc_get_default( $type, $prefix, $section = '', $field = '' ) {
+	$defaults = kcSettings::get_data( 'defaults', $type, $prefix );
+	if ( !$defaults || func_num_args() < 3 )
+		return $defaults;
+
+	$keys = func_get_args();
+	unset( $keys[0] );
+	unset( $keys[1] );
+	return kcs_array_multi_get_value( $defaults, $keys );
+}
+
+
+/**
  * Check role of current user
  *
  * Will determine if current user is allowed to do the task.
