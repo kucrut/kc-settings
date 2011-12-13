@@ -18,6 +18,8 @@ License: GPL v2
 */
 
 class kcSettings {
+	private static $xdata = array();
+
 	protected static $pdata = array(
 		'version'		=> '2.2',
 		'paths'			=> '',
@@ -52,22 +54,6 @@ class kcSettings {
 
 		# Include samples (for development)
 		//self::_samples( array('theme') );
-
-		# Settings bootstrap error messages
-		self::$data['messages'] = array(
-			'no_prefix'					=> __( "One of your settings doesn't have <b>prefix</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'no_menu_title'			=> __( "One of your settings doesn't have <b>menu title</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'no_page_title'			=> __( "One of your settings doesn't have <b>page title</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'no_options'				=> __( "One of your settings doesn't have <b>options</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'section_no_fields'	=> __( "One of your settings' section doesn't have <b>fields</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'section_no_id'			=> __( "One of your settings' sections doesn't have <b>ID</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'section_no_title'	=> __( "One of your settings' sections doesn't have <b>title</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'field_no_id'				=> __( "One of your fields doesn't have <b>ID</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'field_no_title'		=> __( "One of your fields doesn't have <b>title</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'field_no_type'			=> __( "One of your fields doesn't have <b>type</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'field_no_opt'			=> __( "One of your fields doesn't have the required <b>options</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'field_no_cb'				=> __( "One of your fields doesn't have the required <b>callback</b> set. Therefore it has NOT been added.", 'kc-settings')
-		);
 
 		# Get all settings
 		self::_bootstrap_settings();
@@ -170,6 +156,22 @@ class kcSettings {
 	 * Get all settings
 	 */
 	private static function _bootstrap_settings() {
+		# Settings bootstrap error messages
+		self::$xdata['bootsrap_messages'] = array(
+			'no_prefix'					=> __( "One of your settings doesn't have <b>prefix</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'no_menu_title'			=> __( "One of your settings doesn't have <b>menu title</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'no_page_title'			=> __( "One of your settings doesn't have <b>page title</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'no_options'				=> __( "One of your settings doesn't have <b>options</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'section_no_fields'	=> __( "One of your settings' section doesn't have <b>fields</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'section_no_id'			=> __( "One of your settings' sections doesn't have <b>ID</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'section_no_title'	=> __( "One of your settings' sections doesn't have <b>title</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'field_no_id'				=> __( "One of your fields doesn't have <b>ID</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'field_no_title'		=> __( "One of your fields doesn't have <b>title</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'field_no_type'			=> __( "One of your fields doesn't have <b>type</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'field_no_opt'			=> __( "One of your fields doesn't have the required <b>options</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'field_no_cb'				=> __( "One of your fields doesn't have the required <b>callback</b> set. Therefore it has NOT been added.", 'kc-settings')
+		);
+
 		$kcsb = array(
 			'settings'	=> get_option( 'kcsb' ),
 			'_ids'			=> array(
@@ -251,7 +253,7 @@ class kcSettings {
 
 			foreach ( $groups as $g_idx => $group ) {
 				if ( !is_array($group) || empty($group) ) {
-					trigger_error( self::$data['messages']['no_options'] );
+					trigger_error( self::$xdata['bootsrap_messages']['no_options'] );
 					unset( $groups[$g_idx] );
 					continue;
 				}
@@ -259,7 +261,7 @@ class kcSettings {
 				if ( $type == 'plugin' ) {
 					foreach ( array('prefix', 'menu_title', 'page_title', 'options') as $c ) {
 						if ( !isset($group[$c]) || empty($group[$c]) || ($c == 'options' && !is_array($group[$c])) ) {
-							trigger_error( self::$data['messages']["no_{$c}"] );
+							trigger_error( self::$xdata['bootsrap_messages']["no_{$c}"] );
 							unset( $groups[$g_idx] );
 							continue 2;
 						}
@@ -306,7 +308,7 @@ class kcSettings {
 		foreach ( $sections as $s_idx => $section ) {
 			foreach ( array('id', 'title', 'fields') as $c ) {
 				if ( !isset($section[$c]) || empty($section[$c]) || ($c == 'fields' && !is_array($section[$c])) ) {
-					trigger_error( self::$data['messages']["section_no_{$c}"] );
+					trigger_error( self::$xdata['bootsrap_messages']["section_no_{$c}"] );
 					unset( $sections[$s_idx] );
 					continue 2;
 				}
@@ -316,7 +318,7 @@ class kcSettings {
 				unset( $section['fields'][$f_idx] );
 				foreach ( array('id', 'title', 'type') as $c ) {
 					if ( !isset($field[$c]) || empty($field[$c]) ) {
-						trigger_error( self::$data['messages']["field_no_{$c}"] );
+						trigger_error( self::$xdata['bootsrap_messages']["field_no_{$c}"] );
 						continue 2;
 					}
 				}
