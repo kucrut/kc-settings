@@ -484,8 +484,13 @@ jQuery(document).ready(function($) {
 
 	// Help trigger
 	$('a.kc-help-trigger').live('click', function() {
-		$('#contextual-help-link').click();
-		$('#screen-meta').kcsbGoto();
+		if ( win.kcHelpBox !== undefined )  {
+			win.kcPopHelp();
+		}
+		else {
+			$('#contextual-help-link').click();
+			$('#screen-meta').kcsbGoto();
+		}
 		return false;
 	});
 
