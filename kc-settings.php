@@ -274,14 +274,14 @@ class kcSettings {
 							$group['menu_location'] = 'options-general.php';
 					}
 
-					$group['options'] = self::_validate_sections( $group['options'], $type, $group['prefix'] );
+					$group['options'] = self::_validate_sections( $type, $group['options'], $group );
 					if ( empty($group['options']) )
 						$group = null;
 				}
 
 				elseif ( in_array($type, array('post', 'term', 'user')) ) {
 					foreach ( $group as $obj => $sections ) {
-						$group[$obj] = self::_validate_sections( $sections );
+						$group[$obj] = self::_validate_sections( $type, $sections );
 						if ( empty($group[$obj]) )
 							$group = null;
 					}
@@ -303,7 +303,7 @@ class kcSettings {
 
 
 	# Validate each setting's section
-	private static function _validate_sections( $sections, $type = '', $prefix = '' ) {
+	private static function _validate_sections( $type, $sections, $group = '' ) {
 		$defaults = array();
 		foreach ( $sections as $s_idx => $section ) {
 			foreach ( array('id', 'title', 'fields') as $c ) {
@@ -327,7 +327,7 @@ class kcSettings {
 				$section['fields'][$field['id']] = $field;
 				# Default
 				if ( $type == 'plugin' && isset($field['default']) )
-					$defaults['plugin'][$prefix][$section['id']][$field['id']] = $field['default'];
+					$defaults['plugin'][$group['prefix']][$section['id']][$field['id']] = $field['default'];
 			}
 
 			unset( $sections[$s_idx] );
