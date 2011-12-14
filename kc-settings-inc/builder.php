@@ -353,27 +353,27 @@ class kcSettings_builder {
 
 	public static function validate( $new ) {
 		# Delete
-		$old = self::$pdata['kcsb']['settings'];
+		$kcsb = get_option( 'kcsb' );
 		if ( !isset($new['id']) ) {
-			return $new;
+			return $kcsb;
 		}
 		# Add / Update
 		else {
 			if ( empty($new['id']) ) {
 				set_transient( 'kcsb', array('new' => true, 'item' => $new) );
-				return $old;
+				return $kcsb;
 			}
 			else {
-				$_temp = $old;
-				$old[$new['id']] = $new;
+				$_temp = $kcsb;
+				$kcsb[$new['id']] = $new;
 
 				# No change?
-				if ( $_temp == $old )
+				if ( $_temp == $kcsb )
 					self::_success();
 			}
 		}
 
-		return $old;
+		return $kcsb;
 	}
 
 
@@ -534,7 +534,7 @@ class kcSettings_builder {
 					<ul>
 						<li>
 							<label class="kcsb-ml"><?php _e('ID', 'kc-settings') ?></label>
-							<input class="kcsb-mi kcsb-slug kcsb-ids required" type="text" name="kcsb[id]" value="<?php echo $values['id'] ?>" data-ids="settings" <?php if ( $mode == 'edit' ) echo 'disabled="disabled" ' ?>/>
+							<input class="kcsb-mi kcsb-slug kcsb-ids required" type="text" name="kcsb[id]" value="<?php echo $values['id'] ?>" data-ids="settings" />
 						</li>
 						<li>
 							<label class="kcsb-ml"><?php _e('Type') ?></label>

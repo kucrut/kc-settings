@@ -259,6 +259,7 @@ class kcSettings {
 				}
 
 				if ( $type == 'plugin' ) {
+					$g_idx = $group['prefix'];
 					foreach ( array('prefix', 'menu_title', 'page_title', 'options') as $c ) {
 						if ( !isset($group[$c]) || empty($group[$c]) || ($c == 'options' && !is_array($group[$c])) ) {
 							trigger_error( self::$xdata['bootsrap_messages']["no_{$c}"] );
@@ -325,7 +326,7 @@ class kcSettings {
 				}
 
 				$section['fields'][$field['id']] = $field;
-				# Default
+				# Has default value?
 				if ( $type == 'plugin' && isset($field['default']) )
 					$defaults['plugin'][$group['prefix']][$section['id']][$field['id']] = $field['default'];
 			}
@@ -333,9 +334,17 @@ class kcSettings {
 			unset( $sections[$s_idx] );
 
 			if ( !empty($section['fields']) ) {
+				if ( $type == 'plugin' ) {
+					# Store default values
+					if ( !empty($defaults) )
+						self::$pdata['defaults'] = array_merge_recursive( self::$pdata['defaults'], $defaults );
+
+					# Set metabox position
+					if ( $group['display'] == 'metabox' && ( !isset($section['position']) || !in_array($section['position'], array('normal', 'side')) ) )
+						$section['position'] = 'normal';
+				}
+
 				$sections[$section['id']] = $section;
-				if ( $type == 'plugin' && !empty($defaults) )
-				self::$pdata['defaults'] = array_merge_recursive( self::$pdata['defaults'], $defaults );
 			}
 		}
 		return $sections;
