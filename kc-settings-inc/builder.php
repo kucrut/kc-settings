@@ -17,7 +17,10 @@ class kcSettings_builder {
 					'id'						=> '',
 					'title'					=> '',
 					'desc'					=> '',
-					'priority'			=> 'high',
+					'metabox'				=> array(
+						'context'				=> 'normal',
+						'priority'			=> 'default',
+					),
 					'fields'				=> array(
 						array(
 							'id'				=> '',
@@ -186,15 +189,40 @@ class kcSettings_builder {
 					'label'		=> __('Special', 'kc-settings')
 				)
 			),
-			'priorities'	=> array(
-				array(
-					'value'		=> 'high',
-					'label'		=> __('High', 'kc-settings'),
-					'default'	=> true
+			'metabox'			=> array(
+				'context'		=> array(
+					'label'		=> __('Context', 'kc-settings'),
+					'options'	=> array(
+						array(
+							'label'	=> __('Normal', 'kc-settings'),
+							'value'	=> 'normal'
+						),
+						array(
+							'label'	=> __('Advanced', 'kc-settings'),
+							'value'	=> 'advanced'
+						),
+						array(
+							'label'	=> __('Side', 'kc-settings'),
+							'value'	=> 'side'
+						)
+					)
 				),
-				array(
-					'value'		=> 'special',
-					'label'		=> __('Normal', 'kc-settings')
+				'priority'	=> array(
+					'label'		=> __('Priority', 'kc-settings'),
+					'options'	=> array(
+						array(
+							'label'	=> __('High', 'kc-settings'),
+							'value'	=> 'high'
+						),
+						array(
+							'label'	=> __('Default', 'kc-settings'),
+							'value'	=> 'default'
+						),
+						array(
+							'label'	=> __('Low', 'kc-settings'),
+							'value'	=> 'low'
+						)
+					)
 				)
 			)
 		);
@@ -654,18 +682,22 @@ class kcSettings_builder {
 										?>
 									</ul>
 								</li>
-								<?php if ( !isset($s_val['priority']) ) $s_val['priority'] = 'high' ?>
+								<?php
+									if ( !isset($s_val['metabox']) )
+										$s_val['metabox'] = array('context' => 'normal', 'priority', 'default');
+									foreach ( $options['metabox'] as $mb_prop => $prop ) { ?>
 								<li class="global_idep_type post">
-									<label class="kcsb-ml nr"><?php _e('Priority', 'kc-settings') ?></label>
+									<label class="kcsb-ml nr"><?php echo $prop['label'] ?></label>
 									<?php
 										echo kcForm::select(array(
-											'attr'		=> array('name' => "{$s_name}[priority]", 'class' => 'kcsb-mi'),
-											'options'	=> $options['priorities'],
-											'current'	=> $s_val['priority'],
+											'attr'		=> array('name' => "{$s_name}[metabox][$mb_prop]", 'class' => 'kcsb-mi'),
+											'options'	=> $prop['options'],
+											'current'	=> $s_val['metabox'][$mb_prop],
 											'none'		=> false
 										));
 									?>
 								</li>
+								<?php } ?>
 								<li class="fields">
 									<h4 class="kcsb-ml"><?php _e('Fields', 'kc-settings') ?></h4>
 									<ul class="kcsb-mi kc-rows">

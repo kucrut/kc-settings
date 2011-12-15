@@ -2,7 +2,7 @@
 
 /**
  * @package KC_Settings
- * @version 2.2
+ * @version 2.5
  */
 
 
@@ -10,7 +10,7 @@
 Plugin name: KC Settings
 Plugin URI: http://kucrut.org/2010/10/kc-settings/
 Description: Easily create plugin/theme settings page, custom fields metaboxes, term meta and user meta settings.
-Version: 2.2
+Version: 2.5
 Author: Dzikri Aziz
 Author URI: http://kucrut.org/
 License: GPL v2
@@ -21,7 +21,6 @@ class kcSettings {
 	private static $xdata = array();
 
 	protected static $pdata = array(
-		'version'		=> '2.2',
 		'paths'			=> '',
 		'settings'	=> array(),
 		'defaults'	=> array(),
@@ -39,7 +38,7 @@ class kcSettings {
 		if ( !is_array($paths) )
 			return false;
 
-		self::$data['options'] = get_option('kc_settings');
+		self::$pdata['status'] = get_option( 'kc_settings' );
 		self::$pdata['paths'] = $paths;
 
 		require_once "{$paths['inc']}/form.php";
@@ -453,11 +452,11 @@ class kcSettings {
 
 		# Common
 		wp_register_script( 'modernizr',		self::$pdata['paths']['scripts'].'/modernizr.2.0.6.min.js', false, '2.0.6', true );
-		wp_register_script( 'kc-settings',	self::$pdata['paths']['scripts'].'/kc-settings.js', array('modernizr', 'jquery-ui-sortable', 'jquery-ui-datepicker', 'media-upload', 'thickbox'), self::$pdata['version'], true );
-		wp_register_style( 'kc-settings',		self::$pdata['paths']['styles'].'/kc-settings.css', array('thickbox'), self::$pdata['version'] );
+		wp_register_script( 'kc-settings',	self::$pdata['paths']['scripts'].'/kc-settings.js', array('modernizr', 'jquery-ui-sortable', 'jquery-ui-datepicker', 'media-upload', 'thickbox'), self::$pdata['status']['version'], true );
+		wp_register_style( 'kc-settings',		self::$pdata['paths']['styles'].'/kc-settings.css', array('thickbox'), self::$pdata['status']['version'] );
 
 		# Uploader
-		wp_register_script( 'kc-settings-upload', self::$pdata['paths']['scripts'].'/upload.js', array('jquery'), self::$pdata['version'] );
+		wp_register_script( 'kc-settings-upload', self::$pdata['paths']['scripts'].'/upload.js', array('jquery'), self::$pdata['status']['version'] );
 
 		# Misc
 		# Lightbox Me http://buckwilson.me/lightboxme/
@@ -563,7 +562,7 @@ class kcSettings {
 	 * Lock plugin when there are other plugins/themes using it
 	 */
 	public static function _lock( $actions, $plugin_file, $plugin_data, $context ) {
-		if ( $plugin_file == self::$pdata['paths']['p_file'] && !empty(self::$data['options']['kids']) )
+		if ( $plugin_file == self::$pdata['paths']['p_file'] && !empty(self::$data['status']['kids']) )
 			unset( $actions['deactivate'] );
 
 		return $actions;
@@ -609,22 +608,61 @@ $plugin_file = kc_plugin_file( __FILE__ );
 
 # Activation
 function kcSettings_activate() {
-	$options = get_option( 'kc_settings' );
-	if ( !$options )
-		$options = array();
+	$status = get_option( 'kc_settings' );
+	if ( !$status )
+		$status = array();
 
-	if ( !isset($options['kids']) )
-		$options['kids'] = array();
-	update_option( 'kc_settings', $options );
+	if ( !isset($data['kids']) )
+		$status['kids'] = array();
+
+	$old_version = ( isset($status['version']) ) ? $status['version'] : '2.2';
+	$status['version'] = '2.5';
+
+	update_option( 'kc_settings', $status );
+
+	if ( version_compare($old_version, '2.5', '<') )
+		kcSettings_upgrade( array('kcsb', 'kcsb_metabox') );
 }
+register_activation_hook( $plugin_file, 'kcSettings_activate' );
+
 
 # Deactivation
 function kcSettings_deactivate() {
 	# TODO: Anything else?
 	//delete_option( 'kc_settings' );
 }
-
-register_activation_hook( $plugin_file, 'kcSettings_activate' );
 #register_deactivation_hook( $plugin_file, 'kcSettings_deactivate' );
+
+
+
+function kcSettings_upgrade( $parts = array() ) {
+	if ( in_array('kcsb', $parts) ) {
+		$kcsb = get_option( 'kcsb' );
+		if ( is_array($kcsb) ) {
+			foreach ( $kcsb as $id => $item ) {
+				foreach ($item['sections'] as $section_id => $section ) {
+					# Metabox (20111215)
+					if ( in_array('kcsb_metabox', $parts) ) {
+						if ( isset($section['priority']) || ($item['display'] == 'metabox' && !isset($section['metabox'])) ) {
+							$section['metabox'] = array(
+								'context'		=> 'normal',
+								'priority'	=> $section['priority']
+							);
+							unset( $section['priority'] );
+						}
+					}
+
+					# Return the section
+					$item['sections'][$section_id] = $section;
+				}
+
+				# Return the item
+				$kcsb[$id] = $item;
+			}
+
+			update_option( 'kcsb', $kcsb );
+		}
+	}
+}
 
 ?>
