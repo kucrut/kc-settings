@@ -158,18 +158,19 @@ class kcSettings {
 	private static function _bootstrap_settings() {
 		# Settings bootstrap error messages
 		self::$xdata['bootsrap_messages'] = array(
-			'no_prefix'					=> __( "One of your settings doesn't have <b>prefix</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'no_menu_title'			=> __( "One of your settings doesn't have <b>menu title</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'no_page_title'			=> __( "One of your settings doesn't have <b>page title</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'no_options'				=> __( "One of your settings doesn't have <b>options</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'section_no_fields'	=> __( "One of your settings' section doesn't have <b>fields</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'section_no_id'			=> __( "One of your settings' sections doesn't have <b>ID</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'section_no_title'	=> __( "One of your settings' sections doesn't have <b>title</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'field_no_id'				=> __( "One of your fields doesn't have <b>ID</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'field_no_title'		=> __( "One of your fields doesn't have <b>title</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'field_no_type'			=> __( "One of your fields doesn't have <b>type</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'field_no_opt'			=> __( "One of your fields doesn't have the required <b>options</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'field_no_cb'				=> __( "One of your fields doesn't have the required <b>callback</b> set. Therefore it has NOT been added.", 'kc-settings')
+			'no_prefix'						=> __( "One of your settings doesn't have <b>prefix</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'no_menu_title'				=> __( "One of your settings doesn't have <b>menu title</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'no_page_title'				=> __( "One of your settings doesn't have <b>page title</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'no_options'					=> __( "One of your settings doesn't have <b>options</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'section_no_fields'		=> __( "One of your settings' section doesn't have <b>fields</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'section_no_id'				=> __( "One of your settings' sections doesn't have <b>ID</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'section_no_title'		=> __( "One of your settings' sections doesn't have <b>title</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'section_metabox_old'	=> __( "One of your settings is still using the old format for metabox setting, please migrate it to the new one.", 'kc-settings'),
+			'field_no_id'					=> __( "One of your fields doesn't have <b>ID</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'field_no_title'			=> __( "One of your fields doesn't have <b>title</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'field_no_type'				=> __( "One of your fields doesn't have <b>type</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'field_no_opt'				=> __( "One of your fields doesn't have the required <b>options</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'field_no_cb'					=> __( "One of your fields doesn't have the required <b>callback</b> set. Therefore it has NOT been added.", 'kc-settings')
 		);
 
 		$kcsb = array(
@@ -288,8 +289,16 @@ class kcSettings {
 					}
 				}
 
-				if ( !empty($group) )
+				# Include this group only if it's valid
+				if ( !empty($group) ) {
+					# Plugin/themes only: Set page layout
+					if ( isset($group['options']['has_sidebar']) ) {
+						unset( $group['options']['has_sidebar'] );
+						$group['has_sidebar'] = true;
+					}
+
 					$nu[$type][$g_idx] = $group;
+				}
 			}
 
 		}
@@ -334,14 +343,29 @@ class kcSettings {
 			unset( $sections[$s_idx] );
 
 			if ( !empty($section['fields']) ) {
+				# Plugin/themes/post only: Set metabox position & priority
+				if ( $type == 'post' || ($type == 'plugin' && $group['display']) == 'metabox' ) {
+					# TODO: remove in version 3.0
+					if ( isset($section['priority']) ) {
+						trigger_error( self::$xdata['bootsrap_messages']["section_metabox_old"] );
+						$mb_priority = $section['priority'];
+						unset( $section['priority'] );
+					}
+
+					if ( !isset($section['metabox']) )
+						$section['metabox'] = $mb_default = array(
+							'context'		=> 'normal',
+							'priority'	=> ( isset($mb_priority) && in_array($mb_priority, array('high', 'default', 'low')) ) ? $mb_priority : 'default'
+						);
+				}
+
+				# Plugin/themes only
 				if ( $type == 'plugin' ) {
 					# Store default values
 					if ( !empty($defaults) )
 						self::$pdata['defaults'] = array_merge_recursive( self::$pdata['defaults'], $defaults );
-
-					# Set metabox position
-					if ( $group['display'] == 'metabox' && ( !isset($section['position']) || !in_array($section['position'], array('normal', 'side')) ) )
-						$section['position'] = 'normal';
+					if ( $section['metabox']['context'] == 'side' )
+						$sections['has_sidebar'] = true;
 				}
 
 				$sections[$section['id']] = $section;

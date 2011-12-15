@@ -1,3 +1,8 @@
+/* Metaboxes */
+#kc-settings-form .meta-box-sortables {margin-left:16px}
+#kc-settings-form #postbox-container-1 .meta-box-sortables {margin-left:0}
+#kc-settings-form #advanced-sortables {min-height:0}
+
 .section-desc {
 	margin:1.5em 0;
 	line-height:1.4}
