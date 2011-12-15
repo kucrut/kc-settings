@@ -351,29 +351,33 @@ class kcSettings_builder {
 	}
 
 
-	public static function validate( $new ) {
-		# Delete
-		$kcsb = get_option( 'kcsb' );
-		if ( !isset($new['id']) ) {
-			return $kcsb;
+	public static function validate( $values ) {
+		/**
+		 * Task: clone / delete an item
+		 * Just return the values, assume it's valid
+		 */
+		if ( !isset($values['id']) ) {
+			return $values;
 		}
-		# Add / Update
+
+		/**
+		 * Task: Add / Edit item: get all items, and if:
+		 * 0. Error: store the new item in the transient db
+		 * 1. Sucess: add the new item
+		 */
 		else {
-			if ( empty($new['id']) ) {
-				set_transient( 'kcsb', array('new' => true, 'item' => $new) );
-				return $kcsb;
+			$settings = self::$pdata['kcsb']['settings'];
+
+			if ( empty($values['id']) || $values['id'] == 'id' ) {
+				$values['id'] = '';
+				set_transient( 'kcsb', array('new' => true, 'item' => $values) );
 			}
 			else {
-				$_temp = $kcsb;
-				$kcsb[$new['id']] = $new;
-
-				# No change?
-				if ( $_temp == $kcsb )
-					self::_success();
+				$settings[$values['id']] = $values;
 			}
-		}
 
-		return $kcsb;
+			return $settings;
+		}
 	}
 
 
@@ -384,9 +388,9 @@ class kcSettings_builder {
 		# Add
 		elseif ( !is_array($old) || count($old) < count($new) )
 			$message = __('Setting successfully created.', 'kc-settings');
-		# Update
+		# Edit/Update
 		else
-			$message = __('Setting successfully saved.', 'kc-settings');
+			$message = __('Setting successfully updated.', 'kc-settings');
 
 		if ( !count( get_settings_errors() ) )
 			add_settings_error('general', 'settings_updated', $message, 'updated');

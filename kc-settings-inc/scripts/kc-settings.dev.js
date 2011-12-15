@@ -132,8 +132,8 @@ function kcsbSlug( str ) {
 	$.fn.kcsbCheck = function() {
 		var $input = $(this);
 
-		if ( $input.val() == '' ) {
-			$input.focus().css('borderColor', '#ff0000');
+		if ( ($input.attr('name') === 'kcsb[id]' && $input.val() === 'id') || $input.val() === '' ) {
+			$input.val('').focus().css('borderColor', '#ff0000');
 			return false;
 		} else {
 			$input.removeAttr('style');
