@@ -65,6 +65,7 @@ input.kcs-input {
 	background:none}
 
 /* Filelist */
+.kcsf-upload {display:inline-block;}
 .kcs-file .info {margin-top:0;}
 .kcs-file ul {padding-bottom:1em}
 .kcs-file .row {
@@ -110,6 +111,25 @@ input.kcs-files {margin-right:.5em}
   border-radius:5px}
 
 .description .impo {color:#cc0000}
+
+/* Post sidebar metabox */
+.kcs-sideform > li {padding-bottom:1em;}
+.kcs-sideform input.kcs-input {width:99%}
+.kcs-sideform .side-label {
+	display:block;
+	font-weight:bolder;
+	margin-bottom:.25em;
+}
+.kcs-sideform .kcs-check {padding-left:.5em;}
+#poststuff .kcs-sideform p {margin-bottom:0;}
+.kcs-sideform .kcs-file label {
+	overflow:hidden;
+	text-overflow:ellipsis;
+	white-space:nowrap;
+	width:160px;
+	display:inline-block;
+}
+
 
 
 

@@ -31,11 +31,11 @@ class kcSettings_post {
 			if ( (isset($section['role']) && !empty($section['role'])) && !kcs_check_roles($section['role']) )
 				continue;
 
-			# set metabox priority
-			$priority = ( isset($section['priority']) && in_array($section['priority'], array('low', 'high')) ) ? $section['priority'] : 'high';
+			# set metabox properties
+			#$priority = ( isset($section['priority']) && in_array($section['priority'], array('low', 'high')) ) ? $section['priority'] : 'high';
 
 			# add metabox
-			add_meta_box( "kc-metabox-{$post_type}-{$section['id']}", $section['title'], array(__CLASS__, '_fill_meta_box'), $post_type, 'normal', $priority, $section );
+			add_meta_box( "kc-metabox-{$post_type}-{$section['id']}", $section['title'], array(__CLASS__, '_fill_meta_box'), $post_type, $section['metabox']['context'], $section['metabox']['priority'], $section );
 		}
 	}
 
@@ -43,21 +43,34 @@ class kcSettings_post {
 	# Populate metabox
 	public static function _fill_meta_box( $object, $box ) {
 		$section = $box['args'];
-
-		$output  = "<input type='hidden' name='{$object->post_type}_kc_meta_box_nonce' value='".wp_create_nonce( '___kc_meta_box_nonce___' )."' />";
-		$output .= "<table class='form-table'>\n";
-
-		foreach ( $section['fields'] as $field ) {
-			$label_for = ( !in_array($field['type'], array('checkbox', 'radio')) ) ? $field['id'] : null;
-			$output .= "\t<tr>\n";
-			$output .= kcs_form_label( $field['title'], $label_for, true, false );
-			$output .= "\t\t<td>";
-			$output .= kcs_settings_field( array( 'mode' => 'post', 'object_id' => $object->ID, 'section' => $section['id'], 'field' => $field ) );
-			$output .= "\t\t</td>\n";
-			$output .= "\t</tr>\n";
+		$on_side = $section['metabox']['context'] == 'side' ? true : false;
+		if ( $on_side ) {
+			$wraps = array(
+				'block'	=> array("<ul class='kcs-sideform'>\n", "</ul>\n"),
+				'row'		=> array("\t<li>\n", "\t</li>\n")
+			);
+		}
+		else {
+			$wraps = array(
+				'block'	=> array("<table class='form-table'>\n", "</table>\n"),
+				'row'		=> array("\t<tr>\n", "\t</tr>\n")
+			);
 		}
 
-		$output .= "</table>\n";
+		$output  = "<input type='hidden' name='{$object->post_type}_kc_meta_box_nonce' value='".wp_create_nonce( '___kc_meta_box_nonce___' )."' />";
+		$output .= $wraps['block'][0];
+
+		foreach ( $section['fields'] as $field ) {
+			$label_for = ( !in_array($field['type'], array('checkbox', 'radio', 'multiinput', 'file')) ) ? $field['id'] : null;
+			$output .= $wraps['row'][0];
+			$f_label = kcs_form_label( $field['title'], $label_for, !$on_side, false );
+			$output .= ( $on_side ) ? "\t\t<span class='side-label'>{$f_label}</span>\n" : $f_label;
+			$f_input = kcs_settings_field( array( 'mode' => 'post', 'object_id' => $object->ID, 'section' => $section['id'], 'field' => $field ) );
+			$output .= ( $on_side ) ? $f_input : "\t\t<td>\n\t\t\t{$f_input}\n\t\t</td>\n";
+			$output .= $wraps['row'][1];
+		}
+
+		$output .= $wraps['block'][1];
 
 		echo $output;
 	}

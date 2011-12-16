@@ -328,7 +328,7 @@ function kcs_settings_field( $args ) {
 		if ( !in_array($type, array('checkbox', 'radio')) ) {
 			$field_attr['id'] = $id;
 		}
-		if ( in_array($type, array('text', 'date', 'input', 'textarea')) ) {
+		if ( in_array($type, array('text', 'date', 'color', 'input', 'textarea')) ) {
 			$field_attr['class'] .= ' kcs-input';
 		}
 

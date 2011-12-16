@@ -22,6 +22,16 @@ function kcsbSlug( str ) {
 }
 
 
+function invertColor( color ) {
+	inverted = new RGBColor(color);
+	if ( inverted.ok ) {
+		color = 'rgb(' + (255 - inverted.r) + ', ' + (255 - inverted.g) + ', ' + (255 - inverted.b) + ')';
+	}
+
+	return color;
+}
+
+
 (function($) {
 	// File
 	win.kcsInsertFiles = function() {
@@ -378,7 +388,11 @@ jQuery(document).ready(function($) {
 	var $colorInputs = $('input[type=color]');
 	if ( $colorInputs.length && Modernizr.inputtypes.color === false ) {
 		Modernizr.load([{
-			load: [win.kcSettings.paths.scripts+'/colorpicker/js/colorpicker.js', win.kcSettings.paths.scripts+'/colorpicker/css/colorpicker.css'],
+			load: [
+				win.kcSettings.paths.scripts+'/colorpicker/js/colorpicker.js',
+				win.kcSettings.paths.scripts+'/colorpicker/css/colorpicker.css',
+				win.kcSettings.paths.scripts+'/rgbcolor.js'
+			],
 			complete: function () {
 				$colorInputs.ColorPicker({
 					onBeforeShow: function () {
@@ -386,13 +400,20 @@ jQuery(document).ready(function($) {
 					},
 					onSubmit: function(hsb, hex, rgb, el) {
 						var clr = '#'+hex;
-						$(el).css('backgroundColor', clr )
+						$(el).css({
+							backgroundColor: clr,
+							color: invertColor( clr )
+						})
 							.val( clr )
 							.ColorPickerHide();
 					}
 				}).each(function() {
-					if ( $(this).val() !== '' )
-						$(this).css('backgroundColor', $(this).val() );
+					var $el = $(this);
+					if ( $el.val() !== '' )
+						$el.css({
+							backgroundColor: this.value,
+							color: invertColor( this.value )
+						});
 				});
 			}
 		}]);
