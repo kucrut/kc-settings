@@ -138,7 +138,7 @@ function mytheme_options( $settings ) {
 			'priority'	=> 'default',	// default | high | low
 		),
 		'options'				=> $options,
-		'help'					=> array(
+		'help'					=> array(		// Here goes the contextual helps
 			array(
 				'id'			=> 'help_1',
 				'title'		=> 'Help title',
