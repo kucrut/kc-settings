@@ -98,17 +98,23 @@
 			<ul>
 				<li>
 					<h4>All data</h4>
-					<pre>$var = kc_get_option( '<span>prefix</span>' );</pre>
+					<pre>$var = kc_get_option( <span>$prefix</span> );</pre>
 					<p>Or, you can also use WordPress' builtin function:</p>
 					<pre>$var = get_option( '<span>prefix</span>_settings' );</pre>
 				</li>
 				<li>
 					<h4>Section</h4>
-					<pre>$var = kc_get_option( <span>'prefix'</span>, <span>'section_id'</span> );</pre>
+					<pre>$var = kc_get_option( <span>$prefix</span>, <span>$section_id</span> );</pre>
 				</li>
 				<li>
 					<h4>Field</h4>
-					<pre>$var = kc_get_option( <span>'prefix'</span>, <span>'section_id'</span>, <span>'field_id'</span> );</pre>
+					<pre>$var = kc_get_option( <span>$prefix</span>, <span>$section_id</span>, <span>$field_id</span> );</pre>
+				</li>
+				<li>
+					<h4>Default values</h4>
+					<p>If you have set a default value for your field, you can get it like this:</p>
+					<pre>$var = kc_get_default( <span>$type</span>, <span>$prefix</span>, <span>$section_id</span>, <span>$field_id</span> );</pre>
+					<p><em>Note:</em><br />For now, this only works for plugin/theme settings, so the $type argument should always be set to 'plugin'. <code>$section_id</code> and <code>$field_id</code> are optionals</p>
 				</li>
 			</ul>
 
@@ -131,21 +137,21 @@
 			<h3 id="get-data-cfields">Custom field / Post metadata</h3>
 			<p>Just use standard WordPress function, but prefix the meta key with an underscore, for example:</p>
 			<p>
-				<code>$var = get_post_meta( <span>'post_id'</span>, <span>'_field_id'</span>, true );</code>
+				<code>$var = get_post_meta( <span>$post_id</span>, '_<span>field_id</span>', true );</code>
 				<br />or: <br/>
-				<code>$var = get_metadata( 'post', <span>'post_id'</span>, <span>'_field_id'</span>, true );</code>
+				<code>$var = get_metadata( 'post', <span>$post_id</span>, '_<span>field_id</span>', true );</code>
 			</p>
 
 			<h3 id="get-data-termmeta">Term Metadata</h3>
 			<p>You can use standard WordPress function, for example:</p>
-			<pre>$var = get_metadata( 'term', <span>'term_id'</span>, <span>'field_id'</span>, true );</pre>
+			<pre>$var = get_metadata( 'term', <span>'term_id'</span>, <span>$field_id</span>, true );</pre>
 
 			<h3 id="get-data-usermeta">User Metadata</h3>
 			<p>You can use standard WordPress function, for example:</p>
 			<p>
-				<code>$var = get_user_meta( <span>'user_id'</span>, <span>'field_id'</span>, true );</code>
+				<code>$var = get_user_meta( <span>'user_id'</span>, <span>$field_id</span>, true );</code>
 				<br />or: <br />
-				<code>$var = get_metadata( 'user', <span>'user_id'</span>, <span>'field_id'</span>, true );</code>
+				<code>$var = get_metadata( 'user', <span>'user_id'</span>, <span>$field_id</span>, true );</code>
 			</p>
 
 			<h2 id="validation">Validation/sanitation</h2>
