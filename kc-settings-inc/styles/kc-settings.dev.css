@@ -65,6 +65,7 @@ input.kcs-input {
 	background:none}
 
 /* Filelist */
+.kcs-file .info {margin-top:0;}
 .kcs-file ul {padding-bottom:1em}
 .kcs-file .row {
 	padding:.5em;
@@ -86,7 +87,6 @@ input.kcs-input {
   clip: rect(1px, 1px, 1px, 1px)}
 input.kcs-files {margin-right:.5em}
 .kcs-file-info {padding:1em}
-.form-table .kcs-file p {margin-top:1.5em}
 
 
 .kcs-wrap .button {margin-right:1em}
@@ -162,7 +162,8 @@ div.actions {cursor:move}
 .kcsb-options label {cursor:move}
 
 .removing, .adding,
-.kcsb .ui-sortable-helper {
+.kcsb .ui-sortable-helper,
+.kcs-multiinput .ui-sortable-helper {
   -webkit-border-radius:5px;
   -khtml-border-radius:5px;
   -moz-border-radius:5px;
@@ -183,6 +184,18 @@ div.actions {cursor:move}
 	padding-bottom:0;
 	margin-bottom:-2px;
 }
+.kcs-multiinput .ui-sortable-helper,
+.kcs-multiinput .adding,
+.kcs-multiinput .removing {
+	padding:10px 0 0 10px;
+	margin:-10px 0 -2px -10px;
+}
+.kcs-file .adding,
+.kcs-file .removing {
+	margin-bottom:-2px;
+	display:inline-block;
+}
+
 .adding {
   background-color:#f4ffe5;
   border:1px solid #00892c}

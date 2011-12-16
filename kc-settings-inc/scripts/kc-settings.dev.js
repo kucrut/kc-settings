@@ -1,35 +1,5 @@
 var win = window.dialogArguments || opener || parent || top;
 
-win.kcsInsertFiles = function() {
-	var count = win.kcSettings.upload.nu.length;
-
-	if ( count ) {
-		var $list = win.kcSettings.upload.id,
-				$lastItem = $list.children().last(),
-				$nuEls = jQuery();
-
-		while ( count ) {
-			count--;
-			var $nuItem = $lastItem.clone();
-
-			jQuery('input', $nuItem).each(function() {
-				this.value = win.kcSettings.upload.nu[count][0];
-			});
-			jQuery('.title', $nuItem).text(win.kcSettings.upload.nu[count][1]);
-			$nuItem.find('img').attr('src', win.kcSettings.upload.nu[count][2]);
-
-			$nuEls = $nuEls.add( $nuItem );
-		}
-
-		$list.append( $nuEls );
-		if ( $lastItem.is('.hidden') ) {
-			$nuEls.show();
-			$lastItem.remove();
-		}
-	}
-};
-
-
 // Credit: http://stackoverflow.com/questions/784012/javascript-equivalent-of-phps-in-array
 function inArray(needle, haystack) {
 	var length = haystack.length;
@@ -53,6 +23,40 @@ function kcsbSlug( str ) {
 
 
 (function($) {
+	// File
+	win.kcsInsertFiles = function() {
+		var count = win.kcSettings.upload.nu.length;
+
+		if ( count ) {
+			var $list = win.kcSettings.upload.id,
+					$lastItem = $list.children().last(),
+					$nuEls = $();
+
+			while ( count ) {
+				count--;
+				var $nuItem = $lastItem.clone();
+
+				$('input', $nuItem).each(function() {
+					this.value = win.kcSettings.upload.nu[count][0];
+					$(this).prop('checked', false);
+				});
+				$('.title', $nuItem).text(win.kcSettings.upload.nu[count][1]);
+				$nuItem.find('img').attr('src', win.kcSettings.upload.nu[count][2]);
+
+				$nuEls = $nuEls.add( $nuItem );
+			}
+
+			$list.append( $nuEls );
+			if ( $lastItem.is('.hidden') ) {
+				$nuEls.show();
+				$lastItem.remove();
+			}
+
+			$list.show().prev('.info').show();
+		}
+	};
+
+
 	$.fn.kcGoto = function( opts ) {
 		defaults = {
 			offset: -20,
@@ -402,9 +406,11 @@ jQuery(document).ready(function($) {
 				$item	= $this.closest('.row');
 
 		$item.addClass('removing').fadeOut('slow', function() {
+			// am I the only one?
 			if ( $item.siblings().length ) {
 				$item.remove();
 			}
+			// No?
 			else {
 				$item.removeClass('removing')
 					.addClass('hidden')
@@ -412,9 +418,11 @@ jQuery(document).ready(function($) {
 						.val('')
 						.prop('checked', false);
 
-				var $h = $('input[type="hidden"]', $item);
-				$h.data( 'olName', $h.attr('name') )
-					.attr('name', '');
+				// Disable the field so it won't get saved upon submission
+				$('input.fileID', $item).prop('disabled', true);
+
+				// Hide the list and info
+				$item.parent().hide().prev('.info').hide();
 			}
 		});
 
@@ -431,11 +439,11 @@ jQuery(document).ready(function($) {
 		win.kcSettings.upload.id = $( '#'+$group.attr('id')+' > ul' );
 		win.kcSettings.upload.files = [];
 
+		// If there's currently only one row and it's hidden, enable the field
 		if ( $solo.length ) {
-			var $h = $('input[type="hidden"]', $solo);
-			$h.attr('name', $h.data('olName') );
+			$('input.fileID', $solo).prop('disabled', false);
 		} else {
-			$('input.mid', $group).each(function() {
+			$('input.include', $group).each(function() {
 				win.kcSettings.upload.files.push(this.value);
 			});
 		}

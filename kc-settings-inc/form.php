@@ -261,7 +261,9 @@ function kcs_settings_field( $args ) {
 		$output .= "<div id='{$id}' class='kcs-file'>";
 
 		# List files
-		$output .= "\t<ul class='kc-rows sortable'>\n";
+		$lclass = empty($value['files']) ? ' hidden' : '';
+		$output .= "<p class='info{$lclass}'><em>". __('Info: Drag & drop to reorder.', 'kc-settings') ."</em></p>\n";
+		$output .= "\t<ul class='kc-rows sortable{$lclass}'>\n";
 
 		if ( !empty($value['files']) ) {
 			$q_args = array(
@@ -298,7 +300,6 @@ function kcs_settings_field( $args ) {
 		$output .= "\t</ul>\n";
 
 		$output .= "<a href='media-upload.php?kcsf=true&amp;post_id={$p__id}&amp;TB_iframe=1' class='button kcsf-upload' title='".__('Add files to collection', 'kc-settings')."'>".__('Add files', 'kc-settings')."</a>\n";
-		$output .= "<input type='hidden' class='kcsf-holder'>\n";
 		if ( isset($field['desc']) && !empty($field['desc']) )
 			$output .= wpautop( $field['desc'] );
 		$output .= "</div>\n";
@@ -306,6 +307,7 @@ function kcs_settings_field( $args ) {
 
 	# pair Input
 	elseif ( $type == 'multiinput' ) {
+		$output .= "<p class='info'><em>". __('Info: Drag & drop to reorder.', 'kc-settings') ."</em></p>\n";
 		$output .= kcs_multiinput( $name, $db_value, $field );
 		$output .= "\t{$desc}\n";
 	}
@@ -440,10 +442,13 @@ function kcs_filelist_item( $name, $type, $pid = '', $fid = '', $title = '', $ch
 	$output .= "\t\t<img src='{$icon}' alt=''/>";
 	$output .= "\t\t<a class='rm mid' title='".__('Remove from collection', 'kc-settings')."'><span>".__('Remove', 'kc-settings')."</span></a>\n";
 	$output .= "\t\t<label>";
-	$output .= "<input class='mid' type='{$type}' name='{$name}[selected][]' value='{$fid}' {$checked}/> ";
+	$output .= "<input class='mid include' type='{$type}' name='{$name}[selected][]' value='{$fid}' {$checked}/> ";
 	$output .= "<span class='title'>{$title}</span>";
 	$output .= "</label>\n";
-	$output .= "\t\t<input type='hidden' name='{$name}[files][]' value='{$fid}'/> ";
+	$output .= "\t\t<input class='fileID' type='hidden' name='{$name}[files][]' value='{$fid}'";
+	if ( $hidden )
+		$output .= " disabled='true'";
+	$output .= "/> ";
 	$output .= "\t</li>\n";
 
 	return $output;
