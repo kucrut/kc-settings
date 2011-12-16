@@ -3,14 +3,16 @@ Contributors: kucrut
 Donate link: http://kucrut.org/
 Tags: theme-options, plugin-options, settings, options, term-meta, category-meta, post-meta, custom-fields, user-meta, attachment
 Requires at least: 3.2.1
-Tested up to: 3.3-beta2
+Tested up to: 3.3
 Stable tag: 2.5
 
-Easily create plugin/theme settings page, custom fields metaboxes and term meta settings.
+Easily create plugin/theme settings page, custom fields metaboxes and term/user meta settings.
 
 == Description ==
 
 With this plugin, you can easily create a settings/options page for you theme or plugin. You can also create metaboxes for post custom fields, and add some metadata to the terms.
+
+If you have created your settings manually prior to version 2.5 of this plugin, please review the sample files and make the needed changes.
 
 == Installation ==
 
@@ -20,11 +22,12 @@ With this plugin, you can easily create a settings/options page for you theme or
 
 == Frequently Asked Questions ==
 
-= How do I add my options? =
+= How do I create my settings? =
 
-Please find the readme.html file inside the plugin directory for the documentation.
+Please find the readme.html file inside the plugin directory for the documentation, or [view it online](http://kucrut.github.com/kc-settings/).
 
 == Screenshots ==
+
 1. Settings Builder
 2. Theme/Plugin settings
 3. Term settings (add new)
@@ -35,6 +38,9 @@ Please find the readme.html file inside the plugin directory for the documentati
 
 = 2.5 =
 * Tons of fixes and enhancements
+* More metaboxes goodies for post/plugin/theme settings
+* Contextual help support for plugin/theme settings
+* And much, much more :)
 
 = 2.2 =
 * Code Improvements
