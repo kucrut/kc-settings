@@ -121,7 +121,7 @@ input.kcs-files {margin-right:.5em}
 	margin-bottom:.25em;
 }
 .kcs-sideform .kcs-check {padding-left:.5em;}
-#poststuff .kcs-sideform p {margin-bottom:0;}
+#poststuff .kcs-sideform p {margin-bottom:.2em;}
 .kcs-sideform .kcs-file label {
 	overflow:hidden;
 	text-overflow:ellipsis;
@@ -129,7 +129,11 @@ input.kcs-files {margin-right:.5em}
 	width:160px;
 	display:inline-block;
 }
-
+.kcs-sideform .kcs-multiinput .row {width:250px}
+#wpcontent .kcs-sideform .kcs-multiinput input,
+#wpcontent .kcs-sideform .kcs-multiinput textarea {
+	width:195px
+}
 
 
 
