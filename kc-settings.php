@@ -643,10 +643,13 @@ function kcSettings_upgrade( $parts = array() ) {
 				foreach ($item['sections'] as $section_id => $section ) {
 					# Metabox (20111215)
 					if ( in_array('kcsb_metabox', $parts) ) {
-						if ( isset($section['priority']) || ($item['display'] == 'metabox' && !isset($section['metabox'])) ) {
+						$mb_prio = isset($section['priority']) ? $section['priority'] : 'default';
+						if ( isset($section['priority'])
+									|| ( $item['type'] == 'plugin' && !isset($item['display']) )
+									|| ( $item['display'] == 'metabox' && !isset($section['metabox']) ) ) {
 							$section['metabox'] = array(
 								'context'		=> 'normal',
-								'priority'	=> $section['priority']
+								'priority'	=> $mb_prio
 							);
 							unset( $section['priority'] );
 						}
