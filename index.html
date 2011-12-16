@@ -13,7 +13,8 @@
 		h1,h2,h3,h4,h5,h6,
 		.desc, #footer {
 			color:#4e4e4e;
-			font-family: 'Linux Biolinum', 'Helvetica', sans-serif}
+			font-family: 'Linux Biolinum', 'Helvetica', sans-serif;
+			margin:1em 0 0}
 		code,pre {color:#590000}
 		code span,pre span {color:#008C00}
 		a {
@@ -57,72 +58,100 @@
 			<h2 id="about">About</h2>
 			<p>This plugin is my attempt to simplify the process of adding a setting page for the <a href="http://wordpress.org/">WordPress</a> themes I was working on. It was originally <em>inspired</em> by the <a href="http://themehybrid.com/">Hybrid</a> theme. I then re-wrote it to utilize the amazing WordPress' <a href="http://codex.wordpress.org/Settings_API">Settings API</a> after reading <a href="http://ottopress.com/2009/wordpress-settings-api-tutorial/">Otto's article</a>.</p>
 
+			<h2 id="features">Features</h2>
+			<p>Currently you can use this plugin for these types of settings:</p>
+			<ul>
+				<li>Plugin/theme settings</li>
+				<li>Post metadata (custom fields)</li>
+				<li>Term metadata</li>
+				<li>User metadata</li>
+			</ul>
+
+			<p>For plugin/theme setting pages, you have the option to choose between 'plain' and 'metaboxes' display types. For post metaboxes/custom fields and plugin/theme setting pages with display time set to metaboxes, you can freely set the metaboxes positions/contexts and priorities.</p>
+
+			<p>Supported input types:</p>
+			<ul>
+				<li>Single line text (<code>text</code>)</li>
+				<li>Multiple lines text (<code>textarea</code>)</li>
+				<li>File (<code>file</code>)</li>
+				<li>Date (<code>date</code>)</li>
+				<li>Color (<code>color</code>)</li>
+				<li>Checkboxes (<code>checkbox</code>)</li>
+				<li>Radio (<code>radio</code>)</li>
+				<li>Dropdown select (<code>select</code>)</li>
+				<li>Multiple select (<code>multiselect</code>)</li>
+				<li>Multiple text input (<code>multiinput</code>)</li>
+				<li>Custom function (<code>special</code>)</li>
+			</ul>
+
+			<p>If you think there are other input types that need to be added, don't hesitate to contact me!</p>
+
 			<h2 id="installation">Installation</h2>
-			<h3 id="install-dep">As a dependency</h3>
-			<p>In this mode, KC Settings will act as a dependency for you plugin/theme. You should have it installed and activated all the time.</p>
-			<ol>
-				<li>Install the plugin either by using WordPress plugin installer or manually copying it to WordPress' plugins directory.</li>
-				<li>Activate the plugin.</li>
-			</ol>
-
-			<h3 id="mu-plugin">Must Use Plugin</h3>
-			<p>To have KC Settings active all the time, you need to install it inside the <code>mu-plugins</code> directory. To do that, follow these steps:</p>
-			<ol>
-				<li>Download the plugin and unpack it.</li>
-				<li>Using your favorite FTP client, go to your site's <code>wp-content</code> directory.</li>
-				<li>Create <code>mu-plugins</code> directory if it doesn't exist inside <code>wp-content</code> yet.</li>
-				<li>Upload <code>kc-settings.php</code> file and <code>kc-settings-inc</code> directory into the <code>mu-plugins</code> directory.</li>
-				<li>You're done. KC Settings should be active all the time.</li>
-			</ol>
-
-			<h3 id="install-builtin">Builtin</h3>
-			<p>If you think you'd rather have the KC Setting's functionality builtin with your plugin/theme (so user won't have to install it), follow this steps:</p>
-			<ol>
-				<li>Copy the kc-settings directory into your plugin/theme directory.</li>
-				<li>Include the main plugin file, eg: <code>require_once(dirname(__FILE__) . '/kc-settings/kc-settings.php');</code></li>
-			</ol>
-			<p>The only drawback of using this method is that you will have to overwrite the plugin's files each time it has an update. Your options arrays should be <em>safe</em> as long as you keep them outside the plugin's directory and use different names than the originals.</p>
+			<p>Just install it like any other WordPress plugins :)</p>
 
 			<h2 id="options">The options</h2>
-			<p>There are a few sample options files included in the <code><span>sample</span></code> directory. Copy (examine and modify) the sample options files included in the <code>sample</code> directory to your plugin/theme directory and then include them from your theme/plugin, eg. <code>require_once( TEMPLATEPATH . '/__theme_options.php');</code></p>
+			<p>You can either create the settings using the Builder by going to <em>Settings &raquo; KC Settings</em>, or create them manually.</p>
+			<p>There are a few sample options files included in the <code><span>sample</span></code> directory. Copy (examine and modify) the sample options files included in the <code>sample</code> directory to your plugin/theme directory and then include them from your theme/plugin, eg. <code>require_once TEMPLATEPATH . '/theme_options.php';</code></p>
 
 			<h2 id="get-data">Getting the data</h2>
 			<h3 id="get-data-plugin">Theme/plugin settings</h3>
 			<ul>
 				<li>
 					<h4>All data</h4>
-					<pre>$var = kc_get_option( '<span>prefix</span>' );</pre>
+					<pre>$var = kc_get_option( <span>$prefix</span> );</pre>
 					<p>Or, you can also use WordPress' builtin function:</p>
 					<pre>$var = get_option( '<span>prefix</span>_settings' );</pre>
 				</li>
 				<li>
 					<h4>Section</h4>
-					<pre>$var = kc_get_option( <span>'prefix'</span>, <span>'section_id'</span> );</pre>
+					<pre>$var = kc_get_option( <span>$prefix</span>, <span>$section_id</span> );</pre>
 				</li>
 				<li>
 					<h4>Field</h4>
-					<pre>$var = kc_get_option( <span>'prefix'</span>, <span>'section_id'</span>, <span>'field_id'</span> );</pre>
+					<pre>$var = kc_get_option( <span>$prefix</span>, <span>$section_id</span>, <span>$field_id</span> );</pre>
+				</li>
+				<li>
+					<h4>Default values</h4>
+					<p>If you have set a default value for your field, you can get it like this:</p>
+					<pre>$var = kc_get_default( <span>$type</span>, <span>$prefix</span>, <span>$section_id</span>, <span>$field_id</span> );</pre>
+					<p><em>Note:</em><br />For now, this only works for plugin/theme settings, so the $type argument should always be set to 'plugin'. <code>$section_id</code> and <code>$field_id</code> are optionals</p>
 				</li>
 			</ul>
+
+			<h3>Return values</h3>
+			<ul>
+				<li>Single line text (<code>string</code>)</li>
+				<li>Multiple lines text (<code>string</code>)</li>
+				<li>File (<code>array</code>)</li>
+				<li>Date (<code>string</code>)</li>
+				<li>Color (<code>string</code>)</li>
+				<li>Checkboxes (<code>array</code>)</li>
+				<li>Radio (<code>string</code>)</li>
+				<li>Dropdown select (<code>string</code>)</li>
+				<li>Multiple select (<code>array</code>)</li>
+				<li>Multiple text input (<code>array</code>)</li>
+				<li>Custom function (<code>mixed</code>)</li>
+			</ul>
+
 
 			<h3 id="get-data-cfields">Custom field / Post metadata</h3>
 			<p>Just use standard WordPress function, but prefix the meta key with an underscore, for example:</p>
 			<p>
-				<code>$var = get_post_meta( <span>'post_id'</span>, <span>'_field_id'</span>, true );</code>
+				<code>$var = get_post_meta( <span>$post_id</span>, '_<span>field_id</span>', true );</code>
 				<br />or: <br/>
-				<code>$var = get_metadata( 'post', <span>'post_id'</span>, <span>'_field_id'</span>, true );</code>
+				<code>$var = get_metadata( 'post', <span>$post_id</span>, '_<span>field_id</span>', true );</code>
 			</p>
 
 			<h3 id="get-data-termmeta">Term Metadata</h3>
 			<p>You can use standard WordPress function, for example:</p>
-			<pre>$var = get_metadata( 'term', <span>'term_id'</span>, <span>'field_id'</span>, true );</pre>
+			<pre>$var = get_metadata( 'term', <span>'term_id'</span>, <span>$field_id</span>, true );</pre>
 
 			<h3 id="get-data-usermeta">User Metadata</h3>
 			<p>You can use standard WordPress function, for example:</p>
 			<p>
-				<code>$var = get_user_meta( <span>'user_id'</span>, <span>'field_id'</span>, true );</code>
+				<code>$var = get_user_meta( <span>'user_id'</span>, <span>$field_id</span>, true );</code>
 				<br />or: <br />
-				<code>$var = get_metadata( 'user', <span>'user_id'</span>, <span>'field_id'</span>, true );</code>
+				<code>$var = get_metadata( 'user', <span>'user_id'</span>, <span>$field_id</span>, true );</code>
 			</p>
 
 			<h2 id="validation">Validation/sanitation</h2>
@@ -336,12 +365,6 @@ function my_filter_function( $nu_val, $section, $field ) {
 						<dd><code>add_filter( 'kcv_usermeta_<span>mySectionID</span>_<span>fieldID</span>', 'my_filter_function', 10, 3 );</code></dd>
 					</dl>
 				</li>
-			</ul>
-
-			<h2>TODO</h2>
-			<ul>
-				<li>Add 'component' field type</li>
-				<li>Add 'multiple' field type</li>
 			</ul>
 
 			<h2 id="support">Support</h2>
