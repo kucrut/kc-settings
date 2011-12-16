@@ -212,18 +212,25 @@ function kcs_settings_field( $args ) {
 	$output = apply_filters( 'kc_settings_field_before', '', $section, $field );
 
 	# Special option with callback
-	if ( $type == 'special' && isset($field['cb']) && function_exists($field['cb']) && is_callable($field['cb']) ) {
-		$args['field']['name'] = $name;
-		$cb_args = '';
-		if ( isset($field['args']) && !empty($field['args']) ) {
-			$cb_args = $field['args'];
-			// Is it a function?
-			if ( is_string($cb_args) && function_exists($cb_args) && is_callable($cb_args) ) {
-				$cb_args = call_user_func( $cb_args, $args, $db_value );
+	if ( $type == 'special' && isset($field['cb']) ) {
+		if ( function_exists($field['cb']) && is_callable($field['cb']) ) {
+			$args['field']['name'] = $name;
+			$cb_args = '';
+			if ( isset($field['args']) && !empty($field['args']) ) {
+				$cb_args = $field['args'];
+				// Is it a function?
+				if ( is_string($cb_args) && function_exists($cb_args) && is_callable($cb_args) ) {
+					$cb_args = call_user_func( $cb_args, $args, $db_value );
+				}
 			}
+
+			$output .= call_user_func( $field['cb'], $args, $db_value, $cb_args );
+		}
+		# Callback function not found
+		else {
+			$output .= "<p class='description'><span class='impo'>" . __('Ooops, the callback function doesn&#39;t exist or is not callable ;(', 'kc-settings') . "</span></p>\n";
 		}
 
-		$output .= call_user_func( $field['cb'], $args, $db_value, $cb_args );
 		$output .= $desc;
 	}
 
