@@ -14,6 +14,7 @@ Version: 2.5
 Author: Dzikri Aziz
 Author URI: http://kucrut.org/
 License: GPL v2
+Text Domain: kc-settings
 
 */
 
