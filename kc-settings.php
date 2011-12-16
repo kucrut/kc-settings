@@ -57,7 +57,7 @@ class kcSettings {
 		self::_sns_register();
 
 		# Include samples (for development)
-		//self::_samples( array('theme') );
+		//self::_samples( array('01_plugin', '02_post', '03_term', '04_user') );
 
 		# Get all settings
 		self::_bootstrap_settings();
@@ -440,8 +440,11 @@ class kcSettings {
 		}
 		# WP < 3.3
 		else {
+			$content = '';
 			foreach ( $helps as $help )
-				add_contextual_help( $screen, "<h2>{$help['title']}</h2>\n{$help['content']}" );
+				$content .= "<h3>{$help['title']}</h3>\n{$help['content']}";
+
+			add_contextual_help( $screen, $content );
 		}
 	}
 

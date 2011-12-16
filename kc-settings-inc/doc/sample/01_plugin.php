@@ -1,30 +1,48 @@
 <?php
+
+/**
+ * Sample plugin/theme options.
+ *
+ * @todo Make sure to use unique and only alphanumerics/dashes/underscores string for the prefix and section field IDs!
+ *
+ */
+
+
 add_filter( 'kc_plugin_settings', 'mytheme_options' );
 function mytheme_options( $settings ) {
 	$options = array(
-		'sample_section' => array(
+		array(
 			'id'			=> 'sample_section',
 			'title'		=> 'Sample Options',
 			'desc'		=> '<p>Some description about this options group</p>',
 			'fields'	=> array(
-				'sample_input' => array(
-					'id'		=> 'sample_input',
-					'title'	=> 'Simple input',
-					'desc'	=> 'Just a simple input field',
-					'type'	=> 'input'
+				array(
+					'id'			=> 'sample_input',
+					'title'		=> 'Simple input',
+					'desc'		=> 'Just a simple input field',
+					'type'		=> 'input',
+					'default'	=> 'Default value'
 				),
-				'date' => array(
-					'id'		=> 'date',
-					'title'	=> 'Date input',
-					'type'	=> 'date'
+				array(
+					'id'			=> 'date',
+					'title'		=> 'Date input',
+					'type'		=> 'date',
+					'default'	=> '2011-12-17'
 				),
-				'sample_textarea' => array(
-					'id'		=> 'sample_textarea',
-					'title'	=> 'Textarea',
-					'desc'	=> 'An ordinary text area where you can write some long texts',
-					'type'	=> 'textarea'
+				array(
+					'id'			=> 'color',
+					'title'		=> 'Color input',
+					'type'		=> 'color',
+					'default'	=> '#000000'
 				),
-				'sample_checkbox' => array(
+				array(
+					'id'			=> 'textarea',
+					'title'		=> 'Textarea',
+					'desc'		=> 'An ordinary text area where you can write some long texts',
+					'type'		=> 'textarea',
+					'default'	=> 'Default value...'
+				),
+				array(
 					'id'			=> 'sample_checkbox',
 					'title'		=> 'Checkboxes (checkbox)',
 					'desc'		=> 'You can select one or more',
@@ -32,9 +50,10 @@ function mytheme_options( $settings ) {
 					'options'	=> array(
 						'cbox1'	=> 'Option #1',
 						'cbox2'	=> 'Option #2'
-					)
+					),
+					'default'	=> 'cbox1'
 				),
-				'sample_radio' => array(
+				array(
 					'id'			=> 'sample_radio',
 					'title'		=> 'Radioboxes (radio)',
 					'desc'		=> 'You can only select one here',
@@ -46,7 +65,7 @@ function mytheme_options( $settings ) {
 					),
 					'default'	=> 'radio2'
 				),
-				'sample_select' => array(
+				array(
 					'id'			=> 'sample_select',
 					'title'		=> 'Dropdown options (select)',
 					'desc'		=> 'You can only select one option here',
@@ -55,9 +74,10 @@ function mytheme_options( $settings ) {
 						'select3'	=> 'Option #1',
 						'select2'	=> 'Option #2',
 						'select1'	=> 'Option #3'
-					)
+					),
+					'default'	=> 'select1'
 				),
-				'sample_multiselect' => array(
+				array(
 					'id'			=> 'sample_multiselect',
 					'title'		=> 'Dropdown options (multiple select)',
 					'desc'		=> 'You can select more than one option here',
@@ -69,71 +89,67 @@ function mytheme_options( $settings ) {
 						'select4'	=> 'Option #4',
 						'select5'	=> 'Option #5',
 						'select6'	=> 'Option #6'
-					)
+					),
+					'default'	=> 'select6'
 				),
-				'sample_callback_1' => array(
-					'id'		=> 'sample_callback_1',
-					'title'	=> 'Categories (callback)',
-					'desc'	=> 'You can only select one <a href="'.admin_url('edit-tags.php?taxonomy=category').'">category</a> here',
-					'type'	=> 'special',
-					'cb'		=> 'kc_dropdown_options',
-					'args'	=> array(
-						'prefix'	=> 'anything',
-						'section'	=> 'sample_section',
-						'id'			=> 'sample_callback_1',
-						'mode'		=> 'categories'
-					)
-				),
-				'sample_callback_2' => array(
-					'id'		=> 'sample_callback_2',
-					'title'	=> 'Pages (callback)',
-					'desc'	=> 'You can only select one <a href="'.admin_url('edit.php?post_type=page').'">page</a> here',
-					'type'	=> 'special',
-					'cb'		=> 'kc_dropdown_options',
-					'args'	=> array(
-						'prefix'	=> 'anything',
-						'section'	=> 'sample_section',
-						'id'			=> 'sample_callback_2'
-					)
-				),
-				'sample_multiinput' => array(
+				array(
 					'id'		=> 'sample_multiinput',
 					'title'	=> 'Multi input (multiinput)',
 					'desc'	=> 'Input field with your own custom label, to create an array',
 					'type'	=> 'multiinput'
 				),
-				'sample_file' => array(
+				array(
 					'id'		=> 'sample_file',
 					'title'	=> 'File selection',
 					'type'	=> 'file',
-					'mode'	=> 'single'
+					'mode'	=> 'single' // single (radio) | multiple (checkbox)
 				),
-				'sample_callback_3' => array(
-					'id'		=> 'sample_callback_3',
-					'title'	=> 'Callback',
-					'desc'	=> 'Callback with static argument',
-					'type'	=> 'special',
-					'cb'		=> 'kcs_sample_callback_static',
-					'args'	=> "Hey, I'm the static callback argument"
+				array(
+					'id'			=> 'sample_callback_3',
+					'title'		=> 'Callback',
+					'desc'		=> 'Callback with static argument',
+					'type'		=> 'special',
+					'cb'			=> 'kcs_sample_callback_static',	// See how to handle the arguments passed at the bottom of this file
+					'args'		=> "Hey, I'm the static callback argument",
+					'default'	=> 'Some default value'
 				),
-				'sample_callback_4' => array(
+				array(
 					'id'		=> 'sample_callback_4',
-					'title'	=> 'Callback',
+					'title'	=> 'Another Callback',
 					'desc'	=> 'Callback with dynamic argument (function return value)',
 					'type'	=> 'special',
-					'cb'		=> 'kcs_sample_callback_dynamic',
-					'args'	=> 'kcs_sample_callback_dynamic_args'
+					'cb'		=> 'kcs_sample_callback_dynamic',	// See how to handle the arguments passed at the bottom of this file
+					'args'	=> 'kcs_sample_callback_dynamic_args',
+					'default'	=> 'Some default value'
 				)
 			)
 		)
+		// You can add more sections here...
 	);
 
 	$my_settings = array(
-		'prefix'				=> 'anything',
-		'menu_location'	=> 'themes.php',
+		'prefix'				=> 'anything',		// Use only alphanumerics, dashes and underscores here!
+		'menu_location'	=> 'themes.php',	// options-general.php | index.php | edit.php | upload.php | link-manager.php | edit-comments.php | themes.php | users.php | tools.php
 		'menu_title'		=> 'My Theme Settings',
 		'page_title'		=> 'My Theme Settings Page',
-		'options'				=> $options
+		'display'				=> 'metabox',		// plain|metabox. If you chose to use metabox, don't forget to set their settings too
+		'metabox'				=> array(
+			'context'		=> 'normal',	// normal | advanced | side
+			'priority'	=> 'default',	// default | high | low
+		),
+		'options'				=> $options,
+		'help'					=> array(
+			array(
+				'id'			=> 'help_1',
+				'title'		=> 'Help title',
+				'content'	=> 'Something....'
+			),
+			array(
+				'id'			=> 'help_2',
+				'title'		=> 'Another Help',
+				'content'	=> 'Something the user needs to know....'
+			)
+		)
 	);
 
 	$settings[] = $my_settings;
