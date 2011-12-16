@@ -433,11 +433,19 @@ function kcs_filelist_item( $name, $type, $pid = '', $fid = '', $title = '', $ch
 		$output .= " hidden";
 	$output .= "'>\n";
 	// Image thumb or mime type icon
-	if ( $fid && wp_attachment_is_image($fid) ) {
-		$icon = wp_get_attachment_image_src($fid, array(46, 46));
-		$icon = $icon[0];
-	} else {
-		$icon = wp_mime_type_icon($fid);
+	if ( $fid ) {
+		// Image
+		if ( wp_attachment_is_image($fid) ) {
+			$icon = wp_get_attachment_image_src($fid, array(46, 46));
+			$icon = $icon[0];
+		}
+		// Other types
+		else {
+			$icon = wp_mime_type_icon( get_post_mime_type($fid) );
+		}
+	}
+	else {
+		$icon = wp_mime_type_icon(0);
 	}
 	$output .= "\t\t<img src='{$icon}' alt=''/>";
 	$output .= "\t\t<a class='rm mid' title='".__('Remove from collection', 'kc-settings')."'><span>".__('Remove', 'kc-settings')."</span></a>\n";

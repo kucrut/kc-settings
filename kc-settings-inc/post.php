@@ -78,6 +78,8 @@ class kcSettings_post {
 			foreach ( $section['fields'] as $field )
 				kcs_update_meta( 'post', $post->post_type, $post_id, $section, $field );
 		}
+
+		return $post_id;
 	}
 
 
