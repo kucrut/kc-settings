@@ -651,6 +651,7 @@ function kcSettings_upgrade( $parts = array() ) {
 								'context'		=> 'normal',
 								'priority'	=> $mb_prio
 							);
+							$item['display'] = 'metabox';
 							unset( $section['priority'] );
 						}
 					}
