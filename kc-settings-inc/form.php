@@ -270,6 +270,7 @@ function kcs_settings_field( $args ) {
 				'post__in' => $value['files'],
 				'post_type' => 'attachment',
 				'post_status' => 'inherit',
+				'posts_per_page'	=> -1,
 				'orderby' => 'post__in',
 				'suppress_filters' => false
 			);
