@@ -586,7 +586,8 @@ class kcSettings {
 		if ( !func_num_args() )
 			return $data;
 
-		return kcs_array_multi_get_value( $data, func_get_args() );
+		$args = func_get_args();
+		return kcs_array_multi_get_value( $data, $args );
 	}
 }
 add_action( 'init', array('kcSettings', 'init') );
