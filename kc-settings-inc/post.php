@@ -80,7 +80,8 @@ class kcSettings_post {
 	public static function _save( $post_id, $post ) {
 		if ( !isset(self::$settings[$post->post_type])
 					|| ( isset($_POST['action']) && in_array($_POST['action'], array('inline-save', 'trash', 'untrash')) )
-					|| $post->post_status == 'auto-draft' )
+					|| $post->post_status == 'auto-draft'
+					|| !isset($_POST["{$post->post_type}_kc_meta_box_nonce"]) )
 			return $post_id;
 
 		$post_type_obj = get_post_type_object( $post->post_type );
