@@ -79,7 +79,7 @@ class kcSettings_post {
 	# Save post metadata/custom fields values
 	public static function _save( $post_id, $post ) {
 		if ( !isset(self::$settings[$post->post_type])
-					|| ( isset($_POST['action']) && $_POST['action'] == 'inline-save' )
+					|| ( isset($_POST['action']) && in_array($_POST['action'], array('inline-save', 'trash', 'untrashed')) )
 					|| $post->post_status == 'auto-draft' )
 			return $post_id;
 
