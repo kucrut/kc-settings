@@ -249,9 +249,9 @@ function kcs_sort_query_by_post_in( $sortby, $query ) {
  * @param int $object_id The ID of the object (post/term) that we're gonna update
  * @param array $section The meta section array
  * @param array $field The meta field array
- * @param bool $attachment Are we updating attachment metadata?
+ * @param bool $is_attachment Are we updating attachment metadata?
  */
-function kcs_update_meta( $meta_type = 'post', $object_type_name, $object_id, $section, $field, $attachment = false ) {
+function kcs_update_meta( $meta_type = 'post', $object_type_name, $object_id, $section, $field, $is_attachment = false ) {
 	if ( isset($_POST['action']) && $_POST['action'] == 'inline-save' )
 		return;
 
@@ -273,20 +273,20 @@ function kcs_update_meta( $meta_type = 'post', $object_type_name, $object_id, $s
 		break;
 	}
 
-	$db_val = get_metadata( $meta_type, $object_id, $meta_key, true );
-	$nu_val = '';
-
 	# Get the new meta value from user
-	if ( $attachment ) {
-		if ( isset($_POST['attachments'][$object_id][$field['id']]) )
-			$nu_val = $_POST['attachments'][$object_id][$field['id']];
+	if ( $is_attachment && isset($_POST['attachments'][$object_id][$field['id']]) ) {
+		$nu_val = $_POST['attachments'][$object_id][$field['id']];
 	}
-	else {
+	elseif ( isset($_POST["kc-{$meta_type}meta"][$section['id']][$field['id']]) ) {
 		$nu_val = $_POST["kc-{$meta_type}meta"][$section['id']][$field['id']];
 	}
 
+	# Abort if not found in $_POST
+	if ( !isset($nu_val) )
+		return;
+
 	# default sanitation
-	if ( $field['type'] == 'multiinput' ) {
+	if ( $nu_val != '' && $field['type'] == 'multiinput' ) {
 		$nu_val = kcs_array_remove_empty( $nu_val );
 		$nu_val = kcs_array_rebuild_index( $nu_val );
 		if ( empty($nu_val) )
@@ -296,6 +296,7 @@ function kcs_update_meta( $meta_type = 'post', $object_type_name, $object_id, $s
 		$nu_val = trim( $nu_val );
 	}
 
+	$db_val = get_metadata( $meta_type, $object_id, $meta_key, true );
 	$filter_prefix = "kcv_{$meta_type}meta";
 	if ( $meta_type != 'user' && $object_type_name != '' )
 		$filter_prefix .= "_{$object_type_name}";
