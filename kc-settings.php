@@ -2,7 +2,7 @@
 
 /**
  * @package KC_Settings
- * @version 2.5.3
+ * @version 2.5.4
  */
 
 
@@ -10,7 +10,7 @@
 Plugin name: KC Settings
 Plugin URI: http://kucrut.org/2010/10/kc-settings/
 Description: Easily create plugin/theme settings page, custom fields metaboxes, term meta and user meta settings.
-Version: 2.5.3
+Version: 2.5.4
 Author: Dzikri Aziz
 Author URI: http://kucrut.org/
 License: GPL v2
@@ -589,7 +589,7 @@ class kcSettings {
 		return kcs_array_multi_get_value( $data, $args );
 	}
 }
-add_action( 'init', array('kcSettings', 'init') );
+add_action( 'init', array('kcSettings', 'init'), 99 );
 
 
 # A hack for symlinks
@@ -620,7 +620,7 @@ function kcSettings_activate() {
 		$status['kids'] = array();
 
 	$old_version = ( isset($status['version']) ) ? $status['version'] : '2.2';
-	$status['version'] = '2.5.3';
+	$status['version'] = '2.5.4';
 
 	update_option( 'kc_settings', $status );
 
