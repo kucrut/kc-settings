@@ -102,7 +102,7 @@ function mytheme_options( $settings ) {
 					'id'		=> 'sample_file',
 					'title'	=> 'File selection',
 					'type'	=> 'file',
-					'mode'	=> 'single' // single (radio) | multiple (checkbox)
+					'mode'	=> 'radio' // radio (single) | checkbox (multiple)
 				),
 				array(
 					'id'			=> 'sample_callback_3',
