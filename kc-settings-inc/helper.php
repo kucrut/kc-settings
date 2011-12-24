@@ -273,6 +273,11 @@ function kcs_update_meta( $meta_type = 'post', $object_type_name, $object_id, $s
 		break;
 	}
 
+	# Current value
+	$db_val = get_metadata( $meta_type, $object_id, $meta_key, true );
+	# Hold new value
+	$nu_val = '';
+
 	# Get the new meta value from user
 	if ( $is_attachment && isset($_POST['attachments'][$object_id][$field['id']]) ) {
 		$nu_val = $_POST['attachments'][$object_id][$field['id']];
@@ -280,10 +285,6 @@ function kcs_update_meta( $meta_type = 'post', $object_type_name, $object_id, $s
 	elseif ( isset($_POST["kc-{$meta_type}meta"][$section['id']][$field['id']]) ) {
 		$nu_val = $_POST["kc-{$meta_type}meta"][$section['id']][$field['id']];
 	}
-
-	# Abort if not found in $_POST
-	if ( !isset($nu_val) )
-		return;
 
 	# default sanitation
 	if ( $nu_val != '' && $field['type'] == 'multiinput' ) {
@@ -296,7 +297,6 @@ function kcs_update_meta( $meta_type = 'post', $object_type_name, $object_id, $s
 		$nu_val = trim( $nu_val );
 	}
 
-	$db_val = get_metadata( $meta_type, $object_id, $meta_key, true );
 	$filter_prefix = "kcv_{$meta_type}meta";
 	if ( $meta_type != 'user' && $object_type_name != '' )
 		$filter_prefix .= "_{$object_type_name}";
@@ -311,17 +311,10 @@ function kcs_update_meta( $meta_type = 'post', $object_type_name, $object_id, $s
 	# 	3. Field
 	$nu_val = apply_filters( "{$filter_prefix}_{$section['id']}_{$field['id']}", $nu_val, $section, $field );
 
-	# If a new meta value was added and there was no previous value, add it.
-	if ( $nu_val && '' == $db_val )
-		add_metadata( $meta_type, $object_id, $meta_key, $nu_val, true );
-
-	# If the new meta value does not match the old value, update it.
-	elseif ( $nu_val && $nu_val != $db_val )
-		update_metadata( $meta_type, $object_id, $meta_key, $nu_val );
-
-	# If there is no new meta value but an old value exists, delete it.
-	elseif ( !$nu_val && $db_val )
+	if ( !$nu_val )
 		delete_metadata( $meta_type, $object_id, $meta_key, $nu_val );
+	else
+		update_metadata( $meta_type, $object_id, $meta_key, $nu_val );
 }
 
 ?>
