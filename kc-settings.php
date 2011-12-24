@@ -2,15 +2,15 @@
 
 /**
  * @package KC_Settings
- * @version 2.5.4
+ * @version 2.5.5
  */
 
 
 /*
 Plugin name: KC Settings
-Plugin URI: http://kucrut.org/2010/10/kc-settings/
+Plugin URI: http://kucrut.org/kc-settings/
 Description: Easily create plugin/theme settings page, custom fields metaboxes, term meta and user meta settings.
-Version: 2.5.4
+Version: 2.5.5
 Author: Dzikri Aziz
 Author URI: http://kucrut.org/
 License: GPL v2
@@ -620,7 +620,7 @@ function kcSettings_activate() {
 		$status['kids'] = array();
 
 	$old_version = ( isset($status['version']) ) ? $status['version'] : '2.2';
-	$status['version'] = '2.5.4';
+	$status['version'] = '2.5.5';
 
 	update_option( 'kc_settings', $status );
 
