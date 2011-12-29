@@ -203,41 +203,53 @@ function invertColor( color ) {
 jQuery(document).ready(function($) {
 	var $builder	= $('#kcsb'),
 			$kcsbForm = $('form.kcsb'),
-			$components = $('#kc-settings-form').find('div.postbox').find('#kcs-components');
+			$kcForm		= $('#kc-settings-form');
 
-	/*** Plugin/theme settings components ***/
-	if ( $components.length ) {
-		var mbPrefix = '#'+$components.closest('div.metabox-holder').attr('id')+'-',
-				$generalChecks = $components.find(':checkbox'),
-				$sectionChecks = $();
 
-		$generalChecks.each(function() {
-			var $mBox = $( mbPrefix+this.value );
-			if ( !$mBox.length )
-				return;
+	/*** Plugin/theme settings ***/
+	if ( $kcForm.length ) {
+		var	$mBoxRoot	= $kcForm.find('div.metabox-holder');
 
-			var $check = $(this),
-					$target = $(mbPrefix+this.value+'-hide');
+		/* Theme/plugin settings page with metaboxes */
+		if ( $mBoxRoot.length ) {
+			var mBoxPrefix	= $mBoxRoot.attr('id'),
+					$checks			= $kcForm.find(':checkbox');
 
-			$check.data( 'sectTarget', $target )
-						.data( 'mBox', $mBox );
-			if ( !(this.checked === $target[0].checked) ) {
-				$target.prop('checked', this.checked).triggerHandler('click');
+			/* Component metabox toggler */
+			if ( $checks.length  ) {
+				var	$secTogglers = $();
+
+				$checks.each(function() {
+					var $sectBox = $( '#'+mBoxPrefix+'-'+this.value );
+					if ( !$sectBox.length )
+						return;
+
+					var $check = $(this),
+							$target = $('#'+mBoxPrefix+'-'+this.value+'-hide');
+
+					$check.data( 'sectHider', $target )
+								.data( 'sectBox', $sectBox );
+					if ( !(this.checked === $target[0].checked) ) {
+						$target.prop('checked', this.checked).triggerHandler('click');
+					}
+
+					$secTogglers = $secTogglers.add( $check );
+				});
+
+				if ( $secTogglers.length ) {
+					$secTogglers.change(function() {
+						var $el = $(this);
+						$el.data('sectHider').prop('checked', this.checked).triggerHandler('click');
+
+						// Scroll to
+						if ( this.checked )
+							$el.data('sectBox').kcGoto( {offset: -40, speed: 'slow'} );
+					});
+				}
 			}
-			$sectionChecks = $sectionChecks.add( $check );
-		});
-
-		if ( $sectionChecks.length ) {
-			$sectionChecks.change(function() {
-				var $el = $(this);
-				$el.data('sectTarget').prop('checked', this.checked).triggerHandler('click');
-
-				// Scroll to
-				if ( this.checked )
-					$el.data('mBox').kcGoto( {offset: -40, speed: 'slow'} );
-			});
 		}
 	}
+
 
 	// Sort
 	$('ul.kc-rows').sortable({
