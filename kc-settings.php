@@ -359,18 +359,19 @@ class kcSettings {
 						);
 				}
 
-				# Plugin/themes only
-				if ( $type == 'plugin' ) {
-					# Store default values
-					if ( !empty($defaults) )
-						self::$pdata['defaults'] = array_merge_recursive( self::$pdata['defaults'], $defaults );
-					if ( $section['metabox']['context'] == 'side' )
-						$sections['has_sidebar'] = true;
-				}
+				# Plugin/themes metaboxes
+				if ( $type == 'plugin' && $section['metabox']['context'] == 'side' )
+					$sections['has_sidebar'] = true;
 
 				$sections[$section['id']] = $section;
 			}
+
 		}
+
+		# Store default values
+		if ( !empty($defaults) )
+			self::$pdata['defaults'] = array_merge_recursive( self::$pdata['defaults'], $defaults );
+
 		return $sections;
 	}
 
