@@ -103,9 +103,6 @@ class kcSettings {
 
 		# Contextual help
 		add_action( 'admin_head', array(__CLASS__, '_help') );
-
-		# Dev stuff
-		//add_action( 'admin_footer', array(__CLASS__, '_dev') );
 	}
 
 
@@ -574,13 +571,6 @@ class kcSettings {
 	}
 
 
-	public static function _dev() {
-		echo '<pre>';
-		print_r( get_option('kc_settings') );
-		echo '</pre>';
-	}
-
-
 	public static function get_data() {
 		$data = self::$pdata;
 		if ( !func_num_args() )
@@ -673,5 +663,46 @@ function kcSettings_upgrade( $parts = array() ) {
 		}
 	}
 }
+
+
+/**
+ * Debug
+ *
+ * Inject our own debug info into Debug Bar
+ */
+class kcDebug {
+	var $content = '';
+
+
+	function title() {
+		return __( 'KC Debug' );
+	}
+
+
+	function prerender() {
+		$this->content = apply_filters( 'kc_debug', '' );
+	}
+
+
+	function is_visible() {
+		if ( empty($this->content) )
+			return false;
+
+		return true;
+	}
+
+
+	function render() {
+		echo $this->content;
+	}
+}
+
+
+function kc_debug_insert( $panels ) {
+	$panels[] = new kcDebug;
+	return $panels;
+}
+add_filter( 'debug_bar_panels', 'kc_debug_insert' );
+
 
 ?>
