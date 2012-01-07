@@ -187,6 +187,46 @@ class kcSettings_builder {
 				array(
 					'value'		=> 'special',
 					'label'		=> __('Special', 'kc-settings')
+				),
+				array(
+					'value'		=> 'number',
+					'label'		=> __('Number', 'kc-settings')
+				),
+				array(
+					'value'		=> 'email',
+					'label'		=> __('Email', 'kc-settings')
+				),
+				array(
+					'value'		=> 'password',
+					'label'		=> __('Password', 'kc-settings')
+				),
+				array(
+					'value'		=> 'url',
+					'label'		=> __('URL', 'kc-settings')
+				),
+				array(
+					'value'		=> 'tel',
+					'label'		=> __('Telephone', 'kc-settings')
+				),
+				array(
+					'value'		=> 'month',
+					'label'		=> __('Month', 'kc-settings')
+				),
+				array(
+					'value'		=> 'week',
+					'label'		=> __('Week', 'kc-settings')
+				),
+				array(
+					'value'		=> 'time',
+					'label'		=> __('Time', 'kc-settings')
+				),
+				array(
+					'value'		=> 'datetime-local',
+					'label'		=> __('Datetime (local)', 'kc-settings')
+				),
+				array(
+					'value'		=> 'datetime',
+					'label'		=> __('Datetime (with timezone)', 'kc-settings')
 				)
 			),
 			'metabox'			=> array(

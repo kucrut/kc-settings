@@ -136,6 +136,15 @@ input.kcs-files {margin-right:.5em}
 }
 
 
+/*** HTML5 inputs ***/
+input[type="number"],
+input[type="date"], input[type="month"],
+input[type="week"], input[type="time"],
+input[type="datetime"], input[type="datetime-local"] {
+	text-align:right
+}
+
+
 
 /*** Builder style ***/
 .kcsb {width:45em}

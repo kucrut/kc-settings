@@ -5,126 +5,129 @@
  */
 class kcForm {
 
-  public static function field( $args = array() ) {
-    $defaults = array(
-      'type'    => 'text',
-      'attr'    => '',
-      'current' => ''
-    );
-    $args = wp_parse_args( $args, $defaults );
+	public static $i_text = array(
+		'', 'text', 'url', 'search',
+		'tel', 'number',
+		'password',
+		'email',
+		'date', 'month', 'week', 'time', 'datetime', 'datetime-local',
+		'color', 'range'
+	);
 
-    if ( in_array($args['type'], array('', 'text', 'date', 'color')) ) {
-      $type = 'input';
-    }
-    else {
-      $type = $args['type'];
-    }
+	public static function field( $args = array() ) {
+		$defaults = array(
+			'type'    => 'text',
+			'attr'    => '',
+			'current' => ''
+		);
+		$args = wp_parse_args( $args, $defaults );
+
+		$type = ( in_array($args['type'], self::$i_text) ) ? 'input' : $args['type'];
+
+		if ( !method_exists(__CLASS__, $type) )
+			return false;
+
+		if ( in_array($type, array('select', 'radio', 'checkbox'))
+					&& (!isset($args['options']) || !is_array($args['options'])) )
+			return false;
+
+		return call_user_func( array(__CLASS__, $type), $args );
+	}
 
 
-    if ( !method_exists(__CLASS__, $type) )
-      return false;
-
-    if ( in_array($type, array('select', 'radio', 'checkbox'))
-          && (!isset($args['options']) || !is_array($args['options'])) )
-      return false;
-
-    return call_user_func( array(__CLASS__, $type), $args );
-  }
-
-
-  public static function input( $args ) {
+	public static function input( $args ) {
 		if ( !isset($args['type']) || in_array($args['type'], array('', 'input') ) )
 			$args['type'] = 'text';
 
-    $output  = "<input type='{$args['type']}'";
-    $output .= self::_build_attr( $args['attr'] );
-    $output .= "value='".esc_attr($args['current'])."' ";
-    $output .= " />";
+		$output  = "<input type='{$args['type']}'";
+		$output .= self::_build_attr( $args['attr'] );
+		$output .= "value='".esc_attr($args['current'])."' ";
+		$output .= " />";
 
-    return $output;
-  }
-
-
-  public static function textarea( $args ) {
-    $output  = "<textarea";
-    $output .= self::_build_attr( $args['attr'] );
-    $output .= ">";
-    $output .= esc_textarea( $args['current'] );
-    $output .= "</textarea>";
-
-    return $output;
-  }
+		return $output;
+	}
 
 
-  public static function radio( $args ) {
-    $args['type'] = 'radio';
-    return self::checkbox( $args );
-  }
+	public static function textarea( $args ) {
+		$output  = "<textarea";
+		$output .= self::_build_attr( $args['attr'] );
+		$output .= ">";
+		$output .= esc_textarea( $args['current'] );
+		$output .= "</textarea>";
+
+		return $output;
+	}
 
 
-  public static function checkbox( $args ) {
+	public static function radio( $args ) {
+		$args['type'] = 'radio';
+		return self::checkbox( $args );
+	}
+
+
+	public static function checkbox( $args ) {
 		if ( !isset($args['type']) || !$args['type'] )
 			$args['type'] = 'checkbox';
 		unset( $args['attr']['id'] );
 
-    if ( !is_array($args['current']) )
-      $args['current'] = array($args['current']);
-    if ( !isset($args['check_sep']) || !is_array($args['check_sep']) || count($args['check_sep']) < 2 )
-      $args['check_sep'] = array('', '<br />');
-    $attr = self::_build_attr( $args['attr'] );
+		if ( !is_array($args['current']) )
+			$args['current'] = array($args['current']);
+		if ( !isset($args['check_sep']) || !is_array($args['check_sep']) || count($args['check_sep']) < 2 )
+			$args['check_sep'] = array('', '<br />');
+		$attr = self::_build_attr( $args['attr'] );
 
-    $output  = '';
-    foreach ( $args['options'] as $o ) {
-      $output .= "{$args['check_sep'][0]}<label class='kcs-check kcs-{$args['type']}'><input type='{$args['type']}' value='{$o['value']}'{$attr}";
-      if ( in_array($o['value'], $args['current']) || ( isset($args['current'][$o['value']]) && $args['current'][$o['value']]) )
-        $output .= " checked='true'";
-      $output .= " /> {$o['label']}</label>{$args['check_sep'][1]}\n";
-    }
+		$output  = '';
+		foreach ( $args['options'] as $o ) {
+			$output .= "{$args['check_sep'][0]}<label class='kcs-check kcs-{$args['type']}'><input type='{$args['type']}' value='{$o['value']}'{$attr}";
+			if ( in_array($o['value'], $args['current']) || ( isset($args['current'][$o['value']]) && $args['current'][$o['value']]) )
+				$output .= " checked='true'";
+			$output .= " /> {$o['label']}</label>{$args['check_sep'][1]}\n";
+		}
 
-    return $output;
-  }
+		return $output;
+	}
 
 
-  public static function select( $args ) {
-    if ( !isset($args['none']) || ( isset($args['none']) && $args['none'] !== false ) ) {
-      $args['none'] = array(
-        'value'   => '',
-        'label'   => '&mdash;&nbsp;'.__('Select', 'kc-settings').'&nbsp;&mdash;'
-      );
+	public static function select( $args ) {
+		if ( !isset($args['none']) || ( isset($args['none']) && $args['none'] !== false ) ) {
+			$args['none'] = array(
+				'value'   => '',
+				'label'   => '&mdash;&nbsp;'.__('Select', 'kc-settings').'&nbsp;&mdash;'
+			);
 			$args['options'] = array_merge( array($args['none']), $args['options'] );
-    }
+		}
 
-    if ( !is_array($args['current']) )
-      $args['current'] = array($args['current']);
+		if ( !is_array($args['current']) )
+			$args['current'] = array($args['current']);
 
-    $output  = "<select";
-    $output .= self::_build_attr( $args['attr'] );
-    $output .= ">\n";
-    foreach ( $args['options'] as $o ) {
-      $output .= "\t<option value='".esc_attr($o['value'])."'";
-      if ( $o['value'] == $args['current'] || in_array($o['value'], $args['current']) )
-        $output .= " selected='true'\n";
-      $output .= ">{$o['label']}</option>\n";
-    }
-    $output .= "</select>";
+		$output  = "<select";
+		$output .= self::_build_attr( $args['attr'] );
+		$output .= ">\n";
+		foreach ( $args['options'] as $o ) {
+			$output .= "\t<option value='".esc_attr($o['value'])."'";
+			if ( $o['value'] == $args['current'] || in_array($o['value'], $args['current']) )
+				$output .= " selected='true'\n";
+			$output .= ">{$o['label']}</option>\n";
+		}
+		$output .= "</select>";
 
-    return $output;
-  }
+		return $output;
+	}
 
 
-  private static function _build_attr( $attr ) {
-    if ( !is_array($attr) || empty($attr) )
-      return '';
+	private static function _build_attr( $attr ) {
+		if ( !is_array($attr) || empty($attr) )
+			return '';
 
-    foreach ( array('type', 'value', 'checked', 'selected') as $x )
-      unset( $attr[$x] );
+		foreach ( array('type', 'value', 'checked', 'selected') as $x )
+			unset( $attr[$x] );
 
-    $output = '';
-    foreach ( $attr as $k => $v )
-      $output .= " {$k}='".esc_attr($v)."'";
+		$output = '';
+		foreach ( $attr as $k => $v )
+			$output .= " {$k}='".esc_attr($v)."'";
 
-    return $output;
-  }
+		return $output;
+	}
 
 }
 
@@ -174,10 +177,13 @@ function kcs_settings_field( $args ) {
 
 	extract($args, EXTR_OVERWRITE);
 
-	$input_types = array('special', 'date', 'text', 'textarea', 'color',
-		'checkbox', 'radio', 'select', 'multiselect', 'multiinput', 'file'
-	);
-	$type = ( isset($field['type']) && in_array($field['type'], $input_types) ) ? $field['type'] : 'input';
+	$i_text = kcForm::$i_text;
+	$field_types = array_merge( $i_text, array(
+		'checkbox', 'radio', 'select', 'multiselect',
+		'multiinput', 'special', 'file',
+		'textarea'
+	) );
+	$type = ( isset($field['type']) && in_array($field['type'], $field_types) ) ? $field['type'] : 'input';
 
 	# setup the input id and name attributes, also get the current value from db
 	switch ( $mode ) {
@@ -329,7 +335,7 @@ function kcs_settings_field( $args ) {
 		if ( !in_array($type, array('checkbox', 'radio')) ) {
 			$field_attr['id'] = $id;
 		}
-		if ( in_array($type, array('text', 'date', 'color', 'input', 'textarea')) ) {
+		if ( in_array($type, array_merge($i_text, array('textarea'))) ) {
 			$field_attr['class'] .= ' kcs-input';
 		}
 

@@ -17,26 +17,86 @@ function mytheme_options( $settings ) {
 			'desc'		=> '<p>Some description about this options group</p>',
 			'fields'	=> array(
 				array(
-					'id'			=> 'sample_input',
-					'title'		=> 'Simple input',
-					'desc'		=> 'Just a simple input field',
-					'type'		=> 'input',
+					'id'			=> 'sample_text',
+					'title'		=> 'Text input',
+					'desc'		=> 'Just a simple text field',
+					'type'		=> 'text',
 					'default'	=> 'Default value'
 				),
 				array(
-					'id'			=> 'date',
+					'id'			=> 'sample_email',
+					'title'		=> 'Email input',
+					'type'		=> 'email',
+					'default'	=> 'email@domain.tld'
+				),
+				array(
+					'id'			=> 'sample_tel',
+					'title'		=> 'Telephone input',
+					'type'		=> 'tel',
+					'default'	=> 'Default value'
+				),
+				array(
+					'id'			=> 'sample_number',
+					'title'		=> 'Number input',
+					'type'		=> 'number',
+					'default'	=> '1'
+				),
+				array(
+					'id'			=> 'sample_password',
+					'title'		=> 'Password input',
+					'type'		=> 'password'
+				),
+				array(
+					'id'			=> 'sample_date',
 					'title'		=> 'Date input',
 					'type'		=> 'date',
-					'default'	=> '2011-12-17'
+					'default'	=> date('Y-m-d'),
+					'desc'		=> 'Format: <code>'.date('Y-m-d').'</code>'
 				),
 				array(
-					'id'			=> 'color',
+					'id'			=> 'sample_month',
+					'title'		=> 'Month input',
+					'type'		=> 'month',
+					'default'	=> date('Y-m'),
+					'desc'		=> 'Format: <code>'.date('Y-m').'</code>'
+				),
+				array(
+					'id'			=> 'sample_week',
+					'title'		=> 'Week input',
+					'type'		=> 'week',
+					'default'	=> date('Y-\WW'),
+					'desc'		=> 'Format: <code>'.date('Y-\WW').'</code>'
+				),
+				array(
+					'id'			=> 'sample_time',
+					'title'		=> 'Time input',
+					'type'		=> 'time',
+					'default'	=> date('H:i'),
+					'desc'		=> 'Format: <code>'.date('H:i').'</code>'
+				),
+				array(
+					'id'			=> 'sample_datetime',
+					'title'		=> 'Datetime input',
+					'type'		=> 'datetime',
+					'default'	=> date('Y-m-d\TH:i\Z'),
+					'desc'		=> 'Format: <code>'.date('Y-m-d\TH:i\Z').'</code>'
+				),
+				array(
+					'id'			=> 'sample_datetime-local',
+					'title'		=> 'Datetime (local) input',
+					'type'		=> 'datetime-local',
+					'default'	=> date('Y-m-d\TH:i'),
+					'desc'		=> 'Format: <code>'.date('Y-m-d\TH:i').'</code>'
+				),
+				array(
+					'id'			=> 'sample_color',
 					'title'		=> 'Color input',
 					'type'		=> 'color',
-					'default'	=> '#000000'
+					'default'	=> '#000000',
+					'desc'		=> 'Format: <code>#000000</code>'
 				),
 				array(
-					'id'			=> 'textarea',
+					'id'			=> 'sample_textarea',
 					'title'		=> 'Textarea',
 					'desc'		=> 'An ordinary text area where you can write some long texts',
 					'type'		=> 'textarea',
@@ -80,7 +140,7 @@ function mytheme_options( $settings ) {
 				array(
 					'id'			=> 'sample_multiselect',
 					'title'		=> 'Dropdown options (multiple select)',
-					'desc'		=> 'You can select more than one option here',
+					'desc'		=> 'You can select more than one option here (hold control or shift key)',
 					'type'		=> 'multiselect',
 					'options'	=> array(
 						'select3'	=> 'Option #1',
