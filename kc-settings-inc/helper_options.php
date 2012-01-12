@@ -10,6 +10,35 @@
 
 
 /**
+ * Options
+ */
+class kcSettings_options {
+	public static $nav_menus;
+
+
+	public static function init() {
+		foreach ( get_class_methods(__CLASS__) as $method )
+			if ( $method !== 'init' )
+				call_user_func( array(__CLASS__, $method) );
+	}
+
+
+	public static function nav_menus() {
+		$_menus = wp_get_nav_menus();
+		if ( !$_menus )
+			return;
+
+		$menus = array();
+		foreach ( $_menus as $menu )
+			$menus[$menu->term_id] = $menu->name;
+
+		self::$nav_menus = $menus;
+	}
+}
+
+
+
+/**
  * Multi featured images
  *
  */
@@ -37,6 +66,28 @@ function kcs_multi_featured_images( $args, $db_value, $cb_args ) {
 		$out .= "\t</li>\n";
 	}
 	$out .= "</ul>\n";
+
+	return $out;
+}
+
+
+/**
+ * Get nav menus
+ */
+function kcs_cb_nav_menus( $args, $db_value, $cb_args ) {
+	if ( !kcSettings_options::$nav_menus )
+		return __('Please create a menu', 'kc-settings');
+
+	$type = ( isset($cb_args['type']) && in_array($cb_args['type'], array('select', 'checkbox', 'radio')) ) ? $cb_args['type'] : 'select';
+	$out = kcForm::field(array(
+		'type'    => $type,
+		'options' => kcSettings_options::$nav_menus,
+		'attr'    => array(
+			'id'    => $args['field']['id'],
+			'name'  => $args['field']['name']
+		),
+		'current' => $db_value
+	));
 
 	return $out;
 }

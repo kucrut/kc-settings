@@ -27,9 +27,12 @@ class kcForm {
 		if ( !method_exists(__CLASS__, $type) )
 			return false;
 
-		if ( in_array($type, array('select', 'radio', 'checkbox'))
-					&& (!isset($args['options']) || !is_array($args['options'])) )
-			return false;
+		if ( in_array($type, array('select', 'radio', 'checkbox')) ) {
+			if ( !isset($args['options']) || !is_array($args['options']) )
+				return false;
+			elseif (  count($args['options']) == count($args['options'], COUNT_RECURSIVE) )
+				$args['options'] = self::_build_options( $args['options'] );
+		}
 
 		return call_user_func( array(__CLASS__, $type), $args );
 	}
@@ -129,6 +132,14 @@ class kcForm {
 		return $output;
 	}
 
+
+	private static function _build_options( $options ) {
+		$out = array();
+		foreach ( $options as $v => $l )
+			$out[] = array( 'value' => $v, 'label'	=> $l );
+
+		return $out;
+	}
 }
 
 
@@ -346,15 +357,8 @@ function kcs_settings_field( $args ) {
 			'current'	=> $db_value
 		);
 
-		if ( isset($field['options']) ) {
-			$field_options = array();
-			foreach ( $field['options'] as $v => $l )
-				$field_options[] = array(
-					'value' => $v,
-					'label'	=> $l
-				);
-			$field_args['options'] = $field_options;
-		}
+		if ( isset($field['options']) )
+			$field_args['options'] = $field['options'];
 		if ( isset($field['none']) )
 			$field_args['none'] = $field['none'];
 
