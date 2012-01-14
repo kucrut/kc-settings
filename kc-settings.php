@@ -15,22 +15,21 @@ Author: Dzikri Aziz
 Author URI: http://kucrut.org/
 License: GPL v2
 Text Domain: kc-settings
-
 */
 
 class kcSettings {
 	private static $xdata = array();
 
 	protected static $pdata = array(
-		'paths'			=> '',
-		'settings'	=> array(),
-		'defaults'	=> array(),
-		'kcsb'			=> array()
+		'paths'    => '',
+		'settings' => array(),
+		'defaults' => array(),
+		'kcsb'     => array()
 	);
 
 	public static $data	= array(
-		'pages'			=> array('media-upload-popup'),
-		'help'			=> array()
+		'pages' => array('media-upload-popup'),
+		'help'  => array()
 	);
 
 
@@ -57,14 +56,14 @@ class kcSettings {
 		# Register scripts n styles
 		self::_sns_register();
 
+		# Options helpers
+		kcSettings_options::init();
+
 		# Include samples (for development)
 		//self::_samples( array('01_plugin') );
 
 		# Get all settings
 		self::_bootstrap_settings();
-
-		# Options helpers
-		kcSettings_options::init();
 
 		# Backend-only stuff
 		add_action( 'init', array(__CLASS__, '_admin_init'), 100 );
@@ -119,9 +118,9 @@ class kcSettings {
 		$file_info = pathinfo( $file );
 		$file_info['parent'] = basename( $file_info['dirname'] );
 		$locations = array(
-			'plugins'			=> array( WP_PLUGIN_DIR, plugins_url() ),
-			'mu-plugins'	=> array( WPMU_PLUGIN_DIR, WPMU_PLUGIN_URL ),
-			'themes'			=> array( get_theme_root(), get_theme_root_uri() )
+			'plugins'    => array( WP_PLUGIN_DIR, plugins_url() ),
+			'mu-plugins' => array( WPMU_PLUGIN_DIR, WPMU_PLUGIN_URL ),
+			'themes'     => array( get_theme_root(), get_theme_root_uri() )
 		);
 
 		$valid = false;
@@ -141,12 +140,12 @@ class kcSettings {
 		$url = "{$locations[$key][1]}/{$file_info['parent']}";
 		$inc_prefix = "{$file_info['filename']}{$inc_suffix}";
 
-		$paths['file']		= $file;
-		$paths['p_file']	= kc_plugin_file( $file );
-		$paths['inc']			= "{$dir}/{$inc_prefix}";
-		$paths['url']			= $url;
-		$paths['scripts']	= "{$url}/{$inc_prefix}/scripts";
-		$paths['styles']	= "{$url}/{$inc_prefix}/styles";
+		$paths['file']    = $file;
+		$paths['p_file']  = kc_plugin_file( $file );
+		$paths['inc']     = "{$dir}/{$inc_prefix}";
+		$paths['url']     = $url;
+		$paths['scripts'] = "{$url}/{$inc_prefix}/scripts";
+		$paths['styles']  = "{$url}/{$inc_prefix}/styles";
 
 		return $paths;
 	}
@@ -158,35 +157,35 @@ class kcSettings {
 	private static function _bootstrap_settings() {
 		# Settings bootstrap error messages
 		self::$xdata['bootsrap_messages'] = array(
-			'no_prefix'						=> __( "One of your settings doesn't have <b>prefix</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'no_menu_title'				=> __( "One of your settings doesn't have <b>menu title</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'no_page_title'				=> __( "One of your settings doesn't have <b>page title</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'no_options'					=> __( "One of your settings doesn't have <b>options</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'section_no_fields'		=> __( "One of your settings' section doesn't have <b>fields</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'section_no_id'				=> __( "One of your settings' sections doesn't have <b>ID</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'section_no_title'		=> __( "One of your settings' sections doesn't have <b>title</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'section_metabox_old'	=> __( "One of your settings is still using the old format for metabox setting, please migrate it to the new one.", 'kc-settings'),
-			'field_no_id'					=> __( "One of your fields doesn't have <b>ID</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'field_no_title'			=> __( "One of your fields doesn't have <b>title</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'field_no_type'				=> __( "One of your fields doesn't have <b>type</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'field_no_opt'				=> __( "One of your fields doesn't have the required <b>options</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'field_no_cb'					=> __( "One of your fields doesn't have the required <b>callback</b> set. Therefore it has NOT been added.", 'kc-settings')
+			'no_prefix'           => __( "One of your settings doesn't have <b>prefix</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'no_menu_title'       => __( "One of your settings doesn't have <b>menu title</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'no_page_title'       => __( "One of your settings doesn't have <b>page title</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'no_options'          => __( "One of your settings doesn't have <b>options</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'section_no_fields'   => __( "One of your settings' section doesn't have <b>fields</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'section_no_id'       => __( "One of your settings' sections doesn't have <b>ID</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'section_no_title'    => __( "One of your settings' sections doesn't have <b>title</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'section_metabox_old' => __( "One of your settings is still using the old format for metabox setting, please migrate it to the new one.", 'kc-settings'),
+			'field_no_id'         => __( "One of your fields doesn't have <b>ID</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'field_no_title'      => __( "One of your fields doesn't have <b>title</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'field_no_type'       => __( "One of your fields doesn't have <b>type</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'field_no_opt'        => __( "One of your fields doesn't have the required <b>options</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'field_no_cb'         => __( "One of your fields doesn't have the required <b>callback</b> set. Therefore it has NOT been added.", 'kc-settings')
 		);
 
 		$kcsb = array(
-			'settings'	=> get_option( 'kcsb' ),
-			'_ids'			=> array(
-				'settings'	=> array(),
-				'sections'	=> array(),
-				'fields'		=> array()
+			'settings' => get_option( 'kcsb' ),
+			'_ids'     => array(
+				'settings' => array(),
+				'sections' => array(),
+				'fields'   => array()
 			)
 		);
 
 		$settings = array(
-			'plugin'	=> array(),
-			'post'		=> array(),
-			'term'		=> array(),
-			'user'		=> array()
+			'plugin' => array(),
+			'post'   => array(),
+			'term'   => array(),
+			'user'   => array()
 		);
 
 		# Process settings from the builder
@@ -456,9 +455,9 @@ class kcSettings {
 			wp_register_script( 'jquery-ui-datepicker', self::$pdata['paths']['scripts']."/jquery.ui.datepicker.min.js", array('jquery-ui-core'), '1.8.11', true );
 
 		# Common
-		wp_register_script( 'modernizr',		self::$pdata['paths']['scripts'].'/modernizr.2.0.6.min.js', false, '2.0.6', true );
-		wp_register_script( 'kc-settings',	self::$pdata['paths']['scripts'].'/kc-settings.js', array('modernizr', 'jquery-ui-sortable', 'jquery-ui-datepicker', 'media-upload', 'thickbox'), self::$pdata['status']['version'], true );
-		wp_register_style( 'kc-settings',		self::$pdata['paths']['styles'].'/kc-settings.css', array('thickbox'), self::$pdata['status']['version'] );
+		wp_register_script( 'modernizr',   self::$pdata['paths']['scripts'].'/modernizr.2.0.6.min.js', false, '2.0.6', true );
+		wp_register_script( 'kc-settings', self::$pdata['paths']['scripts'].'/kc-settings.js', array('modernizr', 'jquery-ui-sortable', 'jquery-ui-datepicker', 'media-upload', 'thickbox'), self::$pdata['status']['version'], true );
+		wp_register_style( 'kc-settings',  self::$pdata['paths']['styles'].'/kc-settings.css', array('thickbox'), self::$pdata['status']['version'] );
 
 		# Uploader
 		wp_register_script( 'kc-settings-upload', self::$pdata['paths']['scripts'].'/upload.js', array('jquery'), self::$pdata['status']['version'] );
@@ -487,19 +486,19 @@ class kcSettings {
 
 	private static function _js_globals() {
 		$kcSettings_vars = array(
-			'upload'	=> array(
-				'text'	=> array(
-					'head'			=> __( 'KC Settings', 'kc-settings' ),
-					'empty'			=> __( 'Please upload some files and then go back to this tab.', 'kc-settings' ),
-					'checkAll'	=> __( 'Select all files', 'kc-settings' ),
-					'clear'			=> __( 'Clear selections', 'kc-settings' ),
-					'invert'		=> __( 'Invert selection', 'kc-settings' ),
-					'addFiles'	=> __( 'Add files to collection', 'kc-settings' ),
-					'info'			=> __( 'Click the "Media Library" tab to insert files that are already upload, or, upload your files, close this popup window, then click the "add files" button again to go to the "Media Library" tab to insert the files you just uploaded.', 'kc-settings' )
+			'upload' => array(
+				'text' => array(
+					'head'     => __( 'KC Settings', 'kc-settings' ),
+					'empty'    => __( 'Please upload some files and then go back to this tab.', 'kc-settings' ),
+					'checkAll' => __( 'Select all files', 'kc-settings' ),
+					'clear'    => __( 'Clear selections', 'kc-settings' ),
+					'invert'   => __( 'Invert selection', 'kc-settings' ),
+					'addFiles' => __( 'Add files to collection', 'kc-settings' ),
+					'info'     => __( 'Click the "Media Library" tab to insert files that are already upload, or, upload your files, close this popup window, then click the "add files" button again to go to the "Media Library" tab to insert the files you just uploaded.', 'kc-settings' )
 				)
 			),
-			'_ids'		=> isset( self::$pdata['kcsb']['_ids'] ) ? self::$pdata['kcsb']['_ids'] : '',
-			'paths'		=> self::$pdata['paths']
+			'_ids'  => isset( self::$pdata['kcsb']['_ids'] ) ? self::$pdata['kcsb']['_ids'] : '',
+			'paths' => self::$pdata['paths']
 		);
 
 		?>
@@ -643,11 +642,11 @@ function kcSettings_upgrade( $parts = array() ) {
 					if ( in_array('kcsb_metabox', $parts) ) {
 						$mb_prio = isset($section['priority']) ? $section['priority'] : 'default';
 						if ( isset($section['priority'])
-									|| ( $item['type'] == 'plugin' && !isset($item['display']) )
-									|| ( $item['display'] == 'metabox' && !isset($section['metabox']) ) ) {
+						      || ( $item['type'] == 'plugin' && !isset($item['display']) )
+						      || ( $item['display'] == 'metabox' && !isset($section['metabox']) ) ) {
 							$section['metabox'] = array(
-								'context'		=> 'normal',
-								'priority'	=> $mb_prio
+								'context'  => 'normal',
+								'priority' => $mb_prio
 							);
 							$item['display'] = 'metabox';
 							unset( $section['priority'] );
