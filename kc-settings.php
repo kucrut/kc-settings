@@ -63,6 +63,9 @@ class kcSettings {
 		# Get all settings
 		self::_bootstrap_settings();
 
+		# Options helpers
+		kcSettings_options::init();
+
 		# Backend-only stuff
 		add_action( 'init', array(__CLASS__, '_admin_init'), 100 );
 	}
@@ -74,10 +77,6 @@ class kcSettings {
 
 		# Register settings
 		if ( self::$pdata['settings'] ) {
-			# Include options helpers
-			require_once self::$pdata['paths']['inc'].'/helper_options.php';
-			kcSettings_options::init();
-
 			foreach ( array_keys(self::$pdata['settings']) as $type ) {
 				require_once self::$pdata['paths']['inc']."/{$type}.php";
 
