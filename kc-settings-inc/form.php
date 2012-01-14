@@ -30,7 +30,7 @@ class kcForm {
 		if ( in_array($type, array('select', 'radio', 'checkbox')) ) {
 			if ( !isset($args['options']) || !is_array($args['options']) )
 				return false;
-			elseif (  count($args['options']) == count($args['options'], COUNT_RECURSIVE) )
+			elseif ( count($args['options']) == count($args['options'], COUNT_RECURSIVE) )
 				$args['options'] = self::_build_options( $args['options'] );
 		}
 
@@ -39,7 +39,7 @@ class kcForm {
 
 
 	public static function input( $args ) {
-		if ( !isset($args['type']) || in_array($args['type'], array('', 'input') ) )
+		if ( !isset($args['type']) || in_array($args['type'], array('', 'input')) )
 			$args['type'] = 'text';
 
 		$output  = "<input type='{$args['type']}'";
