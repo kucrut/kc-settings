@@ -69,12 +69,12 @@ class kcSettings_plugin {
 				foreach ( $section['fields'] as $field ) {
 					# add fields on each sections
 					$args = array(
-						'mode' 		=> 'plugin',
-						'prefix' 	=> $prefix,
-						'section'	=> $section['id'],
-						'field'		=> $field,
-						'echo'		=> true,
-						'tabled'	=> true
+						'mode'    => 'plugin',
+						'prefix'  => $prefix,
+						'section' => $section['id'],
+						'field'   => $field,
+						'echo'    => true,
+						'tabled'  => true
 					);
 					if ( !in_array($field['type'], array('checkbox', 'radio', 'multiinput')) )
 						$args['label_for'] = "{$section['id']}__{$field['id']}";
@@ -226,14 +226,8 @@ class kcSettings_plugin {
 			foreach ( $sv as $fk => $fv ) {
 				$type = $options[$sk]['fields'][$fk]['type'];
 
-				# rebuild and cleanup array for multiinput type options
-				if ( $type == 'multiinput' ) {
-					$fv = kc_array_remove_empty( $fv );
-					$fv = kc_array_rebuild_index( $fv );
-				}
-				elseif ( in_array($type, array('input', 'textarea')) ) {
-					$fv = trim( $fv );
-				}
+				# default sanitation
+				$fv = kc_sanitize_value( $fv );
 
 				# type-based filter
 				$fv = apply_filters( "kcv_setting_{$prefix}_{$type}", $fv );

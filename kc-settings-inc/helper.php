@@ -207,6 +207,25 @@ function kc_sort_query_by_post_in( $sortby, $query ) {
 
 
 /**
+ * Sanitize user input
+ */
+function kc_sanitize_value( $value ) {
+	# default sanitation
+	if ( $value != '' && $field['type'] == 'multiinput' ) {
+		$value = kc_array_remove_empty( $nu_val );
+		$value = kc_array_rebuild_index( $nu_val );
+		if ( empty($value) )
+			$value = '';
+	}
+	elseif ( !is_array($value) ) {
+		$value = trim( $value );
+	}
+
+	return $value;
+}
+
+
+/**
  * Update posts & terms metadata
  *
  * @param string $meta_type post|term|user The type of metadata, post, term or user
@@ -252,15 +271,7 @@ function kc_update_meta( $meta_type = 'post', $object_type_name, $object_id, $se
 	}
 
 	# default sanitation
-	if ( $nu_val != '' && $field['type'] == 'multiinput' ) {
-		$nu_val = kc_array_remove_empty( $nu_val );
-		$nu_val = kc_array_rebuild_index( $nu_val );
-		if ( empty($nu_val) )
-			$nu_val = '';
-	}
-	elseif ( !is_array($nu_val) ) {
-		$nu_val = trim( $nu_val );
-	}
+	$nu_val = kc_sanitize_value( $nu_val );
 
 	$filter_prefix = "kcv_{$meta_type}meta";
 	if ( $meta_type != 'user' && $object_type_name != '' )
