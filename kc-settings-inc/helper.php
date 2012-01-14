@@ -191,18 +191,6 @@ function kc_check_roles( $roles = array() ) {
 }
 
 
-
-function kc_get_taxonomies( $args = array('public' => true) ) {
-	$taxonomies = array();
-	$arr = get_taxonomies( $args, 'object' );
-	if ( !empty($arr) )
-		foreach ( $arr as $tax )
-			$taxonomies[] = array( 'value' => $tax->name, 'label' => $tax->label );
-
-	return $taxonomies;
-}
-
-
 function kc_get_post_types( $args = array('public' => true) ) {
 	$post_types = array();
 	$arr = get_post_types( $args, 'object' );
