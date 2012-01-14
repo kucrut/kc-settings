@@ -79,7 +79,7 @@ class kcSettings_plugin {
 					if ( !in_array($field['type'], array('checkbox', 'radio', 'multiinput')) )
 						$args['label_for'] = "{$section['id']}__{$field['id']}";
 
-					add_settings_field( $field['id'], $field['title'], 'kcs_settings_field', "{$prefix}_settings", $section['id'], $args );
+					add_settings_field( $field['id'], $field['title'], 'kc_settings_field', "{$prefix}_settings", $section['id'], $args );
 				}
 			}
 
@@ -228,8 +228,8 @@ class kcSettings_plugin {
 
 				# rebuild and cleanup array for multiinput type options
 				if ( $type == 'multiinput' ) {
-					$fv = kcs_array_remove_empty( $fv );
-					$fv = kcs_array_rebuild_index( $fv );
+					$fv = kc_array_remove_empty( $fv );
+					$fv = kc_array_rebuild_index( $fv );
 				}
 				elseif ( in_array($type, array('input', 'textarea')) ) {
 					$fv = trim( $fv );

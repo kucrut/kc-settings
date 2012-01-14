@@ -9,7 +9,7 @@
  * @return $nu_arr array
  */
 
-function kcs_array_rebuild_index( $arr, $cleanup = true ) {
+function kc_array_rebuild_index( $arr, $cleanup = true ) {
 	$nu_arr = array();
 	$rownum = 0;
 	foreach ( $arr as $row ) {
@@ -25,28 +25,33 @@ function kcs_array_rebuild_index( $arr, $cleanup = true ) {
 }
 
 
-/* Search haystack for needle and return an array of the key path,
+/**
+ * Search array recursively
+ *
+ * Search haystack for needle and return an array of the key path,
  * FALSE otherwise. If $key is given, return only for this key
  *
- * @param $needle The searched value
- * @param $haystack The array
- * @param $needlekey Optional key
- * @mixed kcs_array_search_recursive(mixed $needle, array $haystack [,$key [,bool $trict[,array $path]]])
+ * @param string $needle The searched value
+ * @param array $haystack The array
+ * @param string $needlekey Optional key
+ * @param bool $strict
+ * @param array $path
+ * @mixed kc_array_search_recursive(mixed $needle, array $haystack [,string $key [,bool $strict[,array $path]]])
  *
  * @credit ob at babcom dot biz
  * @link http://www.php.net/manual/en/function.array-search.php#69232
  */
-
-function kcs_array_search_recursive( $needle, $haystack, $needlekey = '', $strict = false, $path = array() ) {
+function kc_array_search_recursive( $needle, $haystack, $needlekey = '', $strict = false, $path = array() ) {
 	if( !is_array($haystack) )
 		return false;
 
 	foreach( $haystack as $key => $val ) {
-		if ( is_array($val) && $subpath = kcs_array_search_recursive( $needle, $val, $needlekey, $strict, $path) ) {
+		if ( is_array($val) && $subpath = kc_array_search_recursive( $needle, $val, $needlekey, $strict, $path) ) {
 			$path = array_merge( $path, array($key), $subpath );
 			return $path;
 		}
-		elseif ( (!$strict && $val == $needle && $key == (strlen($needlekey) > 0 ? $needlekey : $key)) || ($strict && $val === $needle && $key == (strlen($needlekey) > 0 ? $needlekey : $key)) ) {
+		elseif ( (!$strict && $val == $needle && $key == (strlen($needlekey) > 0 ? $needlekey : $key))
+		         || ($strict && $val === $needle && $key == (strlen($needlekey) > 0 ? $needlekey : $key)) ) {
 			$path[] = $key;
 			return $path;
 		}
@@ -64,11 +69,11 @@ function kcs_array_search_recursive( $needle, $haystack, $needlekey = '', $stric
  * @return array
  */
 
-function kcs_array_remove_empty( $arr, $rm_zero = true ) {
+function kc_array_remove_empty( $arr, $rm_zero = true ) {
 	$narr = array();
 	while ( list($key, $val) = each($arr) ) {
 		if ( is_array($val) ) {
-			$val = kcs_array_remove_empty( $val );
+			$val = kc_array_remove_empty( $val );
 			if ( count($val) != 0 )
 				$narr[$key] = $val;
 		}
@@ -92,7 +97,7 @@ function kcs_array_remove_empty( $arr, $rm_zero = true ) {
  *
  * @return mixed
  */
-function kcs_array_multi_get_value( $array, $keys ) {
+function kc_array_multi_get_value( $array, $keys ) {
 	foreach ( $keys as $idx => $key ) {
 		unset( $keys[$idx] );
 		if ( !isset($array[$key]) )
@@ -127,7 +132,7 @@ function kc_get_option( $prefix, $section = '', $field = '') {
 
 	$keys = func_get_args();
 	unset( $keys[0] );
-	return kcs_array_multi_get_value( $values, $keys );
+	return kc_array_multi_get_value( $values, $keys );
 }
 
 
@@ -151,7 +156,7 @@ function kc_get_default( $type, $prefix, $section = '', $field = '' ) {
 	$keys = func_get_args();
 	unset( $keys[0] );
 	unset( $keys[1] );
-	return kcs_array_multi_get_value( $defaults, $keys );
+	return kc_array_multi_get_value( $defaults, $keys );
 }
 
 
@@ -163,7 +168,7 @@ function kc_get_default( $type, $prefix, $section = '', $field = '' ) {
  * @param array $roles Array containing roles, could be a string for single role.
  * @return bool $allowed Permission
  */
-function kcs_check_roles( $roles = array() ) {
+function kc_check_roles( $roles = array() ) {
 	if ( empty($roles) )
 		return true;
 
@@ -234,7 +239,7 @@ function kc_get_roles() {
  * @links http://www.thinkoomph.com
  * @links http://wordpress.org/extend/plugins/sort-query-by-post-in/
  */
-function kcs_sort_query_by_post_in( $sortby, $query ) {
+function kc_sort_query_by_post_in( $sortby, $query ) {
 	if ( isset($query->query['post__in']) && !empty($query->query['post__in']) && isset($query->query['orderby']) && $query->query['orderby'] == 'post__in' )
 		$sortby = "find_in_set(ID, '" . implode( ',', $query->query['post__in'] ) . "')";
 
@@ -252,7 +257,7 @@ function kcs_sort_query_by_post_in( $sortby, $query ) {
  * @param array $field The meta field array
  * @param bool $is_attachment Are we updating attachment metadata?
  */
-function kcs_update_meta( $meta_type = 'post', $object_type_name, $object_id, $section, $field, $is_attachment = false ) {
+function kc_update_meta( $meta_type = 'post', $object_type_name, $object_id, $section, $field, $is_attachment = false ) {
 	if ( isset($_POST['action']) && $_POST['action'] == 'inline-save' )
 		return;
 
@@ -289,8 +294,8 @@ function kcs_update_meta( $meta_type = 'post', $object_type_name, $object_id, $s
 
 	# default sanitation
 	if ( $nu_val != '' && $field['type'] == 'multiinput' ) {
-		$nu_val = kcs_array_remove_empty( $nu_val );
-		$nu_val = kcs_array_rebuild_index( $nu_val );
+		$nu_val = kc_array_remove_empty( $nu_val );
+		$nu_val = kc_array_rebuild_index( $nu_val );
 		if ( empty($nu_val) )
 			$nu_val = '';
 	}
@@ -304,7 +309,7 @@ function kcs_update_meta( $meta_type = 'post', $object_type_name, $object_id, $s
 
 	# apply validation/sanitation filters on the new values
 	# 	0. Taxonomy / Post type
-	$nu_val = apply_filters( "{$filter_prefix}", $nu_val, $section, $field );
+	$nu_val = apply_filters( $filter_prefix, $nu_val, $section, $field );
 	# 	1. Field type
 	$nu_val = apply_filters( "{$filter_prefix}_{$field['type']}", $nu_val, $section, $field );
 	#		2. Section
@@ -325,7 +330,7 @@ function kcs_update_meta( $meta_type = 'post', $object_type_name, $object_id, $s
  * @param string $type Sizes to get: all, default, or custom
  * @return array $sizes Array of image sizes
  */
-function kcs_get_image_sizes( $type = 'all' ) {
+function kc_get_image_sizes( $type = 'all' ) {
 	$sizes = array();
 
 	# Default sizes
@@ -387,7 +392,7 @@ class kcSettings_options {
 
 	public static function image_sizes( $store = true, $dims = true ) {
 		$sizes = array();
-		foreach ( kcs_get_image_sizes() as $id => $dim ) {
+		foreach ( kc_get_image_sizes() as $id => $dim ) {
 			if ( $dims )
 				$sizes[$id] = "{$id} ({$dim['width']} x {$dim['height']})";
 			else

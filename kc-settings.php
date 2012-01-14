@@ -61,7 +61,7 @@ class kcSettings {
 		kcSettings_options::init();
 
 		# Include samples (for development)
-		//self::_samples( array('01_plugin') );
+		self::_samples( array('01_plugin') );
 
 		# Get all settings
 		self::_bootstrap_settings();
@@ -580,7 +580,7 @@ class kcSettings {
 			return $data;
 
 		$args = func_get_args();
-		return kcs_array_multi_get_value( $data, $args );
+		return kc_array_multi_get_value( $data, $args );
 	}
 }
 add_action( 'init', array('kcSettings', 'init'), 99 );

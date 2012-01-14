@@ -73,13 +73,13 @@ class kcSettings_term {
 
 				$output .= "\t\t<{$row_tag} class='form-field'>\n";
 
-				$the_label = kcs_form_label( $field['title'], $label_for, false, false  );
+				$the_label = kc_form_label( $field['title'], $label_for, false, false  );
 				# Wrap the field with <tr> if we're in edit mode
 				if ( $edit_mode )
 					$the_label = "\t\t\t<th scope='row'>{$the_label}</th>\n";
 				$output .= $the_label;
 
-				$the_field = "\t\t\t\t".kcs_settings_field( $args )."\n";
+				$the_field = "\t\t\t\t".kc_settings_field( $args )."\n";
 				# Wrap the field with <tr> if we're in edit mode
 				if ( $edit_mode )
 					$the_field = "\t\t\t<td>\n{$the_field}\t\t\t</td>\n";
@@ -108,7 +108,7 @@ class kcSettings_term {
 
 		foreach ( self::$settings[$taxonomy] as $section ) {
 			foreach ( $section['fields'] as $field )
-				kcs_update_meta( 'term', $tax, $term_id, $section, $field );
+				kc_update_meta( 'term', $tax, $term_id, $section, $field );
 		}
 	}
 }

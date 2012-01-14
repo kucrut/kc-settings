@@ -28,7 +28,7 @@ class kcSettings_post {
 
 		foreach ( self::$settings[$post_type] as $section ) {
 			# does this section have role set?
-			if ( (isset($section['role']) && !empty($section['role'])) && !kcs_check_roles($section['role']) )
+			if ( (isset($section['role']) && !empty($section['role'])) && !kc_check_roles($section['role']) )
 				continue;
 
 			# set metabox properties
@@ -63,9 +63,9 @@ class kcSettings_post {
 		foreach ( $section['fields'] as $field ) {
 			$label_for = ( !in_array($field['type'], array('checkbox', 'radio', 'multiinput', 'file')) ) ? $field['id'] : null;
 			$output .= $wraps['row'][0];
-			$f_label = kcs_form_label( $field['title'], $label_for, !$on_side, false );
+			$f_label = kc_form_label( $field['title'], $label_for, !$on_side, false );
 			$output .= ( $on_side ) ? "\t\t<span class='side-label'>{$f_label}</span>\n" : $f_label;
-			$f_input = kcs_settings_field( array( 'mode' => 'post', 'object_id' => $object->ID, 'section' => $section['id'], 'field' => $field ) );
+			$f_input = kc_settings_field( array( 'mode' => 'post', 'object_id' => $object->ID, 'section' => $section['id'], 'field' => $field ) );
 			$output .= ( $on_side ) ? $f_input : "\t\t<td>\n\t\t\t{$f_input}\n\t\t</td>\n";
 			$output .= $wraps['row'][1];
 		}
@@ -90,7 +90,7 @@ class kcSettings_post {
 
 		foreach ( self::$settings[$post->post_type] as $section ) {
 			foreach ( $section['fields'] as $field )
-				kcs_update_meta( 'post', $post->post_type, $post_id, $section, $field );
+				kc_update_meta( 'post', $post->post_type, $post_id, $section, $field );
 		}
 
 		return $post_id;
@@ -113,7 +113,7 @@ class kcSettings_post {
 				$nu_field = array(
 					'label' => $field['title'],
 					'input' => 'html',
-					'html'  => kcs_settings_field( $input_args )
+					'html'  => kc_settings_field( $input_args )
 				);
 				if ( isset($desc) && !empty($desc) )
 					$nu_field['helps'] = $field['desc'];
@@ -129,7 +129,7 @@ class kcSettings_post {
 	public static function _attachment_fields_to_save( $post, $attachment ) {
 		foreach ( self::$settings['attachment'] as $section ) {
 			foreach ( $section['fields'] as $field )
-				kcs_update_meta( 'post', 'attachment', $post['ID'], $section, $field, true );
+				kc_update_meta( 'post', 'attachment', $post['ID'], $section, $field, true );
 		}
 
 		return $post;

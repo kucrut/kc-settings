@@ -44,8 +44,8 @@ class kcSettings_user {
 					$args = array( 'mode' => 'user', 'object_id' => $user->ID, 'section' => $section['id'], 'field' => $field );
 
 					$output .= "\t\t<tr>\n";
-					$output .= "\t\t\t<th>".kcs_form_label($field['title'], $label_for, false, false)."</th>\n";
-					$output .= "\t\t\t<td>".kcs_settings_field( $args )."</td>\n";
+					$output .= "\t\t\t<th>".kc_form_label($field['title'], $label_for, false, false)."</th>\n";
+					$output .= "\t\t\t<td>".kc_settings_field( $args )."</td>\n";
 					$output .= "\t\t</tr>\n";
 				}
 				$output .= "\t</tbody>\n";
@@ -72,7 +72,7 @@ class kcSettings_user {
 		foreach ( self::$settings as $group ) {
 			foreach ( $group as $section )
 				foreach ( $section['fields'] as $field )
-					kcs_update_meta( 'user', null, $user_id, $section, $field );
+					kc_update_meta( 'user', null, $user_id, $section, $field );
 		}
 	}
 

@@ -156,7 +156,7 @@ class kcForm {
  * @return $output string HTML label element
  *
  */
-function kcs_form_label( $title, $id = null, $ft = false, $echo = true  ) {
+function kc_form_label( $title, $id = null, $ft = false, $echo = true  ) {
 	$output  = "<label";
 	if ( $id )
 		$output .= " for='{$id}' ";
@@ -182,7 +182,7 @@ function kcs_form_label( $title, $id = null, $ft = false, $echo = true  ) {
  *
  */
 
-function kcs_settings_field( $args ) {
+function kc_settings_field( $args ) {
 	if ( !isset($args['field']['attr']) )
 		$args['field']['attr'] = array();
 
@@ -284,15 +284,15 @@ function kcs_settings_field( $args ) {
 
 		if ( !empty($value['files']) ) {
 			$q_args = array(
-				'post__in' => $value['files'],
-				'post_type' => 'attachment',
-				'post_status' => 'inherit',
-				'posts_per_page'	=> -1,
-				'orderby' => 'post__in',
+				'post__in'         => $value['files'],
+				'post_type'        => 'attachment',
+				'post_status'      => 'inherit',
+				'posts_per_page'   => -1,
+				'orderby'          => 'post__in',
 				'suppress_filters' => false
 			);
 
-			add_filter( 'posts_orderby', 'kcs_sort_query_by_post_in', 10, 2 );
+			add_filter( 'posts_orderby', 'kc_sort_query_by_post_in', 10, 2 );
 
 			global $post;
 			$tmp_post = $post;
@@ -302,17 +302,17 @@ function kcs_settings_field( $args ) {
 				foreach ( $files as $post ) {
 					setup_postdata( $post );
 					$f__id = get_the_ID();
-					$output .= kcs_filelist_item( $name, $field['mode'], $p__id, $f__id, get_the_title(), in_array($f__id, $value['selected']), false );
+					$output .= kc_filelist_item( $name, $field['mode'], $p__id, $f__id, get_the_title(), in_array($f__id, $value['selected']), false );
 				}
 				$post = $tmp_post;
 			} else {
-				$output .= kcs_filelist_item( $name, $field['mode'] );
+				$output .= kc_filelist_item( $name, $field['mode'] );
 			}
 
-			remove_filter( 'posts_orderby', 'kcs_sort_query_by_post_in' );
+			remove_filter( 'posts_orderby', 'kc_sort_query_by_post_in' );
 
 		} else {
-			$output .= kcs_filelist_item( $name, $field['mode'] );
+			$output .= kc_filelist_item( $name, $field['mode'] );
 		}
 
 		$output .= "\t</ul>\n";
@@ -326,7 +326,7 @@ function kcs_settings_field( $args ) {
 	# pair Input
 	elseif ( $type == 'multiinput' ) {
 		$output .= "<p class='info'><em>". __('Info: Drag & drop to reorder.', 'kc-settings') ."</em></p>\n";
-		$output .= kcs_multiinput( $name, $db_value, $field );
+		$output .= kc_multiinput( $name, $db_value, $field );
 		$output .= "\t{$desc}\n";
 	}
 
@@ -352,9 +352,9 @@ function kcs_settings_field( $args ) {
 
 
 		$field_args = array(
-			'type'		=> $type,
-			'attr'		=> $field_attr,
-			'current'	=> $db_value
+			'type'    => $type,
+			'attr'    => $field_attr,
+			'current' => $db_value
 		);
 
 		if ( isset($field['options']) )
@@ -393,7 +393,7 @@ function kcs_settings_field( $args ) {
  *
  */
 
-function kcs_multiinput( $name, $db_value, $field ) {
+function kc_multiinput( $name, $db_value, $field ) {
 	if ( !is_array($db_value) || empty($db_value) )
 		$db_value = array(array('key' => '', 'value' => ''));
 
@@ -436,21 +436,21 @@ function kcs_multiinput( $name, $db_value, $field ) {
 }
 
 
-function kcs_filelist_item( $name, $type, $pid = '', $fid = '', $title = '', $checked = false, $hidden = true ) {
+function kc_filelist_item( $name, $type, $pid = '', $fid = '', $title = '', $checked = false, $hidden = true ) {
 	$checked = ( $checked ) ? "checked='checked' " : '';
 
 	$output  = "\t<li title='".__('Drag to reorder the items', 'kc-settings')."' class='row";
 	if ( $hidden )
 		$output .= " hidden";
 	$output .= "'>\n";
-	// Image thumb or mime type icon
+	# Image thumb or mime type icon
 	if ( $fid ) {
-		// Image
+		# Image
 		if ( wp_attachment_is_image($fid) ) {
 			$icon = wp_get_attachment_image_src($fid, array(46, 46));
 			$icon = $icon[0];
 		}
-		// Other types
+		# Other types
 		else {
 			$icon = wp_mime_type_icon( get_post_mime_type($fid) );
 		}
