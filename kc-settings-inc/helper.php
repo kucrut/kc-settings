@@ -325,6 +325,7 @@ class kcSettings_options {
 	public static $post_types_all;
 	public static $taxonomies;
 	public static $taxonomies_all;
+	public static $post_statuses;
 	public static $roles;
 	public static $yesno;
 
@@ -340,6 +341,16 @@ class kcSettings_options {
 		global $wp_roles;
 		if ( is_object($wp_roles) )
 			self::$roles = $wp_roles->role_names;
+
+		# ALL post statuses
+		$post_statuses = array_merge( get_post_statuses(), array(
+			'auto-draft' => __('Auto Draft'),
+			'inherit'    => __('Inherit', 'kc-essentials'),
+			'trash'      => __('Trash'),
+			'future'     => __('Scheduled')
+		) );
+		asort( $post_statuses );
+		self::$post_statuses = $post_statuses;
 
 		# Yes/No
 		self::$yesno = array(
