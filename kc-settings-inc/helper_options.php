@@ -14,6 +14,9 @@
  */
 class kcSettings_options {
 	public static $nav_menus;
+	public static $image_sizes;
+	public static $image_sizes_default;
+	public static $image_sizes_custom;
 
 
 	public static function init() {
@@ -33,6 +36,32 @@ class kcSettings_options {
 			$menus[$menu->term_id] = $menu->name;
 
 		self::$nav_menus = $menus;
+	}
+
+
+	public static function image_sizes( $store = true, $dims = true ) {
+		$sizes = array();
+		foreach ( kcs_get_image_sizes() as $id => $dim ) {
+			if ( $dims )
+				$sizes[$id] = "{$id} ({$dim['width']} x {$dim['height']})";
+			else
+				$sizes[$id] = $id;
+		}
+
+		if ( !$store )
+			return $sizes;
+
+		self::$image_sizes = $sizes;
+
+		$defaults = array();
+		foreach ( array('thumbnail', 'medium', 'large') as $ds ) {
+			$defaults[$ds] = $sizes[$ds];
+			unset( $sizes[$ds] );
+		}
+		self::$image_sizes_default = $defaults;
+
+		if ( !empty($sizes) )
+			self::$image_sizes_custom = $sizes;
 	}
 }
 
