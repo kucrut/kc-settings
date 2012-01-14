@@ -44,7 +44,6 @@ class kcSettings {
 		require_once "{$paths['inc']}/form.php";
 		require_once "{$paths['inc']}/helper.php";
 		require_once "{$paths['inc']}/callbacks.php";
-		require_once "{$paths['inc']}/_deprecated.php";
 
 		# i18n
 		$mo_file = $paths['inc'].'/languages/kc-settings-'.get_locale().'.mo';
@@ -61,7 +60,7 @@ class kcSettings {
 		kcSettings_options::init();
 
 		# Include samples (for development)
-		self::_samples( array('01_plugin') );
+		//self::_samples( array('01_plugin') );
 
 		# Get all settings
 		self::_bootstrap_settings();

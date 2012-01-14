@@ -267,7 +267,7 @@ class kcSettings_builder {
 			)
 		);
 
-		$taxonomies = kc_get_taxonomies();
+		$taxonomies = kcSettings_options::$taxonomies;
 		if ( !empty($taxonomies) ) {
 			$options['taxonomies'] = $taxonomies;
 		}
@@ -666,11 +666,12 @@ class kcSettings_builder {
 						<li class="childType" data-dep='term'>
 							<label class="kcsb-ml"><?php _e('Taxonomies', 'kc-settings') ?></label>
 							<?php
-								echo kcForm::select(array(
-									'attr'		=> array('name' => 'kcsb[taxonomy]', 'class' => 'kcsb-mi'),
-									'options'	=> $options['taxonomies'],
-									'current'	=> $values['taxonomy'],
-									'none'		=> false
+								echo kcForm::field(array(
+									'type'    => 'select',
+									'attr'    => array('name' => 'kcsb[taxonomy]', 'class' => 'kcsb-mi'),
+									'options' => $options['taxonomies'],
+									'current' => $values['taxonomy'],
+									'none'    => false
 								));
 							?>
 						</li>

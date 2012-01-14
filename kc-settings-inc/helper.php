@@ -362,6 +362,8 @@ class kcSettings_options {
 	public static $image_sizes;
 	public static $image_sizes_default;
 	public static $image_sizes_custom;
+	public static $taxonomies;
+	public static $taxonomies_all;
 	public static $yesno;
 
 
@@ -413,6 +415,33 @@ class kcSettings_options {
 
 		if ( !empty($sizes) )
 			self::$image_sizes_custom = $sizes;
+	}
+
+
+	public static function taxonomies( $store = true, $public_only = false, $detail = true ) {
+		$all_tax = get_taxonomies( array(), 'object' );
+		if ( empty($all_tax) )
+			return false;
+
+		$taxonomies_all = $taxonomies = array();
+		foreach ( $all_tax as $tax ) {
+			$label = $detail ? "{$tax->label} <code>({$tax->name})</code>" : $tax->label;
+			$taxonomies_all[$tax->name] = $label;
+
+			if ( $tax->public )
+				$taxonomies[$tax->name] = $label;
+		}
+
+		if ( !$store ) {
+			if ( $public_only )
+				return $taxonomies;
+			else
+				return $taxonomies_all;
+		}
+		else {
+			self::$taxonomies = $taxonomies;
+			self::$taxonomies_all = $taxonomies_all;
+		}
 	}
 }
 
