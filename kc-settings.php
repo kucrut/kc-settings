@@ -43,6 +43,7 @@ class kcSettings {
 
 		require_once "{$paths['inc']}/form.php";
 		require_once "{$paths['inc']}/helper.php";
+		require_once "{$paths['inc']}/callbacks.php";
 		require_once "{$paths['inc']}/_deprecated.php";
 
 		# i18n

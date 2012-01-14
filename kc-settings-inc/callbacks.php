@@ -45,7 +45,7 @@ function kcs_multi_featured_images( $args, $db_value, $cb_args ) {
 /**
  * Get nav menus
  */
-function kcs_cb_nav_menus( $args, $db_value, $cb_args ) {
+function kc_cb_nav_menus( $args, $db_value, $cb_args ) {
 	if ( !kcSettings_options::$nav_menus )
 		return __('Please create a menu', 'kc-settings');
 
