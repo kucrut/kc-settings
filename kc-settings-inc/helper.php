@@ -191,24 +191,6 @@ function kc_check_roles( $roles = array() ) {
 }
 
 
-function kc_get_roles() {
-	$roles = array();
-
-	global $wp_roles;
-	if ( !is_object($wp_roles) )
-		return $roles;
-
-	foreach ( $wp_roles->roles as $k => $v ) {
-		$roles[] = array(
-			'value'	=> $k,
-			'label'	=> $v['name']
-		);
-	}
-
-	return $roles;
-}
-
-
 /**
  * Sort query order by 'post__in'
  *
@@ -343,6 +325,7 @@ class kcSettings_options {
 	public static $post_types_all;
 	public static $taxonomies;
 	public static $taxonomies_all;
+	public static $roles;
 	public static $yesno;
 
 
@@ -351,6 +334,14 @@ class kcSettings_options {
 			if ( !in_array($method, array('init', 'channels')) )
 				call_user_func( array(__CLASS__, $method) );
 
+		# Trivial ones
+
+		# User roles
+		global $wp_roles;
+		if ( is_object($wp_roles) )
+			self::$roles = $wp_roles->role_names;
+
+		# Yes/No
 		self::$yesno = array(
 			'1' => __('Yes', 'kc-settings'),
 			'0' => __('No', 'kc-settings')

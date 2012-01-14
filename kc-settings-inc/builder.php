@@ -293,7 +293,7 @@ class kcSettings_builder {
 			);
 		}
 
-		$roles = kc_get_roles();
+		$roles = kcSettings_options::$roles;
 		if ( !empty($roles) ) {
 			$options['role'] = $roles;
 		}
@@ -715,11 +715,12 @@ class kcSettings_builder {
 											if ( !isset($s_val['role']) )
 												$s_val['role'] = array();
 
-											echo kcForm::checkbox(array(
-												'attr'			=> array('name' => "{$s_name}[role][]", 'class' => 'kcsb-mi'),
-												'options'		=> $options['role'],
-												'current'		=> $s_val['role'],
-												'check_sep'	=> array("\t<li>", "</li>\n")
+											echo kcForm::field(array(
+												'type'      => 'checkbox',
+												'attr'      => array('name' => "{$s_name}[role][]", 'class' => 'kcsb-mi'),
+												'options'   => $options['role'],
+												'current'   => $s_val['role'],
+												'check_sep' => array("\t<li>", "</li>\n")
 											));
 										?>
 									</ul>
