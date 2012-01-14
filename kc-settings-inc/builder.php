@@ -280,7 +280,7 @@ class kcSettings_builder {
 			);
 		}
 
-		$post_types = kc_get_post_types();
+		$post_types = kcSettings_options::$post_types;
 		if ( !empty($post_types) ) {
 			$options['post_types'] = $post_types;
 		}
@@ -655,11 +655,12 @@ class kcSettings_builder {
 						<li class="childType" data-dep='post'>
 							<label class="kcsb-ml"><?php _e('Post type', 'kc-settings') ?></label>
 							<?php
-								echo kcForm::select(array(
-									'attr'		=> array('name' => 'kcsb[post_type]', 'class' => 'kcsb-mi'),
-									'options'	=> $options['post_types'],
-									'current'	=> $values['post_type'],
-									'none'		=> false
+								echo kcForm::field(array(
+									'type'    => 'select',
+									'attr'    => array('name' => 'kcsb[post_type]', 'class' => 'kcsb-mi'),
+									'options' => $options['post_types'],
+									'current' => $values['post_type'],
+									'none'    => false
 								));
 							?>
 						</li>

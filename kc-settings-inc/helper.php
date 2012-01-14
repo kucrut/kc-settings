@@ -191,17 +191,6 @@ function kc_check_roles( $roles = array() ) {
 }
 
 
-function kc_get_post_types( $args = array('public' => true) ) {
-	$post_types = array();
-	$arr = get_post_types( $args, 'object' );
-	if ( !empty($arr) )
-		foreach ( $arr as $pt )
-			$post_types[] = array( 'value' => $pt->name, 'label' => $pt->label );
-
-	return $post_types;
-}
-
-
 function kc_get_roles() {
 	$roles = array();
 
@@ -350,6 +339,8 @@ class kcSettings_options {
 	public static $image_sizes;
 	public static $image_sizes_default;
 	public static $image_sizes_custom;
+	public static $post_types;
+	public static $post_types_all;
 	public static $taxonomies;
 	public static $taxonomies_all;
 	public static $yesno;
@@ -357,7 +348,7 @@ class kcSettings_options {
 
 	public static function init() {
 		foreach ( get_class_methods(__CLASS__) as $method )
-			if ( $method !== 'init' )
+			if ( !in_array($method, array('init', 'channels')) )
 				call_user_func( array(__CLASS__, $method) );
 
 		self::$yesno = array(
@@ -407,28 +398,47 @@ class kcSettings_options {
 
 
 	public static function taxonomies( $store = true, $public_only = false, $detail = true ) {
-		$all_tax = get_taxonomies( array(), 'object' );
-		if ( empty($all_tax) )
+		return self::channels( 'taxonomies', $store, $public_only, $detail );
+	}
+
+
+	public static function post_types( $store = true, $public_only = false, $detail = true ) {
+		return self::channels( 'post_types', $store, $public_only, $detail );
+	}
+
+
+	public static function channels( $type, $store = true, $public_only = false, $detail = true ) {
+		$_objects = ( $type === 'post_types' ) ? get_post_types( array(), 'object' ) : get_taxonomies( array(), 'object' );
+		if ( empty($_objects) )
 			return false;
 
-		$taxonomies_all = $taxonomies = array();
-		foreach ( $all_tax as $tax ) {
-			$label = $detail ? "{$tax->label} <code>({$tax->name})</code>" : $tax->label;
-			$taxonomies_all[$tax->name] = $label;
+		$objects_all = $objects = array();
+		foreach ( $_objects as $object ) {
+			$label = $detail ? "{$object->label} <code>({$object->name})</code>" : $object->label;
+			$objects_all[$object->name] = $label;
 
-			if ( $tax->public )
-				$taxonomies[$tax->name] = $label;
+			if ( $object->public )
+				$objects[$object->name] = $label;
 		}
 
 		if ( !$store ) {
 			if ( $public_only )
-				return $taxonomies;
+				return $objects;
 			else
-				return $taxonomies_all;
+				return $objects_all;
 		}
 		else {
-			self::$taxonomies = $taxonomies;
-			self::$taxonomies_all = $taxonomies_all;
+			switch ( $type ) {
+				case 'post_types' :
+					self::$post_types = $objects;
+					self::$post_types_all = $objects_all;
+				break;
+
+				default :
+					self::$taxonomies = $objects;
+					self::$taxonomies_all = $objects_all;
+				break;
+			}
 		}
 	}
 }
