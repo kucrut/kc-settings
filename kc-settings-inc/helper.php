@@ -408,7 +408,7 @@ class kcSettings_options {
 			$label = $detail ? "{$object->label} <code>({$object->name})</code>" : $object->label;
 			$objects_all[$object->name] = $label;
 
-			if ( $object->public )
+			if ( $object->show_ui )
 				$objects[$object->name] = $label;
 		}
 
