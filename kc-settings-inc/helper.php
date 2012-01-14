@@ -209,17 +209,18 @@ function kc_sort_query_by_post_in( $sortby, $query ) {
 /**
  * Sanitize user input
  */
-function kc_sanitize_value( $value ) {
+function kc_sanitize_value( $value, $type ) {
 	# default sanitation
-	if ( $value != '' && $field['type'] == 'multiinput' ) {
-		$value = kc_array_remove_empty( $nu_val );
-		$value = kc_array_rebuild_index( $nu_val );
+	if ( $value != '' && $type === 'multiinput' ) {
+		$value = kc_array_remove_empty( $value );
+		$value = kc_array_rebuild_index( $value );
 		if ( empty($value) )
 			$value = '';
 	}
 	elseif ( !is_array($value) ) {
 		$value = trim( $value );
 	}
+
 
 	return $value;
 }
@@ -271,7 +272,7 @@ function kc_update_meta( $meta_type = 'post', $object_type_name, $object_id, $se
 	}
 
 	# default sanitation
-	$nu_val = kc_sanitize_value( $nu_val );
+	$nu_val = kc_sanitize_value( $nu_val, $field['type'] );
 
 	$filter_prefix = "kcv_{$meta_type}meta";
 	if ( $meta_type != 'user' && $object_type_name != '' )

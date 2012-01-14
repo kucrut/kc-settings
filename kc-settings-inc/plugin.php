@@ -227,7 +227,7 @@ class kcSettings_plugin {
 				$type = $options[$sk]['fields'][$fk]['type'];
 
 				# default sanitation
-				$fv = kc_sanitize_value( $fv );
+				$fv = kc_sanitize_value( $fv, $type );
 
 				# type-based filter
 				$fv = apply_filters( "kcv_setting_{$prefix}_{$type}", $fv );

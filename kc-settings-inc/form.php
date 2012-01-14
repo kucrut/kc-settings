@@ -400,35 +400,32 @@ function kc_multiinput( $name, $db_value, $field ) {
 	$rownum = 0;
 	$output = "\n\t<ul class='sortable kc-rows kcs-multiinput'>\n";
 
-	# If there's an array already, print it
-	if ( is_array($db_value) && !empty($db_value) ) {
-		foreach ( $db_value as $k => $v ) {
-			$r_key = ( isset($v['key']) ) ? esc_attr( $v['key'] ) : '';
-			$r_val = ( isset($v['value']) ) ? esc_textarea( $v['value'] ) : '';
+	foreach ( $db_value as $k => $v ) {
+		$r_key = ( isset($v['key']) ) ? esc_attr( $v['key'] ) : '';
+		$r_val = ( isset($v['value']) ) ? esc_textarea( $v['value'] ) : '';
 
-			$output .= "\t\t<li class='row' data-mode='{$field['id']}'>\n";
-			$output .= "\t\t\t<ul>\n";
-			# key
-			$output .= "\t\t\t<li>\n";
-			$output .= "\t\t\t\t<label>".__('Key', 'kc-settings')."</label>\n";
-			$output .= "\t\t\t\t<input class='regular-text' type='text' name='{$name}[{$k}][key]' value='{$r_key}' />\n";
-			$output .= "\t\t\t</li>\n";
-			# value
-			$output .= "\t\t\t<li>\n";
-			$output .= "\t\t\t\t<label>".__('Value', 'kc-settings')."</label>\n";
-			$output .= "\t\t\t\t<textarea name='{$name}[{$k}][value]' cols='100' rows='3'>{$r_val}</textarea>\n";
-			$output .= "\t\t\t</li>\n";
-			$output .= "\t\t\t</ul>\n";
-			# actions
-			$output .= "\t\t\t<p class='actions'>";
-			$output .= "<a class='add' title='".__('Add new row', 'kc-settings')."'>".__('Add', 'kc-settings')."</a>";
-			$output .= "<a class='del' title='".__('Remove this row', 'kc-settings')."'>".__('Remove', 'kc-settings')."</a>";
-			$output .= "<a class='clear' title='".__('Clear', 'kc-settings')."'>".__('Clear', 'kc-settings')."</a>";
-			$output .= "</p>\n";
-			$output .= "\t\t</li>\n";
+		$output .= "\t\t<li class='row' data-mode='{$field['id']}'>\n";
+		$output .= "\t\t\t<ul>\n";
+		# key
+		$output .= "\t\t\t<li>\n";
+		$output .= "\t\t\t\t<label>".__('Key', 'kc-settings')."</label>\n";
+		$output .= "\t\t\t\t<input class='regular-text' type='text' name='{$name}[{$k}][key]' value='{$r_key}' />\n";
+		$output .= "\t\t\t</li>\n";
+		# value
+		$output .= "\t\t\t<li>\n";
+		$output .= "\t\t\t\t<label>".__('Value', 'kc-settings')."</label>\n";
+		$output .= "\t\t\t\t<textarea name='{$name}[{$k}][value]' cols='100' rows='3'>{$r_val}</textarea>\n";
+		$output .= "\t\t\t</li>\n";
+		$output .= "\t\t\t</ul>\n";
+		# actions
+		$output .= "\t\t\t<p class='actions'>";
+		$output .= "<a class='add' title='".__('Add new row', 'kc-settings')."'>".__('Add', 'kc-settings')."</a>";
+		$output .= "<a class='del' title='".__('Remove this row', 'kc-settings')."'>".__('Remove', 'kc-settings')."</a>";
+		$output .= "<a class='clear' title='".__('Clear', 'kc-settings')."'>".__('Clear', 'kc-settings')."</a>";
+		$output .= "</p>\n";
+		$output .= "\t\t</li>\n";
 
-			++$rownum;
-		}
+		++$rownum;
 	}
 
 	$output .= "\t</ul>\n";
