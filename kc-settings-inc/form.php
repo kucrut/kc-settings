@@ -241,17 +241,30 @@ function kc_settings_field( $args ) {
 
 	# File
 	elseif ( $type == 'file' ) {
+		if ( $mode == 'post' ) {
+			$attachments_parent = $object_id;
+			$popup_tab = 'gallery';
+		}
+		else {
+			$attachments_parent = 0;
+			$popup_tab = 'library';
+		}
+		# Add files button
+		$button  = "<a href='media-upload.php?kcsf=true&amp;post_id={$attachments_parent}&amp;tab={$popup_tab}&amp;TB_iframe=1'";
+		$button .= " class='button kcsf-upload'";
+		$button .= " title='".__('Add files to collection', 'kc-settings');
+		$button .= "'>".__('Add files', 'kc-settings')."</a>\n";
+
 		$file_field_args = array(
-			'mode'      => $mode,
 			'field'     => $field,
 			'id'        => $id,
 			'name'      => $name,
 			'db_value'  => $db_value,
-			'object_id' => $object_id
+			'button'    => $button
 		);
-		if ( in_array($field['mode'], array('radio', 'checkbox')) ) {
+		if ( in_array($field['mode'], array('radio', 'checkbox')) )
 			$output .= kc_field_file_multiple( $file_field_args );
-		}
+		$output .= "\t{$desc}\n";
 	}
 
 	# Multiinput
@@ -304,6 +317,59 @@ function kc_settings_field( $args ) {
 		echo $output;
 	else
 		return $output;
+}
+
+
+/**
+ * Pair option row
+ *
+ * Generate html multiinput fields
+ *
+ * @param $name string Input name attribute
+ * @param $db_value string|array Current value (from database) of this input
+ * @param $type string Pair options type, defaults to multiinput
+ *
+ * @return $output string HTML Pair option row, with the required jQuery script
+ *
+ */
+
+function kc_field_multiinput( $name, $db_value, $field ) {
+	if ( !is_array($db_value) || empty($db_value) )
+		$db_value = array(array('key' => '', 'value' => ''));
+
+	$rownum = 0;
+	$output = "\n\t<ul class='sortable kc-rows kcs-multiinput'>\n";
+
+	foreach ( $db_value as $k => $v ) {
+		$r_key = ( isset($v['key']) ) ? esc_attr( $v['key'] ) : '';
+		$r_val = ( isset($v['value']) ) ? esc_textarea( $v['value'] ) : '';
+
+		$output .= "\t\t<li class='row' data-mode='{$field['id']}'>\n";
+		$output .= "\t\t\t<ul>\n";
+		# key
+		$output .= "\t\t\t<li>\n";
+		$output .= "\t\t\t\t<label>".__('Key', 'kc-settings')."</label>\n";
+		$output .= "\t\t\t\t<input class='regular-text' type='text' name='{$name}[{$k}][key]' value='{$r_key}' />\n";
+		$output .= "\t\t\t</li>\n";
+		# value
+		$output .= "\t\t\t<li>\n";
+		$output .= "\t\t\t\t<label>".__('Value', 'kc-settings')."</label>\n";
+		$output .= "\t\t\t\t<textarea name='{$name}[{$k}][value]' cols='100' rows='3'>{$r_val}</textarea>\n";
+		$output .= "\t\t\t</li>\n";
+		$output .= "\t\t\t</ul>\n";
+		# actions
+		$output .= "\t\t\t<p class='actions'>";
+		$output .= "<a class='add' title='".__('Add new row', 'kc-settings')."'>".__('Add', 'kc-settings')."</a>";
+		$output .= "<a class='del' title='".__('Remove this row', 'kc-settings')."'>".__('Remove', 'kc-settings')."</a>";
+		$output .= "<a class='clear' title='".__('Clear', 'kc-settings')."'>".__('Clear', 'kc-settings')."</a>";
+		$output .= "</p>\n";
+		$output .= "\t\t</li>\n";
+
+		++$rownum;
+	}
+
+	$output .= "\t</ul>\n";
+	return $output;
 }
 
 
@@ -368,75 +434,9 @@ function kc_field_file_multiple( $args ) {
 	}
 
 	$output .= "\t</ul>\n";
-
-	if ( $mode == 'post' ) {
-		$attachments_parent = $object_id;
-		$popup_tab = 'gallery';
-	}
-	else {
-		$attachments_parent = 0;
-		$popup_tab = 'library';
-	}
-	# Add files button
-	$output .= "<a href='media-upload.php?kcsf=true&amp;post_id={$attachments_parent}&amp;tab={$popup_tab}&amp;TB_iframe=1' class='button kcsf-upload' title='".__('Add files to collection', 'kc-settings')."'>".__('Add files', 'kc-settings')."</a>\n";
-
-	if ( isset($field['desc']) && !empty($field['desc']) )
-		$output .= wpautop( $field['desc'] );
+	$output .= "\t{$button}\n";
 	$output .= "</div>\n";
 
-	return $output;
-}
-
-
-/**
- * Pair option row
- *
- * Generate html multiinput fields
- *
- * @param $name string Input name attribute
- * @param $db_value string|array Current value (from database) of this input
- * @param $type string Pair options type, defaults to multiinput
- *
- * @return $output string HTML Pair option row, with the required jQuery script
- *
- */
-
-function kc_field_multiinput( $name, $db_value, $field ) {
-	if ( !is_array($db_value) || empty($db_value) )
-		$db_value = array(array('key' => '', 'value' => ''));
-
-	$rownum = 0;
-	$output = "\n\t<ul class='sortable kc-rows kcs-multiinput'>\n";
-
-	foreach ( $db_value as $k => $v ) {
-		$r_key = ( isset($v['key']) ) ? esc_attr( $v['key'] ) : '';
-		$r_val = ( isset($v['value']) ) ? esc_textarea( $v['value'] ) : '';
-
-		$output .= "\t\t<li class='row' data-mode='{$field['id']}'>\n";
-		$output .= "\t\t\t<ul>\n";
-		# key
-		$output .= "\t\t\t<li>\n";
-		$output .= "\t\t\t\t<label>".__('Key', 'kc-settings')."</label>\n";
-		$output .= "\t\t\t\t<input class='regular-text' type='text' name='{$name}[{$k}][key]' value='{$r_key}' />\n";
-		$output .= "\t\t\t</li>\n";
-		# value
-		$output .= "\t\t\t<li>\n";
-		$output .= "\t\t\t\t<label>".__('Value', 'kc-settings')."</label>\n";
-		$output .= "\t\t\t\t<textarea name='{$name}[{$k}][value]' cols='100' rows='3'>{$r_val}</textarea>\n";
-		$output .= "\t\t\t</li>\n";
-		$output .= "\t\t\t</ul>\n";
-		# actions
-		$output .= "\t\t\t<p class='actions'>";
-		$output .= "<a class='add' title='".__('Add new row', 'kc-settings')."'>".__('Add', 'kc-settings')."</a>";
-		$output .= "<a class='del' title='".__('Remove this row', 'kc-settings')."'>".__('Remove', 'kc-settings')."</a>";
-		$output .= "<a class='clear' title='".__('Clear', 'kc-settings')."'>".__('Clear', 'kc-settings')."</a>";
-		$output .= "</p>\n";
-		$output .= "\t\t</li>\n";
-
-		++$rownum;
-	}
-
-	$output .= "\t</ul>\n";
 	return $output;
 }
 
@@ -480,5 +480,6 @@ function kc_field_file_item( $input_name, $input_type, $attachment_id = '', $att
 
 	return $output;
 }
+
 
 ?>
