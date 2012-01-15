@@ -267,53 +267,23 @@ class kcSettings_builder {
 			)
 		);
 
-		$taxonomies = kcSettings_options::$taxonomies;
-		if ( !empty($taxonomies) ) {
-			$options['taxonomies'] = $taxonomies;
-		}
-		else {
-			$options['taxonomies'] = array(
-				array(
-					'value'	=> '',
-					'label'	=> __('No public taxonomy found', 'kc-settings')
-				)
-			);
-		}
 
-		$post_types = kcSettings_options::$post_types;
-		if ( !empty($post_types) ) {
-			$options['post_types'] = $post_types;
-		}
-		else {
-			$options['post_types'] = array(
-				array(
-					'value'	=> '',
-					'label'	=> __('No public post type found', 'kc-settings')
-				)
-			);
-		}
+		$post_types = array();
+		foreach( (array) get_post_types(array('public' => true), 'object') as $pt )
+			$post_types[$pt->name] = "{$pt->label} (<code>{$pt->name}</code>)";
+		$options['post_types'] = $post_types;
 
-		$roles = kcSettings_options::$roles;
-		if ( !empty($roles) ) {
-			$options['role'] = $roles;
-		}
-		else {
-			$options['role'] = array(
-				array(
-					'value'	=> '',
-					'label'	=> __('No role found', 'kc-settings')
-				)
-			);
-		}
+		$options['taxonomies'] = kcSettings_options::$taxonomies;
+		$options['role'] = kcSettings_options::$roles;
 
 		$options['filemode'] = array(
 			array(
 				'value' => 'radio',
-				'label' => __('Single', 'kc-settings')
+				'label' => __('Single selection', 'kc-settings')
 			),
 			array(
 				'value' => 'checkbox',
-				'label' => __('Multiple', 'kc-settings'),
+				'label' => __('Multiple selections', 'kc-settings'),
 				'default' => true
 			)
 		);
@@ -655,26 +625,32 @@ class kcSettings_builder {
 						<li class="childType" data-dep='post'>
 							<label class="kcsb-ml"><?php _e('Post type', 'kc-settings') ?></label>
 							<?php
-								echo kcForm::field(array(
-									'type'    => 'select',
-									'attr'    => array('name' => 'kcsb[post_type]', 'class' => 'kcsb-mi'),
-									'options' => $options['post_types'],
-									'current' => $values['post_type'],
-									'none'    => false
-								));
+								if ( empty($options['post_types']) )
+									echo '<p>'.__('No public post type found', 'kc-settings').'</p>';
+								else
+									echo kcForm::field(array(
+										'type'    => 'select',
+										'attr'    => array('name' => 'kcsb[post_type]', 'class' => 'kcsb-mi'),
+										'options' => $options['post_types'],
+										'current' => $values['post_type'],
+										'none'    => false
+									));
 							?>
 						</li>
 						<li class="childType" data-dep='term'>
 							<label class="kcsb-ml"><?php _e('Taxonomies', 'kc-settings') ?></label>
 							<?php
-								echo kcForm::field(array(
-									'type'    => 'select',
-									'attr'    => array('name' => 'kcsb[taxonomy]', 'class' => 'kcsb-mi'),
-									'options' => $options['taxonomies'],
-									'current' => $values['taxonomy'],
-									'none'    => false
-								));
-							?>
+								if ( empty($options['taxonomies']) )
+									echo '<p>'.__('No public taxonomy found', 'kc-settings').'</p>';
+								else
+									echo kcForm::field(array(
+										'type'    => 'select',
+										'attr'    => array('name' => 'kcsb[taxonomy]', 'class' => 'kcsb-mi'),
+										'options' => $options['taxonomies'],
+										'current' => $values['taxonomy'],
+										'none'    => false
+									));
+								?>
 						</li>
 					</ul>
 
@@ -715,13 +691,16 @@ class kcSettings_builder {
 											if ( !isset($s_val['role']) )
 												$s_val['role'] = array();
 
-											echo kcForm::field(array(
-												'type'      => 'checkbox',
-												'attr'      => array('name' => "{$s_name}[role][]", 'class' => 'kcsb-mi'),
-												'options'   => $options['role'],
-												'current'   => $s_val['role'],
-												'check_sep' => array("\t<li>", "</li>\n")
-											));
+											if ( empty($options['role']) )
+												echo '<p>'.__('No role found.', 'kc-settings').'</p>';
+											else
+												echo kcForm::field(array(
+													'type'      => 'checkbox',
+													'attr'      => array('name' => "{$s_name}[role][]", 'class' => 'kcsb-mi'),
+													'options'   => $options['role'],
+													'current'   => $s_val['role'],
+													'check_sep' => array("\t<li>", "</li>\n")
+												));
 										?>
 									</ul>
 								</li>

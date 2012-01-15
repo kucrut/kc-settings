@@ -387,7 +387,7 @@ class kcSettings {
 			# Field check: file mode
 			if ( $field['type'] == 'file' ) {
 				if ( !isset($field['mode']) || !in_array($field['mode'], $file_modes) )
-					$field['mode'] = 'radio';
+					$fields[$idx]['mode'] = 'radio';
 			}
 			elseif ( $field['type'] == 'special' ) {
 				if ( !isset($field['cb']) || !is_callable($field['cb']) ) {

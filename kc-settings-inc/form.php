@@ -241,72 +241,20 @@ function kc_settings_field( $args ) {
 
 	# File
 	elseif ( $type == 'file' ) {
-		# Post ID (for post meta only)
-		$p__id = ( isset($object_id) && $object_id != '' ) ? $object_id : '';
-
-		# Set default value
-		if ( empty($db_value) ) {
-			$value = array(
-				'files' => array(),
-				'selected' => array()
-			);
-		} else {
-			$value = $db_value;
-			if ( !isset($value['files']) || !is_array($value['files']) )
-				$value['files'] = array();
-			if ( !isset($value['selected']) || !is_array($value['selected']) )
-				$value['selected'] = array();
+		$file_field_args = array(
+			'mode'      => $mode,
+			'field'     => $field,
+			'id'        => $id,
+			'name'      => $name,
+			'db_value'  => $db_value,
+			'object_id' => $object_id
+		);
+		if ( in_array($field['mode'], array('radio', 'checkbox')) ) {
+			$output .= kc_field_file_multiple( $file_field_args );
 		}
-
-		$output .= "<div id='{$id}' class='kcs-file'>";
-
-		# List files
-		$lclass = empty($value['files']) ? ' hidden' : '';
-		$output .= "<p class='info{$lclass}'><em>". __('Info: Drag & drop to reorder.', 'kc-settings') ."</em></p>\n";
-		$output .= "\t<ul class='kc-rows sortable{$lclass}'>\n";
-
-		if ( !empty($value['files']) ) {
-			$q_args = array(
-				'post__in'         => $value['files'],
-				'post_type'        => 'attachment',
-				'post_status'      => 'inherit',
-				'posts_per_page'   => -1,
-				'orderby'          => 'post__in',
-				'suppress_filters' => false
-			);
-
-			add_filter( 'posts_orderby', 'kc_sort_query_by_post_in', 10, 2 );
-
-			global $post;
-			$tmp_post = $post;
-
-			$files = get_posts( $q_args );
-			if ( !empty($files) ) {
-				foreach ( $files as $post ) {
-					setup_postdata( $post );
-					$f__id = get_the_ID();
-					$output .= kc_field_file_item( $name, $field['mode'], $f__id, get_the_title(), in_array($f__id, $value['selected']), false );
-				}
-				$post = $tmp_post;
-			} else {
-				$output .= kc_field_file_item( $name, $field['mode'] );
-			}
-
-			remove_filter( 'posts_orderby', 'kc_sort_query_by_post_in' );
-
-		} else {
-			$output .= kc_field_file_item( $name, $field['mode'] );
-		}
-
-		$output .= "\t</ul>\n";
-
-		$output .= "<a href='media-upload.php?kcsf=true&amp;post_id={$p__id}&amp;TB_iframe=1' class='button kcsf-upload' title='".__('Add files to collection', 'kc-settings')."'>".__('Add files', 'kc-settings')."</a>\n";
-		if ( isset($field['desc']) && !empty($field['desc']) )
-			$output .= wpautop( $field['desc'] );
-		$output .= "</div>\n";
 	}
 
-	# pair Input
+	# Multiinput
 	elseif ( $type == 'multiinput' ) {
 		$output .= "<p class='info'><em>". __('Info: Drag & drop to reorder.', 'kc-settings') ."</em></p>\n";
 		$output .= kc_field_multiinput( $name, $db_value, $field );
@@ -360,6 +308,87 @@ function kc_settings_field( $args ) {
 		echo $output;
 	else
 		return $output;
+}
+
+
+/**
+ * Field: Multiple files
+ */
+function kc_field_file_multiple( $args ) {
+	extract( $args, EXTR_OVERWRITE );
+
+	# Set default value
+	if ( empty($db_value) ) {
+		$value = array(
+			'files' => array(),
+			'selected' => array()
+		);
+	} else {
+		$value = $db_value;
+		if ( !isset($value['files']) || !is_array($value['files']) )
+			$value['files'] = array();
+		if ( !isset($value['selected']) || !is_array($value['selected']) )
+			$value['selected'] = array();
+	}
+
+	$output = "<div id='{$id}' class='kcs-file'>";
+
+	# List files
+	$lclass = empty($value['files']) ? ' hidden' : '';
+	$output .= "<p class='info{$lclass}'><em>". __('Info: Drag & drop to reorder.', 'kc-settings') ."</em></p>\n";
+	$output .= "\t<ul class='kc-rows sortable{$lclass}'>\n";
+
+	if ( !empty($value['files']) ) {
+		$q_args = array(
+			'post__in'         => $value['files'],
+			'post_type'        => 'attachment',
+			'post_status'      => 'inherit',
+			'posts_per_page'   => -1,
+			'orderby'          => 'post__in',
+			'suppress_filters' => false
+		);
+
+		add_filter( 'posts_orderby', 'kc_sort_query_by_post_in', 10, 2 );
+
+		global $post;
+		$tmp_post = $post;
+
+		$files = get_posts( $q_args );
+		if ( !empty($files) ) {
+			foreach ( $files as $post ) {
+				setup_postdata( $post );
+				$attachment_id = get_the_ID();
+				$output .= kc_field_file_item( $name, $field['mode'], $attachment_id, get_the_title(), in_array($attachment_id, $value['selected']), false );
+			}
+			$post = $tmp_post;
+		} else {
+			$output .= kc_field_file_item( $name, $field['mode'] );
+		}
+
+		remove_filter( 'posts_orderby', 'kc_sort_query_by_post_in' );
+
+	} else {
+		$output .= kc_field_file_item( $name, $field['mode'] );
+	}
+
+	$output .= "\t</ul>\n";
+
+	if ( $mode == 'post' ) {
+		$attachments_parent = $object_id;
+		$popup_tab = 'gallery';
+	}
+	else {
+		$attachments_parent = 0;
+		$popup_tab = 'library';
+	}
+	# Add files button
+	$output .= "<a href='media-upload.php?kcsf=true&amp;post_id={$attachments_parent}&amp;tab={$popup_tab}&amp;TB_iframe=1' class='button kcsf-upload' title='".__('Add files to collection', 'kc-settings')."'>".__('Add files', 'kc-settings')."</a>\n";
+
+	if ( isset($field['desc']) && !empty($field['desc']) )
+		$output .= wpautop( $field['desc'] );
+	$output .= "</div>\n";
+
+	return $output;
 }
 
 
