@@ -314,8 +314,10 @@ class kcSettings {
 	# Validate each setting's section
 	private static function _validate_sections( $type, $sections, $group = '' ) {
 		$defaults = array();
+		$field_req_options = array( 'select', 'radio', 'checkbox' );
 
 		foreach ( $sections as $s_idx => $section ) {
+			# Section check: id, title & type
 			foreach ( array('id', 'title', 'fields') as $c ) {
 				if ( !isset($section[$c]) || empty($section[$c]) || ($c == 'fields' && !is_array($section[$c])) ) {
 					trigger_error( self::$xdata['bootsrap_messages']["section_no_{$c}"] );
@@ -326,12 +328,17 @@ class kcSettings {
 
 			foreach ( $section['fields'] as $f_idx => $field ) {
 				unset( $section['fields'][$f_idx] );
+				# Field check: id, title & type
 				foreach ( array('id', 'title', 'type') as $c ) {
 					if ( !isset($field[$c]) || empty($field[$c]) ) {
 						trigger_error( self::$xdata['bootsrap_messages']["field_no_{$c}"] );
 						continue 2;
 					}
-
+				}
+				# Field check: require options
+				if ( in_array($field['type'], $field_req_options) && !isset($field['options']) ) {
+					trigger_error( self::$xdata['bootsrap_messages']['field_no_opt'] );
+					continue;
 				}
 
 				$section['fields'][$field['id']] = $field;
