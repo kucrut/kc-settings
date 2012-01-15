@@ -285,7 +285,7 @@ function kc_settings_field( $args ) {
 				foreach ( $files as $post ) {
 					setup_postdata( $post );
 					$f__id = get_the_ID();
-					$output .= kc_field_file_item( $name, $field['mode'], $p__id, $f__id, get_the_title(), in_array($f__id, $value['selected']), false );
+					$output .= kc_field_file_item( $name, $field['mode'], $f__id, get_the_title(), in_array($f__id, $value['selected']), false );
 				}
 				$post = $tmp_post;
 			} else {
@@ -416,7 +416,10 @@ function kc_field_multiinput( $name, $db_value, $field ) {
 }
 
 
-function kc_field_file_item( $name, $type, $pid = '', $fid = '', $title = '', $checked = false, $hidden = true ) {
+/**
+ * File list item
+ */
+function kc_field_file_item( $input_name, $input_type, $attachment_id = '', $attachment_title = '', $checked = false, $hidden = true ) {
 	$checked = ( $checked ) ? "checked='checked' " : '';
 
 	$output  = "\t<li title='".__('Drag to reorder the items', 'kc-settings')."' class='row";
@@ -424,15 +427,15 @@ function kc_field_file_item( $name, $type, $pid = '', $fid = '', $title = '', $c
 		$output .= " hidden";
 	$output .= "'>\n";
 	# Image thumb or mime type icon
-	if ( $fid ) {
+	if ( $attachment_id ) {
 		# Image
-		if ( wp_attachment_is_image($fid) ) {
-			$icon = wp_get_attachment_image_src($fid, array(46, 46));
+		if ( wp_attachment_is_image($attachment_id) ) {
+			$icon = wp_get_attachment_image_src($attachment_id, array(46, 46));
 			$icon = $icon[0];
 		}
 		# Other types
 		else {
-			$icon = wp_mime_type_icon( get_post_mime_type($fid) );
+			$icon = wp_mime_type_icon( get_post_mime_type($attachment_id) );
 		}
 	}
 	else {
@@ -441,10 +444,10 @@ function kc_field_file_item( $name, $type, $pid = '', $fid = '', $title = '', $c
 	$output .= "\t\t<img src='{$icon}' alt=''/>";
 	$output .= "\t\t<a class='rm mid' title='".__('Remove from collection', 'kc-settings')."'><span>".__('Remove', 'kc-settings')."</span></a>\n";
 	$output .= "\t\t<label>";
-	$output .= "<input class='mid include' type='{$type}' name='{$name}[selected][]' value='{$fid}' {$checked}/> ";
-	$output .= "<span class='title'>{$title}</span>";
+	$output .= "<input class='mid include' type='{$input_type}' name='{$input_name}[selected][]' value='{$attachment_id}' {$checked}/> ";
+	$output .= "<span class='title'>{$attachment_title}</span>";
 	$output .= "</label>\n";
-	$output .= "\t\t<input class='fileID' type='hidden' name='{$name}[files][]' value='{$fid}'";
+	$output .= "\t\t<input class='fileID' type='hidden' name='{$input_name}[files][]' value='{$attachment_id}'";
 	if ( $hidden )
 		$output .= " disabled='true'";
 	$output .= "/> ";
