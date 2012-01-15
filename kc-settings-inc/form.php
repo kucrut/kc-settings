@@ -297,10 +297,6 @@ function kc_settings_field( $args ) {
 		$output .= "\t{$desc}\n";
 	}
 
-	# Only for general > components field (for manipulating the metaboxes visibility)
-	if ( $mode == 'plugin' && $section == 'general' && $field['id'] == 'components' && $field['type'] == 'checkbox' )
-		$output = "<div id='kcs-components'>\n{$output}</div>\n";
-
 	# Let user filter the output of the setting field
 	$output = apply_filters( 'kc_settings_field_after', $output, $section, $field );
 
