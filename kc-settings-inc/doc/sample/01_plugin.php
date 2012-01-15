@@ -159,10 +159,18 @@ function mytheme_options( $settings ) {
 					'type'  => 'multiinput'
 				),
 				array(
-					'id'    => 'sample_file',
-					'title' => 'File selection',
+					'id'    => 'sample_file1',
+					'title' => 'File selection (single)',
+					'desc'	=> 'File list with single selection',
 					'type'  => 'file',
-					'mode'  => 'radio' // radio (single) | checkbox (multiple)
+					'mode'  => 'radio'
+				),
+				array(
+					'id'    => 'sample_file2',
+					'title' => 'File selection (multiple)',
+					'desc'	=> 'File list with multiple selection',
+					'type'  => 'file',
+					'mode'  => 'checkbox'
 				),
 				array(
 					'id'      => 'sample_callback_3',
