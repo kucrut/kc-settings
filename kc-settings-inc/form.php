@@ -309,7 +309,7 @@ function kc_settings_field( $args ) {
 	# pair Input
 	elseif ( $type == 'multiinput' ) {
 		$output .= "<p class='info'><em>". __('Info: Drag & drop to reorder.', 'kc-settings') ."</em></p>\n";
-		$output .= kc_multiinput( $name, $db_value, $field );
+		$output .= kc_field_multiinput( $name, $db_value, $field );
 		$output .= "\t{$desc}\n";
 	}
 
@@ -376,7 +376,7 @@ function kc_settings_field( $args ) {
  *
  */
 
-function kc_multiinput( $name, $db_value, $field ) {
+function kc_field_multiinput( $name, $db_value, $field ) {
 	if ( !is_array($db_value) || empty($db_value) )
 		$db_value = array(array('key' => '', 'value' => ''));
 
