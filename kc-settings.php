@@ -169,7 +169,7 @@ class kcSettings {
 			'field_no_title'      => __( "One of your fields doesn't have <b>title</b> set. Therefore it has NOT been added.", 'kc-settings'),
 			'field_no_type'       => __( "One of your fields doesn't have <b>type</b> set. Therefore it has NOT been added.", 'kc-settings'),
 			'field_no_opt'        => __( "One of your fields doesn't have the required <b>options</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'field_no_cb'         => __( "One of your fields doesn't have the required <b>callback</b> set. Therefore it has NOT been added.", 'kc-settings')
+			'field_no_cb'         => __( "One of your fields doesn't have the required <b>callback</b> set, or is not callable. Therefore it has NOT been added.", 'kc-settings')
 		);
 
 		$kcsb = array(
@@ -345,6 +345,12 @@ class kcSettings {
 				if ( $field['type'] == 'file' ) {
 					if ( !isset($field['mode']) || !in_array($field['mode'], $field_file_modes) )
 						$field['mode'] = 'radio';
+				}
+				elseif ( $field['type'] == 'special' ) {
+					if ( !isset($field['cb']) || !is_callable($field['cb']) ) {
+						trigger_error( self::$xdata['bootsrap_messages']['field_no_cb'] );
+						continue;
+					}
 				}
 
 				$section['fields'][$field['id']] = $field;
