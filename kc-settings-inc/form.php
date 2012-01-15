@@ -253,11 +253,6 @@ function kc_settings_field( $args ) {
 
 	# File
 	elseif ( $type == 'file' ) {
-		# Set mode
-		if ( !isset($field['mode']) || !in_array($field['mode'], array('radio', 'checkbox')) ) {
-			$field['mode'] = 'radio';
-		}
-
 		# Post ID (for post meta only)
 		$p__id = ( isset($object_id) && $object_id != '' ) ? $object_id : '';
 

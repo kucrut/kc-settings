@@ -315,6 +315,7 @@ class kcSettings {
 	private static function _validate_sections( $type, $sections, $group = '' ) {
 		$defaults = array();
 		$field_req_options = array( 'select', 'radio', 'checkbox' );
+		$field_file_modes = array('radio', 'checkbox');
 
 		foreach ( $sections as $s_idx => $section ) {
 			# Section check: id, title & type
@@ -339,6 +340,11 @@ class kcSettings {
 				if ( in_array($field['type'], $field_req_options) && !isset($field['options']) ) {
 					trigger_error( self::$xdata['bootsrap_messages']['field_no_opt'] );
 					continue;
+				}
+				# Field check: file mode
+				if ( $field['type'] == 'file' ) {
+					if ( !isset($field['mode']) || !in_array($field['mode'], $field_file_modes) )
+						$field['mode'] = 'radio';
 				}
 
 				$section['fields'][$field['id']] = $field;
