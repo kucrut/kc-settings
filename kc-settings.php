@@ -314,10 +314,8 @@ class kcSettings {
 	# Validate each setting's section
 	private static function _validate_sections( $type, $sections, $group = '' ) {
 		$defaults = array();
-		$field_req_options = array( 'select', 'radio', 'checkbox' );
-		$field_file_modes = array('radio', 'checkbox');
-
 		foreach ( $sections as $s_idx => $section ) {
+			unset( $sections[$s_idx] );
 			# Section check: id, title & type
 			foreach ( array('id', 'title', 'fields') as $c ) {
 				if ( !isset($section[$c]) || empty($section[$c]) || ($c == 'fields' && !is_array($section[$c])) ) {
@@ -327,64 +325,35 @@ class kcSettings {
 				}
 			}
 
-			foreach ( $section['fields'] as $f_idx => $field ) {
-				unset( $section['fields'][$f_idx] );
-				# Field check: id, title & type
-				foreach ( array('id', 'title', 'type') as $c ) {
-					if ( !isset($field[$c]) || empty($field[$c]) ) {
-						trigger_error( self::$xdata['bootsrap_messages']["field_no_{$c}"] );
-						continue 2;
-					}
-				}
-				# Field check: require options
-				if ( in_array($field['type'], $field_req_options) && !isset($field['options']) ) {
-					trigger_error( self::$xdata['bootsrap_messages']['field_no_opt'] );
-					continue;
-				}
-				# Field check: file mode
-				if ( $field['type'] == 'file' ) {
-					if ( !isset($field['mode']) || !in_array($field['mode'], $field_file_modes) )
-						$field['mode'] = 'radio';
-				}
-				elseif ( $field['type'] == 'special' ) {
-					if ( !isset($field['cb']) || !is_callable($field['cb']) ) {
-						trigger_error( self::$xdata['bootsrap_messages']['field_no_cb'] );
-						continue;
-					}
-				}
+			$fields = self::_validate_fields( $type, $section['fields'] );
+			if ( empty($fields['fields']) )
+				continue;
+			$section['fields'] = $fields['fields'];
 
-				$section['fields'][$field['id']] = $field;
-				# Has default value?
-				if ( $type == 'plugin' && isset($field['default']) )
-					$defaults['plugin'][$group['prefix']][$section['id']][$field['id']] = $field['default'];
+			if ( !empty($fields['defaults']) )
+				$defaults['plugin'][$group['prefix']][$section['id']] = $fields['defaults'];
+
+			# Plugin/themes/post only: Set metabox position & priority
+			if ( $type == 'post' || ($type == 'plugin' && $group['display']) == 'metabox' ) {
+				# TODO: remove in version 3.0
+				if ( isset($section['priority']) ) {
+					trigger_error( self::$xdata['bootsrap_messages']["section_metabox_old"] );
+					$metabox_priority = $section['priority'];
+					unset( $section['priority'] );
+				}
+				$metabox_default = array(
+					'context'  => 'normal',
+					'priority' => isset($metabox_priority) ? $metabox_priority : 'default'
+				);
+				$metabox = isset($section['metabox']) ? $section['metabox'] : array();
+				$section['metabox'] = wp_parse_args( $metabox, $metabox_default );
 			}
 
-			unset( $sections[$s_idx] );
+			# Plugin/themes metabox position
+			if ( $type == 'plugin' && $section['metabox']['context'] == 'side' )
+				$sections['has_sidebar'] = true;
 
-			if ( !empty($section['fields']) ) {
-				# Plugin/themes/post only: Set metabox position & priority
-				if ( $type == 'post' || ($type == 'plugin' && $group['display']) == 'metabox' ) {
-					# TODO: remove in version 3.0
-					if ( isset($section['priority']) ) {
-						trigger_error( self::$xdata['bootsrap_messages']["section_metabox_old"] );
-						$metabox_priority = $section['priority'];
-						unset( $section['priority'] );
-					}
-					$metabox_default = array(
-						'context'  => 'normal',
-						'priority' => isset($metabox_priority) ? $metabox_priority : 'default'
-					);
-					$metabox = isset($section['metabox']) ? $section['metabox'] : array();
-					$section['metabox'] = wp_parse_args( $metabox, $metabox_default );
-				}
-
-				# Plugin/themes metabox position
-				if ( $type == 'plugin' && $section['metabox']['context'] == 'side' )
-					$sections['has_sidebar'] = true;
-
-				$sections[$section['id']] = $section;
-			}
-
+			$sections[$section['id']] = $section;
 		}
 
 		# Store default values
@@ -392,6 +361,48 @@ class kcSettings {
 			self::$pdata['defaults'] = array_merge_recursive( self::$pdata['defaults'], $defaults );
 
 		return $sections;
+	}
+
+
+	private static function _validate_fields( $type, $fields ) {
+		$defaults = array();
+		$need_options = array( 'select', 'radio', 'checkbox' );
+		$file_modes = array('radio', 'checkbox');
+
+		foreach ( $fields as $idx => $field ) {
+			# Field check: id, title & type
+			foreach ( array('id', 'title', 'type') as $c ) {
+				if ( !isset($field[$c]) || empty($field[$c]) ) {
+					trigger_error( self::$xdata['bootsrap_messages']["field_no_{$c}"] );
+					unset( $fields[$idx] );
+					continue 2;
+				}
+			}
+			# Field check: need options
+			if ( in_array($field['type'], $need_options) && !isset($field['options']) ) {
+				trigger_error( self::$xdata['bootsrap_messages']['field_no_opt'] );
+				unset( $fields[$idx] );
+				continue;
+			}
+			# Field check: file mode
+			if ( $field['type'] == 'file' ) {
+				if ( !isset($field['mode']) || !in_array($field['mode'], $file_modes) )
+					$field['mode'] = 'radio';
+			}
+			elseif ( $field['type'] == 'special' ) {
+				if ( !isset($field['cb']) || !is_callable($field['cb']) ) {
+					trigger_error( self::$xdata['bootsrap_messages']['field_no_cb'] );
+					unset( $fields[$idx] );
+					continue;
+				}
+			}
+
+			# Has default value?
+			if ( $type == 'plugin' && isset($field['default']) )
+				$defaults[$field['id']] = $field['default'];
+		}
+
+		return array('fields' => $fields, 'defaults' => $defaults );
 	}
 
 
