@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Options callbacks
+ * Option callbacks
  *
  * @package KC_Settings
  *
@@ -13,7 +13,7 @@
  * Multi featured images
  *
  */
-function kc_multi_featured_images( $args, $db_value, $cb_args ) {
+function kc_cb_multi_featured_images( $args, $db_value, $cb_args ) {
 	if ( !is_array($cb_args) || !$cb_args )
 		return '<p class="description"><span class="impo">'.__('Please fix your callback args!', 'kc-settings').'</span></p>';
 

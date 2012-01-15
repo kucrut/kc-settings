@@ -314,6 +314,7 @@ class kcSettings {
 	# Validate each setting's section
 	private static function _validate_sections( $type, $sections, $group = '' ) {
 		$defaults = array();
+
 		foreach ( $sections as $s_idx => $section ) {
 			foreach ( array('id', 'title', 'fields') as $c ) {
 				if ( !isset($section[$c]) || empty($section[$c]) || ($c == 'fields' && !is_array($section[$c])) ) {
@@ -347,18 +348,18 @@ class kcSettings {
 					# TODO: remove in version 3.0
 					if ( isset($section['priority']) ) {
 						trigger_error( self::$xdata['bootsrap_messages']["section_metabox_old"] );
-						$mb_priority = $section['priority'];
+						$metabox_priority = $section['priority'];
 						unset( $section['priority'] );
 					}
-
-					if ( !isset($section['metabox']) )
-						$section['metabox'] = $mb_default = array(
-							'context'		=> 'normal',
-							'priority'	=> ( isset($mb_priority) && in_array($mb_priority, array('high', 'default', 'low')) ) ? $mb_priority : 'default'
-						);
+					$metabox_default = array(
+						'context'  => 'normal',
+						'priority' => isset($metabox_priority) ? $metabox_priority : 'default'
+					);
+					$metabox = isset($section['metabox']) ? $section['metabox'] : array();
+					$section['metabox'] = wp_parse_args( $metabox, $metabox_default );
 				}
 
-				# Plugin/themes metaboxes
+				# Plugin/themes metabox position
 				if ( $type == 'plugin' && $section['metabox']['context'] == 'side' )
 					$sections['has_sidebar'] = true;
 
