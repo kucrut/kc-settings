@@ -285,17 +285,17 @@ function kc_settings_field( $args ) {
 				foreach ( $files as $post ) {
 					setup_postdata( $post );
 					$f__id = get_the_ID();
-					$output .= kc_filelist_item( $name, $field['mode'], $p__id, $f__id, get_the_title(), in_array($f__id, $value['selected']), false );
+					$output .= kc_field_file_item( $name, $field['mode'], $p__id, $f__id, get_the_title(), in_array($f__id, $value['selected']), false );
 				}
 				$post = $tmp_post;
 			} else {
-				$output .= kc_filelist_item( $name, $field['mode'] );
+				$output .= kc_field_file_item( $name, $field['mode'] );
 			}
 
 			remove_filter( 'posts_orderby', 'kc_sort_query_by_post_in' );
 
 		} else {
-			$output .= kc_filelist_item( $name, $field['mode'] );
+			$output .= kc_field_file_item( $name, $field['mode'] );
 		}
 
 		$output .= "\t</ul>\n";
@@ -416,7 +416,7 @@ function kc_field_multiinput( $name, $db_value, $field ) {
 }
 
 
-function kc_filelist_item( $name, $type, $pid = '', $fid = '', $title = '', $checked = false, $hidden = true ) {
+function kc_field_file_item( $name, $type, $pid = '', $fid = '', $title = '', $checked = false, $hidden = true ) {
 	$checked = ( $checked ) ? "checked='checked' " : '';
 
 	$output  = "\t<li title='".__('Drag to reorder the items', 'kc-settings')."' class='row";
