@@ -105,6 +105,8 @@ class kcSettings {
 
 		# Contextual help
 		add_action( 'admin_head', array(__CLASS__, '_help') );
+
+		add_action( 'wp_ajax_kc_get_image_url', 'kc_ajax_get_image_url' );
 	}
 
 
@@ -367,7 +369,7 @@ class kcSettings {
 	private static function _validate_fields( $type, $fields ) {
 		$defaults = array();
 		$need_options = array( 'select', 'radio', 'checkbox' );
-		$file_modes = array('radio', 'checkbox');
+		$file_modes = array('single', 'radio', 'checkbox');
 
 		foreach ( $fields as $idx => $field ) {
 			# Field check: id, title & type
@@ -491,7 +493,8 @@ class kcSettings {
 		wp_register_style( 'kc-settings',  self::$pdata['paths']['styles'].'/kc-settings.css', array('thickbox'), self::$pdata['status']['version'] );
 
 		# Uploader
-		wp_register_script( 'kc-settings-upload', self::$pdata['paths']['scripts'].'/upload.js', array('jquery'), self::$pdata['status']['version'] );
+		wp_register_script( 'kc-settings-upload',        self::$pdata['paths']['scripts'].'/upload.js', array('jquery'), self::$pdata['status']['version'], true );
+		wp_register_script( 'kc-settings-upload-single', self::$pdata['paths']['scripts'].'/upload-single.dev.js', array('jquery'), self::$pdata['status']['version'], true );
 
 		# Misc
 		# Lightbox Me http://buckwilson.me/lightboxme/
@@ -506,12 +509,15 @@ class kcSettings {
 		wp_enqueue_style( 'kc-settings' );
 		wp_enqueue_script( 'kc-settings' );
 
-		if ( $hook_suffix != 'media-upload-popup' )
+		if ( $hook_suffix != 'media-upload-popup' ) {
 			self::_js_globals();
-
-		if ( $hook_suffix == 'media-upload-popup' &&
-				( (isset($_REQUEST['kcsf']) && $_REQUEST['kcsf']) || strpos( wp_get_referer(), 'kcsf') !== false ) )
-			wp_enqueue_script( 'kc-settings-upload' );
+		}
+		else {
+			if ( (isset($_REQUEST['kcsfs']) && $_REQUEST['kcsfs']) || strpos( wp_get_referer(), 'kcsfs') !== false )
+				wp_enqueue_script( 'kc-settings-upload-single' );
+			elseif ( (isset($_REQUEST['kcsf']) && $_REQUEST['kcsf']) || strpos( wp_get_referer(), 'kcsf') !== false )
+				wp_enqueue_script( 'kc-settings-upload' );
+		}
 	}
 
 
@@ -525,7 +531,8 @@ class kcSettings {
 					'clear'    => __( 'Clear selections', 'kc-settings' ),
 					'invert'   => __( 'Invert selection', 'kc-settings' ),
 					'addFiles' => __( 'Add files to collection', 'kc-settings' ),
-					'info'     => __( 'Click the "Media Library" tab to insert files that are already upload, or, upload your files, close this popup window, then click the "add files" button again to go to the "Media Library" tab to insert the files you just uploaded.', 'kc-settings' )
+					'info'     => __( 'Click the "Media Library" tab to insert files that are already upload, or, upload your files and then go to the "Media Library" tab to insert the files you just uploaded.', 'kc-settings' ),
+					'selFile'  => __( 'Select file', 'kc-settings' )
 				)
 			),
 			'_ids'  => isset( self::$pdata['kcsb']['_ids'] ) ? self::$pdata['kcsb']['_ids'] : '',

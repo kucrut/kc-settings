@@ -89,6 +89,21 @@ input.kcs-input {
 input.kcs-files {margin-right:.5em}
 .kcs-file-info {padding:1em}
 
+.kcs-file-single p .up,
+.kcs-file-single span {
+	display:inline-block;
+	vertical-align:middle;
+}
+.kcs-file-single span {margin-left:1em}
+.kcs-file-single[data-type="image"] p span,
+.kcs-file-single[data-type="image"] > a {
+	display:none;
+}
+.kcs-file-single img {
+	max-width:100% !important;
+	height:auto !important;
+}
+#media-items .kc-select {margin-right:1em}
 
 .kcs-wrap .button {margin-right:1em}
 

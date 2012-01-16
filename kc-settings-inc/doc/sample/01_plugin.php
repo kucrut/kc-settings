@@ -159,6 +159,14 @@ function mytheme_options( $settings ) {
 					'type'  => 'multiinput'
 				),
 				array(
+					'id'    => 'sample_file0',
+					'title' => 'Single file',
+					'desc'  => 'This is useful for multiple tumbnails, logo, background, etc.',
+					'type'  => 'file',
+					'mode'  => 'single',
+					'size'  => 'full' // full, large, medium, thumbnail or any custom image size (only used for the preview in the backend)
+				),
+				array(
 					'id'    => 'sample_file1',
 					'title' => 'File selection (single)',
 					'desc'	=> 'File list with single selection',

@@ -33,14 +33,14 @@ function invertColor( color ) {
 
 
 (function($) {
-	// File
+	// File (multiple)
 	win.kcsInsertFiles = function() {
 		var count = win.kcSettings.upload.nu.length;
 
 		if ( count ) {
 			var $list = win.kcSettings.upload.id,
-					$lastItem = $list.children().last(),
-					$nuEls = $();
+			    $lastItem = $list.children().last(),
+			    $nuEls = $();
 
 			while ( count ) {
 				count--;
@@ -66,6 +66,36 @@ function invertColor( color ) {
 		}
 	};
 
+	// File (single)
+	win.kcFileSingle = function( data ) {
+		var target = win.kcSettings.upload.target,
+		    $title = target.find('span').text(data.title);
+
+		target.data('type', data.type)
+			.find('input').val(data.id)
+			.siblings('a').hide()
+			.siblings('p').fadeIn()
+				.find('img').attr('src', data.img);
+
+		if ( data.type == 'image' ) {
+			$title.hide();
+
+			$.ajax({
+				type: 'POST',
+				url: ajaxurl,
+				data: { action: 'kc_get_image_url', id: data.id, size: target.data('size') },
+				success: function( response ) {
+					if ( response !== 0 ) {
+						target.find('img').attr('src', response);
+					}
+				}
+			});
+		}
+		else {
+			$title.show();
+		}
+	}
+
 
 	$.fn.kcGoto = function( opts ) {
 		defaults = {
@@ -89,13 +119,13 @@ function invertColor( color ) {
 	$.fn.kcsbUnique = function() {
 		return this.each(function() {
 			var $this	= $(this),
-					olVal	= $this.val();
+			    olVal	= $this.val();
 
 			$this.data('olVal', olVal)
 				.blur(function() {
-					var $input	= $(this),
-							olVal		= $this.data('olVal'),
-							nuVal		= $input.val();
+					var $input = $(this),
+					    olVal  = $this.data('olVal'),
+					    nuVal  = $input.val();
 
 					if ( nuVal != olVal && inArray(nuVal, kcSettings._ids[$input.data('ids')]) )
 						$input.val('');
@@ -117,54 +147,55 @@ function invertColor( color ) {
 
 
 	$.fn.kcFormDep = function( opts ) {
-		defaults = {
-			disable: true,
-			callback: function() {}
-		};
-		opts = $.extend({}, defaults, opts);
+		var defaults = {
+		      disable: true,
+		      callback: function() {}
+		    },
+		    opts = $.extend({}, defaults, opts),
+		    onChange = function( e ) {
+					var $el = $(e.target),
+							val = $el.val();
+
+					$el.data('depTargets').each(function() {
+						var $c    = $(this),
+						    depon = $c.data('dep'),
+						    show  = false;
+
+						if ( !$el.prop('disabled') && ((typeof depon === 'string' && depon === val) || (typeof depon === 'object' && inArray(val, depon))) )
+							show = true;
+
+						$c.toggle( show );
+						if ( opts.disable === true ) {
+							$c.find(':input').prop('disabled', !show).trigger('change');
+						}
+					});
+				};
 
 		return this.each(function() {
-			var $el		= $(this),
-					val		= $el.val(),
-					$dep	= ( $el.data('scope') !== undefined ) ?
-										$el.closest( $el.data('scope') ).find( $el.data('child') ) :
-										$( $el.data('child') ),
-					show;
+			var $el      = $(this),
+			    val      = $el.val(),
+			    $targets = ( $el.data('scope') !== undefined ) ?
+			                 $el.closest( $el.data('scope') ).find( $el.data('child') ) :
+			                 $( $el.data('child') );
 
-			if ( !$dep.length )
-				return;
-
-			$dep.each(function() {
-				var $c		= $(this),
-						depon	= $c.data('dep');
-
-				if ( (typeof depon === 'string' && depon === val) || (typeof depon === 'object' && inArray(val, depon)) ) {
-					show = true;
-				}
-				else {
-					show = false;
-				}
-
-				$c.toggle( show );
-				if ( opts.disable === true ) {
-					$c.find(':input').prop('disabled', !show);
-				}
-			});
+			if ( $targets.length )
+				$el.data('depTargets', $targets)
+					.change(onChange);
 		});
 	};
 
 
 	$.fn.kcReorder = function( mode, all ) {
-		var rgx1	= new RegExp(mode+'\\]\\[(\\d+)'),
-				rgx2	= new RegExp(mode+'\\-(\\d+)'),
-				$el		= $(this);
+		var rgx1 = new RegExp(mode+'\\]\\[(\\d+)'),
+		    rgx2 = new RegExp(mode+'\\-(\\d+)'),
+		    $el  = $(this);
 
 		if ( all === true ) {
-			var $els	= $el.children(),
-					i			= 0;
+			var $els = $el.children(),
+			    i    = 0;
 		} else {
-			var $els	= $el,
-					i			= $el.index();
+			var $els = $el,
+			    i    = $el.index();
 		}
 
 		$els.each(function() {
@@ -201,34 +232,33 @@ function invertColor( color ) {
 
 
 jQuery(document).ready(function($) {
-	var $builder	= $('#kcsb'),
-			$kcsbForm = $('form.kcsb'),
-			$kcForm		= $('#kc-settings-form');
+	var $builder  = $('#kcsb'),
+	    $kcsbForm = $('form.kcsb'),
+	    $kcForm   = $('#kc-settings-form');
 
 
 	/*** Plugin/theme settings ***/
 	if ( $kcForm.length ) {
-		var	$mBoxRoot	= $kcForm.find('div.metabox-holder');
+		var	$mBoxRoot = $kcForm.find('div.metabox-holder');
 
 		/* Theme/plugin settings page with metaboxes */
 		if ( $mBoxRoot.length ) {
-			var mBoxPrefix	= $mBoxRoot.attr('id'),
-					$checks			= $kcForm.find(':checkbox');
+			var mBoxPrefix = $mBoxRoot.attr('id'),
+			    $checks    = $kcForm.find(':checkbox');
 
 			/* Component metabox toggler */
 			if ( $checks.length  ) {
-				var	$secTogglers = $();
+				var $secTogglers = $();
 
 				$checks.each(function() {
 					var $sectBox = $( '#'+mBoxPrefix+'-'+this.value );
 					if ( !$sectBox.length )
 						return;
 
-					var $check = $(this),
-							$target = $('#'+mBoxPrefix+'-'+this.value+'-hide');
+					var $check  = $(this),
+					    $target = $('#'+mBoxPrefix+'-'+this.value+'-hide');
 
-					$check.data( 'sectHider', $target )
-								.data( 'sectBox', $sectBox );
+					$check.data( 'sectHider', $target ).data( 'sectBox', $sectBox );
 					if ( !(this.checked === $target[0].checked) ) {
 						$target.prop('checked', this.checked).triggerHandler('click');
 					}
@@ -270,11 +300,11 @@ jQuery(document).ready(function($) {
 
 	// Remove row
 	$('.row a.del').live('click', function(e) {
-		var $this		= $(this),
-				$item		= $this.closest('.row'),
-				$block	= $item.parent(),
-				mode		= $item.data('mode'),
-				isLast	= $item.is(':last-child');
+		var $this  = $(this),
+		    $item  = $this.closest('.row'),
+		    $block = $item.parent(),
+		    mode   = $item.data('mode'),
+		    isLast = $item.is(':last-child');
 
 		if ( !$item.siblings('.row').length )
 			return false;
@@ -300,29 +330,29 @@ jQuery(document).ready(function($) {
 
 	// Add row
 	$('.row a.add').live('click', function(e) {
-		var $this		= $(this),
-				$item		= $this.closest('.row'),
-				$block	= $item.parent(),
-				mode		= $item.data('mode'),
-				isLast	= $item.is(':last-child'),
-				$nu			= $item.clone(false).addClass('adding'),
-				scroll	= false,
-				speed		= 400;
+		var $this  = $(this),
+				$item  = $this.closest('.row'),
+				$block = $item.parent(),
+				mode   = $item.data('mode'),
+				isLast = $item.is(':last-child'),
+				$nu    = $item.clone(false).addClass('adding'),
+				scroll = false,
+				speed  = 400;
 
 		if ( mode == 'sections' ) {
 			scroll = true;
-			speed = 1200;
+			speed  = 1200;
 		}
 		else if ( mode == 'fields' ) {
 			scroll = true;
-			speed = 800;
+			speed  = 800;
 		}
 
 
 		// Builder fields
 		if ( $kcsbForm.length ) {
 			$nu.find('.kc-rows').each(function() {
-				var $kids		= $(this).children('.row');
+				var $kids = $(this).children('.row');
 
 				if ( $kids.length > 1 ) {
 					$kids.not(':first').remove();
@@ -465,9 +495,9 @@ jQuery(document).ready(function($) {
 	// Add files button
 	$('a.kcsf-upload').live('click', function(e) {
 		e.preventDefault();
-		var $el = $(this),
-				$group = $el.parent(),
-				$solo = $group.find('.row.hidden');
+		var $el    = $(this),
+		    $group = $el.parent(),
+		    $solo  = $group.find('.row.hidden');
 
 		win.kcSettings.upload.id = $( '#'+$group.attr('id')+' > ul' );
 		win.kcSettings.upload.files = [];
@@ -483,6 +513,33 @@ jQuery(document).ready(function($) {
 
 		tb_show( '', $el.attr('href') );
 	});
+
+
+	// Single file: remove
+	var $single_files = $('.kcs-file-single');
+	if ( $single_files.length ) {
+		// Set height
+		$('a.rm', $single_files).click(function (e) {
+			e.preventDefault();
+			$(this).fadeOut()
+				.closest('div')
+					.find('p.current').fadeOut(function() {
+						$(this).siblings('a.up').show()
+							.siblings('input').val('');
+					});
+		});
+
+		// Single file: select
+		$('a.up', $single_files).click(function (e) {
+			e.preventDefault();
+			var $el = $(this);
+
+			//win.kcSettings.upload.id = $( '#'+$el.closest('div').attr('id') );
+			win.kcSettings.upload.target = $el.closest('div');
+
+			tb_show( '', $el.attr('href') );
+		});
+	}
 
 
 	// Sortables
@@ -515,14 +572,12 @@ jQuery(document).ready(function($) {
 			$builder.kcGoto();
 
 		// Field deps
-		$('.hasdep', $builder).live('change', function() {
-			$(this).kcFormDep({ disable: true	});
-		}).change();
+		$('.hasdep', $builder).kcFormDep({ disable: true	}).change();
 
 		// Check 'slug/id' fields
 		$('input.kcsb-slug').live('blur', function() {
-			var $this 	= $(this),
-					strVal	= $this.val();
+			var $this  = $(this),
+			    strVal = $this.val();
 
 			$this.val( kcsbSlug(strVal) );
 		});
@@ -557,8 +612,8 @@ jQuery(document).ready(function($) {
 
 
 		$('a.clone-do').click(function() {
-			var $this		= $(this),
-					$input	= $(this).siblings('input');
+			var $this  = $(this),
+			    $input = $(this).siblings('input');
 
 			if ( $input.kcsbCheck() === false )
 				return false;
@@ -579,8 +634,8 @@ jQuery(document).ready(function($) {
 
 
 		$('.kcsb-tools a.close').live('click', function() {
-			var $this = $(this),
-					$parent = $this.parent();
+			var $this   = $(this),
+			    $parent = $this.parent();
 			$this.siblings('input').val('');
 			$parent.fadeOut(function() {
 				$(this).siblings().show();
@@ -604,4 +659,5 @@ jQuery(document).ready(function($) {
 				return false;
 		});
 	}
+
 });

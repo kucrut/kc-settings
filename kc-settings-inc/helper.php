@@ -326,7 +326,44 @@ function kc_get_image_sizes( $type = 'all' ) {
 
 
 /**
- * Options
+ * Get attachment icon
+ *
+ * @param int $id Attachment ID
+ * @param $size Icon size (for image)
+ */
+function kc_get_attachment_icon_src( $id = '', $size = 'thumbnail' ) {
+	if ( !$id )
+		return wp_mime_type_icon();
+
+	# Image
+	if ( $thumb = wp_get_attachment_image_src( $id, $size, true ) )
+		$icon = $thumb[0];
+	else
+		$icon = wp_mime_type_icon( get_post_mime_type($id) );
+
+	return $icon;
+}
+
+
+/**
+ * Get image URL via AJAX
+ *
+ * The request should contains 'id' and 'size'
+ */
+function kc_ajax_get_image_url() {
+	$id = (int) $_REQUEST['id'];
+	$size = isset($_REQUEST['size']) ? $_REQUEST['size'] : 'thumbnail';
+	if ( $thumb = wp_get_attachment_image_src( $id, $size ) )
+		$result = $thumb[0];
+	else
+		$result = false;
+
+	die( $result );
+}
+
+
+/**
+ * Options helpers
  */
 class kcSettings_options {
 	public static $nav_menus;
@@ -393,6 +430,7 @@ class kcSettings_options {
 			else
 				$sizes[$id] = $id;
 		}
+		$sizes['full'] = __('Full (original size)', 'kc-settings');
 
 		if ( !$store )
 			return $sizes;

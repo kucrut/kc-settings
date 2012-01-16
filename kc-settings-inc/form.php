@@ -243,27 +243,25 @@ function kc_settings_field( $args ) {
 	elseif ( $type == 'file' ) {
 		if ( $mode == 'post' ) {
 			$attachments_parent = $object_id;
-			$popup_tab = 'gallery';
+			$up_tab = 'gallery';
 		}
 		else {
 			$attachments_parent = 0;
-			$popup_tab = 'library';
+			$up_tab = 'library';
 		}
-		# Add files button
-		$button  = "<a href='media-upload.php?kcsf=true&amp;post_id={$attachments_parent}&amp;tab={$popup_tab}&amp;TB_iframe=1'";
-		$button .= " class='button kcsf-upload'";
-		$button .= " title='".__('Add files to collection', 'kc-settings');
-		$button .= "'>".__('Add files', 'kc-settings')."</a>\n";
+		$param = $field['mode'] == 'single' ? 'kcsfs' : 'kcsf';
 
 		$file_field_args = array(
 			'field'     => $field,
 			'id'        => $id,
 			'name'      => $name,
 			'db_value'  => $db_value,
-			'button'    => $button
+			'up_url'    => "media-upload.php?{$param}=true&amp;post_id={$attachments_parent}&amp;tab={$up_tab}&amp;TB_iframe=1"
 		);
 		if ( in_array($field['mode'], array('radio', 'checkbox')) )
 			$output .= kc_field_file_multiple( $file_field_args );
+		else
+			$output .= kc_field_file_single( $file_field_args );
 		$output .= "\t{$desc}\n";
 	}
 
@@ -434,8 +432,9 @@ function kc_field_file_multiple( $args ) {
 	}
 
 	$output .= "\t</ul>\n";
-	$output .= "\t{$button}\n";
+	$output .= "\t<a href='{$up_url}' class='button kcsf-upload' title='".__('Add files to collection', 'kc-settings')."'>".__('Add files', 'kc-settings')."</a>\n";
 	$output .= "</div>\n";
+
 
 	return $output;
 }
@@ -451,22 +450,7 @@ function kc_field_file_item( $input_name, $input_type, $attachment_id = '', $att
 	if ( $hidden )
 		$output .= " hidden";
 	$output .= "'>\n";
-	# Image thumb or mime type icon
-	if ( $attachment_id ) {
-		# Image
-		if ( wp_attachment_is_image($attachment_id) ) {
-			$icon = wp_get_attachment_image_src($attachment_id, array(46, 46));
-			$icon = $icon[0];
-		}
-		# Other types
-		else {
-			$icon = wp_mime_type_icon( get_post_mime_type($attachment_id) );
-		}
-	}
-	else {
-		$icon = wp_mime_type_icon(0);
-	}
-	$output .= "\t\t<img src='{$icon}' alt=''/>";
+	$output .= "\t\t<img src='".kc_get_attachment_icon_src($attachment_id)."' alt=''/>";
 	$output .= "\t\t<a class='rm mid' title='".__('Remove from collection', 'kc-settings')."'><span>".__('Remove', 'kc-settings')."</span></a>\n";
 	$output .= "\t\t<label>";
 	$output .= "<input class='mid include' type='{$input_type}' name='{$input_name}[selected][]' value='{$attachment_id}' {$checked}/> ";
@@ -479,6 +463,47 @@ function kc_field_file_item( $input_name, $input_type, $attachment_id = '', $att
 	$output .= "\t</li>\n";
 
 	return $output;
+}
+
+
+/**
+ * Field: single file
+ */
+function kc_field_file_single( $args ) {
+	extract( $args, EXTR_OVERWRITE );
+	$size = isset($field['size']) ? $field['size'] : 'thumbnail';
+
+	if ( get_post_type(absint($db_value)) == 'attachment' && $attachment = get_post(absint($db_value)) ) {
+		$post_mime_types = get_post_mime_types();
+		$keys  = array_keys( wp_match_mime_types( array_keys( $post_mime_types ), $attachment->post_mime_type ) );
+		$type  = esc_attr(array_shift($keys));
+		$valid = true;
+		$title = $attachment->post_title;
+	}
+	else {
+		$type  = 'default';
+		$valid = false;
+		$title = '';
+		$db_value = '';
+	}
+
+	$out  = "<div class='kcsfs-wrap'><div id='{$id}' class='kcs-file-single' data-type='{$type}' data-size='{$size}'>\n";
+	$out .= "\t<p class='current";
+	if ( !$valid )
+		$out .= ' hidden';
+	$out .= "'>\n";
+	$out .= "<a href='{$up_url}' title='".__('Change file', 'kc-settings')."' class='up'><img src='".kc_get_attachment_icon_src($db_value, $size)."' alt='' /></a>";
+	$out .= "<span>{$title}</span>";
+	$out .= "<br /><a href='#' class='rm'>".__('Remove', 'kc-settings')."</a>";
+	$out .= "\t</p>\n";
+	$out .= "\t<a href='{$up_url}' class='up";
+	if ( $valid )
+		$out .= ' hidden';
+	$out .= "'>".__('Select file', 'kc-settings')."</a>";
+	$out .= "\t<input type='hidden' name='{$name}' value='{$db_value}' />\n";
+	$out .= "</div></div>\n";
+
+	return $out;
 }
 
 

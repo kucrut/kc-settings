@@ -278,13 +278,17 @@ class kcSettings_builder {
 
 		$options['filemode'] = array(
 			array(
+				'value' => 'single',
+				'label' => __('Single file', 'kc-settings'),
+				'default' => true
+			),
+			array(
 				'value' => 'radio',
 				'label' => __('Single selection', 'kc-settings')
 			),
 			array(
 				'value' => 'checkbox',
-				'label' => __('Multiple selections', 'kc-settings'),
-				'default' => true
+				'label' => __('Multiple selections', 'kc-settings')
 			)
 		);
 
@@ -779,10 +783,31 @@ class kcSettings_builder {
 													<label class="kcsb-ml"><?php _e('Mode', 'kcsb') ?></label>
 													<?php
 														echo kcForm::select(array(
-															'attr'		=> array('name' => "{$f_name}[mode]", 'class' => 'kcsb-mi'),
-															'options'	=> $options['filemode'],
-															'current'	=> $f_val['mode'],
-															'none'		=> false
+															'attr'    => array(
+																'name'       => "{$f_name}[mode]",
+																'class'      => 'hasdep kcsb-mi',
+																'data-child' => '.childFileSize',
+																'data-scope' => 'li.row'
+															),
+															'options' => $options['filemode'],
+															'current' => $f_val['mode'],
+															'none'    => false
+														));
+													?>
+												</li>
+												<li class="childFileSize" data-dep='single'>
+													<?php if ( !isset($f_val['size']) ) $f_val['size'] = 'thumbnail'; ?>
+													<label class="kcsb-ml"><?php _e('Preview Size', 'kcsb') ?></label>
+													<?php
+														echo kcForm::field(array(
+															'type'    => 'select',
+															'attr'    => array(
+																'name'     => "{$f_name}[size]",
+																'class'    => 'kcsb-mi'
+															),
+															'options' => kcSettings_options::$image_sizes,
+															'current' => $f_val['size'],
+															'none'    => false
 														));
 													?>
 												</li>
