@@ -249,7 +249,7 @@ function kc_settings_field( $args ) {
 			$attachments_parent = 0;
 			$up_tab = 'library';
 		}
-		$param = $field['mode'] == 'single' ? 'kcsfs' : 'kcsf';
+		$param = ($field['mode'] == 'single') ? 'kcsfs' : 'kcsf';
 
 		$file_field_args = array(
 			'field'     => $field,
