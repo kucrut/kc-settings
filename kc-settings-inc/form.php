@@ -487,7 +487,7 @@ function kc_field_file_single( $args ) {
 		$db_value = '';
 	}
 
-	$out  = "<div class='kcsfs-wrap'><div id='{$id}' class='kcs-file-single' data-type='{$type}' data-size='{$size}'>\n";
+	$out  = "<div id='{$id}' class='kcs-file-single' data-type='{$type}' data-size='{$size}'>\n";
 	$out .= "\t<p class='current";
 	if ( !$valid )
 		$out .= ' hidden';
@@ -501,7 +501,7 @@ function kc_field_file_single( $args ) {
 		$out .= ' hidden';
 	$out .= "'>".__('Select file', 'kc-settings')."</a>";
 	$out .= "\t<input type='hidden' name='{$name}' value='{$db_value}' />\n";
-	$out .= "</div></div>\n";
+	$out .= "</div>\n";
 
 	return $out;
 }
