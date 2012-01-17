@@ -30,16 +30,16 @@ class kcSettings_term {
 		#	a. Edit screen
 		if ( is_object($args) ) {
 			$edit_mode = true;
-			$taxonomy = $args->taxonomy;
-			$term_id = $args->term_id;
-			$tabled = true;
+			$taxonomy  = $args->taxonomy;
+			$term_id   = $args->term_id;
+			$tabled    = true;
 		}
 		# b. Add screen
 		else {
 			$edit_mode = false;
-			$taxonomy = $args;
-			$term_id = null;
-			$tabled = false;
+			$taxonomy  = $args;
+			$term_id   = null;
+			$tabled    = false;
 		}
 
 		if ( !isset(self::$settings[$taxonomy]) )
@@ -60,11 +60,11 @@ class kcSettings_term {
 
 			foreach ( $section['fields'] as $field ) {
 				$args = array(
-					'mode' 		=> 'term',
+					'mode'    => 'term',
 					'section' => $section['id'],
-					'field' 	=> $field,
-					'tabled'	=> $tabled,
-					'echo' 		=> false
+					'field'   => $field,
+					'tabled'  => $tabled,
+					'echo'    => false
 				);
 				if ( isset($term_id) )
 					$args['object_id'] = $term_id;
@@ -103,7 +103,7 @@ class kcSettings_term {
 	 */
 	public static function _save( $term_id, $tt_id, $taxonomy ) {
 		if ( !isset(self::$settings[$taxonomy])
-					|| ( isset($_POST['action']) && $_POST['action'] == 'inline-save-tax' ) )
+			   || ( isset($_POST['action']) && $_POST['action'] == 'inline-save-tax' ) )
 			return $term_id;
 
 		foreach ( self::$settings[$taxonomy] as $section ) {
