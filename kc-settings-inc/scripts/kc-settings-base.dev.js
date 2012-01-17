@@ -119,7 +119,7 @@ function invertColor( color ) {
 
 			if ( $targets.length )
 				$el.data('depTargets', $targets)
-					.change(onChange);
+					.change(onChange).change();
 		});
 	};
 

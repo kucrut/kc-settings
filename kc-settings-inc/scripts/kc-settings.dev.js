@@ -403,7 +403,7 @@ jQuery(document).ready(function($) {
 			$builder.kcGoto();
 
 		// Field deps
-		$('.hasdep', $builder).kcFormDep({ disable: true	}).change();
+		$('.hasdep', $builder).kcFormDep();
 
 		// Check 'slug/id' fields
 		$('input.kcsb-slug').live('blur', function() {
