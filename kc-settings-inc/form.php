@@ -259,9 +259,9 @@ function kc_settings_field( $args ) {
 			'up_url'    => "media-upload.php?{$param}=true&amp;post_id={$attachments_parent}&amp;tab={$up_tab}&amp;TB_iframe=1"
 		);
 		if ( in_array($field['mode'], array('radio', 'checkbox')) )
-			$output .= kc_field_file_multiple( $file_field_args );
+			$output .= _kc_field_file_multiple( $file_field_args );
 		else
-			$output .= kc_field_file_single( $file_field_args );
+			$output .= _kc_field_file_single( $file_field_args );
 		$output .= "\t{$desc}\n";
 	}
 
@@ -374,8 +374,16 @@ function kc_field_multiinput( $name, $db_value, $field ) {
 /**
  * Field: Multiple files
  */
-function kc_field_file_multiple( $args ) {
+function _kc_field_file_multiple( $args ) {
 	extract( $args, EXTR_OVERWRITE );
+
+	#  Handle migration from single mode
+	if ( is_numeric($db_value) ) {
+		$db_value = array(
+			'files' => array($db_value),
+			'selected' => array($db_value)
+		);
+	}
 
 	# Set default value
 	if ( empty($db_value) ) {
@@ -418,17 +426,17 @@ function kc_field_file_multiple( $args ) {
 			foreach ( $files as $post ) {
 				setup_postdata( $post );
 				$attachment_id = get_the_ID();
-				$output .= kc_field_file_item( $name, $field['mode'], $attachment_id, get_the_title(), in_array($attachment_id, $value['selected']), false );
+				$output .= _kc_field_file_item( $name, $field['mode'], $attachment_id, get_the_title(), in_array($attachment_id, $value['selected']), false );
 			}
 			$post = $tmp_post;
 		} else {
-			$output .= kc_field_file_item( $name, $field['mode'] );
+			$output .= _kc_field_file_item( $name, $field['mode'] );
 		}
 
 		remove_filter( 'posts_orderby', 'kc_sort_query_by_post_in' );
 
 	} else {
-		$output .= kc_field_file_item( $name, $field['mode'] );
+		$output .= _kc_field_file_item( $name, $field['mode'] );
 	}
 
 	$output .= "\t</ul>\n";
@@ -443,7 +451,7 @@ function kc_field_file_multiple( $args ) {
 /**
  * File list item
  */
-function kc_field_file_item( $input_name, $input_type, $attachment_id = '', $attachment_title = '', $checked = false, $hidden = true ) {
+function _kc_field_file_item( $input_name, $input_type, $attachment_id = '', $attachment_title = '', $checked = false, $hidden = true ) {
 	$checked = ( $checked ) ? "checked='checked' " : '';
 
 	$output  = "\t<li title='".__('Drag to reorder the items', 'kc-settings')."' class='row";
@@ -469,9 +477,19 @@ function kc_field_file_item( $input_name, $input_type, $attachment_id = '', $att
 /**
  * Field: single file
  */
-function kc_field_file_single( $args ) {
+function _kc_field_file_single( $args ) {
 	extract( $args, EXTR_OVERWRITE );
 	$size = isset($field['size']) ? $field['size'] : 'thumbnail';
+
+	#  Handle migration from multiple mode
+	if ( is_array($db_value) ) {
+		if ( isset($db_value['selected']) && !empty($db_value['selected']) )
+			$db_value = $db_value['selected'][0];
+		elseif ( isset($db_value['files']) && !empty($db_value['files']) )
+			$db_value = $db_value['files'][0];
+		else
+			$db_value = '';
+	}
 
 	if ( get_post_type(absint($db_value)) == 'attachment' && $attachment = get_post(absint($db_value)) ) {
 		$post_mime_types = get_post_mime_types();
