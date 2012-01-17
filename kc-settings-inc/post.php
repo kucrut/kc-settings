@@ -65,7 +65,7 @@ class kcSettings_post {
 			$output .= $wraps['row'][0];
 			$f_label = kc_form_label( $field['title'], $label_for, !$on_side, false );
 			$output .= ( $on_side ) ? "\t\t<span class='side-label'>{$f_label}</span>\n" : $f_label;
-			$f_input = kc_settings_field( array( 'mode' => 'post', 'object_id' => $object->ID, 'section' => $section['id'], 'field' => $field ) );
+			$f_input = _kc_field( array( 'mode' => 'post', 'object_id' => $object->ID, 'section' => $section['id'], 'field' => $field ) );
 			$output .= ( $on_side ) ? $f_input : "\t\t<td>\n\t\t\t{$f_input}\n\t\t</td>\n";
 			$output .= $wraps['row'][1];
 		}
@@ -113,7 +113,7 @@ class kcSettings_post {
 				$nu_field = array(
 					'label' => $field['title'],
 					'input' => 'html',
-					'html'  => kc_settings_field( $input_args )
+					'html'  => _kc_field( $input_args )
 				);
 				if ( isset($desc) && !empty($desc) )
 					$nu_field['helps'] = $field['desc'];

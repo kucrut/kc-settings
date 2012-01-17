@@ -79,7 +79,7 @@ class kcSettings_plugin {
 					if ( !in_array($field['type'], array('checkbox', 'radio', 'multiinput')) )
 						$args['label_for'] = "{$section['id']}__{$field['id']}";
 
-					add_settings_field( $field['id'], $field['title'], 'kc_settings_field', "{$prefix}_settings", $section['id'], $args );
+					add_settings_field( $field['id'], $field['title'], '_kc_field', "{$prefix}_settings", $section['id'], $args );
 				}
 			}
 

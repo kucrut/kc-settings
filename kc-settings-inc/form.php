@@ -182,7 +182,7 @@ function kc_form_label( $title, $id = null, $ft = false, $echo = true  ) {
  *
  */
 
-function kc_settings_field( $args ) {
+function _kc_field( $args ) {
 	if ( !isset($args['field']['attr']) )
 		$args['field']['attr'] = array();
 
