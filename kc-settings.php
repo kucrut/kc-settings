@@ -2,7 +2,7 @@
 
 /**
  * @package KC_Settings
- * @version 2.5.5
+ * @version 2.6
  */
 
 
@@ -10,7 +10,7 @@
 Plugin name: KC Settings
 Plugin URI: http://kucrut.org/kc-settings/
 Description: Easily create plugin/theme settings page, custom fields metaboxes, term meta and user meta settings.
-Version: 2.5.5
+Version: 2.6
 Author: Dzikri Aziz
 Author URI: http://kucrut.org/
 License: GPL v2
@@ -482,10 +482,6 @@ class kcSettings {
 	}
 
 	public static function _sns_register() {
-		# WP < 3.3
-		if ( version_compare(get_bloginfo('version'), '3.3', '<') )
-			wp_register_script( 'jquery-ui-datepicker', self::$pdata['paths']['scripts']."/jquery.ui.datepicker.min.js", array('jquery-ui-core'), '1.8.11', true );
-
 		# Common
 		wp_register_script( 'modernizr',   self::$pdata['paths']['scripts'].'/modernizr.2.0.6.min.js', false, '2.0.6', true );
 		wp_register_script( 'kc-settings', self::$pdata['paths']['scripts'].'/kc-settings.js', array('modernizr', 'jquery-ui-sortable', 'jquery-ui-datepicker', 'media-upload', 'thickbox'), self::$pdata['status']['version'], true );
@@ -642,6 +638,9 @@ $plugin_file = kc_plugin_file( __FILE__ );
 
 # Activation
 function kcSettings_activate() {
+		if ( version_compare(get_bloginfo('version'), '3.3', '<') )
+			wp_die( 'Please upgrade your WordPress to version 3.3 before using this plugin.' );
+
 	$status = get_option( 'kc_settings' );
 	if ( !$status )
 		$status = array();
@@ -650,7 +649,7 @@ function kcSettings_activate() {
 		$status['kids'] = array();
 
 	$old_version = ( isset($status['version']) ) ? $status['version'] : '2.2';
-	$status['version'] = '2.5.5';
+	$status['version'] = '2.6';
 
 	update_option( 'kc_settings', $status );
 
@@ -661,10 +660,12 @@ register_activation_hook( $plugin_file, 'kcSettings_activate' );
 
 
 # Deactivation
+/*
 function kcSettings_deactivate() {
 	# TODO: Anything else?
 	//delete_option( 'kc_settings' );
 }
+*/
 #register_deactivation_hook( $plugin_file, 'kcSettings_deactivate' );
 
 

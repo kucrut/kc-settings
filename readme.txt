@@ -2,9 +2,9 @@
 Contributors: kucrut
 Donate link: http://kucrut.org/
 Tags: theme-options, plugin-options, settings, options, term-meta, category-meta, post-meta, custom-fields, user-meta, attachment
-Requires at least: 3.2.1
+Requires at least: 3.3
 Tested up to: 3.3
-Stable tag: 2.5.5
+Stable tag: 2.6
 
 Easily create plugin/theme settings page, custom fields metaboxes and term/user meta settings.
 
@@ -13,6 +13,8 @@ Easily create plugin/theme settings page, custom fields metaboxes and term/user 
 With this plugin, you can easily create a settings/options page for you theme or plugin. You can also create metaboxes for post custom fields, and add some metadata to the terms.
 
 If you have created your settings manually prior to version 2.5 of this plugin, please review the sample files and make the needed changes.
+
+Version 2.6 only supports WordPress 3.3+
 
 == Installation ==
 
@@ -35,6 +37,13 @@ Please find the readme.html file inside the plugin directory for the documentati
 5. Post settings
 
 == Changelog ==
+
+= 2.6 =
+* Remove support for WordPress < 3.3
+* New file field mode: Single file
+* New options helpers to make your life easier :)
+* New HTML5 input types
+* Bunch of under-the-hood fixes and improvements
 
 = 2.5.5 =
 * Fixed and simplified kcs_update_meta(), props Tan
