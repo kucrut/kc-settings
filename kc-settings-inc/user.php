@@ -72,7 +72,7 @@ class kcSettings_user {
 		foreach ( self::$settings as $group ) {
 			foreach ( $group as $section )
 				foreach ( $section['fields'] as $field )
-					kc_update_meta( 'user', null, $user_id, $section, $field );
+					_kc_update_meta( 'user', null, $user_id, $section, $field );
 		}
 	}
 

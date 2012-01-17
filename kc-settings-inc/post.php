@@ -90,7 +90,7 @@ class kcSettings_post {
 
 		foreach ( self::$settings[$post->post_type] as $section ) {
 			foreach ( $section['fields'] as $field )
-				kc_update_meta( 'post', $post->post_type, $post_id, $section, $field );
+				_kc_update_meta( 'post', $post->post_type, $post_id, $section, $field );
 		}
 
 		return $post_id;
@@ -129,7 +129,7 @@ class kcSettings_post {
 	public static function _attachment_fields_to_save( $post, $attachment ) {
 		foreach ( self::$settings['attachment'] as $section ) {
 			foreach ( $section['fields'] as $field )
-				kc_update_meta( 'post', 'attachment', $post['ID'], $section, $field, true );
+				_kc_update_meta( 'post', 'attachment', $post['ID'], $section, $field, true );
 		}
 
 		return $post;

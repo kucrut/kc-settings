@@ -233,7 +233,7 @@ function kc_sanitize_value( $value, $type ) {
  * @param array $field The meta field array
  * @param bool $is_attachment Are we updating attachment metadata?
  */
-function kc_update_meta( $meta_type = 'post', $object_type_name, $object_id, $section, $field, $is_attachment = false ) {
+function _kc_update_meta( $meta_type = 'post', $object_type_name, $object_id, $section, $field, $is_attachment = false ) {
 	if ( isset($_POST['action']) && $_POST['action'] == 'inline-save' )
 		return;
 
