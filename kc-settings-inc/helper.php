@@ -207,7 +207,7 @@ function kc_sort_query_by_post_in( $sortby, $query ) {
 /**
  * Sanitize user input
  */
-function kc_sanitize_value( $value, $type ) {
+function _kc_sanitize_value( $value, $type ) {
 	# default sanitation
 	if ( $value != '' && $type === 'multiinput' ) {
 		$value = kc_array_remove_empty( $value );
@@ -269,7 +269,7 @@ function _kc_update_meta( $meta_type = 'post', $object_type_name, $object_id, $s
 	}
 
 	# default sanitation
-	$nu_val = kc_sanitize_value( $nu_val, $field['type'] );
+	$nu_val = _kc_sanitize_value( $nu_val, $field['type'] );
 
 	$filter_prefix = "kcv_{$meta_type}meta";
 	if ( $meta_type != 'user' && $object_type_name != '' )
