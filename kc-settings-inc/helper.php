@@ -3,12 +3,11 @@
 /**
  * Rebuild array indices
  *
- * @param $arr array
- * @param $cleanup bool Trim the value, defaults to true
+ * @param array $arr Array
+ * @param bool $cleanup Trim the value, defaults to true
  *
- * @return $nu_arr array
+ * @return array $nu_arr array
  */
-
 function kc_array_rebuild_index( $arr, $cleanup = true ) {
 	$nu_arr = array();
 	$rownum = 0;
@@ -63,12 +62,13 @@ function kc_array_search_recursive( $needle, $haystack, $needlekey = '', $strict
 /**
  * Cleanup array
  *
+ * @param array $arr Array to cleanup
+ * @param bool $rm_zero
+ * @return array
+ *
  * @credit Jonas John
  * @link http://www.jonasjohn.de/snippets/php/array-remove-empty.htm
- * @param $arr Array to cleanup
- * @return array
  */
-
 function kc_array_remove_empty( $arr, $rm_zero = true ) {
 	$narr = array();
 	while ( list($key, $val) = each($arr) ) {
@@ -80,7 +80,7 @@ function kc_array_remove_empty( $arr, $rm_zero = true ) {
 		else {
 			if ( trim($val) != '' ) {
 				if ( $rm_zero && $val )
-				$narr[$key] = $val;
+					$narr[$key] = $val;
 			}
 		}
 	}
@@ -115,16 +115,14 @@ function kc_array_multi_get_value( $array, $keys ) {
 
 
 /**
- * Get theme option
+ * Get theme/plugin option
  *
  * @param string $prefix Options prefix, required
  * @param string $section Section id, optional
  * @param string $field Field id, optional
  *
  * @return bool|array|string
- *
  */
-
 function kc_get_option( $prefix, $section = '', $field = '') {
 	$values = get_option( "{$prefix}_settings" );
 	if ( !is_array($values) || func_num_args() < 2 )
@@ -137,7 +135,7 @@ function kc_get_option( $prefix, $section = '', $field = '') {
 
 
 /**
- * Get default values
+ * Get default value
  *
  * @param string $type Options type, required
  * @param string $prefix Options prefix, required
@@ -220,7 +218,6 @@ function kc_sanitize_value( $value, $type ) {
 	elseif ( !is_array($value) ) {
 		$value = trim( $value );
 	}
-
 
 	return $value;
 }
