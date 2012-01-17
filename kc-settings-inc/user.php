@@ -44,7 +44,7 @@ class kcSettings_user {
 					$args = array( 'mode' => 'user', 'object_id' => $user->ID, 'section' => $section['id'], 'field' => $field );
 
 					$output .= "\t\t<tr>\n";
-					$output .= "\t\t\t<th>".kc_form_label($field['title'], $label_for, false, false)."</th>\n";
+					$output .= "\t\t\t<th>"._kc_field_label($field['title'], $label_for, false, false)."</th>\n";
 					$output .= "\t\t\t<td>"._kc_field( $args )."</td>\n";
 					$output .= "\t\t</tr>\n";
 				}

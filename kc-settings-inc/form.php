@@ -156,7 +156,7 @@ class kcForm {
  * @return $output string HTML label element
  *
  */
-function kc_form_label( $title, $id = null, $ft = false, $echo = true  ) {
+function _kc_field_label( $title, $id = null, $ft = false, $echo = true  ) {
 	$output  = "<label";
 	if ( $id )
 		$output .= " for='{$id}' ";

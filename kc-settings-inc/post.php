@@ -63,7 +63,7 @@ class kcSettings_post {
 		foreach ( $section['fields'] as $field ) {
 			$label_for = ( !in_array($field['type'], array('checkbox', 'radio', 'multiinput', 'file')) ) ? $field['id'] : null;
 			$output .= $wraps['row'][0];
-			$f_label = kc_form_label( $field['title'], $label_for, !$on_side, false );
+			$f_label = _kc_field_label( $field['title'], $label_for, !$on_side, false );
 			$output .= ( $on_side ) ? "\t\t<span class='side-label'>{$f_label}</span>\n" : $f_label;
 			$f_input = _kc_field( array( 'mode' => 'post', 'object_id' => $object->ID, 'section' => $section['id'], 'field' => $field ) );
 			$output .= ( $on_side ) ? $f_input : "\t\t<td>\n\t\t\t{$f_input}\n\t\t</td>\n";
