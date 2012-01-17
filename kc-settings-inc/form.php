@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * Form elements helper
  */
 class kcForm {
@@ -13,6 +13,7 @@ class kcForm {
 		'date', 'month', 'week', 'time', 'datetime', 'datetime-local',
 		'color', 'range'
 	);
+
 
 	public static function field( $args = array() ) {
 		$defaults = array(
@@ -150,19 +151,19 @@ class kcForm {
  *
  * @param $title string Label text
  * @param $id string Input's id attribute this label corresponds to, defaul null
- * @param $ft bool Wrap with th element, default false
+ * @param $wrap_th bool Wrap with th element, default false
  * @param $echo bool Echo or return the label element
  *
  * @return $output string HTML label element
  *
  */
-function _kc_field_label( $title, $id = null, $ft = false, $echo = true  ) {
+function _kc_field_label( $title, $id = null, $wrap_th = false, $echo = true ) {
 	$output  = "<label";
 	if ( $id )
 		$output .= " for='{$id}' ";
 	$output .= ">{$title}</label>";
 
-	if ( $ft )
+	if ( $wrap_th )
 		$output = "<th scope='row'>{$output}</th>\n";
 
 	if ( $echo )
@@ -181,7 +182,6 @@ function _kc_field_label( $title, $id = null, $ft = false, $echo = true  ) {
  * @return string HTML element
  *
  */
-
 function _kc_field( $args ) {
 	if ( !isset($args['field']['attr']) )
 		$args['field']['attr'] = array();
@@ -220,7 +220,6 @@ function _kc_field( $args ) {
 			$db_value = ( isset($object_id) && $object_id != '' ) ? get_metadata( $mode, $object_id, $key, true ) : null;
 		break;
 	}
-
 
 	$desc_tag   = ( isset($desc_tag) ) ? $desc_tag : 'p';
 	$desc_class = ( $mode == 'attachment' ) ? 'help' : 'description';
@@ -331,7 +330,6 @@ function _kc_field( $args ) {
  * @return $output string HTML Pair option row, with the required jQuery script
  *
  */
-
 function kc_field_multiinput( $name, $db_value, $field ) {
 	if ( !is_array($db_value) || empty($db_value) )
 		$db_value = array(array('key' => '', 'value' => ''));
