@@ -46,14 +46,14 @@ class kcSettings_post {
 		$on_side = $section['metabox']['context'] == 'side' ? true : false;
 		if ( $on_side ) {
 			$wraps = array(
-				'block'	=> array("<ul class='kcs-sideform'>\n", "</ul>\n"),
-				'row'		=> array("\t<li>\n", "\t</li>\n")
+				'block' => array("<ul class='kcs-sideform'>\n", "</ul>\n"),
+				'row'   => array("\t<li>\n", "\t</li>\n")
 			);
 		}
 		else {
 			$wraps = array(
-				'block'	=> array("<table class='form-table'>\n", "</table>\n"),
-				'row'		=> array("\t<tr>\n", "\t</tr>\n")
+				'block' => array("<table class='form-table'>\n", "</table>\n"),
+				'row'   => array("\t<tr>\n", "\t</tr>\n")
 			);
 		}
 
@@ -79,9 +79,9 @@ class kcSettings_post {
 	# Save post metadata/custom fields values
 	public static function _save( $post_id, $post ) {
 		if ( !isset(self::$settings[$post->post_type])
-					|| ( isset($_POST['action']) && in_array($_POST['action'], array('inline-save', 'trash', 'untrash')) )
-					|| $post->post_status == 'auto-draft'
-					|| !isset($_POST["{$post->post_type}_kc_meta_box_nonce"]) )
+		      || ( isset($_POST['action']) && in_array($_POST['action'], array('inline-save', 'trash', 'untrash')) )
+		      || $post->post_status == 'auto-draft'
+		      || !isset($_POST["{$post->post_type}_kc_meta_box_nonce"]) )
 			return $post_id;
 
 		$post_type_obj = get_post_type_object( $post->post_type );
@@ -104,10 +104,10 @@ class kcSettings_post {
 					continue;
 
 				$input_args = array(
-					'mode'			=> 'attachment',
-					'object_id'	=> $post->ID,
-					'section'		=> $section['id'],
-					'field'			=> $field
+					'mode'      => 'attachment',
+					'object_id' => $post->ID,
+					'section'   => $section['id'],
+					'field'     => $field
 				);
 
 				$nu_field = array(
