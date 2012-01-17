@@ -222,8 +222,9 @@ function kc_settings_field( $args ) {
 	}
 
 
-	$desc_tag = ( isset($desc_tag) ) ? $desc_tag : 'p';
-	$desc = ( $mode != 'attachment' && isset($field['desc']) && !empty($field['desc']) ) ? "<{$desc_tag} class='description'>{$field['desc']}</{$desc_tag}>" : null;
+	$desc_tag   = ( isset($desc_tag) ) ? $desc_tag : 'p';
+	$desc_class = ( $mode == 'attachment' ) ? 'help' : 'description';
+	$desc = ( isset($field['desc']) && !empty($field['desc']) ) ? "<{$desc_tag} class='{$desc_class}'>{$field['desc']}</{$desc_tag}>" : null;
 
 	# Let user filter the output of the setting field
 	$output = apply_filters( 'kc_settings_field_before', '', $section, $field );
