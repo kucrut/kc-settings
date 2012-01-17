@@ -268,7 +268,7 @@ function _kc_field( $args ) {
 	# Multiinput
 	elseif ( $type == 'multiinput' ) {
 		$output .= "<p class='info'><em>". __('Info: Drag & drop to reorder.', 'kc-settings') ."</em></p>\n";
-		$output .= kc_field_multiinput( $name, $db_value, $field );
+		$output .= _kc_field_multiinput( $name, $db_value, $field );
 		$output .= "\t{$desc}\n";
 	}
 
@@ -330,7 +330,7 @@ function _kc_field( $args ) {
  * @return $output string HTML Pair option row, with the required jQuery script
  *
  */
-function kc_field_multiinput( $name, $db_value, $field ) {
+function _kc_field_multiinput( $name, $db_value, $field ) {
 	if ( !is_array($db_value) || empty($db_value) )
 		$db_value = array(array('key' => '', 'value' => ''));
 
