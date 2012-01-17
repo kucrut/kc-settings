@@ -482,18 +482,22 @@ class kcSettings {
 	}
 
 	public static function _sns_register() {
+		$path = self::$pdata['paths'];
+		$version = self::$pdata['status']['version'];
+
 		# Common
-		wp_register_script( 'modernizr',   self::$pdata['paths']['scripts'].'/modernizr.2.0.6.min.js', false, '2.0.6', true );
-		wp_register_script( 'kc-settings', self::$pdata['paths']['scripts'].'/kc-settings.js', array('modernizr', 'jquery-ui-sortable', 'jquery-ui-datepicker', 'media-upload', 'thickbox'), self::$pdata['status']['version'], true );
-		wp_register_style( 'kc-settings',  self::$pdata['paths']['styles'].'/kc-settings.css', array('thickbox'), self::$pdata['status']['version'] );
+		wp_register_script( 'kc-settings-base', "{$path['scripts']}/kc-settings-base.js", array('jquery'), $version, true );
+		wp_register_script( 'modernizr',        "{$path['scripts']}/modernizr.2.0.6.min.js", false, '2.0.6', true );
+		wp_register_script( 'kc-settings',      "{$path['scripts']}/kc-settings.js", array('modernizr', 'kc-settings-base', 'jquery-ui-sortable', 'jquery-ui-datepicker', 'media-upload', 'thickbox'), $version, true );
+		wp_register_style(  'kc-settings',      "{$path['styles']}/kc-settings.css", array('thickbox'), $version );
 
 		# Uploader
-		wp_register_script( 'kc-settings-upload',        self::$pdata['paths']['scripts'].'/upload.js', array('jquery'), self::$pdata['status']['version'], true );
-		wp_register_script( 'kc-settings-upload-single', self::$pdata['paths']['scripts'].'/upload-single.dev.js', array('jquery'), self::$pdata['status']['version'], true );
+		wp_register_script( 'kc-settings-upload',        "{$path['scripts']}/upload.js", array('jquery'), $version, true );
+		wp_register_script( 'kc-settings-upload-single', "{$path['scripts']}/upload-single.js", array('jquery'), $version, true );
 
 		# Misc
 		# Lightbox Me http://buckwilson.me/lightboxme/
-		wp_register_script( 'jquery-lightbox_me', self::$pdata['paths']['scripts'].'/jquery.lightbox_me.js', array('jquery'), '2.3', true );
+		wp_register_script( 'jquery-lightbox_me', "{$path['scripts']}/jquery.lightbox_me.js", array('jquery'), '2.3', true );
 	}
 
 
