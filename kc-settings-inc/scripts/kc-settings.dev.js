@@ -45,7 +45,7 @@ function invertColor( color ) {
 			if ( !files.hasOwnProperty(item) || $.inArray(files[item].id, current) > -1 )
 				continue;
 
-			$nu = $last.clone();
+			$nu = $last.clone().removeClass('hidden');
 
 			$nu.find('img').attr('src', files[item].img);
 			$nu.find('input').val(files[item].id).prop('checked', false);
