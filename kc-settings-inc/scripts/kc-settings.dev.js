@@ -33,25 +33,26 @@ var win = window.dialogArguments || opener || parent || top;
 
 	// File (single)
 	win.kcFileSingle = function( data ) {
-		var target = win.kcSettings.upload.target,
-		    $title = target.find('span').text(data.title);
+		var $target = win.kcSettings.upload.target.removeAttr('data-type'),
+		    $title  = $target.find('span').text(data.title);
 
-		target.data('type', data.type)
+		$target
 			.find('input').val(data.id)
 			.siblings('a').hide()
 			.siblings('p').fadeIn()
 				.find('img').attr('src', data.img);
 
 		if ( data.type == 'image' ) {
+			$target.attr('data-type', data.type);
 			$title.hide();
 
 			$.ajax({
 				type: 'POST',
 				url: ajaxurl,
-				data: { action: 'kc_get_image_url', id: data.id, size: target.data('size') },
+				data: { action: 'kc_get_image_url', id: data.id, size: $target.data('size') },
 				success: function( response ) {
 					if ( response !== 0 ) {
-						target.find('img').attr('src', response);
+						$target.find('img').attr('src', response);
 					}
 				}
 			});
