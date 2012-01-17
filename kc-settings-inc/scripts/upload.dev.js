@@ -1,12 +1,4 @@
 var win = window.dialogArguments || opener || parent || top;
-function in_array(needle, haystack) {
-  for(var key in haystack) {
-    if( needle === haystack[key] )
-      return true;
-  }
-  return false;
-}
-
 
 jQuery(document).ready(function($) {
   var $form1  = $('#library-form, #gallery-form'),
@@ -14,75 +6,81 @@ jQuery(document).ready(function($) {
 	    $mItems = $('#media-items');
 
   // If we're in the Gallery or Library tab
-  if ( $form1.length ) {
-    var texts      = win.kcSettings.upload.text,
-		    $btWrapper = $('<div class="kcs-wrap"><h4>'+texts.head+'</h4></div>');
+	if ( $form1.length ) {
+		var texts      = win.kcSettings.upload.text,
+		    current    = win.kcSettings.upload.target.data('currentFiles'),
+		    $btWrapper = $('<div class="kcs-wrap"><h4>'+texts.head+'</h4></div>'),
+		    $checks    = $();
 
 		if ( !$mItems.children().length ) {
 			// No attachment files yet?
 			$btWrapper.append( '<p>'+texts.empty+'</p>' );
 		}
 		else {
-			var $btCheckAll = $('<a class="button">'+texts.checkAll+'</a>');
-			    $btClear    = $('<a class="button">'+texts.clear+'</a>');
-			    $btInvert   = $('<a class="button">'+texts.invert+'</a>');
+			var $btCheckAll = $('<a class="button">'+texts.checkAll+'</a>'),
+			    $btClear    = $('<a class="button">'+texts.clear+'</a>'),
+			    $btInvert   = $('<a class="button">'+texts.invert+'</a>'),
 			    $btAdd      = $('<a class="button">'+texts.addFiles+'</a>');
 
-			// Add checkboxes on each attachment
+			// Add checkboxes on each attachment row
 			$('.new', $mItems).each(function(e) {
-				var $el    = $(this).parent(),
-				    pID    = $el.attr('id').split("-")[2],
-				    iCheck = ( in_array(pID, win.kcSettings.upload.files) ) ? ' checked="checked"' : '';
+				var $el     = $(this).parent(),
+				    pID     = $el.attr('id').split("-")[2],
+				    checked = ( $.inArray(pID, current) > -1 ) ? ' checked="checked"' : '',
+				    $check  = $('<input type="checkbox" value="'+pID+'" '+checked+'class="kcs-files" style="margin-right:.5em"/>');
 
-				$input = $('<input type="checkbox" value="'+pID+'" '+iCheck+'class="kcs-files" style="margin-right:.5em"/>');
+				// Add new checkbox to the collection
+				$checks = $checks.add( $check );
 
 				$el.children('.new')
-					.prepend($input)
+					.prepend($check)
 					.wrapInner('<label />');
 			});
 
 			// Assign 'check all' button click event
 			$btCheckAll.click(function(e) {
 				e.preventDefault();
-				$('input.kcs-files', $mItems).each(function() {
-					$(this).prop('checked', true);
-				});
+				$checks.prop('checked', true);
 			});
 
 			// Assign clear button click event
 			$btClear.click(function(e) {
 				e.preventDefault();
-				$('input.kcs-files', $mItems).each(function() {
-					$(this).prop('checked', false);
-				});
+				$checks.prop('checked', false);
 			});
 
 			// Assign invert button click event
 			$btInvert.click(function(e) {
 				e.preventDefault();
-				$('input.kcs-files', $mItems).each(function() {
-					if ( this.checked )
-						$(this).prop('checked', false);
-					else
-						$(this).prop('checked', true);
+				$checks.each(function() {
+					$(this).prop('checked', !this.checked);
 				});
 			});
 
 			// Assign add button click event
 			$btAdd.click(function(e) {
 				e.preventDefault();
-				var nuCount = 0;
 
-				win.kcSettings.upload.nu = [];
-				$('input.kcs-files', $mItems).each(function() {
-					var $el = $(this);
-					if ( !in_array(this.value, win.kcSettings.upload.files) && this.checked ) {
-						win.kcSettings.upload.nu.push( [this.value, $el.siblings('.title').text(), $el.closest('.media-item').find('.pinkynail').attr('src')] );
+				var $items = $checks.filter(':checked'),
+				    count  = $items.length;
+
+				if ( !count )
+					return false;
+
+				var files = {};
+				$items.each(function() {
+					var pID = this.value,
+					    key = key = 'file_'+pID,
+					    $el = $(this);
+
+					files['file_'+pID] = {
+						id : pID,
+						title: $el.siblings('.title').text(),
+						img: $el.closest('.media-item').find('.pinkynail').attr('src')
 					}
 				});
-				win.kcSettings.upload.nuCount = nuCount;
 
-				win.kcsInsertFiles();
+				win.kcFileMultiple( files );
 				win.tb_remove();
 			});
 

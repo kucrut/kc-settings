@@ -43,7 +43,6 @@ class kcSettings {
 
 		require_once "{$paths['inc']}/form.php";
 		require_once "{$paths['inc']}/helper.php";
-		require_once "{$paths['inc']}/callbacks.php";
 
 		# i18n
 		$mo_file = $paths['inc'].'/languages/kc-settings-'.get_locale().'.mo';

@@ -1,14 +1,14 @@
 var win = window.dialogArguments || opener || parent || top;
 
-// Credit: http://stackoverflow.com/questions/784012/javascript-equivalent-of-phps-in-array
-function inArray(needle, haystack) {
-	var length = haystack.length;
-	for (var i = 0; i < length; i++) {
-		if (haystack[i] == needle) return true;
+function kcCountObj( obj ) {
+	var count = 0;
+	for (var k in obj) {
+		if ( obj.hasOwnProperty(k) ) {
+			++count;
+		}
 	}
-	return false;
+	return count;
 }
-
 
 function kcsbSlug( str ) {
 	strNu = str.replace(/^\-+/, '');
@@ -34,36 +34,33 @@ function invertColor( color ) {
 
 (function($) {
 	// File (multiple)
-	win.kcsInsertFiles = function() {
-		var count = win.kcSettings.upload.nu.length;
+	win.kcFileMultiple = function( files ) {
+		var $target = win.kcSettings.upload.target,
+		    current = $target.data('currentFiles'),
+		    $last   = $target.children().last(),
+		    $items  = $(),
+		    $nu     = null;
 
-		if ( count ) {
-			var $list = win.kcSettings.upload.id,
-			    $lastItem = $list.children().last(),
-			    $nuEls = $();
+		for ( var item in files ) {
+			if ( !files.hasOwnProperty(item) || $.inArray(files[item].id, current) > -1 )
+				continue;
 
-			while ( count ) {
-				count--;
-				var $nuItem = $lastItem.clone();
+			$nu = $last.clone();
 
-				$('input', $nuItem).each(function() {
-					this.value = win.kcSettings.upload.nu[count][0];
-					$(this).prop('checked', false);
-				});
-				$('.title', $nuItem).text(win.kcSettings.upload.nu[count][1]);
-				$nuItem.find('img').attr('src', win.kcSettings.upload.nu[count][2]);
+			$nu.find('img').attr('src', files[item].img);
+			$nu.find('input').val(files[item].id).prop('checked', false);
+			$nu.find('.title').text(files[item].title);
 
-				$nuEls = $nuEls.add( $nuItem );
-			}
-
-			$list.append( $nuEls );
-			if ( $lastItem.is('.hidden') ) {
-				$nuEls.show();
-				$lastItem.remove();
-			}
-
-			$list.show().prev('.info').show();
+			$items = $items.add( $nu );
 		}
+
+		$target.append( $items );
+		if ( $last.is('.hidden') ) {
+			$items.show();
+			$last.remove();
+		}
+
+		$target.show().prev('.info').show();
 	};
 
 	// File (single)
@@ -127,7 +124,7 @@ function invertColor( color ) {
 					    olVal  = $this.data('olVal'),
 					    nuVal  = $input.val();
 
-					if ( nuVal != olVal && inArray(nuVal, kcSettings._ids[$input.data('ids')]) )
+					if ( nuVal != olVal && $.inArray(nuVal, kcSettings._ids[$input.data('ids')]) > -1 )
 						$input.val('');
 				});
 		});
@@ -161,7 +158,7 @@ function invertColor( color ) {
 						    depon = $c.data('dep'),
 						    show  = false;
 
-						if ( !$el.prop('disabled') && ((typeof depon === 'string' && depon === val) || (typeof depon === 'object' && inArray(val, depon))) )
+						if ( !$el.prop('disabled') && ((typeof depon === 'string' && depon === val) || (typeof depon === 'object' && $.inArray(val, depon) > -1)) )
 							show = true;
 
 						$c.toggle( show );
@@ -495,22 +492,22 @@ jQuery(document).ready(function($) {
 	// Add files button
 	$('a.kcsf-upload').live('click', function(e) {
 		e.preventDefault();
-		var $el    = $(this),
-		    $group = $el.parent(),
-		    $solo  = $group.find('.row.hidden');
-
-		win.kcSettings.upload.id = $( '#'+$group.attr('id')+' > ul' );
-		win.kcSettings.upload.files = [];
+		var $el     = $(this),
+		    $target = $el.siblings('.kc-rows'),
+		    $solo   = $target.find('.row.hidden'),
+				current = [];
 
 		// If there's currently only one row and it's hidden, enable the field
 		if ( $solo.length ) {
 			$('input.fileID', $solo).prop('disabled', false);
-		} else {
-			$('input.include', $group).each(function() {
-				win.kcSettings.upload.files.push(this.value);
+		}
+		else {
+			$('input.fileID', $target).each(function() {
+				current.push( this.value );
 			});
 		}
 
+		win.kcSettings.upload.target = $target.data('currentFiles', current);
 		tb_show( '', $el.attr('href') );
 	});
 
@@ -534,9 +531,7 @@ jQuery(document).ready(function($) {
 			e.preventDefault();
 			var $el = $(this);
 
-			//win.kcSettings.upload.id = $( '#'+$el.closest('div').attr('id') );
 			win.kcSettings.upload.target = $el.closest('div');
-
 			tb_show( '', $el.attr('href') );
 		});
 	}
