@@ -268,11 +268,7 @@ class kcSettings_builder {
 		);
 
 
-		$post_types = array();
-		foreach( (array) get_post_types(array('public' => true), 'object') as $pt )
-			$post_types[$pt->name] = "{$pt->label} (<code>{$pt->name}</code>)";
-		$options['post_types'] = $post_types;
-
+		$options['post_types'] = kcSettings_options::$post_types;
 		$options['taxonomies'] = kcSettings_options::$taxonomies;
 		$options['role'] = kcSettings_options::$roles;
 
