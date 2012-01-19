@@ -461,23 +461,11 @@ class kcSettings {
 		if ( empty(self::$data['help']) || !isset(self::$data['help'][$hook_suffix]) || !is_object($screen) )
 			return;
 
-		$helps = self::$data['help'][$hook_suffix];
-		# WP >= 3.3
-		if ( method_exists($screen, 'add_help_tab') ) {
-			foreach ( $helps as $help ) {
-				if ( isset($help['sidebar']) && $help['sidebar'] )
-					$screen->set_help_sidebar( $help['content'] );
-				else
-					$screen->add_help_tab( $help );
-			}
-		}
-		# WP < 3.3
-		else {
-			$content = '';
-			foreach ( $helps as $help )
-				$content .= "<h3>{$help['title']}</h3>\n{$help['content']}";
-
-			add_contextual_help( $screen, $content );
+		foreach ( self::$data['help'][$hook_suffix] as $help ) {
+			if ( isset($help['sidebar']) && $help['sidebar'] )
+				$screen->set_help_sidebar( $help['content'] );
+			else
+				$screen->add_help_tab( $help );
 		}
 	}
 
@@ -494,10 +482,6 @@ class kcSettings {
 		# Uploader
 		wp_register_script( 'kc-settings-upload',        "{$path['scripts']}/upload.js", array('jquery'), $version, true );
 		wp_register_script( 'kc-settings-upload-single', "{$path['scripts']}/upload-single.js", array('jquery'), $version, true );
-
-		# Misc
-		# Lightbox Me http://buckwilson.me/lightboxme/
-		wp_register_script( 'jquery-lightbox_me', "{$path['scripts']}/jquery.lightbox_me.js", array('jquery'), '2.3', true );
 	}
 
 
