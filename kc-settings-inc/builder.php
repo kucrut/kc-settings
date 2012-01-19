@@ -3,35 +3,35 @@
 class kcSettings_builder {
 	protected static $pdata = array(
 		'defaults' => array(
-			'id'								=> '',
-			'type'							=> 'post',
-			'prefix'						=> '',
-			'menu_location'			=> 'options-general.php',
-			'menu_title'				=> '',
-			'page_title'				=> '',
-			'display'						=> 'plain',
-			'post_type'					=> 'post',
-			'taxonomy'					=> '',
-			'sections'					=> array(
+			'id'            => '',
+			'type'          => 'post',
+			'prefix'        => '',
+			'menu_location' => 'options-general.php',
+			'menu_title'    => '',
+			'page_title'    => '',
+			'display'       => 'plain',
+			'post_type'     => 'post',
+			'taxonomy'      => '',
+			'sections'      => array(
 				array(
-					'id'						=> '',
-					'title'					=> '',
-					'desc'					=> '',
-					'metabox'				=> array(
-						'context'				=> 'normal',
-						'priority'			=> 'default',
+					'id'      => '',
+					'title'   => '',
+					'desc'    => '',
+					'metabox' => array(
+						'context'  => 'normal',
+						'priority' => 'default',
 					),
-					'fields'				=> array(
+					'fields'  => array(
 						array(
-							'id'				=> '',
-							'title'			=> '',
-							'desc'			=> '',
-							'type'			=> 'input',
-							'attr'			=> '',
-							'options'		=> array(
+							'id'      => '',
+							'title'   => '',
+							'desc'    => '',
+							'type'    => 'input',
+							'attr'    => '',
+							'options' => array(
 								array(
-									'key'		=> '',
-									'label'	=> ''
+									'key'   => '',
+									'label' => ''
 								)
 							)
 						)
@@ -58,215 +58,214 @@ class kcSettings_builder {
 		$options = array(
 			'yesno'		=> array(
 				array(
-					'value'	=> 1,
-					'label'	=> __('Yes', 'kc-settings')
+					'value' => 1,
+					'label' => __('Yes', 'kc-settings')
 				),
 				array(
-					'value'	=> 0,
-					'label'	=> __('No', 'kc-settings')
+					'value' => 0,
+					'label' => __('No', 'kc-settings')
 				)
 			),
-			'type'		=> array(
+			'type' => array(
 				'plugin' => array(
-					'value'		=> 'plugin',
-					'label'		=> __('Plugin / theme settings', 'kc-settings')
+					'value' => 'plugin',
+					'label' => __('Plugin / theme settings', 'kc-settings')
 				),
 				'post' => array(
-					'value'		=> 'post',
-					'label'		=> __('Post metadata (custom fields)', 'kc-settings'),
-					'default'	=> true
+					'value'   => 'post',
+					'label'   => __('Post metadata (custom fields)', 'kc-settings'),
+					'default' => true
 				),
 				'term' => array(
-					'value'		=> 'term',
-					'label'		=> __('Term metadata', 'kc-settings')
+					'value' => 'term',
+					'label' => __('Term metadata', 'kc-settings')
 				),
 				'user' => array(
-					'value'		=> 'user',
-					'label'		=> __('User metadata', 'kc-settings')
+					'value' => 'user',
+					'label' => __('User metadata', 'kc-settings')
 				)
 			),
-			'menu_location'	=> array(
+			'menu_location' => array(
 				array(
-					'value'		=> 'options-general.php',
-					'label'		=> __('Settings'),
-					'default'	=> true
+					'value'   => 'options-general.php',
+					'label'   => __('Settings'),
+					'default' => true
 				),
 				array(
-					'value'		=> 'themes.php',
-					'label'		=> __('Appearance')
+					'value' => 'themes.php',
+					'label' => __('Appearance')
 				),
 				array(
-					'value'		=> 'index.php',
-					'label'		=> __('Dashboard')
+					'value' => 'index.php',
+					'label' => __('Dashboard')
 				),
 				array(
-					'value'		=> 'plugins.php',
-					'label'		=> __('Plugins')
+					'value' => 'plugins.php',
+					'label' => __('Plugins')
 				),
 				array(
-					'value'		=> 'tools.php',
-					'label'		=> __('Tools')
+					'value' => 'tools.php',
+					'label' => __('Tools')
 				),
 				array(
-					'value'		=> 'plugins.php',
-					'label'		=> __('Plugins')
+					'value' => 'plugins.php',
+					'label' => __('Plugins')
 				),
 				array(
-					'value'		=> 'users.php',
-					'label'		=> __('Users')
+					'value' => 'users.php',
+					'label' => __('Users')
 				),
 				array(
-					'value'		=> 'upload.php',
-					'label'		=> __('Media')
+					'value' => 'upload.php',
+					'label' => __('Media')
 				),
 				array(
-					'value'		=> 'link-manager.php',
-					'label'		=> __('Links')
+					'value' => 'link-manager.php',
+					'label' => __('Links')
 				),
 				array(
-					'value'		=> 'edit-comments.php',
-					'label'		=> __('Comments')
+					'value' => 'edit-comments.php',
+					'label' => __('Comments')
 				),
 				array(
-					'value'		=> 'edit.php',
-					'label'		=> __('Posts')
+					'value' => 'edit.php',
+					'label' => __('Posts')
 				),
 			),
-			'display'		=> array(
+			'display' => array(
 				array(
-					'value'	=> 'metabox',
-					'label'	=> __('Metaboxes', 'kc-settings')
+					'value' => 'metabox',
+					'label' => __('Metaboxes', 'kc-settings')
 				),
 				array(
-					'value'	=> 'plain',
-					'label'	=> __('Plain', 'kc-settings')
+					'value' => 'plain',
+					'label' => __('Plain', 'kc-settings')
 				)
 			),
-			'field'		=> array(
+			'field' => array(
 				array(
-					'value'		=> 'text',
-					'label'		=> __('Text', 'kc-settings'),
-					'default'	=> true
+					'value'   => 'text',
+					'label'   => __('Text', 'kc-settings'),
+					'default' => true
 				),
 				array(
-					'value'		=> 'textarea',
-					'label'		=> __('Textarea', 'kc-settings')
+					'value' => 'textarea',
+					'label' => __('Textarea', 'kc-settings')
 				),
 				array(
-					'value'		=> 'checkbox',
-					'label'		=> __('Checkbox', 'kc-settings')
+					'value' => 'checkbox',
+					'label' => __('Checkbox', 'kc-settings')
 				),
 				array(
-					'value'		=> 'color',
-					'label'		=> __('Color', 'kc-settings')
+					'value' => 'color',
+					'label' => __('Color', 'kc-settings')
 				),
 				array(
-					'value'		=> 'date',
-					'label'		=> __('Date', 'kc-settings')
+					'value' => 'date',
+					'label' => __('Date', 'kc-settings')
 				),
 				array(
-					'value'		=> 'file',
-					'label'		=> __('File', 'kc-settings')
+					'value' => 'file',
+					'label' => __('File', 'kc-settings')
 				),
 				array(
-					'value'		=> 'radio',
-					'label'		=> __('Radio', 'kc-settings')
+					'value' => 'radio',
+					'label' => __('Radio', 'kc-settings')
 				),
 				array(
-					'value'		=> 'select',
-					'label'		=> __('Select', 'kc-settings')
+					'value' => 'select',
+					'label' => __('Select', 'kc-settings')
 				),
 				array(
-					'value'		=> 'multiselect',
-					'label'		=> __('Select (multiple)', 'kc-settings')
+					'value' => 'multiselect',
+					'label' => __('Select (multiple)', 'kc-settings')
 				),
 				array(
-					'value'		=> 'multiinput',
-					'label'		=> __('Multiinput', 'kc-settings')
+					'value' => 'multiinput',
+					'label' => __('Multiinput', 'kc-settings')
 				),
 				array(
-					'value'		=> 'special',
-					'label'		=> __('Special', 'kc-settings')
+					'value' => 'special',
+					'label' => __('Special', 'kc-settings')
 				),
 				array(
-					'value'		=> 'number',
-					'label'		=> __('Number', 'kc-settings')
+					'value' => 'number',
+					'label' => __('Number', 'kc-settings')
 				),
 				array(
-					'value'		=> 'email',
-					'label'		=> __('Email', 'kc-settings')
+					'value' => 'email',
+					'label' => __('Email', 'kc-settings')
 				),
 				array(
-					'value'		=> 'password',
-					'label'		=> __('Password', 'kc-settings')
+					'value' => 'password',
+					'label' => __('Password', 'kc-settings')
 				),
 				array(
-					'value'		=> 'url',
-					'label'		=> __('URL', 'kc-settings')
+					'value' => 'url',
+					'label' => __('URL', 'kc-settings')
 				),
 				array(
-					'value'		=> 'tel',
-					'label'		=> __('Telephone', 'kc-settings')
+					'value' => 'tel',
+					'label' => __('Telephone', 'kc-settings')
 				),
 				array(
-					'value'		=> 'month',
-					'label'		=> __('Month', 'kc-settings')
+					'value' => 'month',
+					'label' => __('Month', 'kc-settings')
 				),
 				array(
-					'value'		=> 'week',
-					'label'		=> __('Week', 'kc-settings')
+					'value' => 'week',
+					'label' => __('Week', 'kc-settings')
 				),
 				array(
-					'value'		=> 'time',
-					'label'		=> __('Time', 'kc-settings')
+					'value' => 'time',
+					'label' => __('Time', 'kc-settings')
 				),
 				array(
-					'value'		=> 'datetime-local',
-					'label'		=> __('Datetime (local)', 'kc-settings')
+					'value' => 'datetime-local',
+					'label' => __('Datetime (local)', 'kc-settings')
 				),
 				array(
-					'value'		=> 'datetime',
-					'label'		=> __('Datetime (with timezone)', 'kc-settings')
+					'value' => 'datetime',
+					'label' => __('Datetime (with timezone)', 'kc-settings')
 				)
 			),
-			'metabox'			=> array(
-				'context'		=> array(
-					'label'		=> __('Context', 'kc-settings'),
-					'options'	=> array(
+			'metabox' => array(
+				'context'   => array(
+					'label'   => __('Context', 'kc-settings'),
+					'options' => array(
 						array(
-							'label'	=> __('Normal', 'kc-settings'),
-							'value'	=> 'normal'
+							'label' => __('Normal', 'kc-settings'),
+							'value' => 'normal'
 						),
 						array(
-							'label'	=> __('Advanced', 'kc-settings'),
-							'value'	=> 'advanced'
+							'label' => __('Advanced', 'kc-settings'),
+							'value' => 'advanced'
 						),
 						array(
-							'label'	=> __('Side', 'kc-settings'),
-							'value'	=> 'side'
+							'label' => __('Side', 'kc-settings'),
+							'value' => 'side'
 						)
 					)
 				),
-				'priority'	=> array(
-					'label'		=> __('Priority', 'kc-settings'),
-					'options'	=> array(
+				'priority' => array(
+					'label'   => __('Priority', 'kc-settings'),
+					'options' => array(
 						array(
-							'label'	=> __('High', 'kc-settings'),
-							'value'	=> 'high'
+							'label' => __('High', 'kc-settings'),
+							'value' => 'high'
 						),
 						array(
-							'label'	=> __('Default', 'kc-settings'),
-							'value'	=> 'default'
+							'label' => __('Default', 'kc-settings'),
+							'value' => 'default'
 						),
 						array(
-							'label'	=> __('Low', 'kc-settings'),
-							'value'	=> 'low'
+							'label' => __('Low', 'kc-settings'),
+							'value' => 'low'
 						)
 					)
 				)
 			)
 		);
-
 
 		$options['post_types'] = kcSettings_options::$post_types;
 		$options['taxonomies'] = kcSettings_options::$taxonomies;
@@ -301,9 +300,9 @@ class kcSettings_builder {
 		# Help
 		kcSettings::$data['help'][$page] = array(
 			array(
-				'id'			=> 'kcsb',
-				'title' 	=> __( 'KC Settings Builder', 'kc-settings' ),
-				'content'	=>
+				'id'      => 'kcsb',
+				'title'   => __( 'KC Settings Builder', 'kc-settings' ),
+				'content' =>
 					'<ul>
 						<li>'.__('All fields are required, unless the label is green.', 'kc-settings').'</li>
 						<li>'.__('Some fields depend on other field(s), they will be shown when the dependency is selected/checked.', 'kc-settings').'</li>
@@ -311,10 +310,10 @@ class kcSettings_builder {
 					</ul>'
 			),
 			array(
-				'id'			=> 'kcsb-side',
-				'title'		=> 'Links',
-				'sidebar'	=> true,
-				'content'	=>
+				'id'      => 'kcsb-side',
+				'title'   => 'Links',
+				'sidebar' => true,
+				'content' =>
 					'<ul>
 						<li><a href="http://wordpress.org/tags/kc-settings?forum_id=10">'.__('Support', 'kc-settings').'</a></li>
 					</ul>'
@@ -453,11 +452,11 @@ class kcSettings_builder {
 
 
 	public static function builder() {
-		$options		= self::$pdata['options'];
-		$values			= self::$pdata['defaults'];
-		$form_class	= ' class="hidden"';
-		$button_txt	= __('Create Setting', 'kc-settings');
-		$mode				= 'default';
+		$options    = self::$pdata['options'];
+		$values     = self::$pdata['defaults'];
+		$form_class = ' class="hidden"';
+		$button_txt = __('Create Setting', 'kc-settings');
+		$mode       = 'default';
 
 		if ( isset($_GET['action']) ) {
 			$action = $_GET['action'];
@@ -465,7 +464,7 @@ class kcSettings_builder {
 				if ( isset($_GET['id']) && !empty($_GET['id']) ) {
 					$id = $_GET['id'];
 					if ( isset(self::$pdata['kcsb']['settings'][$id]) ) {
-						$mode		= 'edit';
+						$mode   = 'edit';
 						$values = wp_parse_args( self::$pdata['kcsb']['settings'][$id], $values );
 					}
 					else {
@@ -475,7 +474,7 @@ class kcSettings_builder {
 				else {
 					$er = get_transient( 'kcsb' );
 					if ( !empty($er) ) {
-						$mode		= 'edit';
+						$mode   = 'edit';
 						$values = wp_parse_args( $er, $values );
 						delete_transient( 'kcsb' );
 						add_settings_error('general', 'not_saved', __('Settings were NOT saved! Please fill all the required fields.', 'kc-settings') );
@@ -489,7 +488,7 @@ class kcSettings_builder {
 
 		if ( $mode == 'edit' ) {
 			$form_class = '';
-			$button_txt	= __('Save Changes');
+			$button_txt = __('Save Changes');
 		}
 
 		?>
@@ -582,10 +581,10 @@ class kcSettings_builder {
 							<label class="kcsb-ml"><?php _e('Type') ?></label>
 							<?php
 								echo kcForm::select(array(
-									'attr'				=> array('name' => 'kcsb[type]', 'class' => 'hasdep kcsb-mi', 'data-child' => '.childType'),
-									'options'			=> $options['type'],
-									'current'			=> $values['type'],
-									'none'				=> false
+									'attr'    => array('name' => 'kcsb[type]', 'class' => 'hasdep kcsb-mi', 'data-child' => '.childType'),
+									'options' => $options['type'],
+									'current' => $values['type'],
+									'none'    => false
 								));
 							?>
 						</li>
@@ -597,10 +596,10 @@ class kcSettings_builder {
 							<label class="kcsb-ml"><?php _e('Menu location', 'kc-settings') ?></label>
 							<?php
 								echo kcForm::select(array(
-									'attr'		=> array('name' => 'kcsb[menu_location]', 'class' => 'kcsb-mi'),
-									'options'	=> $options['menu_location'],
-									'current'	=> $values['menu_location'],
-									'none'		=> false
+									'attr'    => array('name' => 'kcsb[menu_location]', 'class' => 'kcsb-mi'),
+									'options' => $options['menu_location'],
+									'current' => $values['menu_location'],
+									'none'    => false
 								));
 							?>
 						</li>
@@ -615,10 +614,10 @@ class kcSettings_builder {
 							<label class="kcsb-ml"><?php _e('Page mode', 'kc-settings') ?></label>
 							<?php
 								echo kcForm::select(array(
-									'attr'		=> array('name' => 'kcsb[display]', 'class' => 'hasdep kcsb-mi', 'data-child' => '.childDisplay'),
-									'options'	=> $options['display'],
-									'current'	=> $values['display'],
-									'none'		=> false
+									'attr'    => array('name' => 'kcsb[display]', 'class' => 'hasdep kcsb-mi', 'data-child' => '.childDisplay'),
+									'options' => $options['display'],
+									'current' => $values['display'],
+									'none'    => false
 								));
 							?>
 						</li>
@@ -660,8 +659,8 @@ class kcSettings_builder {
 							$count_s = 0;
 							foreach ( $values['sections']  as $idxS => $section ) {
 								$count_s++;
-								$s_name	= "kcsb[sections][{$idxS}]";
-								$s_val	= $values['sections'][$idxS];
+								$s_name = "kcsb[sections][{$idxS}]";
+								$s_val = $values['sections'][$idxS];
 						?>
 						<li class="row" data-mode="sections">
 							<div class="actions">
@@ -713,10 +712,10 @@ class kcSettings_builder {
 											<label><?php echo $prop['label'] ?> : </label>
 											<?php
 												echo kcForm::select(array(
-													'attr'		=> array('name' => "{$s_name}[metabox][$mb_prop]", 'required' => 'required'),
-													'options'	=> $prop['options'],
-													'current'	=> $s_val['metabox'][$mb_prop],
-													'none'		=> false
+													'attr'    => array('name' => "{$s_name}[metabox][$mb_prop]", 'required' => 'required'),
+													'options' => $prop['options'],
+													'current' => $s_val['metabox'][$mb_prop],
+													'none'    => false
 												));
 											?>
 										</li>
@@ -730,8 +729,8 @@ class kcSettings_builder {
 											$count_f = 0;
 											foreach ( $section['fields'] as $idxF => $field ) {
 												$count_f++;
-												$f_name	= "{$s_name}[fields][{$idxF}]";
-												$f_val	= $s_val['fields'][$idxF];
+												$f_name = "{$s_name}[fields][{$idxF}]";
+												$f_val  = $s_val['fields'][$idxF];
 										?>
 										<li class="row" data-mode="fields">
 											<div class="actions">
@@ -758,15 +757,15 @@ class kcSettings_builder {
 													<label class="kcsb-ml"><?php _e('Type') ?></label>
 													<?php
 														echo kcForm::select(array(
-															'attr'					=> array(
-																'name'				=> "{$f_name}[type]",
-																'class'				=> 'hasdep kcsb-mi',
-																'data-child'	=> '.childFieldType',
-																'data-scope'	=> 'li.row'
+															'attr'    => array(
+																'name'       => "{$f_name}[type]",
+																'class'      => 'hasdep kcsb-mi',
+																'data-child' => '.childFieldType',
+																'data-scope' => 'li.row'
 															),
-															'options'	=> $options['field'],
-															'current'	=> $f_val['type'],
-															'none'		=> false
+															'options' => $options['field'],
+															'current' => $f_val['type'],
+															'none'    => false
 														));
 													?>
 												</li>
@@ -797,10 +796,7 @@ class kcSettings_builder {
 													<?php
 														echo kcForm::field(array(
 															'type'    => 'select',
-															'attr'    => array(
-																'name'     => "{$f_name}[size]",
-																'class'    => 'kcsb-mi'
-															),
+															'attr'    => array( 'name' => "{$f_name}[size]", 'class' => 'kcsb-mi' ),
 															'options' => kcSettings_options::$image_sizes,
 															'current' => $f_val['size'],
 															'none'    => false
@@ -812,8 +808,8 @@ class kcSettings_builder {
 													<ul class="kcsb-mi kcsb-options kc-rows kc-sortable">
 														<?php
 															foreach ( $f_val['options'] as $idxO => $option ) {
-																$o_name	= "{$f_name}[options][{$idxO}]";
-																$o_val	= $f_val['options'][$idxO];
+																$o_name = "{$f_name}[options][{$idxO}]";
+																$o_val  = $f_val['options'][$idxO];
 														?>
 														<li class="row" data-mode="options">
 															<label>
