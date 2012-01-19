@@ -56,16 +56,6 @@ class kcSettings_builder {
 
 	private static function _options() {
 		$options = array(
-			'yesno'		=> array(
-				array(
-					'value' => 1,
-					'label' => __('Yes', 'kc-settings')
-				),
-				array(
-					'value' => 0,
-					'label' => __('No', 'kc-settings')
-				)
-			),
 			'type' => array(
 				'plugin' => array(
 					'value' => 'plugin',
