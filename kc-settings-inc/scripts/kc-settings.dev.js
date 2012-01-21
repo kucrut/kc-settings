@@ -37,7 +37,7 @@ var win = window.dialogArguments || opener || parent || top;
 		    $title  = $target.find('span').text(data.title);
 
 		$target
-			.find('input').val(data.id)
+			.find('input').val(data.id).trigger('change')
 			.siblings('a').hide()
 			.siblings('p').fadeIn()
 				.find('img').attr('src', data.img);
@@ -45,17 +45,6 @@ var win = window.dialogArguments || opener || parent || top;
 		if ( data.type == 'image' ) {
 			$target.attr('data-type', data.type);
 			$title.hide();
-
-			$.ajax({
-				type: 'POST',
-				url: ajaxurl,
-				data: { action: 'kc_get_image_url', id: data.id, size: $target.data('size') },
-				success: function( response ) {
-					if ( response !== 0 ) {
-						$target.find('img').attr('src', response);
-					}
-				}
-			});
 		}
 		else {
 			$title.show();
@@ -370,6 +359,28 @@ jQuery(document).ready(function($) {
 
 			win.kcSettings.upload.target = $el.closest('div');
 			tb_show( '', $el.attr('href') );
+		});
+
+		$('input', $single_files).live('change', function() {
+			var $el = $(this),
+					pID = $el.val();
+
+			if ( !pID )
+				return;
+
+			var $target = $el.closest('div'),
+					size    = $target.size;
+
+			$.ajax({
+				type: 'POST',
+				url: ajaxurl,
+				data: { action: 'kc_get_image_url', id: pID, size: $target.data('size') },
+				success: function( response ) {
+					if ( response !== 0 ) {
+						$target.find('img').attr('src', response);
+					}
+				}
+			});
 		});
 	}
 

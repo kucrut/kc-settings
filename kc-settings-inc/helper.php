@@ -355,7 +355,8 @@ function kc_ajax_get_image_url() {
 	else
 		$result = false;
 
-	die( $result );
+	echo $result;
+	die();
 }
 
 
