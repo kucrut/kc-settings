@@ -209,34 +209,34 @@ class kcSettings_plugin {
 
 	# Setting field validation callback
 	function validate( $user_val ) {
-		$options = $this->group['options'];
 		$prefix = $this->group['prefix'];
+		$options = $this->group['options'];
 
 		# apply validation/sanitation filter(s) on the new values
-		# filter by prefix
+		# prefix-based filter
 		$user_val = apply_filters( "kcv_settings_{$prefix}", $user_val );
 		if ( empty($user_val) )
 			return apply_filters( "kc_psv", $user_val );
 
 		$nu_val = array();
-		foreach ( $user_val as $sk => $sv ) {
-			# section filter
-			$nu_val[$sk] = apply_filters( "kcv_setting_{$prefix}_{$sk}", $sv );
+		foreach ( $user_val as $section_id => $section_value ) {
+			# section-based filter
+			$nu_val[$section_id] = apply_filters( "kcv_setting_{$prefix}_{$section_id}", $section_value );
 
-			foreach ( $sv as $fk => $fv ) {
-				$type = $options[$sk]['fields'][$fk]['type'];
+			foreach ( $section_value as $field_id => $field_value ) {
+				$type = $options[$section_id]['fields'][$field_id]['type'];
 
 				# default sanitation
-				$fv = _kc_sanitize_value( $fv, $type );
+				$field_value = _kc_sanitize_value( $field_value, $type );
 
 				# type-based filter
-				$fv = apply_filters( "kcv_setting_{$prefix}_{$type}", $fv );
+				$field_value = apply_filters( "kcv_setting_{$prefix}_{$type}", $field_value );
 
 				# field-based filter
-				$fv = apply_filters( "kcv_setting_{$prefix}_{$sk}_{$fk}", $fv );
+				$field_value = apply_filters( "kcv_setting_{$prefix}_{$section_id}_{$field_id}", $field_value );
 
 				# insert the filtered value to our new array
-				$nu_val[$sk][$fk] = $fv;
+				$nu_val[$section_id][$field_id] = $field_value;
 			}
 		}
 

@@ -371,6 +371,7 @@ class kcSettings {
 		$file_modes = array('single', 'radio', 'checkbox');
 
 		foreach ( $fields as $idx => $field ) {
+			unset( $fields[$idx] );
 			# Field check: id, title & type
 			foreach ( array('id', 'title', 'type') as $c ) {
 				if ( !isset($field[$c]) || empty($field[$c]) ) {
@@ -401,6 +402,8 @@ class kcSettings {
 			# Has default value?
 			if ( $type == 'plugin' && isset($field['default']) )
 				$defaults[$field['id']] = $field['default'];
+
+			$fields[$field['id']] = $field;
 		}
 
 		return array('fields' => $fields, 'defaults' => $defaults );
