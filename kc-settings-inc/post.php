@@ -42,7 +42,11 @@ class kcSettings_post {
 
 	# Populate metabox
 	public static function _fill_meta_box( $object, $box ) {
+		$output = '';
 		$section = $box['args'];
+		if ( isset($section['desc']) && !empty($section['desc']) )
+			$output .= wpautop( $section['desc'] );
+
 		$on_side = $section['metabox']['context'] == 'side' ? true : false;
 		if ( $on_side ) {
 			$wraps = array(
@@ -57,7 +61,7 @@ class kcSettings_post {
 			);
 		}
 
-		$output  = "<input type='hidden' name='{$object->post_type}_kc_meta_box_nonce' value='".wp_create_nonce( '___kc_meta_box_nonce___' )."' />";
+		$output .= "<input type='hidden' name='{$object->post_type}_kc_meta_box_nonce' value='".wp_create_nonce( '___kc_meta_box_nonce___' )."' />";
 		$output .= $wraps['block'][0];
 
 		foreach ( $section['fields'] as $field ) {
