@@ -317,24 +317,39 @@ class kcSettings {
 		$defaults = array();
 		foreach ( $sections as $s_idx => $section ) {
 			unset( $sections[$s_idx] );
-			# Section check: id, title & type
-			foreach ( array('id', 'title', 'fields') as $c ) {
-				if ( !isset($section[$c]) || empty($section[$c]) || ($c == 'fields' && !is_array($section[$c])) ) {
+			# Section check: id & title
+			foreach ( array('id', 'title') as $c ) {
+				if ( !isset($section[$c]) || empty($section[$c]) ) {
 					trigger_error( self::$xdata['bootsrap_messages']["section_no_{$c}"] );
 					unset( $sections[$s_idx] );
 					continue 2;
 				}
 			}
 
-			$fields = self::_validate_fields( $type, $section['fields'] );
-			if ( empty($fields['fields']) )
-				continue;
-			$section['fields'] = $fields['fields'];
+			# Custom callback for section?
+			if ( isset($section['cb']) ) {
+				if ( !is_callable($section['cb']) ) {
+					trigger_error( self::$xdata['bootsrap_messages']["section_no_cb"] );
+					continue;
+				}
+			}
+			else {
+				if ( !isset($section['fields']) || !is_array($section['fields']) || empty($section['fields']) ) {
+					trigger_error( self::$xdata['bootsrap_messages']["section_no_fields"] );
+					continue;
+				}
+				else {
+					$fields = self::_validate_fields( $type, $section['fields'] );
+					if ( empty($fields['fields']) )
+						continue;
+					$section['fields'] = $fields['fields'];
 
-			if ( !empty($fields['defaults']) )
-				$defaults['plugin'][$group['prefix']][$section['id']] = $fields['defaults'];
+					if ( !empty($fields['defaults']) )
+						$defaults['plugin'][$group['prefix']][$section['id']] = $fields['defaults'];
+				}
+			}
 
-			# Plugin/themes/post only: Set metabox position & priority
+			# Plugin/theme/post only: Set metabox position & priority
 			if ( $type == 'post' || ($type == 'plugin' && $group['display']) == 'metabox' ) {
 				# TODO: remove in version 3.0
 				if ( isset($section['priority']) ) {

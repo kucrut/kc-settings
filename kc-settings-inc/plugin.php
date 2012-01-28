@@ -42,14 +42,8 @@ class kcSettings_plugin {
 		if ( $display == 'metabox' )
 			add_action( "load-{$this->page}", array(&$this, 'create_meta_box') );
 
-		if ( isset($load_actions) )
-			add_action( "load-{$this->page}", array(&$this, 'load_actions'), 99 );
-	}
-
-
-	function load_actions() {
-		foreach ( (array) $this->group['load_actions'] as $func )
-			call_user_func( $func, $this );
+		if ( isset($load_actions) && is_callable($load_actions) )
+			add_action( "load-{$this->page}", $load_actions, 99 );
 	}
 
 
@@ -66,6 +60,11 @@ class kcSettings_plugin {
 				$section_title = ( isset($section['title']) ) ? $section['title'] : "{$prefix}-section-{$section['id']}";
 				# Add sections
 				add_settings_section( $section['id'], $section_title, '', "{$prefix}_settings" );
+
+				# Skip fields for sections with custom callbacks
+				if ( !isset($section['fields']) )
+					continue;
+
 				foreach ( $section['fields'] as $field ) {
 					# add fields on each sections
 					$args = array(
@@ -139,7 +138,14 @@ class kcSettings_plugin {
 
 		# Call user callback function for displaying the section ( if set )
 		if ( isset($section['cb']) && is_callable($section['cb']) ) {
-			call_user_func( $opt_section['cb'], $opt_section );
+			$section = array_merge( $section, array(
+				'field_id'   => "{$this->group['prefix']}_settings__{$section['id']}",
+				'field_name' => "{$this->group['prefix']}_settings[{$section['id']}]"
+			) );
+			$cb_args = isset($section['args']) ? $section['args'] : '';
+			if ( $cb_args && is_callable($cb_args) )
+				$cb_args = call_user_func_array( $cb_args, array( 'args' => $section) );
+			call_user_func_array( $section['cb'], array('args' => $section, 'cb_args' => $cb_args) );
 		}
 		# Defaults to WordPress' Settings API
 		else {
@@ -223,7 +229,10 @@ class kcSettings_plugin {
 			# section-based filter
 			$nu_val[$section_id] = apply_filters( "kcv_setting_{$prefix}_{$section_id}", $section_value );
 
-			foreach ( $section_value as $field_id => $field_value ) {
+			if ( !isset($options[$section_id]['fields']) )
+				continue;
+
+			foreach ( $nu_val[$section_id] as $field_id => $field_value ) {
 				$type = $options[$section_id]['fields'][$field_id]['type'];
 
 				# default sanitation
