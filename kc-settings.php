@@ -158,19 +158,20 @@ class kcSettings {
 	private static function _bootstrap_settings() {
 		# Settings bootstrap error messages
 		self::$xdata['bootsrap_messages'] = array(
-			'no_prefix'           => __( "One of your settings doesn't have <b>prefix</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'no_menu_title'       => __( "One of your settings doesn't have <b>menu title</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'no_page_title'       => __( "One of your settings doesn't have <b>page title</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'no_options'          => __( "One of your settings doesn't have <b>options</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'section_no_fields'   => __( "One of your settings' section doesn't have <b>fields</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'section_no_id'       => __( "One of your settings' sections doesn't have <b>ID</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'section_no_title'    => __( "One of your settings' sections doesn't have <b>title</b> set. Therefore it has NOT been added.", 'kc-settings'),
+			'no_prefix'           => __( "One of your settings doesn't have <b>prefix</b> set.", 'kc-settings'),
+			'no_menu_title'       => __( "One of your settings doesn't have <b>menu title</b> set.", 'kc-settings'),
+			'no_page_title'       => __( "One of your settings doesn't have <b>page title</b> set.", 'kc-settings'),
+			'no_options'          => __( "One of your settings doesn't have <b>options</b> set.", 'kc-settings'),
+			'section_no_cb'       => __( "One of your section's callback is not callable.", 'kc-settings'),
+			'section_no_fields'   => __( "One of your settings' section doesn't have <b>fields</b> set.", 'kc-settings'),
+			'section_no_id'       => __( "One of your settings' sections doesn't have <b>ID</b> set.", 'kc-settings'),
+			'section_no_title'    => __( "One of your settings' sections doesn't have <b>title</b> set.", 'kc-settings'),
 			'section_metabox_old' => __( "One of your settings is still using the old format for metabox setting, please migrate it to the new one.", 'kc-settings'),
-			'field_no_id'         => __( "One of your fields doesn't have <b>ID</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'field_no_title'      => __( "One of your fields doesn't have <b>title</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'field_no_type'       => __( "One of your fields doesn't have <b>type</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'field_no_opt'        => __( "One of your fields doesn't have the required <b>options</b> set. Therefore it has NOT been added.", 'kc-settings'),
-			'field_no_cb'         => __( "One of your fields doesn't have the required <b>callback</b> set, or is not callable. Therefore it has NOT been added.", 'kc-settings')
+			'field_no_id'         => __( "One of your fields doesn't have <b>ID</b> set.", 'kc-settings'),
+			'field_no_title'      => __( "One of your fields doesn't have <b>title</b> set.", 'kc-settings'),
+			'field_no_type'       => __( "One of your fields doesn't have <b>type</b> set.", 'kc-settings'),
+			'field_no_opt'        => __( "One of your fields doesn't have the required <b>options</b> set.", 'kc-settings'),
+			'field_no_cb'         => __( "One of your fields doesn't have the required <b>callback</b> set, or is not callable.", 'kc-settings')
 		);
 
 		$kcsb = array(
