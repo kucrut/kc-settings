@@ -373,6 +373,7 @@ class kcSettings_options {
 	public static $taxonomies;
 	public static $taxonomies_all;
 	public static $post_statuses;
+	public static $sidebars;
 	public static $roles;
 	public static $yesno;
 
@@ -490,6 +491,18 @@ class kcSettings_options {
 				break;
 			}
 		}
+	}
+
+
+	public static function sidebars() {
+		global $wp_registered_sidebars;
+		if ( empty($wp_registered_sidebars) )
+			return;
+
+		$sidebars = array();
+		foreach ( $wp_registered_sidebars as $sb )
+			$sidebars[$sb['id']] = $sb['name'];
+		self::$sidebars = $sidebars;
 	}
 }
 
