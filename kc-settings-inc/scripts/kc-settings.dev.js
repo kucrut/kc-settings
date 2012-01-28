@@ -197,7 +197,8 @@ jQuery(document).ready(function($) {
 		// Settings page (multiinput)
 		else {
 			$nu.find(':input').each(function() {
-				$(this).val('');
+				if ( $(this).data('nocleanup') !== true )
+					$(this).val('');
 			});
 		}
 
