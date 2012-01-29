@@ -53,7 +53,7 @@ class kcSettings_term {
 
 			$section_head = "\t\t\t\t<h4>{$section['title']}</h4>\n";
 			if ( isset($section['desc']) && $section['desc'] )
-				$section_head .= "\t\t\t\t{$section['desc']}\n";
+				$section_head .= "\t\t\t\t".wpautop($section['desc'])."\n";
 			if ( $tabled )
 				$section_head = "<tr class='form-field'>\n\t\t\t<th colspan='2'>\n{$section_head}\t\t\t</th>\n\t\t</tr>\n";
 			$output .= $section_head;
