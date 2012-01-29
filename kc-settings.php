@@ -328,7 +328,7 @@ class kcSettings {
 			}
 
 			# Custom callback for section?
-			if ( isset($section['cb']) ) {
+			if ( $type == 'plugin' && isset($section['cb']) ) {
 				if ( !is_callable($section['cb']) ) {
 					trigger_error( self::$xdata['bootsrap_messages']["section_no_cb"] );
 					continue;
