@@ -21,8 +21,7 @@ class kcSettings_term {
 	/**
 	 * Generate term meta field HTML.
 	 *
-	 * $param $args This could be a taxonomy name (string) or a term (object), depending on which screen we're at.
-	 * $return string $output Input field HTML
+	 * @param string|object $args This could be a taxonomy name (string) or a term (object), depending on which screen we're at.
 	 *
 	 */
 	public static function _fields( $args ) {
