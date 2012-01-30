@@ -28,8 +28,12 @@ class kcSettings {
 	);
 
 	public static $data	= array(
-		'pages' => array('media-upload-popup'),
-		'help'  => array()
+		'pages'   => array('media-upload-popup'),
+		'help'    => array(),
+		'notices' => array(
+			'updated' => array(),
+			'error'   => array()
+		)
 	);
 
 
@@ -95,7 +99,6 @@ class kcSettings {
 		add_action( 'admin_enqueue_scripts', array(__CLASS__, '_sns_admin') );
 
 		# Admin notices
-		self::$data['notices'] = array();
 		add_action( 'admin_notices', array(__CLASS__, '_admin_notice') );
 
 		# Builder
@@ -560,13 +563,13 @@ class kcSettings {
 		if ( empty(self::$data['notices']) )
 			return;
 
-		foreach ( self::$data['notices'] as $notice ) {
-			if ( !$notice['message'] )
-				continue;
-			if ( !isset($notice['class']) )
-				$notice['class'] = 'updated';
+		foreach ( self::$data['notices'] as $type => $messages ) {
+			if ( empty($messages) )
+				return;
 
-			echo "<div class='message {$notice['class']}'>\n\t{$notice['message']}\n</div>\n";
+			echo "<div class='message {$type}'>\n\t";
+			echo wpautop( join("\n", $messages) );
+			echo "</div>\n";
 		}
 	}
 
