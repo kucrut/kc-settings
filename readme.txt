@@ -1,4 +1,4 @@
-=== Plugin Name ===
+=== KC Settings ===
 Contributors: kucrut
 Donate link: http://kucrut.org/
 Tags: theme-options, plugin-options, settings, options, term-meta, category-meta, post-meta, custom-fields, user-meta, attachment

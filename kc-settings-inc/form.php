@@ -110,7 +110,7 @@ class kcForm {
 		foreach ( $args['options'] as $o ) {
 			$output .= "\t<option value='".esc_attr($o['value'])."'";
 			if ( $o['value'] == $args['current'] || in_array($o['value'], $args['current']) )
-				$output .= " selected='true'\n";
+				$output .= " selected='true'";
 			$output .= ">{$o['label']}</option>\n";
 		}
 		$output .= "</select>";
