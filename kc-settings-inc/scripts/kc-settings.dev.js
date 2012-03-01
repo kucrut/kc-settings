@@ -37,7 +37,7 @@ var win = window.dialogArguments || opener || parent || top;
 		    $title  = $target.find('span').text(data.title);
 
 		$target
-			.find('input').val(data.id).trigger('change')
+			.find('input').val(data.id).trigger('change', {update: true})
 			.siblings('a').hide()
 			.siblings('p').fadeIn()
 				.find('img').attr('src', data.img);
@@ -362,15 +362,18 @@ jQuery(document).ready(function($) {
 			tb_show( '', $el.attr('href') );
 		});
 
-		$('input', $single_files).live('change', function() {
+		$('input', $single_files).live('change', function(e, data) {
+			if ( data === undefined || data.hasOwnProperty(update) || !data.update )
+				return;
+
 			var $el = $(this),
-					pID = $el.val();
+			    pID = $el.val();
 
 			if ( !pID )
 				return;
 
 			var $target = $el.closest('div'),
-					size    = $target.size;
+			    size    = $target.size;
 
 			$.ajax({
 				type: 'POST',
