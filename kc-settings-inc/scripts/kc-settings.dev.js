@@ -363,7 +363,7 @@ jQuery(document).ready(function($) {
 		});
 
 		$('input', $single_files).live('change', function(e, data) {
-			if ( data === undefined || data.hasOwnProperty(update) || !data.update )
+			if ( data === undefined || data.hasOwnProperty('update') || !data.update )
 				return;
 
 			var $el = $(this),
