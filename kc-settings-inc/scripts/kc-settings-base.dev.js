@@ -100,7 +100,7 @@ function invertColor( color ) {
 						    depon = $c.data('dep'),
 						    show  = false;
 
-						if ( !$el.prop('disabled') && ((typeof depon === 'string' && depon === val) || (typeof depon === 'object' && $.inArray(val, depon) > -1)) )
+						if ( !$el.prop('disabled') && (((typeof depon === 'string' || typeof depon === 'number') && depon == val) || (typeof depon === 'object' && $.inArray(val, depon) > -1)) )
 							show = true;
 
 						$c.toggle( show );
