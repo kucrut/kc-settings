@@ -1,6 +1,8 @@
 <?php
 
 class kcSettings_plugin {
+	var $url;
+	var $group;
 
 	# Add settings menus and register the options
 	function __construct( $group ) {
@@ -88,6 +90,7 @@ class kcSettings_plugin {
 
 	# Setting link on the plugins listing page
 	function setting_link( $plugin_meta, $plugin_file, $plugin_data ) {
+		//echo '<pre>'.print_r( $this->group, true).'</pre>';
 		if ( $plugin_data['Name'] == $this->group['menu_title'] )
 			$plugin_meta[] = '<a href="'.$this->url.'">'.__('Settings', 'kc-settings').'</a>';
 
