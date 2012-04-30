@@ -361,7 +361,7 @@ jQuery(document).ready(function($) {
 	});
 
 	$('.kcs-file-single input').live('change', function(e, data) {
-		if ( data === undefined || data.hasOwnProperty('update') || !data.update )
+		if ( data === undefined || !data.hasOwnProperty('update') || !data.update )
 			return;
 
 		var $el = $(this),
