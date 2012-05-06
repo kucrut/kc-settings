@@ -286,7 +286,7 @@ function _kc_update_meta( $meta_type = 'post', $object_type_name, $object_id, $s
 	$nu_val = apply_filters( "{$filter_prefix}_{$section['id']}_{$field['id']}", $nu_val, $section, $field );
 
 	if ( !$nu_val )
-		delete_metadata( $meta_type, $object_id, $meta_key, $nu_val );
+		delete_metadata( $meta_type, $object_id, $meta_key );
 	else
 		update_metadata( $meta_type, $object_id, $meta_key, $nu_val );
 }
