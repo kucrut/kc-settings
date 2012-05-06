@@ -107,7 +107,7 @@ class kcSettings_term {
 
 		foreach ( self::$settings[$taxonomy] as $section ) {
 			foreach ( $section['fields'] as $field )
-				_kc_update_meta( 'term', $tax, $term_id, $section, $field );
+				_kc_update_meta( 'term', $taxonomy, $term_id, $section, $field );
 		}
 	}
 }
