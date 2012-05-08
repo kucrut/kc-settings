@@ -495,15 +495,20 @@ class kcSettings {
 		$path = self::$pdata['paths'];
 		$version = self::$pdata['status']['version'];
 
+		if ( !defined('KC_SETTINGS_SNS_DEBUG') )
+			define( 'KC_SETTINGS_SNS_DEBUG', false );
+
+		$suffix = KC_SETTINGS_SNS_DEBUG ? '.dev' : '';
+
 		# Common
-		wp_register_script( 'kc-settings-base', "{$path['scripts']}/kc-settings-base.js", array('jquery'), $version, true );
-		wp_register_script( 'modernizr',        "{$path['scripts']}/modernizr-2.5.3.js", false, '2.5.3', true );
-		wp_register_script( 'kc-settings',      "{$path['scripts']}/kc-settings.js", array('modernizr', 'kc-settings-base', 'jquery-ui-sortable', 'jquery-ui-datepicker', 'media-upload', 'thickbox'), $version, true );
-		wp_register_style(  'kc-settings',      "{$path['styles']}/kc-settings.css", array('thickbox'), $version );
+		wp_register_script( 'kc-settings-base', "{$path['scripts']}/kc-settings-base{$suffix}.js", array('jquery'), $version, true );
+		wp_register_script( 'modernizr',        "{$path['scripts']}/modernizr-2.5.3{$suffix}.js", false, '2.5.3', true );
+		wp_register_script( 'kc-settings',      "{$path['scripts']}/kc-settings{$suffix}.js", array('modernizr', 'kc-settings-base', 'jquery-ui-sortable', 'jquery-ui-datepicker', 'media-upload', 'thickbox'), $version, true );
+		wp_register_style(  'kc-settings',      "{$path['styles']}/kc-settings{$suffix}.css", array('thickbox'), $version );
 
 		# Uploader
-		wp_register_script( 'kc-settings-upload',        "{$path['scripts']}/upload.js", array('jquery'), $version, true );
-		wp_register_script( 'kc-settings-upload-single', "{$path['scripts']}/upload-single.js", array('jquery'), $version, true );
+		wp_register_script( 'kc-settings-upload',        "{$path['scripts']}/upload{$suffix}.js", array('jquery'), $version, true );
+		wp_register_script( 'kc-settings-upload-single', "{$path['scripts']}/upload-single{$suffix}.js", array('jquery'), $version, true );
 	}
 
 
