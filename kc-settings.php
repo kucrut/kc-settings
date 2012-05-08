@@ -497,7 +497,7 @@ class kcSettings {
 
 		# Common
 		wp_register_script( 'kc-settings-base', "{$path['scripts']}/kc-settings-base.js", array('jquery'), $version, true );
-		wp_register_script( 'modernizr',        "{$path['scripts']}/modernizr.2.0.6.min.js", false, '2.0.6', true );
+		wp_register_script( 'modernizr',        "{$path['scripts']}/modernizr-2.5.3.js", false, '2.5.3', true );
 		wp_register_script( 'kc-settings',      "{$path['scripts']}/kc-settings.js", array('modernizr', 'kc-settings-base', 'jquery-ui-sortable', 'jquery-ui-datepicker', 'media-upload', 'thickbox'), $version, true );
 		wp_register_style(  'kc-settings',      "{$path['styles']}/kc-settings.css", array('thickbox'), $version );
 
