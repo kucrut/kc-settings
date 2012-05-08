@@ -414,6 +414,7 @@ jQuery(document).ready(function($) {
 	$('#addtag').ajaxComplete( function( e, r ) {
 		var $form = $(this);
 		$('.kcs-input', $form).val('');
+		$('.kcs-multiinput > li.row', $form).not(':first-child').remove();
 	});
 
 	/**** Builder ****/
