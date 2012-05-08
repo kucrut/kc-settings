@@ -410,6 +410,11 @@ jQuery(document).ready(function($) {
 	});
 
 
+	// Cleanup add tag form after successful submission
+	$('#addtag').ajaxComplete( function( e, r ) {
+		var $form = $(this);
+		$('.kcs-input', $form).val('');
+	});
 
 	/**** Builder ****/
 	if ( $builder.length ) {
