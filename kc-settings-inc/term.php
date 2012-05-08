@@ -70,7 +70,7 @@ class kcSettings_term {
 
 				$label_for = ( !in_array($field['type'], array('checkbox', 'radio', 'multiinput')) ) ? $field['id'] : null;
 
-				$output .= "\t\t<{$row_tag} class='form-field'>\n";
+				$output .= "\t\t<{$row_tag} class='form-field kcs-field'>\n";
 
 				$the_label = _kc_field_label( $field['title'], $label_for, false, false  );
 				# Wrap the field with <tr> if we're in edit mode

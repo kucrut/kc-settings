@@ -167,4 +167,46 @@ function invertColor( color ) {
 
 		return this;
 	};
+
+
+	$.fn.kcTabs = function() {
+		var switchPanel = function(e) {
+			e.preventDefault();
+			var $anchor = $(e.currentTarget),
+			    $parent = $anchor.parent();
+
+			if ( $parent.hasClass('tabs') )
+				return;
+
+			$anchor.closest('ul').data('kcTabsPanels').hide().filter($anchor.data('kcTabsPanel')).show();
+			$parent.addClass('tabs').siblings().removeClass('tabs');
+		};
+
+		return this.each(function() {
+			var $list = $(this),
+			    $anchors = $();
+			    $panels = $();
+
+			$list.children().each(function(idx) {
+				var $anchor = $(this).children('a').first();
+				if ( !$anchor.length )
+					return;
+
+				var $panel = $( $anchor.attr('href') );
+				if ( !$panel.length )
+					return;
+
+				$panels = $panels.add($panel);
+				$anchors = $anchors.add($anchor);
+				$anchor.data('kcTabsPanel', $panel)
+					.on('click', switchPanel);
+			});
+
+			$list.data({
+				'kcTabsPanels': $panels,
+				'kcTabsAnchors': $anchors
+			});
+			$anchors.first().trigger('click');
+		});
+	};
 })(jQuery);

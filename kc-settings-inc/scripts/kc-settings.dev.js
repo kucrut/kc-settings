@@ -410,12 +410,32 @@ jQuery(document).ready(function($) {
 	});
 
 
-	// Cleanup add tag form after successful submission
-	$('#addtag').ajaxComplete( function( e, r ) {
-		var $form = $(this);
-		$('.kcs-input', $form).val('');
-		$('.kcs-multiinput > li.row', $form).not(':first-child').remove();
-	});
+	// Tabs
+	$('.kcs-tabs').kcTabs();
+
+
+	// Add term form
+	var $addTagForm = $('#addtag');
+	if ( $addTagForm.length ) {
+		var $kcsFields = $();
+		$('div.kcs-field').each(function() {
+			$kcsFields = $kcsFields.add( $(this).clone() );
+		});
+
+		if ( $kcsFields.length ) {
+			$addTagForm.ajaxComplete( function( e, xhr, settings ) {
+				if ( settings.data.indexOf('action=add-tag') < 0 )
+					return;
+
+				$('div.kcs-field').each(function(idx) {
+					$(this).replaceWith( $kcsFields.eq(idx).clone() );
+				});
+
+				$('.kcs-tabs', $addTagForm).kcTabs();
+				$addTagForm.trigger('kcsRefreshed');
+			});
+		}
+	}
 
 	/**** Builder ****/
 	if ( $builder.length ) {
