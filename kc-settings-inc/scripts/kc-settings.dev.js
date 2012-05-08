@@ -202,6 +202,8 @@ jQuery(document).ready(function($) {
 			});
 		}
 
+		$('.hasdep', $nu).kcFormDep();
+
 		$item.after( $nu );
 		// Scroll to
 		if ( scroll )
