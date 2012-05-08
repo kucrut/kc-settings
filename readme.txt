@@ -4,7 +4,7 @@ Donate link: http://kucrut.org/
 Tags: theme-options, plugin-options, settings, options, term-meta, category-meta, post-meta, custom-fields, user-meta, attachment
 Requires at least: 3.3
 Tested up to: 3.3
-Stable tag: 2.6.4
+Stable tag: 2.6.5
 
 Easily create plugin/theme settings pages, custom fields metaboxes and term/user metadata settings.
 
@@ -37,6 +37,12 @@ Please find the readme.html file inside the plugin directory for the documentati
 5. Post settings
 
 == Changelog ==
+
+= 2.6.5 =
+* Fix bug in metadata saving
+* Cleanup addtag form after successful term creation via ajax
+* Support scripts and styles debugging via KC_SETTINGS_SNS_DEBUG constant (need to be set before init hook, priority 99)
+* Update Modernizr to version 2.5.3
 
 = 2.6.4 =
 * JS Fixes
