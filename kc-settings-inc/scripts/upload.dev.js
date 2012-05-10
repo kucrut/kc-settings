@@ -1,98 +1,93 @@
 var win = window.dialogArguments || opener || parent || top;
 
-jQuery(document).ready(function($) {
-  var $form1  = $('#library-form, #gallery-form'),
-	    $form2  = $('#file-form')
-	    $mItems = $('#media-items');
+(function($) {
+	var texts    = win.kcSettings.upload.text,
+	    current  = win.kcSettings.upload.target.data('currentFiles'),
+	    $checks  = $(),
+	    $buttons = $('<div class="kcs-wrap"><h4>'+texts.head+'</h4> <a class="button check-all">'+texts.checkAll+'</a> <a class="button check-clear">'+texts.clear+'</a> <a class="button check-invert">'+texts.invert+'</a> <a class="button add-checked">'+texts.addFiles+'</a></div>')
+				.on('click', 'a', function(e) {
+					e.preventDefault();
+					var $el = $(this);
 
-  // If we're in the Gallery or Library tab
-	if ( $form1.length ) {
-		var texts      = win.kcSettings.upload.text,
-		    current    = win.kcSettings.upload.target.data('currentFiles'),
-		    $btWrapper = $('<div class="kcs-wrap"><h4>'+texts.head+'</h4></div>'),
-		    $checks    = $();
+					if ( $el.is('.check-all') ) {
+						$checks.prop('checked', true);
+					}
+					else if ( $el.is('.check-clear') ) {
+						$checks.prop('checked', false);
+					}
+					else if ( $el.is('.check-invert') ) {
+						$checks.each(function() {
+							$(this).prop('checked', !this.checked);
+						});
+					}
+					else if ( $el.is('.add-checked') ) {
+						var $items = $checks.filter(':checked'),
+								count  = $items.length;
 
-		if ( !$mItems.children().length ) {
-			// No attachment files yet?
-			$btWrapper.append( '<p>'+texts.empty+'</p>' );
-		}
-		else {
-			var $btCheckAll = $('<a class="button">'+texts.checkAll+'</a>'),
-			    $btClear    = $('<a class="button">'+texts.clear+'</a>'),
-			    $btInvert   = $('<a class="button">'+texts.invert+'</a>'),
-			    $btAdd      = $('<a class="button">'+texts.addFiles+'</a>');
+						if ( !count )
+							return;
 
-			// Add checkboxes on each attachment row
-			$('.new', $mItems).each(function(e) {
-				var $el     = $(this).parent(),
-				    pID     = $el.attr('id').split("-")[2],
-				    checked = ( $.inArray(pID, current) > -1 ) ? ' checked="checked"' : '',
-				    $check  = $('<input type="checkbox" value="'+pID+'" '+checked+'class="kcs-files" style="margin-right:.5em"/>');
+						var files = {};
+						$items.each(function() {
+							var postID = this.value,
+									key    = 'file_'+postID,
+									$el    = $(this);
+
+							files['file_'+postID] = {
+								id : postID,
+								title: $el.siblings('.title').text(),
+								img: $el.closest('.media-item').find('.pinkynail').attr('src')
+							}
+						});
+
+						win.kcFileMultiple( files );
+						win.tb_remove();
+					}
+				});
+
+
+	$.fn.kcsfPrepare = function( isAjax, newID ) {
+		return this.each(function() {
+			var $wrap = $(this),
+			    $items = $wrap.children();
+
+			if ( !$items.length )
+				return;
+
+			if ( !$wrap.siblings('div.kcs-wrap').length )
+				$wrap.parent().append($buttons);
+
+			$items.each(function(e) {
+				var $item = $(this);
+				if ( $item.find('input.kcs-files').length )
+					return;
+
+				var postID  = isAjax ? newID : $item.attr('id').split("-")[2],
+				    checked = ( $.inArray(postID, current) > -1 ) ? ' checked="checked"' : '',
+				    $check  = $('<input type="checkbox" value="'+postID+'" '+checked+'class="kcs-files" style="margin-right:.5em"/>');
 
 				// Add new checkbox to the collection
 				$checks = $checks.add( $check );
 
-				$el.children('.new')
+				$item.children('.new')
 					.prepend($check)
 					.wrapInner('<label />');
 			});
+		});
+	};
 
-			// Assign 'check all' button click event
-			$btCheckAll.click(function(e) {
-				e.preventDefault();
-				$checks.prop('checked', true);
-			});
 
-			// Assign clear button click event
-			$btClear.click(function(e) {
-				e.preventDefault();
-				$checks.prop('checked', false);
-			});
+	$(document).ready(function($) {
+		// Gallery & Media Library tabs
+		$('#library-form, #gallery-form').find('#media-items').kcsfPrepare( false );
 
-			// Assign invert button click event
-			$btInvert.click(function(e) {
-				e.preventDefault();
-				$checks.each(function() {
-					$(this).prop('checked', !this.checked);
-				});
-			});
+		// From computer / Upload tab
+		$('#media-upload').ajaxComplete(function(e, xhr, settings) {
+			if ( xhr.status !== 200 || settings.url !== 'async-upload.php' )
+				return;
 
-			// Assign add button click event
-			$btAdd.click(function(e) {
-				e.preventDefault();
+			$('#media-items', this).kcsfPrepare( true, xhr.responseText.match(/type-of-(\d+)/)[1] );
+		});
+	});
+})(jQuery);
 
-				var $items = $checks.filter(':checked'),
-				    count  = $items.length;
-
-				if ( !count )
-					return false;
-
-				var files = {};
-				$items.each(function() {
-					var pID = this.value,
-					    key = key = 'file_'+pID,
-					    $el = $(this);
-
-					files['file_'+pID] = {
-						id : pID,
-						title: $el.siblings('.title').text(),
-						img: $el.closest('.media-item').find('.pinkynail').attr('src')
-					}
-				});
-
-				win.kcFileMultiple( files );
-				win.tb_remove();
-			});
-
-			$btWrapper.append( $btCheckAll, $btClear, $btInvert, $btAdd );
-		}
-
-		// Finally, add the buttons
-		$form1.append( $btWrapper );
-  }
-
-	else if ( $form2.length ) {
-		$form2.after('<div class="kcs-file-info"><h3>'+win.kcSettings.upload.text.head+'</h3><p>'+win.kcSettings.upload.text.info+'</p><div>');
-	}
-
-});
