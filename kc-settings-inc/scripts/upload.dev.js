@@ -22,7 +22,7 @@ var win = window.dialogArguments || opener || parent || top;
 					}
 					else if ( $el.is('.add-checked') ) {
 						var $items = $checks.filter(':checked'),
-								count  = $items.length;
+						    count  = $items.length;
 
 						if ( !count )
 							return;
@@ -30,8 +30,8 @@ var win = window.dialogArguments || opener || parent || top;
 						var files = {};
 						$items.each(function() {
 							var postID = this.value,
-									key    = 'file_'+postID,
-									$el    = $(this);
+							    key    = 'file_'+postID,
+							    $el    = $(this);
 
 							files['file_'+postID] = {
 								id : postID,
