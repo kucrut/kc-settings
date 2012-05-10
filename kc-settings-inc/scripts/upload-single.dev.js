@@ -21,8 +21,8 @@ var win = window.dialogArguments || opener || parent || top;
 					return;
 
 				var imgSrc = $item.find('img.pinkynail').attr('src'),
-						title  = $item.find('.title').text(),
-						type   = $item.find('#type-of-'+postID).val();
+				    title  = $item.find('.title').text(),
+				    type   = $item.find('#type-of-'+postID).val();
 
 				$('<a href="#" class="kc-select" data-id="'+postID+'" data-img="'+imgSrc+'" data-title="'+title+'" data-type="'+type+'">'+win.kcSettings.upload.text.selFile+'</a>')
 					.prependTo($item.children('.new'));
