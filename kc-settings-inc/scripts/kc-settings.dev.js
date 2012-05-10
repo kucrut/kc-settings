@@ -33,18 +33,33 @@ var win = window.dialogArguments || opener || parent || top;
 
 	// File (single)
 	win.kcFileSingle = function( data ) {
-		var $target = win.kcSettings.upload.target.removeAttr('data-type'),
-		    $title  = $target.find('span').text(data.title);
+		var $target = win.kcSettings.upload.target,
+		    $title  = $target.find('span').text(data.title),
+		    $img    = $target.find('img').attr('src', data.img);
 
-		$target
-			.find('input').val(data.id).trigger('change', {update: true})
-			.siblings('a').hide()
-			.siblings('p').fadeIn()
-				.find('img').attr('src', data.img);
+		$target.removeAttr('data-type');
+		$target.find('input').val(data.id);
+		$target.children('a.up').hide();
+		$target.find('p').fadeIn().children('a.up').show().siblings('a.rm').show();
 
 		if ( data.type == 'image' ) {
 			$target.attr('data-type', data.type);
 			$title.hide();
+
+			// Replace preview image
+			var thumbSize = $target.data('size');
+			if ( thumbSize !== 'thumbnail' ) {
+				$.ajax({
+					type: 'POST',
+					url: ajaxurl,
+					data: { action: 'kc_get_image_url', id: data.id, size: thumbSize },
+					success: function( response ) {
+						if ( response ) {
+							$img.attr('src', response);
+						}
+					}
+				});
+			}
 		}
 		else {
 			$title.show();
@@ -343,7 +358,7 @@ jQuery(document).ready(function($) {
 
 	// Single file: remove
 	// Set height
-	$('.kcs-file-single a.rm').live('click', function (e) {
+	$('.kcs-file-single a.rm').on('click', function(e) {
 		e.preventDefault();
 		$(this).fadeOut()
 			.closest('div')
@@ -354,39 +369,13 @@ jQuery(document).ready(function($) {
 	});
 
 	// Single file: select
-	$('.kcs-file-single a.up').live('click', function (e) {
+	$('.kcs-file-single a.up').live('click', function(e) {
 		e.preventDefault();
 		var $el = $(this);
 
 		win.kcSettings.upload.target = $el.closest('div');
 		tb_show( '', $el.attr('href') );
 	});
-
-	$('.kcs-file-single input').live('change', function(e, data) {
-		if ( data === undefined || !data.hasOwnProperty('update') || !data.update )
-			return;
-
-		var $el = $(this),
-				pID = $el.val();
-
-		if ( !pID )
-			return;
-
-		var $target = $el.closest('div'),
-				size    = $target.size;
-
-		$.ajax({
-			type: 'POST',
-			url: ajaxurl,
-			data: { action: 'kc_get_image_url', id: pID, size: $target.data('size') },
-			success: function( response ) {
-				if ( response !== 0 ) {
-					$target.find('img').attr('src', response);
-				}
-			}
-		});
-	});
-
 
 	// Sortables
 	$('ul.kc-sortable').sortable({

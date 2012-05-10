@@ -1,28 +1,47 @@
 var win = window.dialogArguments || opener || parent || top;
 
-jQuery(document).ready(function($) {
-  var $form1  = $('#library-form, #gallery-form'),
-	    $form2  = $('#file-form')
-	    $mItems = $('#media-items');
+(function($) {
+	$.fn.kcsfsPrepare = function() {
+		return this.each(function() {
+			var $wrap = $(this),
+					$items = $wrap.children();
 
-  // If we're in the Gallery or Library tab
-  if ( $form1.length && $mItems.children().length ) {
-		var text = win.kcSettings.upload.text.selFile;
-		$('.new', $mItems).each(function() {
-			var $el = $(this).parent(),
-			    pID = $el.attr('id').split("-")[2],
-			    img = $el.find('.pinkynail').attr('src'),
-			    ttl = $el.find('.title').text(),
-			    type= $el.find('#type-of-'+pID).val();
+			if ( !$items.length )
+				return;
 
-			$el.children('.new').prepend('<a href="#" class="kc-select" data-id="'+pID+'" data-img="'+img+'" data-title="'+ttl+'" data-type="'+type+'">'+text+'</a>');
+			var currentFile = win.kcSettings.upload.target.find('input').val();
+
+			$items.each(function() {
+				var $item  = $(this),
+						postID = $item.attr('id').split("-")[2];
+
+				if ( postID === currentFile )
+					return;
+
+				var imgSrc = $item.find('img.pinkynail').attr('src'),
+						title  = $item.find('.title').text(),
+						type   = $item.find('#type-of-'+postID).val();
+
+				$item.children('.new').prepend('<a href="#" class="kc-select" data-id="'+postID+'" data-img="'+imgSrc+'" data-title="'+title+'" data-type="'+type+'">'+win.kcSettings.upload.text.selFile+'</a>');
+			});
+		});
+	};
+
+	$(document).ready(function($) {
+		// Gallery and Media gallery tabs
+		$('#library-form, #gallery-form').find('#media-items').kcsfsPrepare();
+
+		// From computer Upload tab
+		$('#media-upload').ajaxComplete(function(e, xhr, settings) {
+			$('#media-items', this).kcsfsPrepare();
 		});
 
-		$('a.kc-select').click(function(e) {
+		// Send file to setting/metadata form
+		$('a.kc-select').on('click', function(e) {
 			e.preventDefault();
 
 			win.kcFileSingle( $(this).data() );
 			win.tb_remove();
 		});
-	}
-});
+	});
+})(jQuery);
