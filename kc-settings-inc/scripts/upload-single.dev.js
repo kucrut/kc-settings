@@ -35,7 +35,7 @@ var win = window.dialogArguments || opener || parent || top;
 		$('#media-items').on('click', 'a.kc-select', function(e) {
 			e.preventDefault();
 
-			win.kcFileSingle( $(e.currentTarget).data() );
+			win.kcFileSingle( $(this).data() );
 			win.tb_remove();
 		});
 
