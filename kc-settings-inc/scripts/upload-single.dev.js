@@ -25,22 +25,21 @@ var win = window.dialogArguments || opener || parent || top;
 						type   = $item.find('#type-of-'+postID).val();
 
 				$('<a href="#" class="kc-select" data-id="'+postID+'" data-img="'+imgSrc+'" data-title="'+title+'" data-type="'+type+'">'+win.kcSettings.upload.text.selFile+'</a>')
-					.on('click', kcsfsSelect)
 					.prependTo($item.children('.new'));
 			});
 		});
 	};
 
 
-	var kcsfsSelect = function(e) {
-		e.preventDefault();
-
-		win.kcFileSingle( $(e.delegateTarget).data() );
-		win.tb_remove();
-	};
-
-
 	$(document).ready(function($) {
+		$('#media-items').on('click', 'a.kc-select', function(e) {
+			e.preventDefault();
+
+			win.kcFileSingle( $(e.currentTarget).data() );
+			win.tb_remove();
+		});
+
+
 		// Gallery and Media gallery tabs
 		$('#library-form, #gallery-form').find('#media-items').kcsfsPrepare( false );
 
