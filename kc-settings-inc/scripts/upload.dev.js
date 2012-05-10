@@ -64,7 +64,7 @@ var win = window.dialogArguments || opener || parent || top;
 
 				var postID  = isAjax ? newID : $item.attr('id').split("-")[2],
 				    checked = ( $.inArray(postID, current) > -1 ) ? ' checked="checked"' : '',
-				    $check  = $('<input type="checkbox" value="'+postID+'" '+checked+'class="kcs-files" style="margin-right:.5em"/>');
+				    $check  = $('<input type="checkbox" value="'+postID+'" '+checked+'class="kcs-files" />');
 
 				// Add new checkbox to the collection
 				$checks = $checks.add( $check );
