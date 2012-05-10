@@ -70,7 +70,8 @@ var win = window.dialogArguments || opener || parent || top;
 
 
 jQuery(document).ready(function($) {
-	var $builder  = $('#kcsb'),
+	var $body     = $('body'),
+	    $builder  = $('#kcsb'),
 	    $kcsbForm = $('form.kcsb'),
 	    $kcForm   = $('#kc-settings-form');
 
@@ -137,15 +138,16 @@ jQuery(document).ready(function($) {
 
 
 	// Remove row
-	$('.row a.del').live('click', function(e) {
-		var $this  = $(this),
-		    $item  = $this.closest('.row'),
-		    $block = $item.parent(),
-		    mode   = $item.data('mode'),
-		    isLast = $item.is(':last-child');
+	$body.on('click', '.row a.del', function(e) {
+		e.preventDefault();
 
+		var $item = $(this).closest('.row');
 		if ( !$item.siblings('.row').length )
 			return false;
+
+		var $block = $item.parent(),
+		    mode   = $item.data('mode'),
+		    isLast = $item.is(':last-child');
 
 		$item.addClass('removing').fadeOut('slow', function() {
 			$item.remove();
@@ -161,21 +163,21 @@ jQuery(document).ready(function($) {
 				}
 			}
 		});
-
-		return false;
 	});
 
 
 	// Add row
-	$('.row a.add').live('click', function(e) {
-		var $this  = $(this),
-				$item  = $this.closest('.row'),
-				$block = $item.parent(),
-				mode   = $item.data('mode'),
-				isLast = $item.is(':last-child'),
-				$nu    = $item.clone(false).addClass('adding'),
-				scroll = false,
-				speed  = 400;
+	$body.on('click', '.row a.add', function(e) {
+		e.preventDefault();
+
+		var $el    = $(this),
+		    $item  = $el.closest('.row'),
+		    $block = $item.parent(),
+		    mode   = $item.data('mode'),
+		    isLast = $item.is(':last-child'),
+		    $nu    = $item.clone(false).addClass('adding'),
+		    scroll = false,
+		    speed  = 400;
 
 		if ( mode == 'sections' ) {
 			scroll = true;
@@ -186,40 +188,37 @@ jQuery(document).ready(function($) {
 			speed  = 800;
 		}
 
-
 		// Builder fields
 		if ( $kcsbForm.length ) {
 			$nu.find('.kc-rows').each(function() {
-				var $kids = $(this).children('.row');
-
-				if ( $kids.length > 1 ) {
-					$kids.not(':first').remove();
-				}
+				$(this).children('.row').not(':first').remove();
 			});
 
 			$nu.find(':input').each(function() {
-				var $this = $(this);
+				var $input = $(this);
 				if ( this.type == 'text' || this.type == 'textarea' )
-					$this.removeAttr('style').val('');
+					$input.removeAttr('style').val('');
 				else if ( this.type == 'checkbox' || this.type == 'radio' )
-					$this.prop('checked', this.checked);
+					$input.prop('checked', this.checked);
 
-				if ( $this.is('.kcsb-ids') )
-					$this.kcsbUnique();
+				if ( $input.is('.kcsb-ids') )
+					$input.kcsbUnique();
 			});
 		}
 
 		// Settings page (multiinput)
 		else {
 			$nu.find(':input').each(function() {
-				if ( $(this).data('nocleanup') !== true )
-					$(this).val('');
+				var $input = $(this);
+				if ( $input.data('nocleanup') !== true )
+					$input.val('');
 			});
 		}
 
 		$('.hasdep', $nu).kcFormDep();
 
 		$item.after( $nu );
+
 		// Scroll to
 		if ( scroll )
 			$nu.kcGoto( {offset: -100, speed: speed});
@@ -240,15 +239,13 @@ jQuery(document).ready(function($) {
 				});
 			}
 		}
-
-		return false;
 	});
 
-	// Clear
-	$('.row a.clear').live('click', function(e) {
-		$(this).closest('.row').find(':input').val('');
 
-		return false;
+	// Clear
+	$body.on('click', '.row a.clear', function(e) {
+		e.preventDefault();
+		$(this).closest('.row').find(':input').val('');
 	});
 
 
@@ -304,10 +301,9 @@ jQuery(document).ready(function($) {
 
 
 	// File
-	$('.kcs-file a.rm').live('click', function(e) {
+	$body.on('click', '.kcs-file a.rm', function(e) {
 		e.preventDefault();
-		var $this = $(this),
-				$item	= $this.closest('.row');
+		var $item = $(this).closest('.row');
 
 		$item.addClass('removing').fadeOut('slow', function() {
 			// am I the only one?
@@ -334,7 +330,7 @@ jQuery(document).ready(function($) {
 
 
 	// Add files button
-	$('a.kcsf-upload').live('click', function(e) {
+	$body.on('click', 'a.kcsf-upload', function(e) {
 		e.preventDefault();
 		var $el     = $(this),
 		    $target = $el.siblings('.kc-rows'),
@@ -358,7 +354,7 @@ jQuery(document).ready(function($) {
 
 	// Single file: remove
 	// Set height
-	$('.kcs-file-single a.rm').on('click', function(e) {
+	$body.on('click', '.kcs-file-single a.rm', function(e) {
 		e.preventDefault();
 		$(this).fadeOut()
 			.closest('div')
@@ -368,8 +364,8 @@ jQuery(document).ready(function($) {
 				});
 	});
 
-	// Single file: select
-	$('.kcs-file-single a.up').live('click', function(e) {
+	// Single file: open popup to select/upload files
+	$body.on('click', '.kcs-file-single a.up', function(e) {
 		e.preventDefault();
 		var $el = $(this);
 
@@ -387,15 +383,11 @@ jQuery(document).ready(function($) {
 
 
 	// Help trigger
-	$('a.kc-help-trigger').live('click', function() {
-		if ( win.kcHelpBox !== undefined )  {
-			win.kcPopHelp();
-		}
-		else {
-			$('#contextual-help-link').click();
-			$('#screen-meta').kcGoto();
-		}
-		return false;
+	$('a.kc-help-trigger').on('click', function(e) {
+		e.preventDefault();
+
+		$('#contextual-help-link').click();
+		$('#screen-meta').kcGoto();
 	});
 
 
@@ -436,73 +428,66 @@ jQuery(document).ready(function($) {
 		$('.hasdep', $builder).kcFormDep();
 
 		// Check 'slug/id' fields
-		$('input.kcsb-slug').live('blur', function() {
-			var $this  = $(this),
-			    strVal = $this.val();
-
-			$this.val( kcsbSlug(strVal) );
+		$body.on('blur', 'input.kcsb-slug', function() {
+			var $input = $(this);
+			$input.val( kcsbSlug( $input.val() ) );
 		});
 
 		$('input.kcsb-ids').kcsbUnique();
 
-		$('input.required, input.clone-id').live('blur', function() {
+		$body.on('blur', 'input.required, input.clone-id', function() {
 			$(this).kcsbCheck();
 		});
 
 
 		// Show form
-		$('#new-kcsb').live('click', function() {
+		$('#new-kcsb').on('click', function(e) {
+			e.preventDefault();
 			$builder.kcGoto();
-			return false;
 		});
 
 
-		$('a.kcsb-cancel').live('click', function() {
-			$('#kcsb').fadeOut(function() {
-				$('body').kcGoto();
-			});
-			return false;
+		$('a.kcsb-cancel').on('click', function(e) {
+			e.preventDefault();
+			$('#kcsb').slideUp('slow');
 		});
 
 
 		// Setting clone
-		$('a.clone-open').live('click', function() {
+		$('a.clone-open').on('click', function(e) {
+			e.preventDefault();
 			$(this).parent().children().hide().filter('div.kcsb-clone').fadeIn();
-			return false;
 		});
 
 
-		$('a.clone-do').click(function() {
-			var $this  = $(this),
+		$('a.clone-do').on('click', function(e) {
+			var $el    = $(this),
 			    $input = $(this).siblings('input');
 
 			if ( $input.kcsbCheck() === false )
 				return false;
 
-			$this.attr( 'href', $this.attr('href')+'&new='+$input.val() );
+			$el.attr( 'href', $el.attr('href')+'&new='+$input.val() );
 		});
 
 
-		$('input.clone-id').bind('keypress', function(e) {
+		$('input.clone-id').on('keypress', function(e) {
 			var key = e.keyCode || e.which;
 			if ( key === 13 ) {
-				var $this = $(this);
 				e.preventDefault();
-				$this.blur()
-					.siblings('a.clone-do').data('new', $this.val()).trigger('click');
+				$(this).blur().siblings('a.clone-do').click();
 			}
 		});
 
 
-		$('.kcsb-tools a.close').live('click', function() {
-			var $this   = $(this),
-			    $parent = $this.parent();
-			$this.siblings('input').val('');
-			$parent.fadeOut(function() {
+		$('.kcsb-tools a.close').on('click', function(e) {
+			e.preventDefault();
+			var $el = $(this);
+
+			$el.siblings('input').val('');
+			$el.parent().fadeOut(function() {
 				$(this).siblings().show();
 			});
-
-			return false;
 		});
 
 
