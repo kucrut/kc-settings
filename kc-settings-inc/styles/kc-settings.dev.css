@@ -106,8 +106,11 @@ input.kcs-files {margin-right:.5em}
 	height:auto !important;
 }
 #media-items .kcs-files {margin-right:.5em}
-
-.kcs-wrap .button {margin-right:1em}
+#media-items .kc-select,
+.kcs-wrap .button {
+	margin-right:1em;
+}
+.kcs-wrap {margin:1em 0}
 
 .kc-sortable .ui-sortable-helper {
   border:1px solid #e6db55;

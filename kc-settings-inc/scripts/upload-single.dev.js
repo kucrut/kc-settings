@@ -1,7 +1,7 @@
 var win = window.dialogArguments || opener || parent || top;
 
 (function($) {
-	$.fn.kcsfsPrepare = function() {
+	$.fn.kcsfsPrepare = function( isAjax, newID ) {
 		return this.each(function() {
 			var $wrap = $(this),
 					$items = $wrap.children();
@@ -12,9 +12,11 @@ var win = window.dialogArguments || opener || parent || top;
 			var currentFile = win.kcSettings.upload.target.find('input').val();
 
 			$items.each(function() {
-				var $item  = $(this),
-						postID = $item.attr('id').split("-")[2];
+				var $item  = $(this);
+				if ( $item.find('a.kc-select').length )
+					return;
 
+				var postID = isAjax ? newID : $item.attr('id').split("-")[2];
 				if ( postID === currentFile )
 					return;
 
@@ -22,26 +24,32 @@ var win = window.dialogArguments || opener || parent || top;
 						title  = $item.find('.title').text(),
 						type   = $item.find('#type-of-'+postID).val();
 
-				$item.children('.new').prepend('<a href="#" class="kc-select" data-id="'+postID+'" data-img="'+imgSrc+'" data-title="'+title+'" data-type="'+type+'">'+win.kcSettings.upload.text.selFile+'</a>');
+				$('<a href="#" class="kc-select" data-id="'+postID+'" data-img="'+imgSrc+'" data-title="'+title+'" data-type="'+type+'">'+win.kcSettings.upload.text.selFile+'</a>')
+					.on('click', kcsfsSelect)
+					.prependTo($item.children('.new'));
 			});
 		});
 	};
 
+
+	var kcsfsSelect = function(e) {
+		e.preventDefault();
+
+		win.kcFileSingle( $(e.delegateTarget).data() );
+		win.tb_remove();
+	};
+
+
 	$(document).ready(function($) {
 		// Gallery and Media gallery tabs
-		$('#library-form, #gallery-form').find('#media-items').kcsfsPrepare();
+		$('#library-form, #gallery-form').find('#media-items').kcsfsPrepare( false );
 
 		// From computer Upload tab
 		$('#media-upload').ajaxComplete(function(e, xhr, settings) {
-			$('#media-items', this).kcsfsPrepare();
-		});
+			if ( xhr.status !== 200 || settings.url !== 'async-upload.php' )
+				return;
 
-		// Send file to setting/metadata form
-		$('a.kc-select').on('click', function(e) {
-			e.preventDefault();
-
-			win.kcFileSingle( $(this).data() );
-			win.tb_remove();
+			$('#media-items', this).kcsfsPrepare(true, xhr.responseText.match(/type-of-(\d+)/)[1]);
 		});
 	});
 })(jQuery);
