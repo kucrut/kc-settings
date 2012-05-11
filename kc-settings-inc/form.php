@@ -207,8 +207,7 @@ function _kc_field( $args ) {
 
 		# 1. Attachment
 		case 'attachment' :
-			$id = $field['id'];
-			$name = "attachments[{$object_id}][{$id}]";
+			$id = $name = "attachments[{$object_id}][{$field['id']}]";
 			$db_value = get_metadata( 'post', $object_id, "_{$id}", true );
 		break;
 
