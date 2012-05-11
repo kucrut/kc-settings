@@ -207,7 +207,8 @@ function _kc_field( $args ) {
 
 		# 1. Attachment
 		case 'attachment' :
-			$id = $name = "attachments[{$object_id}][{$field['id']}]";
+			$id = $field['id'];
+			$name = "attachments[{$object_id}][{$id}]";
 			$db_value = get_metadata( 'post', $object_id, "_{$id}", true );
 		break;
 
@@ -286,6 +287,9 @@ function _kc_field( $args ) {
 		}
 		if ( !in_array($type, array('checkbox', 'radio')) ) {
 			$field_attr['id'] = $id;
+		}
+		if ( $mode === 'attachment' ) {
+			$field_attr['id'] = $name;
 		}
 		if ( in_array($type, array_merge($i_text, array('textarea'))) ) {
 			$field_attr['class'] .= ' kcs-input';
