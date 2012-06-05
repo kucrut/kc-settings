@@ -634,6 +634,64 @@ class kcSettings {
 		$args = func_get_args();
 		return kc_array_multi_get_value( $data, $args );
 	}
+
+
+	# Activation
+	public static function _activate() {
+		if ( version_compare(get_bloginfo('version'), '3.3', '<') )
+			wp_die( 'Please upgrade your WordPress to version 3.3 before using this plugin.' );
+
+		$status = get_option( 'kc_settings' );
+		if ( !$status )
+			$status = array();
+
+		if ( !isset($data['kids']) )
+			$status['kids'] = array();
+
+		$old_version = ( isset($status['version']) ) ? $status['version'] : '2.2';
+		$status['version'] = '2.6.6';
+
+		update_option( 'kc_settings', $status );
+
+		if ( version_compare($old_version, '2.5', '<') )
+			self::_upgrade( array('kcsb', 'kcsb_metabox') );
+	}
+
+
+	# Upgrade task(s)
+	private static function _upgrade( $parts = array() ) {
+		if ( in_array('kcsb', $parts) ) {
+			$kcsb = get_option( 'kcsb' );
+			if ( is_array($kcsb) ) {
+				foreach ( $kcsb as $id => $item ) {
+					foreach ($item['sections'] as $section_id => $section ) {
+						# Metabox (20111215)
+						if ( in_array('kcsb_metabox', $parts) ) {
+							$mb_prio = isset($section['priority']) ? $section['priority'] : 'default';
+							if ( isset($section['priority'])
+										|| ( $item['type'] == 'plugin' && !isset($item['display']) )
+										|| ( $item['display'] == 'metabox' && !isset($section['metabox']) ) ) {
+								$section['metabox'] = array(
+									'context'  => 'normal',
+									'priority' => $mb_prio
+								);
+								$item['display'] = 'metabox';
+								unset( $section['priority'] );
+							}
+						}
+
+						# Return the section
+						$item['sections'][$section_id] = $section;
+					}
+
+					# Return the item
+					$kcsb[$id] = $item;
+				}
+
+				update_option( 'kcsb', $kcsb );
+			}
+		}
+	}
 }
 add_action( 'plugins_loaded', array('kcSettings', 'setup'), 7);
 
@@ -653,76 +711,7 @@ if ( !function_exists('kc_plugin_file') ) {
 	}
 }
 
-
-$plugin_file = kc_plugin_file( __FILE__ );
-
-# Activation
-function kcSettings_activate() {
-		if ( version_compare(get_bloginfo('version'), '3.3', '<') )
-			wp_die( 'Please upgrade your WordPress to version 3.3 before using this plugin.' );
-
-	$status = get_option( 'kc_settings' );
-	if ( !$status )
-		$status = array();
-
-	if ( !isset($data['kids']) )
-		$status['kids'] = array();
-
-	$old_version = ( isset($status['version']) ) ? $status['version'] : '2.2';
-	$status['version'] = '2.6.6';
-
-	update_option( 'kc_settings', $status );
-
-	if ( version_compare($old_version, '2.5', '<') )
-		kcSettings_upgrade( array('kcsb', 'kcsb_metabox') );
-}
-register_activation_hook( $plugin_file, 'kcSettings_activate' );
-
-
-# Deactivation
-/*
-function kcSettings_deactivate() {
-	# TODO: Anything else?
-	//delete_option( 'kc_settings' );
-}
-*/
-#register_deactivation_hook( $plugin_file, 'kcSettings_deactivate' );
-
-
-
-function kcSettings_upgrade( $parts = array() ) {
-	if ( in_array('kcsb', $parts) ) {
-		$kcsb = get_option( 'kcsb' );
-		if ( is_array($kcsb) ) {
-			foreach ( $kcsb as $id => $item ) {
-				foreach ($item['sections'] as $section_id => $section ) {
-					# Metabox (20111215)
-					if ( in_array('kcsb_metabox', $parts) ) {
-						$mb_prio = isset($section['priority']) ? $section['priority'] : 'default';
-						if ( isset($section['priority'])
-						      || ( $item['type'] == 'plugin' && !isset($item['display']) )
-						      || ( $item['display'] == 'metabox' && !isset($section['metabox']) ) ) {
-							$section['metabox'] = array(
-								'context'  => 'normal',
-								'priority' => $mb_prio
-							);
-							$item['display'] = 'metabox';
-							unset( $section['priority'] );
-						}
-					}
-
-					# Return the section
-					$item['sections'][$section_id] = $section;
-				}
-
-				# Return the item
-				$kcsb[$id] = $item;
-			}
-
-			update_option( 'kcsb', $kcsb );
-		}
-	}
-}
+register_activation_hook( kc_plugin_file( __FILE__ ), array('kcSettings', '_activate') );
 
 
 /**
@@ -763,6 +752,5 @@ function kc_debug_insert( $panels ) {
 	return $panels;
 }
 add_filter( 'debug_bar_panels', 'kc_debug_insert' );
-
 
 ?>
