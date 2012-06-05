@@ -60,6 +60,7 @@ class kcSettings {
 		self::_sns_register();
 
 		# Options helpers
+		require_once "{$paths['inc']}/options.php";
 		kcSettings_options::init();
 
 		# Include samples (for development)
