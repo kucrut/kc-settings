@@ -54,6 +54,10 @@ class kcSettings {
 			load_textdomain( 'kc-settings', $mo_file );
 
 		add_action( 'init', array(__CLASS__, 'init'), 99 );
+
+		# Debug bar extension
+		require_once "{$paths['inc']}/debug-bar-ext.php";
+		add_filter( 'debug_bar_panels', array(__CLASS__, 'debug_bar_ext') );
 	}
 
 
@@ -692,6 +696,13 @@ class kcSettings {
 			}
 		}
 	}
+
+
+	public static function debug_bar_ext( $panels ) {
+		$panels[] = new kcDebug;
+		return $panels;
+	}
+
 }
 add_action( 'plugins_loaded', array('kcSettings', 'setup'), 7);
 
@@ -712,45 +723,5 @@ if ( !function_exists('kc_plugin_file') ) {
 }
 
 register_activation_hook( kc_plugin_file( __FILE__ ), array('kcSettings', '_activate') );
-
-
-/**
- * Debug
- *
- * Inject our own debug info into Debug Bar
- */
-class kcDebug {
-	var $content = '';
-
-
-	function title() {
-		return __( 'KC Debug' );
-	}
-
-
-	function prerender() {
-		$this->content = apply_filters( 'kc_debug', '' );
-	}
-
-
-	function is_visible() {
-		if ( empty($this->content) )
-			return false;
-
-		return true;
-	}
-
-
-	function render() {
-		echo $this->content;
-	}
-}
-
-
-function kc_debug_insert( $panels ) {
-	$panels[] = new kcDebug;
-	return $panels;
-}
-add_filter( 'debug_bar_panels', 'kc_debug_insert' );
 
 ?>
