@@ -37,7 +37,7 @@ class kcSettings {
 	);
 
 
-	public static function init() {
+	public static function setup() {
 		$paths = self::_paths( __FILE__ );
 		if ( !is_array($paths) )
 			return false;
@@ -53,6 +53,11 @@ class kcSettings {
 		if ( is_readable($mo_file) )
 			load_textdomain( 'kc-settings', $mo_file );
 
+		add_action( 'init', array(__CLASS__, 'init'), 99 );
+	}
+
+
+	public static function init() {
 		# Setup termmeta table
 		self::_setup_termmeta_table();
 
@@ -60,7 +65,7 @@ class kcSettings {
 		self::_sns_register();
 
 		# Options helpers
-		require_once "{$paths['inc']}/options.php";
+		require_once self::$pdata['paths']['inc'] . '/options.php';
 		kcSettings_options::init();
 
 		# Include samples (for development)
@@ -70,14 +75,12 @@ class kcSettings {
 		self::_bootstrap_settings();
 
 		# Backend-only stuff
-		add_action( 'init', array(__CLASS__, '_admin_init'), 100 );
+		if ( is_admin() )
+			self::_admin_init();
 	}
 
 
 	public static function _admin_init() {
-		if ( !is_admin() )
-			return;
-
 		# Register settings
 		if ( self::$pdata['settings'] ) {
 			foreach ( array_keys(self::$pdata['settings']) as $type ) {
@@ -492,6 +495,7 @@ class kcSettings {
 		}
 	}
 
+
 	public static function _sns_register() {
 		$path = self::$pdata['paths'];
 		$version = self::$pdata['status']['version'];
@@ -631,7 +635,7 @@ class kcSettings {
 		return kc_array_multi_get_value( $data, $args );
 	}
 }
-add_action( 'init', array('kcSettings', 'init'), 99 );
+add_action( 'plugins_loaded', array('kcSettings', 'setup'), 7);
 
 
 # A hack for symlinks
