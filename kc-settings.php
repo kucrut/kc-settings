@@ -29,11 +29,7 @@ class kcSettings {
 	);
 
 	public static $data	= array(
-		'help'    => array(),
-		'notices' => array(
-			'updated' => array(),
-			'error'   => array()
-		)
+		'help'    => array()
 	);
 
 
@@ -105,9 +101,6 @@ class kcSettings {
 
 		# Admin scripts n styles
 		add_action( 'admin_enqueue_scripts', array(__CLASS__, '_sns_admin') );
-
-		# Admin notices
-		add_action( 'admin_notices', array(__CLASS__, '_admin_notice') );
 
 		# Builder
 		require_once( self::$pdata['paths']['inc'].'/builder.php' );
@@ -552,21 +545,6 @@ class kcSettings {
 	private static function _samples( $types ) {
 		foreach ( $types as $type )
 			require_once self::$pdata['paths']['inc'] . "/doc/sample/{$type}.php";
-	}
-
-
-	public static function _admin_notice() {
-		if ( empty(self::$data['notices']) )
-			return;
-
-		foreach ( self::$data['notices'] as $type => $messages ) {
-			if ( empty($messages) )
-				return;
-
-			echo "<div class='message {$type}'>\n\t";
-			echo wpautop( join("\n", $messages) );
-			echo "</div>\n";
-		}
 	}
 
 
