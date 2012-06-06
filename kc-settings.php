@@ -114,7 +114,7 @@ class kcSettings {
 		kcSettings_builder::init();
 
 		# Contextual help
-		add_action( 'admin_head', array(__CLASS__, '_help') );
+		add_action( 'admin_head', array(__CLASS__, '_register_help') );
 
 		add_action( 'wp_ajax_kc_get_image_url', 'kc_ajax_get_image_url' );
 	}
@@ -485,7 +485,7 @@ class kcSettings {
 	/**
 	 * Register contextual help
 	 */
-	public static function _help() {
+	public static function _register_help() {
 		global $hook_suffix;
 		$screen = get_current_screen();
 		if ( empty(self::$data['help']) || !isset(self::$data['help'][$hook_suffix]) || !is_object($screen) )
