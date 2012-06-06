@@ -375,7 +375,7 @@ function _kc_field_multiinput( $name, $db_value, $field ) {
 
 	foreach ( $db_value as $row_idx => $row_values ) {
 		$output .= "\t\t<li class='row' data-mode='{$field['id']}'>\n";
-		$output .= "\t\t\t<table class='widefat'>\n";
+		$output .= "\t\t\t<table class='form-table widefat'>\n";
 		$output .= "\t\t\t\t<tbody>\n";
 		# subfields
 		foreach ( $field['fields'] as $subfield ) {
