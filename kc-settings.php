@@ -18,7 +18,7 @@ Text Domain: kc-settings
 */
 
 class kcSettings {
-	protected static $pdata = array(
+	protected static $data = array(
 		'paths'    => '',
 		'pages'    => array('media-upload-popup'),
 		'help'     => array(),
@@ -34,8 +34,8 @@ class kcSettings {
 		if ( !is_array($paths) )
 			return false;
 
-		self::$pdata['status'] = get_option( 'kc_settings' );
-		self::$pdata['paths'] = $paths;
+		self::$data['status'] = get_option( 'kc_settings' );
+		self::$data['paths'] = $paths;
 
 		require_once "{$paths['inc']}/form.php";
 		require_once "{$paths['inc']}/helper.php";
@@ -61,7 +61,7 @@ class kcSettings {
 		self::_sns_register();
 
 		# Options helpers
-		require_once self::$pdata['paths']['inc'] . '/options.php';
+		require_once self::$data['paths']['inc'] . '/options.php';
 		kcSettings_options::init();
 
 		# Include samples (for development)
@@ -78,12 +78,12 @@ class kcSettings {
 
 	public static function _admin_init() {
 		# Register settings
-		if ( self::$pdata['settings'] ) {
-			foreach ( array_keys(self::$pdata['settings']) as $type ) {
-				require_once self::$pdata['paths']['inc']."/{$type}.php";
+		if ( self::$data['settings'] ) {
+			foreach ( array_keys(self::$data['settings']) as $type ) {
+				require_once self::$data['paths']['inc']."/{$type}.php";
 
 				if ( $type == 'plugin' ) {
-					foreach ( self::$pdata['settings']['plugin'] as $group )
+					foreach ( self::$data['settings']['plugin'] as $group )
 						$do = new kcSettings_plugin( $group );
 				}
 				else {
@@ -99,7 +99,7 @@ class kcSettings {
 		add_action( 'admin_enqueue_scripts', array(__CLASS__, '_sns_admin') );
 
 		# Builder
-		require_once( self::$pdata['paths']['inc'].'/builder.php' );
+		require_once( self::$data['paths']['inc'].'/builder.php' );
 		kcSettings_builder::init();
 
 		# Contextual help
@@ -157,7 +157,7 @@ class kcSettings {
 	 */
 	private static function _bootstrap_settings() {
 		# Settings bootstrap error messages
-		self::$pdata['messages']['bootsrap'] = array(
+		self::$data['messages']['bootsrap'] = array(
 			'no_prefix'           => __( "One of your settings doesn't have <b>prefix</b> set.", 'kc-settings'),
 			'no_menu_title'       => __( "One of your settings doesn't have <b>menu title</b> set.", 'kc-settings'),
 			'no_page_title'       => __( "One of your settings doesn't have <b>page title</b> set.", 'kc-settings'),
@@ -231,14 +231,14 @@ class kcSettings {
 				}
 			}
 
-			self::$pdata['kcsb'] = $kcsb;
+			self::$data['kcsb'] = $kcsb;
 		}
 
 		$settings = self::_validate_settings( $settings );
 		if ( empty($settings) )
 			return;
 
-		self::$pdata['settings'] = $settings;
+		self::$data['settings'] = $settings;
 	}
 
 
@@ -255,7 +255,7 @@ class kcSettings {
 
 			foreach ( $groups as $g_idx => $group ) {
 				if ( !is_array($group) || empty($group) ) {
-					trigger_error( self::$pdata['messages']['bootsrap']['no_options'] );
+					trigger_error( self::$data['messages']['bootsrap']['no_options'] );
 					unset( $groups[$g_idx] );
 					continue;
 				}
@@ -264,7 +264,7 @@ class kcSettings {
 					$g_idx = $group['prefix'];
 					foreach ( array('prefix', 'menu_title', 'page_title', 'options') as $c ) {
 						if ( !isset($group[$c]) || empty($group[$c]) || ($c == 'options' && !is_array($group[$c])) ) {
-							trigger_error( self::$pdata['messages']['bootsrap']["no_{$c}"] );
+							trigger_error( self::$data['messages']['bootsrap']["no_{$c}"] );
 							unset( $groups[$g_idx] );
 							continue 2;
 						}
@@ -321,7 +321,7 @@ class kcSettings {
 			# Section check: id & title
 			foreach ( array('id', 'title') as $c ) {
 				if ( !isset($section[$c]) || empty($section[$c]) ) {
-					trigger_error( self::$pdata['messages']['bootsrap']["section_no_{$c}"] );
+					trigger_error( self::$data['messages']['bootsrap']["section_no_{$c}"] );
 					unset( $sections[$s_idx] );
 					continue 2;
 				}
@@ -330,13 +330,13 @@ class kcSettings {
 			# Custom callback for section?
 			if ( $type == 'plugin' && isset($section['cb']) ) {
 				if ( !is_callable($section['cb']) ) {
-					trigger_error( self::$pdata['messages']['bootsrap']["section_no_cb"] );
+					trigger_error( self::$data['messages']['bootsrap']["section_no_cb"] );
 					continue;
 				}
 			}
 			else {
 				if ( !isset($section['fields']) || !is_array($section['fields']) || empty($section['fields']) ) {
-					trigger_error( self::$pdata['messages']['bootsrap']["section_no_fields"] );
+					trigger_error( self::$data['messages']['bootsrap']["section_no_fields"] );
 					continue;
 				}
 				else {
@@ -354,7 +354,7 @@ class kcSettings {
 			if ( $type == 'post' || ($type == 'plugin' && $group['display']) == 'metabox' ) {
 				# TODO: remove in version 3.0
 				if ( isset($section['priority']) ) {
-					trigger_error( self::$pdata['messages']['bootsrap']["section_metabox_old"] );
+					trigger_error( self::$data['messages']['bootsrap']["section_metabox_old"] );
 					$metabox_priority = $section['priority'];
 					unset( $section['priority'] );
 				}
@@ -375,7 +375,7 @@ class kcSettings {
 
 		# Store default values
 		if ( !empty($defaults) )
-			self::$pdata['defaults'] = array_merge_recursive( self::$pdata['defaults'], $defaults );
+			self::$data['defaults'] = array_merge_recursive( self::$data['defaults'], $defaults );
 
 		return $sections;
 	}
@@ -391,14 +391,14 @@ class kcSettings {
 			# Field check: id, title & type
 			foreach ( array('id', 'title', 'type') as $c ) {
 				if ( !isset($field[$c]) || empty($field[$c]) ) {
-					trigger_error( self::$pdata['messages']['bootsrap']["field_no_{$c}"] );
+					trigger_error( self::$data['messages']['bootsrap']["field_no_{$c}"] );
 					unset( $fields[$idx] );
 					continue 2;
 				}
 			}
 			# Field check: need options
 			if ( in_array($field['type'], $need_options) && !isset($field['options']) ) {
-				trigger_error( self::$pdata['messages']['bootsrap']['field_no_opt'] );
+				trigger_error( self::$data['messages']['bootsrap']['field_no_opt'] );
 				unset( $fields[$idx] );
 				continue;
 			}
@@ -409,7 +409,7 @@ class kcSettings {
 			}
 			elseif ( $field['type'] == 'special' ) {
 				if ( !isset($field['cb']) || !is_callable($field['cb']) ) {
-					trigger_error( self::$pdata['messages']['bootsrap']['field_no_cb'] );
+					trigger_error( self::$data['messages']['bootsrap']['field_no_cb'] );
 					unset( $fields[$idx] );
 					continue;
 				}
@@ -459,10 +459,10 @@ class kcSettings {
 	public static function _register_help() {
 		global $hook_suffix;
 		$screen = get_current_screen();
-		if ( empty(self::$pdata['help']) || !isset(self::$pdata['help'][$hook_suffix]) || !is_object($screen) )
+		if ( empty(self::$data['help']) || !isset(self::$data['help'][$hook_suffix]) || !is_object($screen) )
 			return;
 
-		foreach ( self::$pdata['help'][$hook_suffix] as $help ) {
+		foreach ( self::$data['help'][$hook_suffix] as $help ) {
 			if ( isset($help['sidebar']) && $help['sidebar'] )
 				$screen->set_help_sidebar( $help['content'] );
 			else
@@ -472,8 +472,8 @@ class kcSettings {
 
 
 	public static function _sns_register() {
-		$path = self::$pdata['paths'];
-		$version = self::$pdata['status']['version'];
+		$path = self::$data['paths'];
+		$version = self::$data['status']['version'];
 
 		if ( !defined('KC_SETTINGS_SNS_DEBUG') )
 			define( 'KC_SETTINGS_SNS_DEBUG', false );
@@ -493,7 +493,7 @@ class kcSettings {
 
 
 	public static function _sns_admin( $hook_suffix ) {
-		if ( !in_array($hook_suffix, self::$pdata['pages']) )
+		if ( !in_array($hook_suffix, self::$data['pages']) )
 			return;
 
 		wp_enqueue_style( 'kc-settings' );
@@ -525,8 +525,8 @@ class kcSettings {
 					'selFile'  => __( 'Select file', 'kc-settings' )
 				)
 			),
-			'_ids'  => isset( self::$pdata['kcsb']['_ids'] ) ? self::$pdata['kcsb']['_ids'] : '',
-			'paths' => self::$pdata['paths']
+			'_ids'  => isset( self::$data['kcsb']['_ids'] ) ? self::$data['kcsb']['_ids'] : '',
+			'paths' => self::$data['paths']
 		);
 
 		?>
@@ -540,7 +540,7 @@ class kcSettings {
 
 	private static function _samples( $types ) {
 		foreach ( $types as $type )
-			require_once self::$pdata['paths']['inc'] . "/doc/sample/{$type}.php";
+			require_once self::$data['paths']['inc'] . "/doc/sample/{$type}.php";
 	}
 
 
@@ -579,7 +579,7 @@ class kcSettings {
 	 * Lock plugin when there are other plugins/themes using it
 	 */
 	public static function _lock( $actions, $plugin_file, $plugin_data, $context ) {
-		if ( $plugin_file == self::$pdata['paths']['p_file'] && !empty(self::$pdata['status']['kids']) )
+		if ( $plugin_file == self::$data['paths']['p_file'] && !empty(self::$data['status']['kids']) )
 			unset( $actions['deactivate'] );
 
 		return $actions;
@@ -587,7 +587,7 @@ class kcSettings {
 
 
 	public static function get_data() {
-		$data = self::$pdata;
+		$data = self::$data;
 		if ( !func_num_args() )
 			return $data;
 
@@ -597,8 +597,8 @@ class kcSettings {
 
 
 	public static function add_page( $page ) {
-		if ( !in_array($page, self::$pdata['pages']) )
-			self::$pdata['pages'][] = $page;
+		if ( !in_array($page, self::$data['pages']) )
+			self::$data['pages'][] = $page;
 	}
 
 
@@ -616,7 +616,7 @@ class kcSettings {
 		}
 
 		if ( !empty($helps) )
-			self::$pdata['help'][$page] = $helps;
+			self::$data['help'][$page] = $helps;
 	}
 
 
