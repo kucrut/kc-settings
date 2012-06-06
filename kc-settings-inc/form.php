@@ -375,22 +375,25 @@ function _kc_field_multiinput( $name, $db_value, $field ) {
 
 	foreach ( $db_value as $row_idx => $row_values ) {
 		$output .= "\t\t<li class='row' data-mode='{$field['id']}'>\n";
-		$output .= "\t\t\t<ul>\n";
+		$output .= "\t\t\t<table class='widefat'>\n";
+		$output .= "\t\t\t\t<tbody>\n";
 		# subfields
 		foreach ( $field['fields'] as $subfield ) {
-			$output .= "\t\t\t<li>\n";
-			$output .= "\t\t\t\t<label for='{$field['_id']}-{$row_idx}-{$subfield['id']}'>{$subfield['title']}</label>\n";
-			$output .= "\t\t\t\t" . kcForm::field(array(
+			$output .= "\t\t\t\t\t<tr>\n";
+			$output .= "\t\t\t\t\t\t<th><label for='{$field['_id']}-{$row_idx}-{$subfield['id']}'>{$subfield['title']}</label></th>\n";
+			$output .= "\t\t\t\t\t\t<td>" . kcForm::field(array(
 				'type'    => $subfield['type'],
 				'current' => isset($row_values[$subfield['id']]) ? $row_values[$subfield['id']] : '',
 				'attr'    => array_merge( $subfield['attr'], array(
 					'name'  => "{$name}[$row_idx][{$subfield['id']}]",
-					'id'    => "{$field['_id']}-{$row_idx}-{$subfield['id']}"
+					'id'    => "{$field['_id']}-{$row_idx}-{$subfield['id']}",
+					'class' => 'widefat'
 				) )
-			)) . "\n";
-			$output .= "\t\t\t</li>\n";
+			)) . "</td>\n";
+			$output .= "\t\t\t</tr>\n";
 		}
-		$output .= "\t\t\t</ul>\n";
+		$output .= "\t\t\t\t</tbody>\n";
+		$output .= "\t\t\t</table>\n";
 
 		# actions
 		$output .= "\t\t\t<p class='actions'>";

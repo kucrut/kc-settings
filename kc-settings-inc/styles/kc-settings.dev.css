@@ -43,19 +43,16 @@ input.kcs-input {
 
 /* Multiinput */
 .kcs-multiinput {margin:0 0 .5em;}
-.kcs-multiinput .row {
-	width:350px;
-	line-height:1}
-.kcs-multiinput .row li {margin-bottom:.25em}
-#wpbody-content .kcs-multiinput label {
-	cursor:move;
-	display:inline-block;
-	width:50px;
-	vertical-align:top}
+.kcs-multiinput .row {line-height:1}
+.kcs-multiinput th {cursor:move}
+.kcs-multiinput p.actions {
+	margin:1em 0 1.5em;
+	padding-left:0;
+}
 #wpbody-content .kcs-multiinput input[type="text"],
 .kcs-rows input, #wpcontent .kcs-multiinput textarea {
-    width:270px;
-    margin:0}
+	margin:0;
+}
 
 #wpcontent .kcs-multiselect {
     height:7.5em;
