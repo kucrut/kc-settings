@@ -468,7 +468,7 @@ function _kc_field_file_multiple( $args ) {
 			$output .= _kc_field_file_item( $name, $field['mode'] );
 		}
 
-		remove_filter( 'posts_orderby', 'kc_sort_query_by_post_in' );
+		remove_filter( 'posts_orderby', 'kc_sort_query_by_post_in', 10, 2 );
 
 	} else {
 		$output .= _kc_field_file_item( $name, $field['mode'] );
