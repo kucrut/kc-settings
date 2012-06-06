@@ -268,6 +268,7 @@ function _kc_field( $args ) {
 	# Multiinput
 	elseif ( $type == 'multiinput' ) {
 		$output .= "<p class='info'><em>". __('Info: Drag & drop to reorder.', 'kc-settings') ."</em></p>\n";
+		$field['_id'] = $id;
 		$output .= _kc_field_multiinput( $name, $db_value, $field );
 		$output .= "\t{$desc}\n";
 	}
@@ -334,29 +335,63 @@ function _kc_field( $args ) {
  *
  */
 function _kc_field_multiinput( $name, $db_value, $field ) {
-	if ( !is_array($db_value) || empty($db_value) )
-		$db_value = array(array('key' => '', 'value' => ''));
+	if ( !isset($field['fields']) || empty($field['fields']) ) {
+		$field['fields'] = array(
+			array(
+				'id'    => 'key',
+				'label' => __('Key', 'kc-settings'),
+				'type'  => 'text'
+			),
+			array(
+				'id'    => 'value',
+				'label' => __('Value', 'kc-settings'),
+				'type'  => 'textarea'
+			)
+		);
+	}
 
-	$rownum = 0;
+	# Sanitize subfields
+	foreach ( $field['fields'] as $idx => $subfield ) {
+		# 0. attributes
+		if ( isset($subfield['attr']) && is_array($subfield['attr']) ) {
+			unset( $subfield['attr']['id'] );
+			unset( $subfield['attr']['name'] );
+		}
+		else {
+			$subfield['attr'] = array();
+		}
+
+		$field['fields'][$idx] = $subfield;
+	}
+
+	if ( !is_array($db_value) || empty($db_value) ) {
+		$_temp_value = array();
+		foreach ( $field['fields'] as $subfield )
+			$_temp_value[$subfield['id']] = '';
+		$db_value = array( $_temp_value );
+	}
+
 	$output = "\n\t<ul class='sortable kc-rows kcs-multiinput'>\n";
 
-	foreach ( $db_value as $k => $v ) {
-		$r_key = ( isset($v['key']) ) ? esc_attr( $v['key'] ) : '';
-		$r_val = ( isset($v['value']) ) ? esc_textarea( $v['value'] ) : '';
-
+	foreach ( $db_value as $row_idx => $row_values ) {
 		$output .= "\t\t<li class='row' data-mode='{$field['id']}'>\n";
 		$output .= "\t\t\t<ul>\n";
-		# key
-		$output .= "\t\t\t<li>\n";
-		$output .= "\t\t\t\t<label>".__('Key', 'kc-settings')."</label>\n";
-		$output .= "\t\t\t\t<input class='regular-text' type='text' name='{$name}[{$k}][key]' value='{$r_key}' />\n";
-		$output .= "\t\t\t</li>\n";
-		# value
-		$output .= "\t\t\t<li>\n";
-		$output .= "\t\t\t\t<label>".__('Value', 'kc-settings')."</label>\n";
-		$output .= "\t\t\t\t<textarea name='{$name}[{$k}][value]' cols='100' rows='3'>{$r_val}</textarea>\n";
-		$output .= "\t\t\t</li>\n";
+		# subfields
+		foreach ( $field['fields'] as $subfield ) {
+			$output .= "\t\t\t<li>\n";
+			$output .= "\t\t\t\t<label for='{$field['_id']}-{$row_idx}-{$subfield['id']}'>{$subfield['label']}</label>\n";
+			$output .= "\t\t\t\t" . kcForm::field(array(
+				'type'    => $subfield['type'],
+				'current' => isset($row_values[$subfield['id']]) ? $row_values[$subfield['id']] : '',
+				'attr'    => array_merge( $subfield['attr'], array(
+					'name'  => "{$name}[$row_idx][{$subfield['id']}]",
+					'id'    => "{$field['_id']}-{$row_idx}-{$subfield['id']}"
+				) )
+			)) . "\n";
+			$output .= "\t\t\t</li>\n";
+		}
 		$output .= "\t\t\t</ul>\n";
+
 		# actions
 		$output .= "\t\t\t<p class='actions'>";
 		$output .= "<a class='add' title='".__('Add new row', 'kc-settings')."'>".__('Add', 'kc-settings')."</a>";
@@ -364,8 +399,6 @@ function _kc_field_multiinput( $name, $db_value, $field ) {
 		$output .= "<a class='clear' title='".__('Clear', 'kc-settings')."'>".__('Clear', 'kc-settings')."</a>";
 		$output .= "</p>\n";
 		$output .= "\t\t</li>\n";
-
-		++$rownum;
 	}
 
 	$output .= "\t</ul>\n";
