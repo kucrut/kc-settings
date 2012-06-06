@@ -23,13 +23,10 @@ class kcSettings {
 	protected static $pdata = array(
 		'paths'    => '',
 		'pages'    => array('media-upload-popup'),
+		'help'     => array(),
 		'settings' => array(),
 		'defaults' => array(),
 		'kcsb'     => array()
-	);
-
-	public static $data	= array(
-		'help'    => array()
 	);
 
 
@@ -463,10 +460,10 @@ class kcSettings {
 	public static function _register_help() {
 		global $hook_suffix;
 		$screen = get_current_screen();
-		if ( empty(self::$data['help']) || !isset(self::$data['help'][$hook_suffix]) || !is_object($screen) )
+		if ( empty(self::$pdata['help']) || !isset(self::$pdata['help'][$hook_suffix]) || !is_object($screen) )
 			return;
 
-		foreach ( self::$data['help'][$hook_suffix] as $help ) {
+		foreach ( self::$pdata['help'][$hook_suffix] as $help ) {
 			if ( isset($help['sidebar']) && $help['sidebar'] )
 				$screen->set_help_sidebar( $help['content'] );
 			else
@@ -620,7 +617,7 @@ class kcSettings {
 		}
 
 		if ( !empty($helps) )
-			self::$data['help'][$page] = $helps;
+			self::$pdata['help'][$page] = $helps;
 	}
 
 

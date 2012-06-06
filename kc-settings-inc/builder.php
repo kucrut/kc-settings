@@ -288,7 +288,7 @@ class kcSettings_builder {
 		kcSettings::add_page( $page );
 
 		# Help
-		kcSettings::$data['help'][$page] = array(
+		kcSettings::add_help( $page, array(
 			array(
 				'id'      => 'kcsb',
 				'title'   => __( 'KC Settings Builder', 'kc-settings' ),
@@ -310,7 +310,7 @@ class kcSettings_builder {
 						<li><a href="http://kucrut.org/contact/">'.__('Contact', 'kc-settings').'</a></li>
 					</ul>'
 			)
-		);
+		) );
 
 		add_action( "load-{$page}", array(__CLASS__, 'goback') );
 	}
