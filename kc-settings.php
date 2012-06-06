@@ -604,7 +604,7 @@ class kcSettings {
 
 	public static function add_help( $page, $helps ) {
 		if ( !is_array($helps) || empty($helps) )
-			return;
+			return false;
 
 		foreach ( $helps as $idx => $help ) {
 			foreach ( array('id', 'title', 'content') as $c ) {
@@ -615,8 +615,12 @@ class kcSettings {
 			}
 		}
 
-		if ( !empty($helps) )
-			self::$data['help'][$page] = $helps;
+		if ( empty($helps) )
+			return false;
+
+		if ( !isset(self::$data['help'][$page]) )
+			self::$data['help'][$page] = array();
+		self::$data['help'][$page] = array_merge( self::$data['help'][$page], $helps );
 	}
 
 
