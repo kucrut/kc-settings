@@ -4,7 +4,7 @@ Donate link: http://kucrut.org/
 Tags: theme-options, plugin-options, settings, options, term-meta, category-meta, post-meta, custom-fields, user-meta, attachment
 Requires at least: 3.3
 Tested up to: 3.3.2
-Stable tag: 2.6.6
+Stable tag: 2.6.7
 
 Easily create plugin/theme settings pages, custom fields metaboxes and term/user metadata settings.
 
@@ -37,6 +37,10 @@ Please find the readme.html file inside the plugin directory for the documentati
 5. Post settings
 
 == Changelog ==
+
+= 2.6.7 =
+* Improve multiinput field type. It now supports unlimited number of string-based sub-fields, see documentation for a sample. Support in the builder will be added in the near future ;)
+* Many under-the-hood fixes and improvements
 
 = 2.6.6 =
 * Fix and improve file uploads. It's now possible to insert/select newly uploaded files

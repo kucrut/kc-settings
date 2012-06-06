@@ -153,10 +153,29 @@ function mytheme_options( $settings ) {
 					'default' => 'select6'
 				),
 				array(
-					'id'    => 'sample_multiinput',
-					'title' => 'Multi input (multiinput)',
-					'desc'  => 'Input field with your own custom label, to create an array',
-					'type'  => 'multiinput'
+					'id'     => 'sample_multiinput',
+					'title'  => 'Multi input (multiinput)',
+					'desc'   => 'Input field with your own custom label, to create an array',
+					'type'   => 'multiinput',
+					// 'fields' are optional and will default to text and textarea if not set
+					// each sub-field should have id, title and type
+					'fields' => array(
+						array(
+							'id' => 'key1',
+							'title' => 'Label #1',
+							'type' => 'text'
+						),
+						array(
+							'id' => 'key2',
+							'title' => 'Label #2',
+							'type' => 'textarea'
+						),
+						array(
+							'id' => 'key3',
+							'title' => 'Label #3',
+							'type' => 'text'
+						)
+					)
 				),
 				array(
 					'id'    => 'sample_file0',
