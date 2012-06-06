@@ -339,12 +339,12 @@ function _kc_field_multiinput( $name, $db_value, $field ) {
 		$field['fields'] = array(
 			array(
 				'id'    => 'key',
-				'label' => __('Key', 'kc-settings'),
+				'title' => __('Key', 'kc-settings'),
 				'type'  => 'text'
 			),
 			array(
 				'id'    => 'value',
-				'label' => __('Value', 'kc-settings'),
+				'title' => __('Value', 'kc-settings'),
 				'type'  => 'textarea'
 			)
 		);
@@ -379,7 +379,7 @@ function _kc_field_multiinput( $name, $db_value, $field ) {
 		# subfields
 		foreach ( $field['fields'] as $subfield ) {
 			$output .= "\t\t\t<li>\n";
-			$output .= "\t\t\t\t<label for='{$field['_id']}-{$row_idx}-{$subfield['id']}'>{$subfield['label']}</label>\n";
+			$output .= "\t\t\t\t<label for='{$field['_id']}-{$row_idx}-{$subfield['id']}'>{$subfield['title']}</label>\n";
 			$output .= "\t\t\t\t" . kcForm::field(array(
 				'type'    => $subfield['type'],
 				'current' => isset($row_values[$subfield['id']]) ? $row_values[$subfield['id']] : '',
