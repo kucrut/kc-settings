@@ -44,7 +44,10 @@ input.kcs-input {
 /* Multiinput */
 .kcs-multiinput {margin:0 0 .5em;}
 .kcs-multiinput .row {line-height:1}
-.kcs-multiinput table {border-collapse:separate;}
+.kcs-multiinput table {
+	border-collapse:separate;
+	margin-bottom:0;
+}
 .kcs-multiinput th {cursor:move}
 .kcs-multiinput p.actions {
 	margin:1em 0 1.5em;
