@@ -6,7 +6,7 @@ class kcSettings_term {
 
 	public static function init() {
 		self::$settings = kcSettings::get_data('settings', 'term' );
-		kcSettings::$data['pages'][] = 'edit-tags.php';
+		kcSettings::add_page( 'edit-tags.php' );
 
 		foreach ( array_keys(self::$settings) as $tax ) {
 			add_action( "{$tax}_add_form_fields", array(__CLASS__, '_fields'), 20, 1 );

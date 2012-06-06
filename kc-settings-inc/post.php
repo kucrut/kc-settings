@@ -9,8 +9,8 @@ class kcSettings_post {
 		add_action( 'save_post', array(__CLASS__, '_save'), 11, 2 );
 
 		if ( isset(self::$settings['attachment']) ) {
-			kcSettings::$data['pages'][] = 'media.php';
-			kcSettings::$data['pages'][] = 'media-upload-popup';
+			kcSettings::add_page( 'media.php' );
+			kcSettings::add_page( 'media-upload-popup' );
 
 			add_filter( 'attachment_fields_to_edit', array(__CLASS__, '_attachment_fields_to_edit'), 10, 2 );
 			add_filter( 'attachment_fields_to_save', array(__CLASS__, '_attachment_fields_to_save'), 10, 2 );
@@ -23,8 +23,8 @@ class kcSettings_post {
 		if ( !isset(self::$settings[$post_type]) )
 			return;
 
-		kcSettings::$data['pages'][] = 'post.php';
-		kcSettings::$data['pages'][] = 'post-new.php';
+		kcSettings::add_page( 'post.php' );
+		kcSettings::add_page( 'post-new.php' );
 
 		foreach ( self::$settings[$post_type] as $section ) {
 			# does this section have role set?

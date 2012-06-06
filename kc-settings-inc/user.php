@@ -5,8 +5,8 @@ class kcSettings_user {
 
 	public static function init() {
 		self::$settings = kcSettings::get_data('settings', 'user' );
-		kcSettings::$data['pages'][] = 'profile.php';
-		kcSettings::$data['pages'][] = 'user-edit.php';
+		kcSettings::add_page( 'profile.php' );
+		kcSettings::add_page( 'user-edit.php' );
 
 		# Display additional fields in user profile page
 		add_action( 'show_user_profile', array(__CLASS__, '_fields') );

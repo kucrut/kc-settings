@@ -22,13 +22,13 @@ class kcSettings {
 
 	protected static $pdata = array(
 		'paths'    => '',
+		'pages'    => array('media-upload-popup'),
 		'settings' => array(),
 		'defaults' => array(),
 		'kcsb'     => array()
 	);
 
 	public static $data	= array(
-		'pages'   => array('media-upload-popup'),
 		'help'    => array(),
 		'notices' => array(
 			'updated' => array(),
@@ -464,24 +464,6 @@ class kcSettings {
 	}
 
 
-	public static function add_help( $page, $helps ) {
-		if ( !is_array($helps) || empty($helps) )
-			return;
-
-		foreach ( $helps as $idx => $help ) {
-			foreach ( array('id', 'title', 'content') as $c ) {
-				if ( !isset($help[$c]) || empty($help[$c]) ) {
-					unset( $helps[$idx] );
-					continue 2;
-				}
-			}
-		}
-
-		if ( !empty($helps) )
-			self::$data['help'][$page] = $helps;
-	}
-
-
 	/**
 	 * Register contextual help
 	 */
@@ -522,7 +504,7 @@ class kcSettings {
 
 
 	public static function _sns_admin( $hook_suffix ) {
-		if ( !in_array($hook_suffix, self::$data['pages']) )
+		if ( !in_array($hook_suffix, self::$pdata['pages']) )
 			return;
 
 		wp_enqueue_style( 'kc-settings' );
@@ -640,7 +622,31 @@ class kcSettings {
 	}
 
 
-	# Activation
+	public static function add_page( $page ) {
+		if ( !in_array($page, self::$pdata['pages']) )
+			self::$pdata['pages'][] = $page;
+	}
+
+
+	public static function add_help( $page, $helps ) {
+		if ( !is_array($helps) || empty($helps) )
+			return;
+
+		foreach ( $helps as $idx => $help ) {
+			foreach ( array('id', 'title', 'content') as $c ) {
+				if ( !isset($help[$c]) || empty($help[$c]) ) {
+					unset( $helps[$idx] );
+					continue 2;
+				}
+			}
+		}
+
+		if ( !empty($helps) )
+			self::$data['help'][$page] = $helps;
+	}
+
+
+	# Plugin activation tasks
 	public static function _activate() {
 		if ( version_compare(get_bloginfo('version'), '3.3', '<') )
 			wp_die( 'Please upgrade your WordPress to version 3.3 before using this plugin.' );

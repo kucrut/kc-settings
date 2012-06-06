@@ -285,7 +285,7 @@ class kcSettings_builder {
 		$page = add_options_page( __('KC Settings', 'kc-settings'), __('KC Settings', 'kc-settings'), 'manage_options', 'kcsb', array(__CLASS__, 'builder') );
 
 		# Set scripts and styles
-		kcSettings::$data['pages'][] = $page;
+		kcSettings::add_page( $page );
 
 		# Help
 		kcSettings::$data['help'][$page] = array(

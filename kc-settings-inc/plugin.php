@@ -35,7 +35,7 @@ class kcSettings_plugin {
 
 		$this->page = add_submenu_page( $menu_location, $page_title, $menu_title, 'manage_options', "kc-settings-{$prefix}", array(&$this, 'settings_page') );
 		$this->url = admin_url( "{$menu_location}?page=kc-settings-{$prefix}" );
-		kcSettings::$data['pages'][] = $this->page;
+		kcSettings::add_page( $this->page );
 
 		# Help
 		if ( isset($help) )
