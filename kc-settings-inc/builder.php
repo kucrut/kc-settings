@@ -1,7 +1,7 @@
 <?php
 
 class kcSettings_builder {
-	protected static $pdata = array(
+	protected static $data = array(
 		'defaults' => array(
 			'id'            => '',
 			'type'          => 'post',
@@ -43,8 +43,8 @@ class kcSettings_builder {
 
 
 	public static function init() {
-		self::$pdata['options'] = self::_options();
-		self::$pdata['kcsb'] = kcSettings::get_data('kcsb');
+		self::$data['options'] = self::_options();
+		self::$data['kcsb'] = kcSettings::get_data('kcsb');
 
 		add_action( 'admin_init', array(__CLASS__, 'register'), 21 );
 		add_action( 'admin_menu', array(__CLASS__, 'create_page') );
@@ -335,7 +335,7 @@ class kcSettings_builder {
 			check_admin_referer( "__kcsb__{$sID}" );
 
 			$action = $_GET['action'];
-			$settings = self::$pdata['kcsb']['settings'];
+			$settings = self::$data['kcsb']['settings'];
 
 			switch ( $action ) {
 				case 'clone' :
@@ -395,7 +395,7 @@ class kcSettings_builder {
 		 * 1. Sucess: add the new item
 		 */
 		else {
-			$settings = self::$pdata['kcsb']['settings'];
+			$settings = self::$data['kcsb']['settings'];
 
 			if ( empty($values['id']) || $values['id'] == 'id' ) {
 				$values['id'] = '';
@@ -444,8 +444,8 @@ class kcSettings_builder {
 
 
 	public static function builder() {
-		$options    = self::$pdata['options'];
-		$values     = self::$pdata['defaults'];
+		$options    = self::$data['options'];
+		$values     = self::$data['defaults'];
 		$form_class = ' class="hidden"';
 		$button_txt = __('Create Setting', 'kc-settings');
 		$mode       = 'default';
@@ -455,9 +455,9 @@ class kcSettings_builder {
 			if ( $action == 'edit' ) {
 				if ( isset($_GET['id']) && !empty($_GET['id']) ) {
 					$id = $_GET['id'];
-					if ( isset(self::$pdata['kcsb']['settings'][$id]) ) {
+					if ( isset(self::$data['kcsb']['settings'][$id]) ) {
 						$mode   = 'edit';
-						$values = wp_parse_args( self::$pdata['kcsb']['settings'][$id], $values );
+						$values = wp_parse_args( self::$data['kcsb']['settings'][$id], $values );
 					}
 					else {
 						add_settings_error('general', 'warning', sprintf( __("There's no setting with ID %s. Are you cheating? ;)", 'kc-settings'), "&#8220;{$id}&#8221;") );
@@ -507,9 +507,9 @@ class kcSettings_builder {
 					</tfoot>
 					<tbody id="the-list">
 						<?php
-							if ( !empty(self::$pdata['kcsb']['settings']) ) {
+							if ( !empty(self::$data['kcsb']['settings']) ) {
 								$i = 0;
-								foreach( self::$pdata['kcsb']['settings'] as $sID => $sVal ) {
+								foreach( self::$data['kcsb']['settings'] as $sID => $sVal ) {
 									++$i;
 									$url_base = "options-general.php?page=kcsb&amp;id={$sVal['id']}&amp;action=";
 						?>
