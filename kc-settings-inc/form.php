@@ -335,7 +335,7 @@ function _kc_field( $args ) {
  *
  */
 function _kc_field_multiinput( $name, $db_value, $field ) {
-	if ( !isset($field['fields']) || empty($field['fields']) ) {
+	if ( !isset($field['subfields']) || empty($field['subfields']) ) {
 		$field['fields'] = array(
 			array(
 				'id'    => 'key',
@@ -351,7 +351,7 @@ function _kc_field_multiinput( $name, $db_value, $field ) {
 	}
 
 	# Sanitize subfields
-	foreach ( $field['fields'] as $idx => $subfield ) {
+	foreach ( $field['subfields'] as $idx => $subfield ) {
 		# 0. attributes
 		if ( isset($subfield['attr']) && is_array($subfield['attr']) ) {
 			unset( $subfield['attr']['id'] );
@@ -361,12 +361,12 @@ function _kc_field_multiinput( $name, $db_value, $field ) {
 			$subfield['attr'] = array();
 		}
 
-		$field['fields'][$idx] = $subfield;
+		$field['subfields'][$idx] = $subfield;
 	}
 
 	if ( !is_array($db_value) || empty($db_value) ) {
 		$_temp_value = array();
-		foreach ( $field['fields'] as $subfield )
+		foreach ( $field['subfields'] as $subfield )
 			$_temp_value[$subfield['id']] = '';
 		$db_value = array( $_temp_value );
 	}
@@ -378,7 +378,7 @@ function _kc_field_multiinput( $name, $db_value, $field ) {
 		$output .= "\t\t\t<table class='form-table widefat'>\n";
 		$output .= "\t\t\t\t<tbody>\n";
 		# subfields
-		foreach ( $field['fields'] as $subfield ) {
+		foreach ( $field['subfields'] as $subfield ) {
 			$output .= "\t\t\t\t\t<tr>\n";
 			$output .= "\t\t\t\t\t\t<th><label for='{$field['_id']}-{$row_idx}-{$subfield['id']}'>{$subfield['title']}</label></th>\n";
 			$output .= "\t\t\t\t\t\t<td>" . kcForm::field(array(

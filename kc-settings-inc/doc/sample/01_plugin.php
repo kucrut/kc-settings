@@ -159,21 +159,21 @@ function mytheme_options( $settings ) {
 					'type'   => 'multiinput',
 					// 'fields' are optional and will default to text and textarea if not set
 					// each sub-field should have id, title and type
-					'fields' => array(
+					'subfields' => array(
 						array(
-							'id' => 'key1',
+							'id'    => 'key1',
 							'title' => 'Label #1',
-							'type' => 'text'
+							'type'  => 'text'
 						),
 						array(
-							'id' => 'key2',
+							'id'    => 'key2',
 							'title' => 'Label #2',
-							'type' => 'textarea'
+							'type'  => 'textarea'
 						),
 						array(
-							'id' => 'key3',
+							'id'    => 'key3',
 							'title' => 'Label #3',
-							'type' => 'text'
+							'type'  => 'text'
 						)
 					)
 				),

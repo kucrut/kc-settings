@@ -132,7 +132,7 @@ class kcSettings_builder {
 					'label' => __('Plain', 'kc-settings')
 				)
 			),
-			'field' => array(
+			'string_fields' => array(
 				array(
 					'value'   => 'text',
 					'label'   => __('Text', 'kc-settings'),
@@ -153,30 +153,6 @@ class kcSettings_builder {
 				array(
 					'value' => 'date',
 					'label' => __('Date', 'kc-settings')
-				),
-				array(
-					'value' => 'file',
-					'label' => __('File', 'kc-settings')
-				),
-				array(
-					'value' => 'radio',
-					'label' => __('Radio', 'kc-settings')
-				),
-				array(
-					'value' => 'select',
-					'label' => __('Select', 'kc-settings')
-				),
-				array(
-					'value' => 'multiselect',
-					'label' => __('Select (multiple)', 'kc-settings')
-				),
-				array(
-					'value' => 'multiinput',
-					'label' => __('Multiinput', 'kc-settings')
-				),
-				array(
-					'value' => 'special',
-					'label' => __('Special', 'kc-settings')
 				),
 				array(
 					'value' => 'number',
@@ -257,6 +233,32 @@ class kcSettings_builder {
 			)
 		);
 
+		$options['field'] = array_merge( $options['string_fields'], array(
+			array(
+				'value' => 'file',
+				'label' => __('File', 'kc-settings')
+			),
+			array(
+				'value' => 'radio',
+				'label' => __('Radio', 'kc-settings')
+			),
+			array(
+				'value' => 'select',
+				'label' => __('Select', 'kc-settings')
+			),
+			array(
+				'value' => 'multiselect',
+				'label' => __('Select (multiple)', 'kc-settings')
+			),
+			array(
+				'value' => 'multiinput',
+				'label' => __('Multiinput', 'kc-settings')
+			),
+			array(
+				'value' => 'special',
+				'label' => __('Special', 'kc-settings')
+			)
+		) );
 		$options['post_types'] = kcSettings_options::$post_types;
 		$options['taxonomies'] = kcSettings_options::$taxonomies;
 		$options['role'] = kcSettings_options::$roles;
@@ -832,6 +834,46 @@ class kcSettings_builder {
 														<br/><small><em>(<?php _e('String or function name', 'kc-settings') ?>)</em></small>
 													</label>
 													<input class="kcsb-mi kcsb-slug" type="text" name="<?php echo $f_name ?>[args]" value="<?php esc_attr_e($f_val['args']) ?>" />
+												</li>
+												<?php
+													if ( !isset($f_val['subfields']) || !is_array($f_val['subfields']) || empty($f_val['subfields']) ) {
+														$f_val['subfields'] = array(
+															array( 'id' => 'key', 'title' => __('Key', 'kc-settings'), 'type' => 'text' ),
+															array( 'id' => 'value', 'title' => __('Value', 'kc-settings'), 'type' => 'textarea' )
+														);
+													}
+												?>
+												<li class="childFieldType" data-dep='multiinput'>
+													<label class="kcsb-ml"><?php _e('Sub-fields', 'kcsb') ?></label>
+													<ul class="kcsb-mi kcsb-options kc-rows kc-sortable">
+														<?php foreach ( $f_val['subfields'] as $sf_idx => $sf ) { ?>
+														<li class="row" data-mode="subfields">
+															<label>
+																<span><?php _e('ID') ?></span>
+																<input class="required" type="text" name="<?php echo "{$f_name}[subfields][{$sf_idx}]" ?>[id]" value="<?php esc_attr_e($sf['id']) ?>" />
+															</label>
+															<label>
+																<span><?php _e('Label') ?></span>
+																<input class="required" type="text" name="<?php echo "{$f_name}[subfields][{$sf_idx}]" ?>[title]" value="<?php esc_attr_e($sf['title']) ?>" />
+															</label>
+															<label>
+																<span><?php _e('Type') ?></span>
+																<?php
+																	echo kcForm::select(array(
+																		'attr'    => array( 'name' => "{$f_name}[subfields][{$sf_idx}][type]" ),
+																		'options' => $options['string_fields'],
+																		'current' => $sf['type'],
+																		'none'    => false
+																	));
+																?>
+															</label>
+															<p class="actions">
+																<a class="add" title="<?php _e('Add new sub-field', 'kc-settings') ?>"><?php _e('Add') ?></a>
+																<a class="del" title="<?php _e('Remove this sub-field', 'kc-settings') ?>"><?php _e('Remove') ?></a>
+															</p>
+														</li>
+														<?php } ?>
+													</ul>
 												</li>
 											</ul>
 										</li>
