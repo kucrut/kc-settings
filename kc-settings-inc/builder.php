@@ -800,19 +800,15 @@ class kcSettings_builder {
 												<li class="childFieldType" data-dep='["radio", "checkbox", "select", "multiselect"]'>
 													<label class="kcsb-ml"><?php _e('Options', 'kcsb') ?></label>
 													<ul class="kcsb-mi kcsb-options kc-rows kc-sortable">
-														<?php
-															foreach ( $f_val['options'] as $idxO => $option ) {
-																$o_name = "{$f_name}[options][{$idxO}]";
-																$o_val  = $f_val['options'][$idxO];
-														?>
+														<?php foreach ( $f_val['options'] as $o_idx => $option ) { ?>
 														<li class="row" data-mode="options">
 															<label>
 																<span><?php _e('Value', 'kcsb') ?></span>
-																<input class="kcsb-slug required" type="text" name="<?php echo $o_name ?>[key]" value="<?php esc_attr_e($o_val['key']) ?>" />
+																<input class="kcsb-slug required" type="text" name="<?php echo "{$f_name}[options][{$o_idx}]" ?>[key]" value="<?php esc_attr_e($option['key']) ?>" />
 															</label>
 															<label>
 																<span><?php _e('Label') ?></span>
-																<input class="required" type="text" name="<?php echo $o_name ?>[label]" value="<?php esc_attr_e($o_val['label']) ?>" />
+																<input class="required" type="text" name="<?php echo "{$f_name}[options][{$o_idx}]" ?>[label]" value="<?php esc_attr_e($option['label']) ?>" />
 															</label>
 															<p class="actions">
 																<a class="add" title="<?php _e('Add new option', 'kc-settings') ?>"><?php _e('Add') ?></a>
