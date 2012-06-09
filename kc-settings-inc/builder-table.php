@@ -47,7 +47,7 @@ class kcSettings_builder_table extends WP_List_Table {
 		$out .= "<a class='clone-open' href='#'>".__('Clone', 'kc-settings')."</a>\n";
 		$out .= "<div class='kcsb-clone hide-if-js'>\n";
 		$out .= "<input class='widefat kcsb-slug kcsb-ids clone-id' data-ids='settings' />\n";
-		$out .= "<a class='clone-do' title='".__('Clone', 'kc-settings')."' href='".wp_nonce_url( admin_url("options-general.php?page=kcsb&amp;id={$item['id']}&amp;action=clone"), '__kcsb__{$sID}' )."'><span>".__('Clone', 'kc-settings')."</span></a>\n";
+		$out .= "<a class='clone-do' title='".__('Clone', 'kc-settings')."' href='".wp_nonce_url( admin_url("options-general.php?page=kcsb&amp;id={$item['id']}&amp;action=clone"), "__kcsb__{$item['id']}" )."'><span>".__('Clone', 'kc-settings')."</span></a>\n";
 		$out .= "<a class='close' title='".__('Cancel')." ?>' href='#'><span>".__('Cancel')."</span></a><br />\n";
 		$out .= "<em class='description'>".__("Don't forget to change the setting properties after cloning!", 'kc-settings')."</em>\n";
 		$out .= "</div>\n";
