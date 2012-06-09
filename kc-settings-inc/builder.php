@@ -492,70 +492,19 @@ class kcSettings_builder {
 
 			<div class="kcsb-block">
 				<h3><?php _e('Saved Settings', 'kc-settings') ?></h3>
-				<table class="wp-list-table widefat fixed" cellspacing="0">
-					<thead>
-						<tr>
-							<th scope="col" class="manage-column"><?php _e('ID', 'kc-settings') ?></th>
-							<th scope="col" class="manage-column"><?php _e('Type') ?></th>
-							<th scope="col" class="manage-column"><?php _e('Tools') ?></th>
-						</tr>
-					</thead>
-					<tfoot>
-						<tr>
-							<th scope="col" class="manage-column"><?php _e('ID', 'kc-settings') ?></th>
-							<th scope="col" class="manage-column"><?php _e('Type') ?></th>
-							<th scope="col" class="manage-column"><?php _e('Tools') ?></th>
-						</tr>
-					</tfoot>
-					<tbody id="the-list">
-						<?php
-							if ( !empty(self::$data['kcsb']['settings']) ) {
-								$i = 0;
-								foreach( self::$data['kcsb']['settings'] as $sID => $sVal ) {
-									++$i;
-									$url_base = "options-general.php?page=kcsb&amp;id={$sVal['id']}&amp;action=";
-						?>
-						<tr valign="top"<?php if ($i % 2) echo ' class="alternate"' ?>>
-							<td>
-								<strong><a title="<?php _e('Edit this item') ?>" href="<?php echo admin_url("{$url_base}edit") ?>"><?php echo $sVal['id'] ?></a></strong>
-								<div class="row-actions">
-									<span class="edit"><a title="<?php _e('Edit this item') ?>" href="<?php echo admin_url("{$url_base}edit") ?>"><?php _e('Edit') ?></a> | </span>
-									<?php
-										if ( $sVal['type'] == 'plugin' ) {
-											$o = get_option( "{$sVal['prefix']}_settings" );
-											if ( $o !== false ) {
-												if ( !empty($o) ) {
-									?>
-									<span class="trash"><a title="<?php _e('Reset options', 'kc-settings') ?>" href="<?php echo wp_nonce_url( admin_url("{$url_base}empty"), "__kcsb__{$sID}" ) ?>"><?php _e('Empty', 'kc-settings') ?></a> | </span>
-									<?php } ?>
-									<span class="trash"><a title="<?php _e('Remove all sections and fields', 'kc-settings') ?>" href="<?php echo wp_nonce_url( admin_url("{$url_base}purge"), "__kcsb__{$sID}" ) ?>"><?php _e('Purge', 'kc-settings') ?></a> | </span>
-									<?php } } ?>
-									<span class="trash"><a title="<?php _e('Remove this setting', 'kc-settings') ?>" href="<?php echo wp_nonce_url( admin_url("{$url_base}delete"), "__kcsb__{$sID}" ) ?>" title="<?php esc_attr_e('Delete') ?>" class="submitdelete"><?php _e('Delete') ?></a></span>
-								</div>
-							</td>
-							<td><?php echo $options['type'][$sVal['type']]['label'] ?></td>
-							<td class="kcsb-tools">
-								<div class="hide-if-no-js">
-									<!--span><a href="<?php echo admin_url("{$url_base}getcode") ?>"><?php _e('Get code', 'kc-settings') ?></a> |</span-->
-									<a class="clone-open" href="#"><?php _e('Clone', 'kc-settings') ?></a>
-									<div class="kcsb-clone hide-if-js">
-										<input class="widefat kcsb-slug kcsb-ids clone-id" data-ids="settings" />
-										<a class="clone-do" title="<?php _e('Clone', 'kc-settings') ?>"href="<?php echo wp_nonce_url( admin_url("{$url_base}clone"), "__kcsb__{$sID}" ) ?>"><span><?php _e('Clone', 'kc-settings') ?></span></a>
-										<a class="close" title="<?php _e('Cancel') ?>" href="#"><span><?php _e('Cancel') ?></span></a><br />
-										<em class="description"><?php _e("Don't forget to change the setting properties after cloning!", 'kc-settings') ?></em>
-									</div>
-								</div>
-								<p class="hide-if-js"><em><?php _e('Please enable javascript to use the tool', 'kc-settings') ?></em></p>
-							</td>
-						</tr>
-						<?php } } else { ?>
-						<tr valign="top">
-							<tr class="no-items"><td colspan="3" class="colspanchange"><?php _e('No setting found.', 'kc-settings') ?></td></tr>
-						</tr>
-						<?php } ?>
-					</tbody>
-				</table>
+			<?php
+				require_once dirname( __FILE__ ) . '/builder-table.php';
+				$table = new kcSettings_builder_table( array(
+					'kcsb' => array(
+						'settings' => self::$data['kcsb']['settings'],
+						'options'  => $options
+					)
+				) );
+				$table->prepare_items();
+				$table->display();
+			?>
 			</div>
+
 
 			<!-- Start builder -->
 			<p class="hide-if-js"><?php _e('To create a setting, please enable javascript in your browser and reload this page.', 'kc-settings') ?></p>
