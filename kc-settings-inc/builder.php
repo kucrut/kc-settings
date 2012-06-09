@@ -496,7 +496,7 @@ class kcSettings_builder {
 				require_once dirname( __FILE__ ) . '/builder-table.php';
 				$table = new kcSettings_builder_table( array(
 					'kcsb' => array(
-						'settings' => self::$data['kcsb']['settings'],
+						'settings' => isset(self::$data['kcsb']['settings']) ? self::$data['kcsb']['settings'] : array(),
 						'options'  => $options
 					)
 				) );
