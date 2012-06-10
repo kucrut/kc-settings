@@ -14,8 +14,16 @@ class kcSettings_builder_table extends WP_List_Table {
 
 
 	function prepare_items() {
-		$columns = $this->get_columns();
-		$this->_column_headers = array( $columns, array(), array() );
+		$this->_column_headers = array(
+			$this->get_columns(),
+			array(),
+			array(
+				'id'   => array( 'id', true ),
+				'type' => array( 'type', false )
+			)
+		);
+
+		usort( $this->_args['kcsb']['settings'], array($this, 'usort_reorder') );
 		$this->items = $this->_args['kcsb']['settings'];
   }
 
@@ -71,6 +79,18 @@ class kcSettings_builder_table extends WP_List_Table {
 
 	function no_items() {
 		_e('No setting found.', 'kc-settings');
+	}
+
+
+	function usort_reorder( $a, $b ) {
+		// If no sort, default to title
+		$orderby = ( ! empty( $_GET['orderby'] ) ) ? $_GET['orderby'] : 'id';
+		// If no order, default to asc
+		$order = ( ! empty($_GET['order'] ) ) ? $_GET['order'] : 'asc';
+		// Determine sort order
+		$result = strcmp( $a[$orderby], $b[$orderby] );
+		// Send final sort direction to usort
+		return ( $order === 'asc' ) ? $result : -$result;
 	}
 }
 
