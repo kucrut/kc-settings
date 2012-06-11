@@ -456,7 +456,9 @@ jQuery(document).ready(function($) {
 		// Setting clone
 		$('a.clone-open').on('click', function(e) {
 			e.preventDefault();
-			$(this).parent().children().hide().filter('div.kcsb-clone').fadeIn();
+			$(this).parent().children().hide().filter('div.kcsb-clone').fadeIn(function() {
+				$(this).find('input.clone-id').focus();
+			});
 		});
 
 
