@@ -352,7 +352,6 @@ class kcSettings_builder {
 				'options'  => self::$data['options']
 			)
 		) );
-		$table->prepare_items();
 		self::$table = $table;
 
 		$action = $table->current_action();
@@ -487,7 +486,10 @@ class kcSettings_builder {
 			<div class="kcsb-block">
 				<h3><?php _e('Saved Settings', 'kc-settings') ?></h3>
 				<form id="kcsb-table" action="" method="post">
-					<?php self::$table->display(); ?>
+					<?php
+						self::$table->prepare_items();
+						self::$table->display();
+					?>
 				</form>
 			</div>
 
