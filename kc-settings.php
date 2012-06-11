@@ -23,6 +23,7 @@ class kcSettings {
 		'pages'    => array('media-upload-popup'),
 		'help'     => array(),
 		'messages' => array(),
+		'notices'  => array( 'updated' => array(), 'error' => array() ),
 		'settings' => array(),
 		'defaults' => array(),
 		'kcsb'     => array()
@@ -45,6 +46,7 @@ class kcSettings {
 		if ( is_readable($mo_file) )
 			load_textdomain( 'kc-settings', $mo_file );
 
+		add_action( 'admin_notices', array(__CLASS__, '_admin_notices') );
 		add_action( 'init', array(__CLASS__, 'init'), 99 );
 
 		# Debug bar extension
@@ -586,6 +588,22 @@ class kcSettings {
 	}
 
 
+	public static function _admin_notices() {
+		$notices = kc_array_remove_empty( self::$data['notices'] );
+		if ( empty($notices) )
+			return;
+
+		foreach ( $notices as $type => $messages ) {
+			foreach ( $messages as $message ) {
+				if ( empty($message) )
+					continue;
+
+				echo "<div class='{$type}'>".wpautop( $message )."</div>\n";
+			}
+		}
+	}
+
+
 	public static function get_data() {
 		$data = self::$data;
 		if ( !func_num_args() )
@@ -621,6 +639,14 @@ class kcSettings {
 		if ( !isset(self::$data['help'][$page]) )
 			self::$data['help'][$page] = array();
 		self::$data['help'][$page] = array_merge( self::$data['help'][$page], $helps );
+	}
+
+
+	public static function add_notice( $type, $message ) {
+		if ( !in_array($type, array('updated', 'error')) )
+			$type = 'updated';
+
+		self::$data['notices'][$type][] = $message;
 	}
 
 

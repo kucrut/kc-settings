@@ -41,16 +41,21 @@ class kcSettings_builder {
 		)
 	);
 
+	protected static $table;
+	protected static $item_to_edit;
+	protected static $update_message;
+
 
 	public static function init() {
-		self::$data['options'] = self::_options();
-		self::$data['kcsb'] = kcSettings::get_data('kcsb');
+		$kcsb = kcSettings::get_data('kcsb');
+		if ( !isset($kcsb['settings']) || !is_array($kcsb['settings']) )
+			$kcsb['settings'] = array();
+		self::$data['kcsb'] = $kcsb;
 
 		add_action( 'admin_init', array(__CLASS__, 'register'), 21 );
 		add_action( 'admin_menu', array(__CLASS__, 'create_page') );
 		add_filter( 'plugin_row_meta', array(__CLASS__, 'builder_link'), 10, 3 );
-		add_action( 'update_option_kcsb', array(__CLASS__, 'after_save'), 10, 2 );
-
+		add_action( 'update_option_kcsb', array(__CLASS__, 'redirect'), 10, 2 );
 	}
 
 
@@ -285,7 +290,6 @@ class kcSettings_builder {
 
 	public static function create_page() {
 		$page = add_options_page( __('KC Settings', 'kc-settings'), __('KC Settings', 'kc-settings'), 'manage_options', 'kcsb', array(__CLASS__, 'builder') );
-
 		# Set scripts and styles
 		kcSettings::add_page( $page );
 
@@ -303,7 +307,7 @@ class kcSettings_builder {
 			),
 			array(
 				'id'      => 'kcsb-side',
-				'title'   => 'Links',
+				'title'   => __('Links'),
 				'sidebar' => true,
 				'content' =>
 					'<ul>
@@ -314,7 +318,7 @@ class kcSettings_builder {
 			)
 		) );
 
-		add_action( "load-{$page}", array(__CLASS__, 'goback') );
+		add_action( "load-{$page}", array(__CLASS__, 'load') );
 	}
 
 
@@ -331,54 +335,87 @@ class kcSettings_builder {
 	}
 
 
-	public static function goback() {
-		if ( isset($_GET['action']) && $_GET['action'] != 'edit' && isset($_GET['id']) && !empty($_GET['id']) ) {
-			$sID = $_GET['id'];
-			check_admin_referer( "__kcsb__{$sID}" );
+	public static function load() {
+		self::$data['options'] = self::_options();
 
-			$action = $_GET['action'];
-			$settings = self::$data['kcsb']['settings'];
+		$temp = get_transient( 'kcsb' );
+		if ( $temp ) {
+			self::$item_to_edit = $temp;
+			delete_transient( 'kcsb' );
+		}
 
-			switch ( $action ) {
-				case 'clone' :
-					if ( isset($_GET['new']) && !empty($_GET['new']) ) {
-						$nID = trim( $_GET['new'] );
-						if ( $nID && !isset($settings[$nID]) ) {
-							$new = $settings[$sID];
-							$new['id'] = $nID;
-							$settings[$nID] = $new;
-							update_option( 'kcsb', $settings );
-						}
+		require_once dirname( __FILE__ ) . '/builder-table.php';
+		$table = new kcSettings_builder_table( array(
+			'plural' => 'kcsb-table',
+			'kcsb'   => array(
+				'settings' => self::$data['kcsb']['settings'],
+				'options'  => self::$data['options']
+			)
+		) );
+		$table->prepare_items();
+		self::$table = $table;
+
+		$action = $table->current_action();
+		if ( !$action || !in_array($action, array('delete', 'edit', 'purge', 'empty', 'clone')) )
+			return;
+
+		$update = false;
+
+		# Singular
+		if ( isset($_REQUEST['id']) && in_array($_REQUEST['id'], self::$data['kcsb']['settings'][$_REQUEST['id']]) ) {
+			check_admin_referer( "__kcsb__{$_REQUEST['id']}" );
+			$items = array( $_REQUEST['id'] );
+		}
+		# Plural
+		elseif ( isset($_REQUEST['ids']) && is_array($_REQUEST['ids']) && !empty($_REQUEST['ids']) ) {
+			check_admin_referer('bulk-kcsb-table');
+			$items = $_REQUEST['ids'];
+		}
+
+		$single = count( $items ) < 2 ? true : false;
+
+		switch ( $action ) {
+			case 'delete' :
+				foreach ( $items as $item )
+					unset( self::$data['kcsb']['settings'][$item] );
+
+				$update = true;
+				self::$update_message = $single ? __('Setting succesfully deleted.', 'kc-settings') : __('Settings succesfully deleted.', 'kc-settings');
+			break;
+
+			case 'empty' :
+				$result = 0;
+				foreach ( $items as $item )
+					if ( self::$data['kcsb']['settings'][$item]['type'] === 'plugin' && delete_option( self::$data['kcsb']['settings'][$item]['prefix'] . '_settings' ) )
+					 $result++;
+
+				if ( $result ) {
+					$message = $result === 1 ? __('Setting values succesfully removed from database.', 'kc-settings') : __('Settings values succesfully removed from database.', 'kc-settings');
+					kcSettings::add_notice( 'updated', "<strong>{$message}</strong>" );
+				}
+			break;
+
+			case 'clone' :
+				if ( isset($_REQUEST['new']) && !empty($_REQUEST['new']) ) {
+					$new_id = sanitize_html_class( $_REQUEST['new'] );
+					if ( $new_id && !isset(self::$data['kcsb']['settings'][$new_id]) ) {
+						$new = self::$data['kcsb']['settings'][$_REQUEST['id']];
+						$new['id'] = $new_id;
+						self::$data['kcsb']['settings'][$new_id] = $new;
+
+						$update = true;
+						self::$update_message = __('Setting succesfully cloned.', 'kc-settings');
 					}
-				break;
-				case 'delete' :
-					unset( $settings[$sID] );
-					update_option( 'kcsb', $settings );
-				break;
-				case 'empty' :
-					$o = "{$settings[$sID]['prefix']}_settings";
-					if ( get_option($o) !== false )
-						update_option( $o, '' );
-				break;
-				case 'purge' :
-					delete_option( "{$settings[$sID]['prefix']}_settings" );
-				break;
-			}
+				}
+			break;
 
-			self::_success();
+			case 'edit' :
+				self::$item_to_edit = wp_parse_args( self::$data['kcsb']['settings'][$_REQUEST['id']], self::$data['defaults'] );
+			break;
 		}
-		else {
-			$er = get_transient( 'kcsb' );
-			if ( !empty($er) && isset($er['new']) ) {
-				set_transient( 'kcsb', $er['item'] );
 
-				$goto = wp_get_referer();
-				$goto = remove_query_arg( 'settings-updated', $goto );
-				$goto = add_query_arg( 'action', 'edit', $goto );
-				wp_redirect( $goto );
-				exit;
-			}
-		}
+		if ( $update )
+			update_option( 'kcsb', self::$data['kcsb']['settings'] );
 	}
 
 
@@ -388,7 +425,7 @@ class kcSettings_builder {
 		 * Just return the values, assume it's valid
 		 */
 		if ( !isset($values['id']) ) {
-			return $values;
+			$settings = $values;
 		}
 
 		/**
@@ -399,110 +436,59 @@ class kcSettings_builder {
 		else {
 			$settings = self::$data['kcsb']['settings'];
 
-			if ( empty($values['id']) || $values['id'] == 'id' ) {
-				$values['id'] = '';
-				set_transient( 'kcsb', array('new' => true, 'item' => $values) );
+			if ( isset($values['id']) && $values['id'] ) {
+				$settings[$values['id']] = $values;
+				if ( $settings === self::$data['kcsb']['settings'] )
+					self::redirect();
+				else
+					self::$update_message = __('Setting succesfully updated.', 'kc-settings');
 			}
 			else {
-				$settings[$values['id']] = $values;
+				set_transient( 'kcsb', $values );
+				add_settings_error('kcsb', 'not_saved', __('Setting was NOT saved! Please fill all the required fields.', 'kc-settings') );
+				self::redirect();
 			}
 
-			return $settings;
 		}
+
+		return $settings;
 	}
 
 
-	public static function after_save( $old, $new ) {
-		# Delete
-		if ( count($old) > count($new) )
-			$message = __('Setting successfully deleted.', 'kc-settings');
-		# Add
-		elseif ( !is_array($old) || count($old) < count($new) )
-			$message = __('Setting successfully created.', 'kc-settings');
-		# Edit/Update
-		else
-			$message = __('Setting successfully updated.', 'kc-settings');
-
-		if ( !count( get_settings_errors() ) )
-			add_settings_error('general', 'settings_updated', $message, 'updated');
+	public static function redirect() {
+		if ( self::$update_message )
+			add_settings_error('kcsb', 'settings-updated', self::$update_message, 'updated' );
 		set_transient('settings_errors', get_settings_errors(), 30);
 
-		self::_success();
-	}
-
-
-	private static function _success() {
-		$goto = wp_get_referer();
-		$goto = remove_query_arg( array('id', 'action'), $goto );
-		$goto = add_query_arg( 'settings-updated', 'true', $goto );
-		wp_redirect( $goto );
+		$sendback = remove_query_arg( array('action', 'action2', 'id', 'ids', '_wpnonce'), wp_get_referer() );
+		$sendback = add_query_arg( 'settings-updated', 'true', $sendback );
+		wp_redirect( $sendback );
 		exit;
 	}
 
 
-	public static function sns() {
-		wp_enqueue_script( 'kcsb' );
-	}
-
-
 	public static function builder() {
-		$options    = self::$data['options'];
-		$values     = self::$data['defaults'];
-		$form_class = ' class="hidden"';
-		$button_txt = __('Create Setting', 'kc-settings');
-		$mode       = 'default';
-
-		if ( isset($_GET['action']) ) {
-			$action = $_GET['action'];
-			if ( $action == 'edit' ) {
-				if ( isset($_GET['id']) && !empty($_GET['id']) ) {
-					$id = $_GET['id'];
-					if ( isset(self::$data['kcsb']['settings'][$id]) ) {
-						$mode   = 'edit';
-						$values = wp_parse_args( self::$data['kcsb']['settings'][$id], $values );
-					}
-					else {
-						add_settings_error('general', 'warning', sprintf( __("There's no setting with ID %s. Are you cheating? ;)", 'kc-settings'), "&#8220;{$id}&#8221;") );
-					}
-				}
-				else {
-					$er = get_transient( 'kcsb' );
-					if ( !empty($er) ) {
-						$mode   = 'edit';
-						$values = wp_parse_args( $er, $values );
-						delete_transient( 'kcsb' );
-						add_settings_error('general', 'not_saved', __('Settings were NOT saved! Please fill all the required fields.', 'kc-settings') );
-						set_transient('settings_errors', get_settings_errors(), 30);
-					}
-				}
-			}
-		}
-
-		settings_errors( 'general' );
-
-		if ( $mode == 'edit' ) {
+		$options = self::$data['options'];
+		if ( self::$item_to_edit ) {
+			$values = self::$item_to_edit;
 			$form_class = '';
 			$button_txt = __('Save Changes');
+		}
+		else {
+			$values = self::$data['defaults'];
+			$form_class = ' class="hidden"';
+			$button_txt = __('Create Setting', 'kc-settings');
 		}
 
 		?>
 		<div class="wrap">
 			<?php screen_icon('tools'); ?>
 			<h2><?php echo __('KC Settings', 'kc-settings')." <a id='new-kcsb' class='add-new-h2' href='#'>".__('Add New')."</a>" ?></h2>
-
 			<div class="kcsb-block">
 				<h3><?php _e('Saved Settings', 'kc-settings') ?></h3>
-			<?php
-				require_once dirname( __FILE__ ) . '/builder-table.php';
-				$table = new kcSettings_builder_table( array(
-					'kcsb' => array(
-						'settings' => isset(self::$data['kcsb']['settings']) ? self::$data['kcsb']['settings'] : array(),
-						'options'  => $options
-					)
-				) );
-				$table->prepare_items();
-				$table->display();
-			?>
+				<form id="kcsb-table" action="" method="post">
+					<?php self::$table->display(); ?>
+				</form>
 			</div>
 
 

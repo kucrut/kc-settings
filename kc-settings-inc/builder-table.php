@@ -4,12 +4,23 @@ require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 class kcSettings_builder_table extends WP_List_Table {
 	function get_columns() {
 		$columns = array(
+			'cb'    => '<input type="checkbox" />',
 			'id'    => __('ID', 'kc-settings'),
 			'type'  => __('Type'),
+			'name'  => __('Name'),
 			'tools' => __('Tools')
 		);
 
 		return $columns;
+	}
+
+
+	function get_bulk_actions() {
+		$actions = array(
+			'delete' => __('Delete'),
+			'empty'  => __('Remove from DB')
+		);
+		return $actions;
 	}
 
 
@@ -29,24 +40,35 @@ class kcSettings_builder_table extends WP_List_Table {
 
 
   function column_id( $item ) {
-		$url = "options-general.php?page=kcsb&amp;id={$item['id']}&amp;action=";
+		$url = "options-general.php?page=kcsb&amp;id={$item['id']}&amp;_wpnonce=".wp_create_nonce( "__kcsb__{$item['id']}" )."&amp;action=";
 		$actions = array(
 			'edit'   => "<a href='".admin_url( "{$url}edit" )."'>".__('Edit')."</a>",
-			'delete' => "<a href='".wp_nonce_url( admin_url("{$url}delete"), "__kcsb__{$item['id']}" )."' title='".__('Delete this setting', 'kc-settings')."'>".__('Delete')."</a>"
+			'delete' => "<a href='".admin_url( "{$url}delete")."'>".__('Delete')."</a>"
 		);
 
 		if ( $item['type'] === 'plugin' ) {
 			$values = kc_get_option( $item['prefix'] );
-			if ( false !== $values ) {
-				if ( !empty($values) )
-					$actions['empty'] = "<span class='trash'><a href='".wp_nonce_url( admin_url("{$url}empty"), "__kcsb__{$item['id']}" )."' title='".__('Reset options', 'kc-settings')."'>".__('Empty', 'kc-settings')."</a></span>";
-
-				$actions['purge'] = "<span class='trash'><a href='".wp_nonce_url( admin_url("{$url}purge"), "__kcsb__{$item['id']}" )."' title='".__('Remove all sections and fields', 'kc-settings')."'>".__('Purge', 'kc-settings')."</a></span>";
-			}
+			if ( false !== $values && !empty($values) )
+				$actions['empty'] = "<span class='trash'><a href='".wp_nonce_url( admin_url("{$url}empty"), "__kcsb__{$item['id']}" )."' title='".__('Delete setting value(s) from DB', 'kc-settings')."'>".__('Remove from DB', 'kc-settings')."</a></span>";
 		}
 
 		return sprintf('%1$s %2$s', $item['id'], $this->row_actions($actions) );
   }
+
+
+  function column_name( $item ) {
+   return $item['type'] === 'plugin' ? $item['page_title'] : '&mdash;&nbsp;N/A&nbsp;&mdash;';
+	}
+
+
+  function column_type( $item ) {
+		return $this->_args['kcsb']['options']['type'][$item['type']]['label'];
+	}
+
+
+  function column_cb( $item ) {
+		return '<input type="checkbox" name="ids[]" value="'.$item['id'].'"/>';
+	}
 
 
   function column_tools( $item ) {
@@ -56,7 +78,7 @@ class kcSettings_builder_table extends WP_List_Table {
 		$out .= "<div class='kcsb-clone hide-if-js'>\n";
 		$out .= "<input class='widefat kcsb-slug kcsb-ids clone-id' data-ids='settings' />\n";
 		$out .= "<a class='clone-do' title='".__('Clone', 'kc-settings')."' href='".wp_nonce_url( admin_url("options-general.php?page=kcsb&amp;id={$item['id']}&amp;action=clone"), "__kcsb__{$item['id']}" )."'><span>".__('Clone', 'kc-settings')."</span></a>\n";
-		$out .= "<a class='close' title='".__('Cancel')." ?>' href='#'><span>".__('Cancel')."</span></a><br />\n";
+		$out .= "<a class='close' title='".__('Cancel')."' href='#'><span>".__('Cancel')."</span></a><br />\n";
 		$out .= "<em class='description'>".__("Don't forget to change the setting properties after cloning!", 'kc-settings')."</em>\n";
 		$out .= "</div>\n";
 		$out .= "</div>\n";
@@ -65,11 +87,6 @@ class kcSettings_builder_table extends WP_List_Table {
 
 		return $out;
   }
-
-
-  function column_type( $item ) {
-		return $this->_args['kcsb']['options']['type'][$item['type']]['label'];
-	}
 
 
   function column_default( $item, $column_name ) {
