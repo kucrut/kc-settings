@@ -75,6 +75,9 @@ jQuery(document).ready(function($) {
 	    $kcsbForm = $('form.kcsb'),
 	    $kcForm   = $('#kc-settings-form');
 
+	/* <details /> polyfill */
+	$('html').addClass($.fn.details.support ? 'details' : 'no-details');
+	$('details').details();
 
 	/*** Plugin/theme settings ***/
 	if ( $kcForm.length ) {
@@ -131,7 +134,7 @@ jQuery(document).ready(function($) {
 			ui.item
 				.parent().kcReorder( ui.item.data('mode'), true )
 				.children().each(function() {
-					$('> .actions .count', this).text( $(this).index() + 1);
+					$('> details > summary > .actions .count', this).text( $(this).index() + 1);
 				});
 		}
 	});
@@ -158,7 +161,7 @@ jQuery(document).ready(function($) {
 
 				if ( $kcsbForm.length ) {
 					$block.children().each(function() {
-						$('> .actions .count', this).text( $(this).index() + 1);
+						$('> details > summary > .actions .count', this).text( $(this).index() + 1);
 					});
 				}
 			}
@@ -216,6 +219,7 @@ jQuery(document).ready(function($) {
 		}
 
 		$('.hasdep', $nu).kcFormDep();
+		$('details', $nu).details();
 
 		$item.after( $nu );
 
@@ -229,13 +233,14 @@ jQuery(document).ready(function($) {
 		}, speed);
 
 		$block.kcReorder( mode, true );
+
 		if ( $kcsbForm.length ) {
 			if ( isLast ) {
-				$('> .actions .count', $nu).text( $nu.index() + 1);
+				$('> details > summary > .actions .count', $nu).text( $nu.index() + 1);
 			}
 			else {
 				$block.children().each(function() {
-					$('> .actions .count', this).text( $(this).index() + 1);
+					$('> details > summary > .actions .count', this).text( $(this).index() + 1);
 				});
 			}
 		}

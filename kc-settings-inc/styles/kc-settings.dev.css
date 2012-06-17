@@ -18,7 +18,7 @@ p.actions {padding-left:4.5em}
   content:' | ';
   color:#333}
 .actions a:first-child:before {content:''}
-
+.actions p {margin:0}
 
 input.kcs-input {
 	width:25em;
@@ -211,9 +211,9 @@ label input.kcsb-mi {width:auto}
 .kcsb h4 {
   font-size:1.2em;
   display:block;
-  margin-bottom:0}
+  margin-bottom:.5em;
+}
 .kcsb h4 + .sections {margin-top:0;}
-div.actions {cursor:move}
 .actions h5 {
   display:inline-block;
   font-size:1em;
@@ -273,3 +273,24 @@ div.actions {cursor:move}
   visibility: visible !important;
   margin-top:1em 0;
   padding:0}
+
+/* <details /> */
+.no-details details > * {display: none;}
+.no-details details > summary:before {
+	content:'▸\00a0';
+	display:inline-block;
+	vertical-align:middle;
+}
+.no-details details.open > summary:before {content: '▾\00a0';}
+.no-details details summary {display:block;}
+.no-details details summary .actions {display:inline-block;}
+.no-details details summary:focus {outline:0}
+
+.row details summary {
+	margin:0 30px 10px 0;
+	position:relative;
+}
+.row details summary > *{
+	display:inline-block;
+	vertical-align:middle;
+}

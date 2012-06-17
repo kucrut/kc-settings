@@ -594,226 +594,234 @@ class kcSettings_builder {
 								$s_val = $values['sections'][$idxS];
 						?>
 						<li class="row" data-mode="sections">
-							<div class="actions">
-								<h5 title="<?php _e('Drag to reorder section', 'kc-settings') ?>"><?php _e( sprintf('Section #%s', "<span class='count'>{$count_s}</span>"), 'kc-settings') ?></h5>
-								<p>(
-									<a class="add" title="<?php _e('Add new section', 'kc-settings') ?>"><?php _e('Add') ?></a>
-									<a class="del" title="<?php _e('Remove this section', 'kc-settings') ?>"><?php _e('Remove') ?></a>
-								)</p>
-							</div>
-							<ul>
-								<li>
-									<label class="kcsb-ml"><?php _e('ID', 'kc-settings') ?></label>
-									<input class="kcsb-mi kcsb-slug kcsb-ids required" type="text" name="<?php echo $s_name ?>[id]" value="<?php esc_attr_e($s_val['id']) ?>" data-ids="sections" />
-								</li>
-								<li>
-									<label class="kcsb-ml"><?php _e('Title') ?></label>
-									<input class="kcsb-mi required" type="text" name="<?php echo $s_name ?>[title]" value="<?php esc_attr_e($s_val['title']) ?>" />
-								</li>
-								<li>
-									<label class="kcsb-ml nr"><?php _e('Description') ?></label>
-									<textarea class="kcsb-mi" name="<?php echo $s_name ?>[desc]" cols="25" rows="4"><?php echo esc_textarea($s_val['desc']) ?></textarea>
-								</li>
-								<li class="childType" data-dep='post'>
-									<label class="kcsb-ml nr"><?php _e('Roles', 'kc-settings') ?></label>
-									<ul class="kcsb-mi">
-										<?php
-											if ( !isset($s_val['role']) )
-												$s_val['role'] = array();
-
-											if ( empty($options['role']) )
-												echo '<p>'.__('No role found.', 'kc-settings').'</p>';
-											else
-												echo kcForm::field(array(
-													'type'      => 'checkbox',
-													'attr'      => array('name' => "{$s_name}[role][]", 'class' => 'kcsb-mi'),
-													'options'   => $options['role'],
-													'current'   => $s_val['role'],
-													'check_sep' => array("\t<li>", "</li>\n")
-												));
-										?>
-									</ul>
-								</li>
-								<?php if ( !isset($s_val['metabox']) ) $s_val['metabox'] = array('context' => 'normal', 'priority' => 'default'); ?>
-								<li class="childType childDisplay" data-dep='["post", "metabox"]'>
-									<label class="kcsb-ml"><?php _e('Metabox', 'kc-settings') ?></label>
-									<ul class="kcsb-mi">
-										<?php foreach ( $options['metabox'] as $mb_prop => $prop ) { ?>
-										<li class="kcsb-sub">
-											<label><?php echo $prop['label'] ?> : </label>
+							<details>
+								<summary>
+								<div class="actions">
+									<h5 title="<?php _e('Drag to reorder section', 'kc-settings') ?>"><?php _e( sprintf('Section #%s', "<span class='count'>{$count_s}</span>"), 'kc-settings') ?></h5>
+									<p>(
+										<a class="add" title="<?php _e('Add new section', 'kc-settings') ?>"><?php _e('Add') ?></a>
+										<a class="del" title="<?php _e('Remove this section', 'kc-settings') ?>"><?php _e('Remove') ?></a>
+									)</p>
+								</div>
+								</summary>
+								<ul>
+									<li>
+										<label class="kcsb-ml"><?php _e('ID', 'kc-settings') ?></label>
+										<input class="kcsb-mi kcsb-slug kcsb-ids required" type="text" name="<?php echo $s_name ?>[id]" value="<?php esc_attr_e($s_val['id']) ?>" data-ids="sections" />
+									</li>
+									<li>
+										<label class="kcsb-ml"><?php _e('Title') ?></label>
+										<input class="kcsb-mi required" type="text" name="<?php echo $s_name ?>[title]" value="<?php esc_attr_e($s_val['title']) ?>" />
+									</li>
+									<li>
+										<label class="kcsb-ml nr"><?php _e('Description') ?></label>
+										<textarea class="kcsb-mi" name="<?php echo $s_name ?>[desc]" cols="25" rows="4"><?php echo esc_textarea($s_val['desc']) ?></textarea>
+									</li>
+									<li class="childType" data-dep='post'>
+										<label class="kcsb-ml nr"><?php _e('Roles', 'kc-settings') ?></label>
+										<ul class="kcsb-mi">
 											<?php
-												echo kcForm::select(array(
-													'attr'    => array('name' => "{$s_name}[metabox][$mb_prop]", 'required' => 'required'),
-													'options' => $prop['options'],
-													'current' => $s_val['metabox'][$mb_prop],
-													'none'    => false
-												));
+												if ( !isset($s_val['role']) )
+													$s_val['role'] = array();
+
+												if ( empty($options['role']) )
+													echo '<p>'.__('No role found.', 'kc-settings').'</p>';
+												else
+													echo kcForm::field(array(
+														'type'      => 'checkbox',
+														'attr'      => array('name' => "{$s_name}[role][]", 'class' => 'kcsb-mi'),
+														'options'   => $options['role'],
+														'current'   => $s_val['role'],
+														'check_sep' => array("\t<li>", "</li>\n")
+													));
 											?>
-										</li>
-										<?php } ?>
-									</ul>
-								</li>
-								<li class="fields">
-									<h4 class="kcsb-ml"><?php _e('Fields', 'kc-settings') ?></h4>
-									<ul class="kcsb-mi kc-rows">
-										<?php
-											$count_f = 0;
-											foreach ( $section['fields'] as $idxF => $field ) {
-												$count_f++;
-												$f_name = "{$s_name}[fields][{$idxF}]";
-												$f_val  = $s_val['fields'][$idxF];
-										?>
-										<li class="row" data-mode="fields">
-											<div class="actions">
-												<h5 title="<?php _e('Drag to reorder field', 'kc-settings') ?>"><?php _e( sprintf('Field #%s', "<span class='count'>{$count_f}</span>"), 'kc-settings') ?></h5>
-												<p>(
-													<a class="add" title="<?php _e('Add new field', 'kc-settings') ?>"><?php _e('Add') ?></a>
-													<a class="del" title="<?php _e('Remove this field', 'kc-settings') ?>"><?php _e('Remove') ?></a>
-												)</p>
-											</div>
-											<ul>
-												<li>
-													<label class="kcsb-ml"><?php _e('ID', 'kc-settings') ?></label>
-													<input class="kcsb-mi kcsb-slug kcsb-ids required" type="text" name="<?php echo $f_name ?>[id]" value="<?php esc_attr_e($f_val['id']) ?>" data-ids="fields" />
-												</li>
-												<li>
-													<label class="kcsb-ml"><?php _e('Label') ?></label>
-													<input class="kcsb-mi required" type="text" name="<?php echo $f_name ?>[title]" value="<?php esc_attr_e($f_val['title']) ?>" />
-												</li>
-												<li>
-													<label class="kcsb-ml nr"><?php _e('Description') ?></label>
-													<textarea class="kcsb-mi" name="<?php echo $f_name ?>[desc]" cols="25" rows="4"><?php echo esc_textarea($f_val['desc']) ?></textarea>
-												</li>
-												<li>
-													<label class="kcsb-ml"><?php _e('Type') ?></label>
-													<?php
-														echo kcForm::select(array(
-															'attr'    => array(
-																'name'       => "{$f_name}[type]",
-																'class'      => 'hasdep kcsb-mi',
-																'data-child' => '.childFieldType',
-																'data-scope' => 'li.row'
-															),
-															'options' => $options['field'],
-															'current' => $f_val['type'],
-															'none'    => false
-														));
-													?>
-												</li>
+										</ul>
+									</li>
+									<?php if ( !isset($s_val['metabox']) ) $s_val['metabox'] = array('context' => 'normal', 'priority' => 'default'); ?>
+									<li class="childType childDisplay" data-dep='["post", "metabox"]'>
+										<label class="kcsb-ml"><?php _e('Metabox', 'kc-settings') ?></label>
+										<ul class="kcsb-mi">
+											<?php foreach ( $options['metabox'] as $mb_prop => $prop ) { ?>
+											<li class="kcsb-sub">
+												<label><?php echo $prop['label'] ?> : </label>
 												<?php
-													if ( !isset($f_val['options']) || !is_array($f_val['options']) )
-														$f_val['options'] = array( array( 'key' => '', 'label' => '' ) );
+													echo kcForm::select(array(
+														'attr'    => array('name' => "{$s_name}[metabox][$mb_prop]", 'required' => 'required'),
+														'options' => $prop['options'],
+														'current' => $s_val['metabox'][$mb_prop],
+														'none'    => false
+													));
 												?>
-												<li class="childFieldType" data-dep='file'>
-													<?php if ( !isset($f_val['mode']) ) $f_val['mode'] = ''; ?>
-													<label class="kcsb-ml"><?php _e('Mode', 'kcsb') ?></label>
-													<?php
-														echo kcForm::select(array(
-															'attr'    => array(
-																'name'       => "{$f_name}[mode]",
-																'class'      => 'hasdep kcsb-mi',
-																'data-child' => '.childFileSize',
-																'data-scope' => 'li.row'
-															),
-															'options' => $options['filemode'],
-															'current' => $f_val['mode'],
-															'none'    => false
-														));
-													?>
-												</li>
-												<li class="childFileSize" data-dep='single'>
-													<?php if ( !isset($f_val['size']) ) $f_val['size'] = 'thumbnail'; ?>
-													<label class="kcsb-ml"><?php _e('Preview Size', 'kcsb') ?></label>
-													<?php
-														echo kcForm::field(array(
-															'type'    => 'select',
-															'attr'    => array( 'name' => "{$f_name}[size]", 'class' => 'kcsb-mi' ),
-															'options' => kcSettings_options::$image_sizes,
-															'current' => $f_val['size'],
-															'none'    => false
-														));
-													?>
-												</li>
-												<li class="childFieldType" data-dep='["radio", "checkbox", "select", "multiselect"]'>
-													<label class="kcsb-ml"><?php _e('Options', 'kcsb') ?></label>
-													<ul class="kcsb-mi kcsb-options kc-rows kc-sortable">
-														<?php foreach ( $f_val['options'] as $o_idx => $option ) { ?>
-														<li class="row" data-mode="options">
-															<label>
-																<span><?php _e('Value', 'kcsb') ?></span>
-																<input class="kcsb-slug required" type="text" name="<?php echo "{$f_name}[options][{$o_idx}]" ?>[key]" value="<?php esc_attr_e($option['key']) ?>" />
-															</label>
-															<label>
-																<span><?php _e('Label') ?></span>
-																<input class="required" type="text" name="<?php echo "{$f_name}[options][{$o_idx}]" ?>[label]" value="<?php esc_attr_e($option['label']) ?>" />
-															</label>
-															<p class="actions">
-																<a class="add" title="<?php _e('Add new option', 'kc-settings') ?>"><?php _e('Add') ?></a>
-																<a class="del" title="<?php _e('Remove this option', 'kc-settings') ?>"><?php _e('Remove') ?></a>
-															</p>
+											</li>
+											<?php } ?>
+										</ul>
+									</li>
+									<li class="fields">
+										<h4 class="kcsb-ml"><?php _e('Fields', 'kc-settings') ?></h4>
+										<ul class="kcsb-mi kc-rows">
+											<?php
+												$count_f = 0;
+												foreach ( $section['fields'] as $idxF => $field ) {
+													$count_f++;
+													$f_name = "{$s_name}[fields][{$idxF}]";
+													$f_val  = $s_val['fields'][$idxF];
+											?>
+											<li class="row" data-mode="fields">
+												<details>
+													<summary>
+														<div class="actions">
+															<h5 title="<?php _e('Drag to reorder field', 'kc-settings') ?>"><?php _e( sprintf('Field #%s', "<span class='count'>{$count_f}</span>"), 'kc-settings') ?></h5>
+															<p>(
+																<a class="add" title="<?php _e('Add new field', 'kc-settings') ?>"><?php _e('Add') ?></a>
+																<a class="del" title="<?php _e('Remove this field', 'kc-settings') ?>"><?php _e('Remove') ?></a>
+															)</p>
+														</div>
+													</summary>
+													<ul>
+														<li>
+															<label class="kcsb-ml"><?php _e('ID', 'kc-settings') ?></label>
+															<input class="kcsb-mi kcsb-slug kcsb-ids required" type="text" name="<?php echo $f_name ?>[id]" value="<?php esc_attr_e($f_val['id']) ?>" data-ids="fields" />
 														</li>
-														<?php } ?>
-													</ul>
-												</li>
-												<?php if ( !isset($f_val['cb']) ) $f_val['cb'] = ''; ?>
-												<li class="childFieldType" data-dep='special'>
-													<label class="kcsb-ml"><?php _e('Callback', 'kcsb') ?></label>
-													<input class="kcsb-mi kcsb-slug required" type="text" name="<?php echo $f_name ?>[cb]" value="<?php esc_attr_e($f_val['cb']) ?>" />
-												</li>
-												<?php if ( !isset($f_val['args']) ) $f_val['args'] = ''; ?>
-												<li class="childFieldType" data-dep='special'>
-													<label class="kcsb-ml">
-														<span class="nr"><?php _e('Arguments', 'kcsb') ?></span>
-														<br/><small><em>(<?php _e('String or function name', 'kc-settings') ?>)</em></small>
-													</label>
-													<input class="kcsb-mi kcsb-slug" type="text" name="<?php echo $f_name ?>[args]" value="<?php esc_attr_e($f_val['args']) ?>" />
-												</li>
-												<?php
-													if ( !isset($f_val['subfields']) || !is_array($f_val['subfields']) || empty($f_val['subfields']) ) {
-														$f_val['subfields'] = array(
-															array( 'id' => 'key', 'title' => __('Key', 'kc-settings'), 'type' => 'text' ),
-															array( 'id' => 'value', 'title' => __('Value', 'kc-settings'), 'type' => 'textarea' )
-														);
-													}
-												?>
-												<li class="childFieldType" data-dep='multiinput'>
-													<label class="kcsb-ml"><?php _e('Sub-fields', 'kcsb') ?></label>
-													<ul class="kcsb-mi kcsb-options kc-rows kc-sortable">
-														<?php foreach ( $f_val['subfields'] as $sf_idx => $sf ) { ?>
-														<li class="row" data-mode="subfields">
-															<label>
-																<span><?php _e('ID') ?></span>
-																<input class="required" type="text" name="<?php echo "{$f_name}[subfields][{$sf_idx}]" ?>[id]" value="<?php esc_attr_e($sf['id']) ?>" />
-															</label>
-															<label>
-																<span><?php _e('Label') ?></span>
-																<input class="required" type="text" name="<?php echo "{$f_name}[subfields][{$sf_idx}]" ?>[title]" value="<?php esc_attr_e($sf['title']) ?>" />
-															</label>
-															<label>
-																<span><?php _e('Type') ?></span>
-																<?php
-																	echo kcForm::select(array(
-																		'attr'    => array( 'name' => "{$f_name}[subfields][{$sf_idx}][type]" ),
-																		'options' => $options['string_fields'],
-																		'current' => $sf['type'],
-																		'none'    => false
-																	));
-																?>
-															</label>
-															<p class="actions">
-																<a class="add" title="<?php _e('Add new sub-field', 'kc-settings') ?>"><?php _e('Add') ?></a>
-																<a class="del" title="<?php _e('Remove this sub-field', 'kc-settings') ?>"><?php _e('Remove') ?></a>
-															</p>
+														<li>
+															<label class="kcsb-ml"><?php _e('Label') ?></label>
+															<input class="kcsb-mi required" type="text" name="<?php echo $f_name ?>[title]" value="<?php esc_attr_e($f_val['title']) ?>" />
 														</li>
-														<?php } ?>
+														<li>
+															<label class="kcsb-ml nr"><?php _e('Description') ?></label>
+															<textarea class="kcsb-mi" name="<?php echo $f_name ?>[desc]" cols="25" rows="4"><?php echo esc_textarea($f_val['desc']) ?></textarea>
+														</li>
+														<li>
+															<label class="kcsb-ml"><?php _e('Type') ?></label>
+															<?php
+																echo kcForm::select(array(
+																	'attr'    => array(
+																		'name'       => "{$f_name}[type]",
+																		'class'      => 'hasdep kcsb-mi',
+																		'data-child' => '.childFieldType',
+																		'data-scope' => 'li.row'
+																	),
+																	'options' => $options['field'],
+																	'current' => $f_val['type'],
+																	'none'    => false
+																));
+															?>
+														</li>
+														<?php
+															if ( !isset($f_val['options']) || !is_array($f_val['options']) )
+																$f_val['options'] = array( array( 'key' => '', 'label' => '' ) );
+														?>
+														<li class="childFieldType" data-dep='file'>
+															<?php if ( !isset($f_val['mode']) ) $f_val['mode'] = ''; ?>
+															<label class="kcsb-ml"><?php _e('Mode', 'kcsb') ?></label>
+															<?php
+																echo kcForm::select(array(
+																	'attr'    => array(
+																		'name'       => "{$f_name}[mode]",
+																		'class'      => 'hasdep kcsb-mi',
+																		'data-child' => '.childFileSize',
+																		'data-scope' => 'li.row'
+																	),
+																	'options' => $options['filemode'],
+																	'current' => $f_val['mode'],
+																	'none'    => false
+																));
+															?>
+														</li>
+														<li class="childFileSize" data-dep='single'>
+															<?php if ( !isset($f_val['size']) ) $f_val['size'] = 'thumbnail'; ?>
+															<label class="kcsb-ml"><?php _e('Preview Size', 'kcsb') ?></label>
+															<?php
+																echo kcForm::field(array(
+																	'type'    => 'select',
+																	'attr'    => array( 'name' => "{$f_name}[size]", 'class' => 'kcsb-mi' ),
+																	'options' => kcSettings_options::$image_sizes,
+																	'current' => $f_val['size'],
+																	'none'    => false
+																));
+															?>
+														</li>
+														<li class="childFieldType" data-dep='["radio", "checkbox", "select", "multiselect"]'>
+															<label class="kcsb-ml"><?php _e('Options', 'kcsb') ?></label>
+															<ul class="kcsb-mi kcsb-options kc-rows kc-sortable">
+																<?php foreach ( $f_val['options'] as $o_idx => $option ) { ?>
+																<li class="row" data-mode="options">
+																	<label>
+																		<span><?php _e('Value', 'kcsb') ?></span>
+																		<input class="kcsb-slug required" type="text" name="<?php echo "{$f_name}[options][{$o_idx}]" ?>[key]" value="<?php esc_attr_e($option['key']) ?>" />
+																	</label>
+																	<label>
+																		<span><?php _e('Label') ?></span>
+																		<input class="required" type="text" name="<?php echo "{$f_name}[options][{$o_idx}]" ?>[label]" value="<?php esc_attr_e($option['label']) ?>" />
+																	</label>
+																	<p class="actions">
+																		<a class="add" title="<?php _e('Add new option', 'kc-settings') ?>"><?php _e('Add') ?></a>
+																		<a class="del" title="<?php _e('Remove this option', 'kc-settings') ?>"><?php _e('Remove') ?></a>
+																	</p>
+																</li>
+																<?php } ?>
+															</ul>
+														</li>
+														<?php if ( !isset($f_val['cb']) ) $f_val['cb'] = ''; ?>
+														<li class="childFieldType" data-dep='special'>
+															<label class="kcsb-ml"><?php _e('Callback', 'kcsb') ?></label>
+															<input class="kcsb-mi kcsb-slug required" type="text" name="<?php echo $f_name ?>[cb]" value="<?php esc_attr_e($f_val['cb']) ?>" />
+														</li>
+														<?php if ( !isset($f_val['args']) ) $f_val['args'] = ''; ?>
+														<li class="childFieldType" data-dep='special'>
+															<label class="kcsb-ml">
+																<span class="nr"><?php _e('Arguments', 'kcsb') ?></span>
+																<br/><small><em>(<?php _e('String or function name', 'kc-settings') ?>)</em></small>
+															</label>
+															<input class="kcsb-mi kcsb-slug" type="text" name="<?php echo $f_name ?>[args]" value="<?php esc_attr_e($f_val['args']) ?>" />
+														</li>
+														<?php
+															if ( !isset($f_val['subfields']) || !is_array($f_val['subfields']) || empty($f_val['subfields']) ) {
+																$f_val['subfields'] = array(
+																	array( 'id' => 'key', 'title' => __('Key', 'kc-settings'), 'type' => 'text' ),
+																	array( 'id' => 'value', 'title' => __('Value', 'kc-settings'), 'type' => 'textarea' )
+																);
+															}
+														?>
+														<li class="childFieldType" data-dep='multiinput'>
+															<label class="kcsb-ml"><?php _e('Sub-fields', 'kcsb') ?></label>
+															<ul class="kcsb-mi kcsb-options kc-rows kc-sortable">
+																<?php foreach ( $f_val['subfields'] as $sf_idx => $sf ) { ?>
+																<li class="row" data-mode="subfields">
+																	<label>
+																		<span><?php _e('ID') ?></span>
+																		<input class="required" type="text" name="<?php echo "{$f_name}[subfields][{$sf_idx}]" ?>[id]" value="<?php esc_attr_e($sf['id']) ?>" />
+																	</label>
+																	<label>
+																		<span><?php _e('Label') ?></span>
+																		<input class="required" type="text" name="<?php echo "{$f_name}[subfields][{$sf_idx}]" ?>[title]" value="<?php esc_attr_e($sf['title']) ?>" />
+																	</label>
+																	<label>
+																		<span><?php _e('Type') ?></span>
+																		<?php
+																			echo kcForm::select(array(
+																				'attr'    => array( 'name' => "{$f_name}[subfields][{$sf_idx}][type]" ),
+																				'options' => $options['string_fields'],
+																				'current' => $sf['type'],
+																				'none'    => false
+																			));
+																		?>
+																	</label>
+																	<p class="actions">
+																		<a class="add" title="<?php _e('Add new sub-field', 'kc-settings') ?>"><?php _e('Add') ?></a>
+																		<a class="del" title="<?php _e('Remove this sub-field', 'kc-settings') ?>"><?php _e('Remove') ?></a>
+																	</p>
+																</li>
+																<?php } ?>
+															</ul>
+														</li>
 													</ul>
-												</li>
-											</ul>
-										</li>
-										<?php } unset( $count_f ); ?>
-									</ul>
-								</li>
-							</ul>
+												</details>
+											</li>
+											<?php } unset( $count_f ); ?>
+										</ul>
+									</li>
+								</ul>
+							</details>
 						</li>
 						<?php } unset( $count_s ); ?>
 					</ul>
