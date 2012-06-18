@@ -621,7 +621,6 @@ class kcSettings_builder {
 									<p>(
 										<a class="add" title="<?php _e('Add new section', 'kc-settings') ?>"><?php _e('Add') ?></a>
 										<a class="del" title="<?php _e('Remove this section', 'kc-settings') ?>"><?php _e('Remove') ?></a>
-										<a class="drag" title="<?php _e('Drag', 'kc-settings') ?>"><?php _e('Drag') ?></a>
 									)</p>
 								</div>
 								</summary>
@@ -692,7 +691,6 @@ class kcSettings_builder {
 															<p>(
 																<a class="add" title="<?php _e('Add new field', 'kc-settings') ?>"><?php _e('Add') ?></a>
 																<a class="del" title="<?php _e('Remove this field', 'kc-settings') ?>"><?php _e('Remove') ?></a>
-																<a class="drag" title="<?php _e('Drag', 'kc-settings') ?>"><?php _e('Drag') ?></a>
 															)</p>
 														</div>
 													</summary>
@@ -805,7 +803,6 @@ class kcSettings_builder {
 																	<p class="actions">
 																		<a class="add" title="<?php _e('Add new option', 'kc-settings') ?>"><?php _e('Add') ?></a>
 																		<a class="del" title="<?php _e('Remove this option', 'kc-settings') ?>"><?php _e('Remove') ?></a>
-																		<a class="drag" title="<?php _e('Drag', 'kc-settings') ?>"><?php _e('Drag') ?></a>
 																	</p>
 																</li>
 																<?php } ?>
@@ -860,7 +857,6 @@ class kcSettings_builder {
 																	<p class="actions">
 																		<a class="add" title="<?php _e('Add new sub-field', 'kc-settings') ?>"><?php _e('Add') ?></a>
 																		<a class="del" title="<?php _e('Remove this sub-field', 'kc-settings') ?>"><?php _e('Remove') ?></a>
-																		<a class="drag" title="<?php _e('Drag', 'kc-settings') ?>"><?php _e('Drag') ?></a>
 																	</p>
 																</li>
 																<?php } ?>
