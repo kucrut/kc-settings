@@ -11,7 +11,10 @@
 
 .actions p, p.actions {
   font-style:italic;
-  display:inline-block}
+  display:inline-block;
+	text-transform:lowercase;
+	color:#555;
+}
 p.actions {padding-left:4.5em}
 .actions a {cursor:pointer}
 .actions a:before {
