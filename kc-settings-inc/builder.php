@@ -525,14 +525,19 @@ class kcSettings_builder {
 					<h4><?php _e('Main', 'kc-settings') ?></h4>
 					<ul>
 						<li>
-							<label class="kcsb-ml"><?php _e('ID', 'kc-settings') ?></label>
-							<input class="kcsb-mi kcsb-slug kcsb-ids required" type="text" name="kcsb[id]" value="<?php echo $values['id'] ?>" data-ids="settings" />
+							<label for="_kcsb-id" class="kcsb-ml"><?php _e('ID', 'kc-settings') ?></label>
+							<input id="_kcsb-id" class="kcsb-mi kcsb-slug kcsb-ids required" type="text" name="kcsb[id]" value="<?php echo $values['id'] ?>" data-ids="settings" />
 						</li>
 						<li>
-							<label class="kcsb-ml"><?php _e('Type') ?></label>
+							<label for="_kcsb-type" class="kcsb-ml"><?php _e('Type') ?></label>
 							<?php
 								echo kcForm::select(array(
-									'attr'    => array('name' => 'kcsb[type]', 'class' => 'hasdep kcsb-mi', 'data-child' => '.childType'),
+									'attr'         => array(
+										'id'         => '_kcsb-type',
+										'name'       => 'kcsb[type]',
+										'class'      => 'hasdep kcsb-mi',
+										'data-child' => '.childType'
+									),
 									'options' => $options['type'],
 									'current' => $values['type'],
 									'none'    => false
@@ -540,14 +545,18 @@ class kcSettings_builder {
 							?>
 						</li>
 						<li class="childType" data-dep="plugin">
-							<label class="kcsb-ml"><?php _e('Prefix', 'kc-settings') ?></label>
-							<input class="kcsb-mi kcsb-slug required" type="text" name="kcsb[prefix]" value="<?php esc_attr_e( $values['prefix'] ) ?>"/>
+							<label for="_kcsb-prefix" class="kcsb-ml"><?php _e('Prefix', 'kc-settings') ?></label>
+							<input id="_kcsb-prefix" class="kcsb-mi kcsb-slug required" type="text" name="kcsb[prefix]" value="<?php esc_attr_e( $values['prefix'] ) ?>"/>
 						</li>
 						<li class="childType" data-dep='plugin'>
-							<label class="kcsb-ml"><?php _e('Menu location', 'kc-settings') ?></label>
+							<label for="_kcsb-menu_location" class="kcsb-ml"><?php _e('Menu location', 'kc-settings') ?></label>
 							<?php
 								echo kcForm::select(array(
-									'attr'    => array('name' => 'kcsb[menu_location]', 'class' => 'kcsb-mi'),
+									'attr'    => array(
+										'id'    => '_kcsb-menu_location',
+										'name'  => 'kcsb[menu_location]',
+										'class' => 'kcsb-mi'
+									),
 									'options' => $options['menu_location'],
 									'current' => $values['menu_location'],
 									'none'    => false
@@ -555,17 +564,22 @@ class kcSettings_builder {
 							?>
 						</li>
 						<li class="childType" data-dep='plugin'>
-							<label class="kcsb-ml"><?php _e('Menu title', 'kc-settings') ?></label>
-							<input class="kcsb-mi required" type="text" name="kcsb[menu_title]" value="<?php esc_attr_e( $values['menu_title'] ) ?>"/></li>
+							<label for="_kcsb-menu_title" class="kcsb-ml"><?php _e('Menu title', 'kc-settings') ?></label>
+							<input id="_kcsb-menu_title" class="kcsb-mi required" type="text" name="kcsb[menu_title]" value="<?php esc_attr_e( $values['menu_title'] ) ?>"/></li>
 						<li class="childType" data-dep="plugin">
-							<label class="kcsb-ml"><?php _e('Page title', 'kc-settings') ?></label>
-							<input class="kcsb-mi required" type="text" name="kcsb[page_title]" value="<?php esc_attr_e( $values['page_title'] ) ?>" />
+							<label for="_kcsb-page_title" class="kcsb-ml"><?php _e('Page title', 'kc-settings') ?></label>
+							<input id="_kcsb-page_title" class="kcsb-mi required" type="text" name="kcsb[page_title]" value="<?php esc_attr_e( $values['page_title'] ) ?>" />
 						</li>
 						<li class="childType" data-dep='plugin'>
-							<label class="kcsb-ml"><?php _e('Page mode', 'kc-settings') ?></label>
+							<label for="_kcsb-display" class="kcsb-ml"><?php _e('Page mode', 'kc-settings') ?></label>
 							<?php
 								echo kcForm::select(array(
-									'attr'    => array('name' => 'kcsb[display]', 'class' => 'hasdep kcsb-mi', 'data-child' => '.childDisplay'),
+									'attr'    => array(
+										'id'         => '_kcsb-display',
+										'name'       => 'kcsb[display]',
+										'class'      => 'hasdep kcsb-mi',
+										'data-child' => '.childDisplay'
+									),
 									'options' => $options['display'],
 									'current' => $values['display'],
 									'none'    => false
@@ -573,14 +587,18 @@ class kcSettings_builder {
 							?>
 						</li>
 						<li class="childType" data-dep='post'>
-							<label class="kcsb-ml"><?php _e('Post type', 'kc-settings') ?></label>
+							<label for="_kcsb-post_type" class="kcsb-ml"><?php _e('Post type', 'kc-settings') ?></label>
 							<?php
 								if ( empty($options['post_types']) )
 									echo '<p>'.__('No public post type found', 'kc-settings').'</p>';
 								else
 									echo kcForm::field(array(
 										'type'    => 'select',
-										'attr'    => array('name' => 'kcsb[post_type]', 'class' => 'kcsb-mi'),
+										'attr'    => array(
+											'id'    => '_kcsb-post_type',
+											'name'  => 'kcsb[post_type]',
+											'class' => 'kcsb-mi'
+										),
 										'options' => $options['post_types'],
 										'current' => $values['post_type'],
 										'none'    => false
@@ -588,14 +606,18 @@ class kcSettings_builder {
 							?>
 						</li>
 						<li class="childType" data-dep='term'>
-							<label class="kcsb-ml"><?php _e('Taxonomies', 'kc-settings') ?></label>
+							<label for="_kcsb-taxonomies" class="kcsb-ml"><?php _e('Taxonomies', 'kc-settings') ?></label>
 							<?php
 								if ( empty($options['taxonomies']) )
 									echo '<p>'.__('No public taxonomy found', 'kc-settings').'</p>';
 								else
 									echo kcForm::field(array(
 										'type'    => 'select',
-										'attr'    => array('name' => 'kcsb[taxonomy]', 'class' => 'kcsb-mi'),
+										'attr'    => array(
+											'id'    => '_kcsb-taxonomies',
+											'name'  => 'kcsb[taxonomy]',
+											'class' => 'kcsb-mi'
+										),
 										'options' => $options['taxonomies'],
 										'current' => $values['taxonomy'],
 										'none'    => false
@@ -611,7 +633,8 @@ class kcSettings_builder {
 							foreach ( $values['sections']  as $idxS => $section ) {
 								$count_s++;
 								$s_name = "kcsb[sections][{$idxS}]";
-								$s_val = $values['sections'][$idxS];
+								$s_val  = $values['sections'][$idxS];
+								$s_id   = "_kcsb-sections-{$idxS}";
 						?>
 						<li class="row" data-mode="sections">
 							<details>
@@ -626,16 +649,16 @@ class kcSettings_builder {
 								</summary>
 								<ul>
 									<li>
-										<label class="kcsb-ml"><?php _e('ID', 'kc-settings') ?></label>
-										<input class="kcsb-mi kcsb-slug kcsb-ids required" type="text" name="<?php echo $s_name ?>[id]" value="<?php esc_attr_e($s_val['id']) ?>" data-ids="sections" />
+										<label for="<?php echo "{$s_id}-id" ?>" class="kcsb-ml"><?php _e('ID', 'kc-settings') ?></label>
+										<input id="<?php echo "{$s_id}-id" ?>" class="kcsb-mi kcsb-slug kcsb-ids required" type="text" name="<?php echo $s_name ?>[id]" value="<?php esc_attr_e($s_val['id']) ?>" data-ids="sections" />
 									</li>
 									<li>
-										<label class="kcsb-ml"><?php _e('Title') ?></label>
-										<input class="kcsb-mi required" type="text" name="<?php echo $s_name ?>[title]" value="<?php esc_attr_e($s_val['title']) ?>" />
+										<label for="<?php echo "{$s_id}-title" ?>" class="kcsb-ml"><?php _e('Title') ?></label>
+										<input id="<?php echo "{$s_id}-title" ?>" class="kcsb-mi required" type="text" name="<?php echo $s_name ?>[title]" value="<?php esc_attr_e($s_val['title']) ?>" />
 									</li>
 									<li>
-										<label class="kcsb-ml nr"><?php _e('Description') ?></label>
-										<textarea class="kcsb-mi" name="<?php echo $s_name ?>[desc]" cols="25" rows="4"><?php echo esc_textarea($s_val['desc']) ?></textarea>
+										<label for="<?php echo "{$s_id}-desc" ?>" class="kcsb-ml nr"><?php _e('Description') ?></label>
+										<textarea id="<?php echo "{$s_id}-desc" ?>" class="kcsb-mi" name="<?php echo $s_name ?>[desc]" cols="25" rows="4"><?php echo esc_textarea($s_val['desc']) ?></textarea>
 									</li>
 									<li class="childType" data-dep='post'>
 										<label class="kcsb-ml nr"><?php _e('Roles', 'kc-settings') ?></label>
@@ -660,10 +683,14 @@ class kcSettings_builder {
 										<ul class="kcsb-mi">
 											<?php foreach ( $options['metabox'] as $mb_prop => $prop ) { ?>
 											<li class="kcsb-sub">
-												<label><?php echo $prop['label'] ?> : </label>
+												<label for="<?php echo "{$s_id}-metabox-{$mb_prop}" ?>"><?php echo $prop['label'] ?> : </label>
 												<?php
 													echo kcForm::select(array(
-														'attr'    => array('name' => "{$s_name}[metabox][$mb_prop]", 'required' => 'required'),
+														'attr'    => array(
+															'id'       => "{$s_id}-metabox-{$mb_prop}",
+															'name'     => "{$s_name}[metabox][$mb_prop]",
+															'required' => 'required'
+														),
 														'options' => $prop['options'],
 														'current' => $s_val['metabox'][$mb_prop],
 														'none'    => false
@@ -682,6 +709,7 @@ class kcSettings_builder {
 													$count_f++;
 													$f_name = "{$s_name}[fields][{$idxF}]";
 													$f_val  = $s_val['fields'][$idxF];
+													$f_id   = "{$s_id}-fields-{$idxF}";
 											?>
 											<li class="row" data-mode="fields">
 												<details>
@@ -696,22 +724,23 @@ class kcSettings_builder {
 													</summary>
 													<ul>
 														<li>
-															<label class="kcsb-ml"><?php _e('ID', 'kc-settings') ?></label>
-															<input class="kcsb-mi kcsb-slug kcsb-ids required" type="text" name="<?php echo $f_name ?>[id]" value="<?php esc_attr_e($f_val['id']) ?>" data-ids="fields" />
+															<label for="<?php echo "{$f_id}-id" ?>" class="kcsb-ml"><?php _e('ID', 'kc-settings') ?></label>
+															<input id="<?php echo "{$f_id}-id" ?>" class="kcsb-mi kcsb-slug kcsb-ids required" type="text" name="<?php echo $f_name ?>[id]" value="<?php esc_attr_e($f_val['id']) ?>" data-ids="fields" />
 														</li>
 														<li>
-															<label class="kcsb-ml"><?php _e('Label') ?></label>
-															<input class="kcsb-mi required" type="text" name="<?php echo $f_name ?>[title]" value="<?php esc_attr_e($f_val['title']) ?>" />
+															<label for="<?php echo "{$f_id}-title" ?>" class="kcsb-ml"><?php _e('Label') ?></label>
+															<input id="<?php echo "{$f_id}-title" ?>" class="kcsb-mi required" type="text" name="<?php echo $f_name ?>[title]" value="<?php esc_attr_e($f_val['title']) ?>" />
 														</li>
 														<li>
-															<label class="kcsb-ml nr"><?php _e('Description') ?></label>
-															<textarea class="kcsb-mi" name="<?php echo $f_name ?>[desc]" cols="25" rows="4"><?php echo esc_textarea($f_val['desc']) ?></textarea>
+															<label for="<?php echo "{$f_id}-desc" ?>" class="kcsb-ml nr"><?php _e('Description') ?></label>
+															<textarea id="<?php echo "{$f_id}-desc" ?>" class="kcsb-mi" name="<?php echo $f_name ?>[desc]" cols="25" rows="4"><?php echo esc_textarea($f_val['desc']) ?></textarea>
 														</li>
 														<li>
-															<label class="kcsb-ml"><?php _e('Type') ?></label>
+															<label for="<?php echo "{$f_id}-type" ?>" class="kcsb-ml"><?php _e('Type') ?></label>
 															<?php
 																echo kcForm::select(array(
 																	'attr'    => array(
+																		'id'         => "{$f_id}-type",
 																		'name'       => "{$f_name}[type]",
 																		'class'      => 'hasdep kcsb-mi',
 																		'data-child' => '.childFieldType',
@@ -724,10 +753,11 @@ class kcSettings_builder {
 															?>
 														</li>
 														<li class="childFieldType" data-dep='file'>
-															<label class="kcsb-ml"><?php _e('Mode', 'kcsb') ?></label>
+															<label for="<?php echo "{$f_id}-mode" ?>" class="kcsb-ml"><?php _e('Mode', 'kcsb') ?></label>
 															<?php
 																echo kcForm::select(array(
 																	'attr'    => array(
+																		'id'         => "{$f_id}-mode",
 																		'name'       => "{$f_name}[mode]",
 																		'class'      => 'hasdep kcsb-mi',
 																		'data-child' => '.childFileSize',
@@ -740,11 +770,15 @@ class kcSettings_builder {
 															?>
 														</li>
 														<li class="childFileSize" data-dep='single'>
-															<label class="kcsb-ml"><?php _e('Preview Size', 'kcsb') ?></label>
+															<label for="<?php echo "{$f_id}-size" ?>" class="kcsb-ml"><?php _e('Preview Size', 'kcsb') ?></label>
 															<?php
 																echo kcForm::field(array(
 																	'type'    => 'select',
-																	'attr'    => array( 'name' => "{$f_name}[size]", 'class' => 'kcsb-mi' ),
+																	'attr'    => array(
+																		'id'    => "{$f_id}-size",
+																		'name'  => "{$f_name}[size]",
+																		'class' => 'kcsb-mi'
+																	),
 																	'options' => kcSettings_options::$image_sizes,
 																	'current' => isset($f_val['size']) ? $f_val['size'] : 'thumbnail',
 																	'none'    => false
@@ -752,11 +786,12 @@ class kcSettings_builder {
 															?>
 														</li>
 														<li class="childFieldType" data-dep='["radio", "checkbox", "select", "multiselect"]'>
-															<label class="kcsb-ml"><?php _e('Options', 'kcsb') ?></label>
+															<label for="<?php echo "{$f_id}-option_type" ?>" class="kcsb-ml"><?php _e('Options', 'kcsb') ?></label>
 															<?php
 																echo kcForm::field(array(
 																	'type'    => 'select',
 																	'attr'    => array(
+																		'id'         => "{$f_id}-option_type",
 																		'name'       => "{$f_name}[option_type]",
 																		'class'      => 'hasdep kcsb-mi',
 																		'data-child' => '.childFieldOptionType',
@@ -769,11 +804,12 @@ class kcSettings_builder {
 															?>
 														</li>
 														<li class="childFieldOptionType" data-dep='predefined'>
-															<label class="kcsb-ml"><?php _e('Predefined option', 'kcsb') ?></label>
+															<label for="<?php echo "{$f_id}-option_predefined" ?>" class="kcsb-ml"><?php _e('Predefined option', 'kcsb') ?></label>
 															<?php
 																echo kcForm::field(array(
 																	'type'    => 'select',
 																	'attr'    => array(
+																		'id'    => "{$f_id}-option_predefined",
 																		'name'  => "{$f_name}[option_predefined]",
 																		'class' => 'kcsb-mi'
 																	),
@@ -810,16 +846,16 @@ class kcSettings_builder {
 														</li>
 														<?php if ( !isset($f_val['cb']) ) $f_val['cb'] = ''; ?>
 														<li class="childFieldType" data-dep='special'>
-															<label class="kcsb-ml"><?php _e('Callback', 'kcsb') ?></label>
-															<input class="kcsb-mi kcsb-slug required" type="text" name="<?php echo $f_name ?>[cb]" value="<?php esc_attr_e($f_val['cb']) ?>" />
+															<label for="<?php echo "{$f_id}-cb" ?>" class="kcsb-ml"><?php _e('Callback', 'kcsb') ?></label>
+															<input id="<?php echo "{$f_id}-cb" ?>" class="kcsb-mi kcsb-slug required" type="text" name="<?php echo $f_name ?>[cb]" value="<?php esc_attr_e($f_val['cb']) ?>" />
 														</li>
 														<?php if ( !isset($f_val['args']) ) $f_val['args'] = ''; ?>
 														<li class="childFieldType" data-dep='special'>
-															<label class="kcsb-ml">
+															<label for="<?php echo "{$f_id}-args" ?>" class="kcsb-ml">
 																<span class="nr"><?php _e('Arguments', 'kcsb') ?></span>
 																<br/><small><em>(<?php _e('String or function name', 'kc-settings') ?>)</em></small>
 															</label>
-															<input class="kcsb-mi kcsb-slug" type="text" name="<?php echo $f_name ?>[args]" value="<?php esc_attr_e($f_val['args']) ?>" />
+															<input id="<?php echo "{$f_id}-args" ?>" class="kcsb-mi kcsb-slug" type="text" name="<?php echo $f_name ?>[args]" value="<?php esc_attr_e($f_val['args']) ?>" />
 														</li>
 														<li class="childFieldType" data-dep='multiinput'>
 															<label class="kcsb-ml"><?php _e('Sub-fields', 'kcsb') ?></label>
