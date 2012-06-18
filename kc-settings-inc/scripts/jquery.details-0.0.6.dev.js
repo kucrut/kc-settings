@@ -126,7 +126,7 @@
 
 				// Add `role=button` and set the `tabindex` of the `summary` element to `0` to make it keyboard accessible
 				$detailsSummary.attr('role', 'button').noSelect().prop('tabIndex', 0).on('click', function(e) {
-					if ( !$(e.target).is('summary') )
+					if ( $(e.target).is('a') )
 						return;
 
 					// Focus on the `summary` element

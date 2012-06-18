@@ -219,7 +219,7 @@ jQuery(document).ready(function($) {
 		}
 
 		$('.hasdep', $nu).kcFormDep();
-		$('details', $nu).details();
+		$('details', $nu).details().children().not('summary').hide();
 
 		$item.after( $nu );
 
