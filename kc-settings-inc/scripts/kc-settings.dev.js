@@ -156,7 +156,7 @@ jQuery(document).ready(function($) {
 
 		var $item = $(this).closest('.row');
 		if ( !$item.siblings('.row').length )
-			return false;
+			return;
 
 		var $block = $item.parent(),
 		    mode   = $item.data('mode'),
