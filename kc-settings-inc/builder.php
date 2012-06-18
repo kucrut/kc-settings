@@ -150,10 +150,6 @@ class kcSettings_builder {
 					'label' => __('Textarea', 'kc-settings')
 				),
 				array(
-					'value' => 'checkbox',
-					'label' => __('Checkbox', 'kc-settings')
-				),
-				array(
 					'value' => 'color',
 					'label' => __('Color', 'kc-settings')
 				),
@@ -262,6 +258,10 @@ class kcSettings_builder {
 			array(
 				'value' => 'file',
 				'label' => __('File', 'kc-settings')
+			),
+			array(
+				'value' => 'checkbox',
+				'label' => __('Checkbox', 'kc-settings')
 			),
 			array(
 				'value' => 'radio',
@@ -642,9 +642,6 @@ class kcSettings_builder {
 										<label class="kcsb-ml nr"><?php _e('Roles', 'kc-settings') ?></label>
 										<ul class="kcsb-mi">
 											<?php
-												if ( !isset($s_val['role']) )
-													$s_val['role'] = array();
-
 												if ( empty($options['role']) )
 													echo '<p>'.__('No role found.', 'kc-settings').'</p>';
 												else
@@ -652,7 +649,7 @@ class kcSettings_builder {
 														'type'      => 'checkbox',
 														'attr'      => array('name' => "{$s_name}[role][]", 'class' => 'kcsb-mi'),
 														'options'   => $options['role'],
-														'current'   => $s_val['role'],
+														'current'   => isset($s_val['role']) ? $s_val['role'] : array(),
 														'check_sep' => array("\t<li>", "</li>\n")
 													));
 											?>
@@ -729,7 +726,6 @@ class kcSettings_builder {
 															?>
 														</li>
 														<li class="childFieldType" data-dep='file'>
-															<?php if ( !isset($f_val['mode']) ) $f_val['mode'] = ''; ?>
 															<label class="kcsb-ml"><?php _e('Mode', 'kcsb') ?></label>
 															<?php
 																echo kcForm::select(array(
@@ -740,20 +736,19 @@ class kcSettings_builder {
 																		'data-scope' => 'li.row'
 																	),
 																	'options' => $options['filemode'],
-																	'current' => $f_val['mode'],
+																	'current' => isset($f_val['mode']) ? $f_val['mode'] : 'single',
 																	'none'    => false
 																));
 															?>
 														</li>
 														<li class="childFileSize" data-dep='single'>
-															<?php if ( !isset($f_val['size']) ) $f_val['size'] = 'thumbnail'; ?>
 															<label class="kcsb-ml"><?php _e('Preview Size', 'kcsb') ?></label>
 															<?php
 																echo kcForm::field(array(
 																	'type'    => 'select',
 																	'attr'    => array( 'name' => "{$f_name}[size]", 'class' => 'kcsb-mi' ),
 																	'options' => kcSettings_options::$image_sizes,
-																	'current' => $f_val['size'],
+																	'current' => isset($f_val['size']) ? $f_val['size'] : 'thumbnail',
 																	'none'    => false
 																));
 															?>
@@ -829,18 +824,19 @@ class kcSettings_builder {
 															</label>
 															<input class="kcsb-mi kcsb-slug" type="text" name="<?php echo $f_name ?>[args]" value="<?php esc_attr_e($f_val['args']) ?>" />
 														</li>
-														<?php
-															if ( !isset($f_val['subfields']) || !is_array($f_val['subfields']) || empty($f_val['subfields']) ) {
-																$f_val['subfields'] = array(
-																	array( 'id' => 'key', 'title' => __('Key', 'kc-settings'), 'type' => 'text' ),
-																	array( 'id' => 'value', 'title' => __('Value', 'kc-settings'), 'type' => 'textarea' )
-																);
-															}
-														?>
 														<li class="childFieldType" data-dep='multiinput'>
 															<label class="kcsb-ml"><?php _e('Sub-fields', 'kcsb') ?></label>
 															<ul class="kcsb-mi kcsb-options kc-rows kc-sortable">
-																<?php foreach ( $f_val['subfields'] as $sf_idx => $sf ) { ?>
+																<?php
+																	if ( !isset($f_val['subfields']) || !is_array($f_val['subfields']) || empty($f_val['subfields']) ) {
+																		$f_val['subfields'] = array(
+																			array( 'id' => 'key', 'title' => __('Key', 'kc-settings'), 'type' => 'text' ),
+																			array( 'id' => 'value', 'title' => __('Value', 'kc-settings'), 'type' => 'textarea' )
+																		);
+																	}
+
+																	foreach ( $f_val['subfields'] as $sf_idx => $sf ) {
+																?>
 																<li class="row" data-mode="subfields">
 																	<label>
 																		<span><?php _e('ID') ?></span>
