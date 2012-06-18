@@ -199,6 +199,7 @@ class kcSettings {
 				$kcsb['_ids']['settings'][] = $sID;
 				$type = $setting['type'];
 				$sections = array();
+				$pre_options = get_class_vars( 'kcSettings_options' );
 
 				foreach ( $setting['sections'] as $section ) {
 					$kcsb['_ids']['sections'][] = $section['id'];
@@ -206,11 +207,21 @@ class kcSettings {
 					foreach ( $section['fields'] as $field ) {
 						$kcsb['_ids']['fields'][] = $field['id'];
 						if ( in_array($field['type'], array('checkbox', 'radio', 'select', 'multiselect')) ) {
-							$options = array();
-							foreach ( $field['options'] as $option ) {
-								$options[$option['key']] = $option['label'];
+							# Predefined options
+							if ( isset($field['option_type']) && $field['option_type'] == 'predefined' ) {
+								$field['options'] = $pre_options[$field['option_predefined']];
+								unset( $field['option_type'] );
+								unset( $field['option_predefined'] );
 							}
-							$field['options'] = $options;
+
+							# Custom options
+							else {
+								$options = array();
+								foreach ( $field['options'] as $option ) {
+									$options[$option['key']] = $option['label'];
+								}
+								$field['options'] = $options;
+							}
 						}
 						$fields[$field['id']] = $field;
 					}

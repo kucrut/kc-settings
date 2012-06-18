@@ -23,12 +23,14 @@ class kcSettings_builder {
 					),
 					'fields'  => array(
 						array(
-							'id'      => '',
-							'title'   => '',
-							'desc'    => '',
-							'type'    => 'input',
-							'attr'    => '',
-							'options' => array(
+							'id'                => '',
+							'title'             => '',
+							'desc'              => '',
+							'type'              => 'input',
+							'attr'              => '',
+							'option_type'       => 'custom',
+							'option_predefined' => 'yesno',
+							'options'           => array(
 								array(
 									'key'   => '',
 									'label' => ''
@@ -235,6 +237,24 @@ class kcSettings_builder {
 						)
 					)
 				)
+			),
+			'option_type' => array(
+				'predefined' => __('Predefined options', 'kc-settings'),
+				'custom'     => __('Custom options', 'kc-settings')
+			),
+			'option_predefined' => array(
+				'yesno'               => __('Yes / No', 'kc-settings'),
+				'post_types'          => __('Post types (public)', 'kc-settings'),
+				'post_types_all'      => __('Post types (all)', 'kc-settings'),
+				'taxonomies'          => __('Taxonomies (public)', 'kc-settings'),
+				'taxonomies_all'      => __('Taxonomies (all)', 'kc-settings'),
+				'nav_menus'           => __('Nav menus', 'kc-settings'),
+				'image_sizes_all'     => __('Image sizes (all)', 'kc-settings'),
+				'image_sizes_custom'  => __('Image sizes (custom)', 'kc-settings'),
+				'image_sizes_default' => __('Image sizes (default)', 'kc-settings'),
+				'post_statuses'       => __('Post statuses', 'kc-settings'),
+				'roles'               => __('User roles', 'kc-settings'),
+				'sidebars'            => __('Sidebars', 'kc-settings')
 			)
 		);
 
@@ -708,10 +728,6 @@ class kcSettings_builder {
 																));
 															?>
 														</li>
-														<?php
-															if ( !isset($f_val['options']) || !is_array($f_val['options']) )
-																$f_val['options'] = array( array( 'key' => '', 'label' => '' ) );
-														?>
 														<li class="childFieldType" data-dep='file'>
 															<?php if ( !isset($f_val['mode']) ) $f_val['mode'] = ''; ?>
 															<label class="kcsb-ml"><?php _e('Mode', 'kcsb') ?></label>
@@ -744,8 +760,44 @@ class kcSettings_builder {
 														</li>
 														<li class="childFieldType" data-dep='["radio", "checkbox", "select", "multiselect"]'>
 															<label class="kcsb-ml"><?php _e('Options', 'kcsb') ?></label>
+															<?php
+																echo kcForm::field(array(
+																	'type'    => 'select',
+																	'attr'    => array(
+																		'name'       => "{$f_name}[option_type]",
+																		'class'      => 'hasdep kcsb-mi',
+																		'data-child' => '.childFieldOptionType',
+																		'data-scope' => 'li.row'
+																	),
+																	'options' => $options['option_type'],
+																	'current' => isset( $f_val['option_type'] ) ? $f_val['option_type'] : 'predefined',
+																	'none'    => false
+																));
+															?>
+														</li>
+														<li class="childFieldOptionType" data-dep='predefined'>
+															<label class="kcsb-ml"><?php _e('Predefined option', 'kcsb') ?></label>
+															<?php
+																echo kcForm::field(array(
+																	'type'    => 'select',
+																	'attr'    => array(
+																		'name'  => "{$f_name}[option_predefined]",
+																		'class' => 'kcsb-mi'
+																	),
+																	'options' => $options['option_predefined'],
+																	'current' => isset( $f_val['option_predefined'] ) ? $f_val['option_predefined'] : 'yesno',
+																	'none'    => false
+																));
+															?>
+														</li>
+														<li class="childFieldOptionType" data-dep='custom'>
+															<label class="kcsb-ml"><?php _e('Custom options', 'kcsb') ?></label>
 															<ul class="kcsb-mi kcsb-options kc-rows kc-sortable">
-																<?php foreach ( $f_val['options'] as $o_idx => $option ) { ?>
+																<?php
+																	if ( !isset($f_val['options']) || !is_array($f_val['options']) )
+																		$f_val['options'] = array( array( 'key' => '', 'label' => '' ) );
+																	foreach ( $f_val['options'] as $o_idx => $option ) {
+																?>
 																<li class="row" data-mode="options">
 																	<label>
 																		<span><?php _e('Value', 'kcsb') ?></span>
