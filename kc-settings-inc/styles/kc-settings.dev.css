@@ -285,6 +285,7 @@ label input.kcsb-mi {width:auto}
 .no-details details summary {display:block;}
 .no-details details summary .actions {display:inline-block;}
 .no-details details summary:focus {outline:0}
+summary {cursor:default;}
 
 .row details summary {
 	margin:0 30px 10px 0;
