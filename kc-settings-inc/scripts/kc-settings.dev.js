@@ -76,6 +76,23 @@ jQuery(document).ready(function($) {
 	    $kcsbForm = $('form.kcsb'),
 	    $kcForm   = $('#kc-settings-form');
 
+	var args = {
+		sortable : {
+			axis: 'y',
+			start: function(ev, ui) {
+				ui.placeholder.height( ui.item.outerHeight() );
+			},
+			stop: function(ev, ui) {
+				// Reassign input names
+				ui.item
+					.parent().kcReorder( ui.item.data('mode'), true )
+					.children().each(function() {
+						$('> details > summary > .actions .count', this).text( $(this).index() + 1);
+					});
+			}
+		}
+	};
+
 	/* <details /> polyfill */
 	if ( $.fn.details.support ) {
 		$('html').addClass( 'details' );
@@ -131,21 +148,7 @@ jQuery(document).ready(function($) {
 
 
 	// Sort
-	$('ul.kc-rows').sortable({
-		axis: 'y',
-		start: function(ev, ui) {
-			ui.placeholder.height( ui.item.outerHeight() );
-		},
-		stop: function(ev, ui) {
-			// Reassign input names
-			ui.item
-				.parent().kcReorder( ui.item.data('mode'), true )
-				.children().each(function() {
-					$('> details > summary > .actions .count', this).text( $(this).index() + 1);
-				});
-		}
-	});
-
+	$('ul.kc-rows').sortable( args.sortable );
 
 	// Remove row
 	$body.on('click', '.row a.del', function(e) {
@@ -225,6 +228,7 @@ jQuery(document).ready(function($) {
 			});
 		}
 
+		$('ul.kc-rows').sortable( args.sortable );
 		$('.hasdep', $nu).kcFormDep();
 		var $details = $('details', $nu).details();
 		if ( !h5_details )
@@ -388,14 +392,6 @@ jQuery(document).ready(function($) {
 
 		win.kcSettings.upload.target = $el.closest('div');
 		tb_show( '', $el.attr('href') );
-	});
-
-	// Sortables
-	$('ul.kc-sortable').sortable({
-		axis: 'y',
-		start: function(ev, ui) {
-			ui.placeholder.height( ui.item.outerHeight() );
-		}
 	});
 
 
