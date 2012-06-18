@@ -1,4 +1,5 @@
-var win = window.dialogArguments || opener || parent || top;
+var win = window.dialogArguments || opener || parent || top,
+    h5_details = false;
 
 (function($) {
 	// File (multiple)
@@ -76,8 +77,14 @@ jQuery(document).ready(function($) {
 	    $kcForm   = $('#kc-settings-form');
 
 	/* <details /> polyfill */
-	$('html').addClass($.fn.details.support ? 'details' : 'no-details');
-	$('details').details();
+	if ( $.fn.details.support ) {
+		$('html').addClass( 'details' );
+		h5_details = true;
+	}
+	else {
+		$('html').addClass( 'no-details' );
+		$('details').details();
+	}
 
 	/*** Plugin/theme settings ***/
 	if ( $kcForm.length ) {
@@ -219,7 +226,9 @@ jQuery(document).ready(function($) {
 		}
 
 		$('.hasdep', $nu).kcFormDep();
-		$('details', $nu).details().children().not('summary').hide();
+		var $details = $('details', $nu).details();
+		if ( !h5_details )
+			$details.children().not('summary').hide();
 
 		$item.after( $nu );
 
@@ -244,6 +253,9 @@ jQuery(document).ready(function($) {
 				});
 			}
 		}
+
+		if ( !h5_details )
+			$details.first().not('.open').stop().children('summary').trigger('click');
 	});
 
 
