@@ -96,8 +96,15 @@ function invertColor( color ) {
 							val = $el.val();
 
 					$el.data('depTargets').each(function() {
-						var $c    = $(this),
-						    depon = $c.data('dep'),
+						var $c = $(this);
+						if ( e.kcfdInit === true ) {
+							if ( $c.data('kcfdInit') )
+								return;
+							else
+								$c.data('kcfdInit', true);
+						}
+
+						var depon = $c.data('dep'),
 						    show  = false;
 
 						if ( !$el.prop('disabled') && (((typeof depon === 'string' || typeof depon === 'number') && depon == val) || (typeof depon === 'object' && $.inArray(val, depon) > -1)) )
@@ -119,7 +126,7 @@ function invertColor( color ) {
 
 			if ( $targets.length )
 				$el.data('depTargets', $targets)
-					.change(onChange).change();
+					.on('change', onChange).trigger( {type: 'change', kcfdInit: true} );
 		});
 	};
 
