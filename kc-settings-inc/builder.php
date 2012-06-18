@@ -522,7 +522,7 @@ class kcSettings_builder {
 
 				<form class="kcsb" action="options.php" method="post">
 					<?php settings_fields('kcsb') ?>
-					<h4>Main</h4>
+					<h4><?php _e('Main', 'kc-settings') ?></h4>
 					<ul>
 						<li>
 							<label class="kcsb-ml"><?php _e('ID', 'kc-settings') ?></label>
