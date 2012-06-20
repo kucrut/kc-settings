@@ -66,7 +66,7 @@ class kcSettings_builder_table extends WP_List_Table {
 
 
   function column_type( $item ) {
-		return $this->_args['kcsb']['options']['type'][$item['type']]['label'];
+		return $this->_args['kcsb']['options']['type'][$item['type']];
 	}
 
 
