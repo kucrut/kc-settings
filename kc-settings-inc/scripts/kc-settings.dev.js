@@ -104,6 +104,27 @@ jQuery(document).ready(function($) {
 					.val( clr )
 					.ColorPickerHide();
 			}
+		},
+		datepicker : {
+			date : {
+				dateFormat: 'yy-mm-dd',
+				changeMonth: true,
+				changeYear: true,
+				showButtonPanel: true
+			},
+			month : {
+				changeMonth: true,
+				changeYear: true,
+				showButtonPanel: true,
+				dateFormat: 'yy-mm',
+				onClose: function(dateText, inst) {
+					var $div  = $(inst.dpDiv),
+					    month = $div.find('.ui-datepicker-month :selected').val(),
+					    year  = $div.find('.ui-datepicker-year :selected').val();
+
+					$(this).datepicker('setDate', new Date(year, month, 1));
+				}
+			}
 		}
 	};
 
@@ -244,7 +265,9 @@ jQuery(document).ready(function($) {
 
 		$('ul.kc-rows').sortable( args.sortable );
 		$('.hasdep', $nu).kcFormDep();
-		$('.hasDatepicker', $nu).removeClass('hasDatepicker').removeAttr('id').datepicker({ dateFormat: 'yy-mm-dd' });
+		$('.hasDatepicker', $nu).each(function() {
+			$(this).removeClass('hasDatepicker').removeAttr('id').datepicker(args.datepicker[$(this).attr('type')]);
+		})
 		$('.hasColorpicker', $nu).removeAttr('style').ColorPicker(args.colorpicker);
 
 		var $details = $('details', $nu).details();
@@ -288,19 +311,18 @@ jQuery(document).ready(function($) {
 
 
 	// Datepicker
-	var $dateInputs = $('input[type=date]');
+	var $dateInputs = $('input[type=date], input[type=month]');
 	if ( $dateInputs.length && Modernizr.inputtypes.date === false ) {
 		var jquiTheme = $('body').is('.admin-color-classic') ? 'cupertino' : 'flick';
 		Modernizr.load([{
 			load: win.kcSettings.paths.styles+'/jquery-ui/'+jquiTheme+'/style.css',
 			complete: function() {
-				$dateInputs.datepicker({
-					dateFormat: 'yy-mm-dd'
+				$dateInputs.each(function() {
+					$(this).datepicker( args.datepicker[$(this).attr('type')] );
 				});
 			}
 		}]);
 	}
-
 
 	// Color
 	var $colorInputs = $('input[type=color]');
