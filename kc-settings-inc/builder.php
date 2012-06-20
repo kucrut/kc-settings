@@ -4,6 +4,7 @@ class kcSettings_builder {
 	protected static $data = array(
 		'defaults' => array(
 			'id'            => '',
+			'status'        => '1',
 			'type'          => 'post',
 			'prefix'        => '',
 			'menu_location' => 'options-general.php',
