@@ -267,6 +267,9 @@ class kcSettings {
 			}
 
 			foreach ( $groups as $g_idx => $group ) {
+				if ( isset($group['status']) && !$group['status'] )
+					continue;
+
 				if ( !is_array($group) || empty($group) ) {
 					trigger_error( self::$data['messages']['bootstrap']['no_options'] );
 					unset( $groups[$g_idx] );

@@ -238,6 +238,16 @@ class kcSettings_builder {
 				'predefined' => __('Predefined options', 'kc-settings'),
 				'custom'     => __('Custom options', 'kc-settings')
 			),
+			'status' => array(
+				array(
+					'value' => '1',
+					'label' => __('Active')
+				),
+				array(
+					'value' => '0',
+					'label' => __('Inactive')
+				)
+			),
 			'option_predefined' => array(
 				'yesno'               => __('Yes / No', 'kc-settings'),
 				'post_types'          => __('Post types (public)', 'kc-settings'),
@@ -375,7 +385,7 @@ class kcSettings_builder {
 		self::$table = $table;
 
 		$action = $table->current_action();
-		if ( !$action || !in_array($action, array('delete', 'edit', 'purge', 'empty', 'clone')) )
+		if ( !$action || !in_array($action, array('delete', 'edit', 'purge', 'empty', 'clone', 'activate', 'deactivate')) )
 			return;
 
 		$update = false;
@@ -394,6 +404,22 @@ class kcSettings_builder {
 		$single = count( $items ) < 2 ? true : false;
 
 		switch ( $action ) {
+			case 'activate' :
+				foreach ( $items as $item )
+					self::$data['kcsb']['settings'][$item]['status'] = '1';
+
+				$update = true;
+				self::$update_message = $single ? __('Setting succesfully activated.', 'kc-settings') : __('Settings succesfully activated.', 'kc-settings');
+			break;
+
+			case 'deactivate' :
+				foreach ( $items as $item )
+					self::$data['kcsb']['settings'][$item]['status'] = '0';
+
+				$update = true;
+				self::$update_message = $single ? __('Setting succesfully deactivated.', 'kc-settings') : __('Settings succesfully deactivated.', 'kc-settings');
+			break;
+
 			case 'delete' :
 				foreach ( $items as $item )
 					unset( self::$data['kcsb']['settings'][$item] );
@@ -527,6 +553,21 @@ class kcSettings_builder {
 						<li>
 							<label for="_kcsb-id" class="kcsb-ml"><?php _e('ID', 'kc-settings') ?></label>
 							<input id="_kcsb-id" class="kcsb-mi kcsb-slug kcsb-ids required" type="text" name="kcsb[id]" value="<?php echo $values['id'] ?>" data-ids="settings" />
+						</li>
+						<li>
+							<label for="_kcsb-status" class="kcsb-ml"><?php _e('Status') ?></label>
+							<?php
+								echo kcForm::select(array(
+									'attr'         => array(
+										'id'         => '_kcsb-status',
+										'name'       => 'kcsb[status]',
+										'class'      => 'kcsb-mi'
+									),
+									'options' => $options['status'],
+									'current' => isset( $values['status'] ) ? $values['status'] : 1,
+									'none'    => false
+								));
+							?>
 						</li>
 						<li>
 							<label for="_kcsb-type" class="kcsb-ml"><?php _e('Type') ?></label>
