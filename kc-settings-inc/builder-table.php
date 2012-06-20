@@ -17,8 +17,10 @@ class kcSettings_builder_table extends WP_List_Table {
 
 	function get_bulk_actions() {
 		$actions = array(
-			'delete' => __('Delete'),
-			'empty'  => __('Remove from DB')
+			'activate'   => __('Activate'),
+			'deactivate' => __('Deactivate'),
+			'delete'     => __('Delete'),
+			'empty'      => __('Remove from DB')
 		);
 		return $actions;
 	}
