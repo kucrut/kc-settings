@@ -90,6 +90,20 @@ jQuery(document).ready(function($) {
 						$('> details > summary > .actions .count', this).text( $(this).index() + 1);
 					});
 			}
+		},
+		colorpicker : {
+			onBeforeShow: function () {
+				$(this).ColorPickerSetColor(this.value);
+			},
+			onSubmit: function(hsb, hex, rgb, el) {
+				var clr = '#'+hex;
+				$(el).css({
+					backgroundColor: clr,
+					color: invertColor( clr )
+				})
+					.val( clr )
+					.ColorPickerHide();
+			}
 		}
 	};
 
@@ -230,6 +244,9 @@ jQuery(document).ready(function($) {
 
 		$('ul.kc-rows').sortable( args.sortable );
 		$('.hasdep', $nu).kcFormDep();
+		$('.hasDatepicker', $nu).removeClass('hasDatepicker').removeAttr('id').datepicker({ dateFormat: 'yy-mm-dd' });
+		$('.hasColorpicker', $nu).removeAttr('style').ColorPicker(args.colorpicker);
+
 		var $details = $('details', $nu).details();
 		if ( !h5_details )
 			$details.children().not('summary').hide();
@@ -295,21 +312,9 @@ jQuery(document).ready(function($) {
 				win.kcSettings.paths.scripts+'/rgbcolor.js'
 			],
 			complete: function () {
-				$colorInputs.ColorPicker({
-					onBeforeShow: function () {
-						$(this).ColorPickerSetColor(this.value);
-					},
-					onSubmit: function(hsb, hex, rgb, el) {
-						var clr = '#'+hex;
-						$(el).css({
-							backgroundColor: clr,
-							color: invertColor( clr )
-						})
-							.val( clr )
-							.ColorPickerHide();
-					}
-				}).each(function() {
-					var $el = $(this);
+				$colorInputs.ColorPicker(args.colorpicker)
+				.each(function() {
+					var $el = $(this).addClass('hasColorpicker');
 					if ( $el.val() !== '' )
 						$el.css({
 							backgroundColor: this.value,

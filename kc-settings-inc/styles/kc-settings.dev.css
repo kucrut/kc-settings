@@ -161,7 +161,7 @@ input.kcs-files {margin-right:.5em}
 
 
 /*** HTML5 inputs ***/
-input[type="number"],
+input[type="number"], input[type="color"],
 input[type="date"], input[type="month"],
 input[type="week"], input[type="time"],
 input[type="datetime"], input[type="datetime-local"] {
