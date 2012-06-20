@@ -163,6 +163,7 @@ class kcSettings_builder {
 			'multiinput'  => __('Multiinput', 'kc-settings'),
 			'special'     => __('Special', 'kc-settings')
 		) );
+		asort( $options['field'] );
 
 		return $options;
 	}
