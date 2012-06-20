@@ -154,6 +154,7 @@ class kcSettings_builder {
 		);
 
 		$options['field'] = array_merge( $options['string_fields'], array(
+			'editor'      => __('WYSIWYG Editor', 'kc-settings'),
 			'file'        => __('File', 'kc-settings'),
 			'checkbox'    => __('Checkbox', 'kc-settings'),
 			'radio'       => __('Radio', 'kc-settings'),

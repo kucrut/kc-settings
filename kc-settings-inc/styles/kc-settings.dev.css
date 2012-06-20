@@ -4,6 +4,7 @@
 	min-height:0;
 }
 #kc-settings-form #postbox-container-1 .meta-box-sortables {margin-left:0}
+#kc-settings-form .mceIframeContainer {background:#fff;}
 
 .section-desc {
 	margin:1.5em 0;
