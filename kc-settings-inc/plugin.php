@@ -108,7 +108,7 @@ class kcSettings_plugin {
 							echo "<h3>{$section['title']}</h3>\n";
 							$this->settings_section( $section );
 						}
-						echo "<p class='submit'><input class='button-primary' name='submit' type='submit' value='".esc_attr( 'Save Changes', 'kc-settings' )."' /></p>\n";
+						echo "<p class='submit'><input class='button-primary' name='submit' type='submit' value='".esc_attr( __('Save Changes') )."' /></p>\n";
 					break;
 				}
 			?>
@@ -160,7 +160,7 @@ class kcSettings_plugin {
 
 	function fill_meta_box( $object, $box ) {
 		$this->settings_section( $box['args'] );
-		echo "<p><input class='button-primary' name='submit' type='submit' value='".esc_attr( 'Save Changes', 'kc-settings' )."' /></p>";
+		echo "<p><input class='button-primary' name='submit' type='submit' value='".esc_attr( __('Save Changes') )."' /></p>";
 	}
 
 
