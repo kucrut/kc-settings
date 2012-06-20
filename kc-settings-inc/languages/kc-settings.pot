@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the KC Settings package.
 msgid ""
 msgstr ""
-"Project-Id-Version: KC Settings 2.6.1\n"
+"Project-Id-Version: KC Settings 2.7\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/kc-settings\n"
-"POT-Creation-Date: 2012-01-19 17:50:16+00:00\n"
+"POT-Creation-Date: 2012-06-20 13:17:02+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -12,673 +12,763 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
-#: kc-settings-inc/form.php:99 kc-settings-inc/builder.php:167
-msgid "Select"
+#: kc-settings-inc/builder-table.php:8 kc-settings-inc/builder.php:405
+#: kc-settings-inc/builder.php:548 kc-settings-inc/builder.php:624
+#: kc-settings-inc/builder.php:774
+msgid "ID"
 msgstr ""
 
-#: kc-settings-inc/form.php:270 kc-settings-inc/form.php:405
-msgid "Info: Drag & drop to reorder."
+#: kc-settings-inc/builder-table.php:9 kc-settings-inc/builder.php:425
+#: kc-settings-inc/builder.php:636 kc-settings-inc/builder.php:782
+msgid "Type"
 msgstr ""
 
-#: kc-settings-inc/form.php:348
-msgid "Key"
+#: kc-settings-inc/builder-table.php:10
+msgid "Name"
 msgstr ""
 
-#: kc-settings-inc/form.php:353 kc-settings-inc/builder.php:808
-msgid "Value"
-msgstr ""
-
-#: kc-settings-inc/form.php:359
-msgid "Add new row"
-msgstr ""
-
-#: kc-settings-inc/form.php:359 kc-settings-inc/builder.php:661
-#: kc-settings-inc/builder.php:731 kc-settings-inc/builder.php:816
-msgid "Add"
-msgstr ""
-
-#: kc-settings-inc/form.php:360
-msgid "Remove this row"
-msgstr ""
-
-#: kc-settings-inc/form.php:360 kc-settings-inc/form.php:461
-#: kc-settings-inc/form.php:514 kc-settings-inc/builder.php:662
-#: kc-settings-inc/builder.php:732 kc-settings-inc/builder.php:817
-msgid "Remove"
-msgstr ""
-
-#: kc-settings-inc/form.php:361
-msgid "Clear"
-msgstr ""
-
-#: kc-settings-inc/form.php:442 kc-settings.php:516
-msgid "Add files to collection"
-msgstr ""
-
-#: kc-settings-inc/form.php:442
-msgid "Add files"
-msgstr ""
-
-#: kc-settings-inc/form.php:456
-msgid "Drag to reorder the items"
-msgstr ""
-
-#: kc-settings-inc/form.php:461
-msgid "Remove from collection"
-msgstr ""
-
-#: kc-settings-inc/form.php:512
-msgid "Change file"
-msgstr ""
-
-#: kc-settings-inc/form.php:519 kc-settings.php:518
-msgid "Select file"
-msgstr ""
-
-#: kc-settings-inc/plugin.php:9
-msgid "My Settings"
-msgstr ""
-
-#: kc-settings-inc/plugin.php:93 kc-settings-inc/builder.php:81
-msgid "Settings"
-msgstr ""
-
-#: kc-settings-inc/helper.php:393
-msgid "Auto Draft"
-msgstr ""
-
-#: kc-settings-inc/helper.php:394
-msgid "Inherit"
-msgstr ""
-
-#: kc-settings-inc/helper.php:395
-msgid "Trash"
-msgstr ""
-
-#: kc-settings-inc/helper.php:396
-msgid "Scheduled"
-msgstr ""
-
-#: kc-settings-inc/helper.php:403
-msgid "Yes"
-msgstr ""
-
-#: kc-settings-inc/helper.php:404
-msgid "No"
-msgstr ""
-
-#: kc-settings-inc/helper.php:430
-msgid "Full (original size)"
-msgstr ""
-
-#: kc-settings-inc/builder.php:62
-msgid "Plugin / theme settings"
-msgstr ""
-
-#: kc-settings-inc/builder.php:66
-msgid "Post metadata (custom fields)"
-msgstr ""
-
-#: kc-settings-inc/builder.php:71
-msgid "Term metadata"
-msgstr ""
-
-#: kc-settings-inc/builder.php:75
-msgid "User metadata"
-msgstr ""
-
-#: kc-settings-inc/builder.php:86
-msgid "Appearance"
-msgstr ""
-
-#: kc-settings-inc/builder.php:90
-msgid "Dashboard"
-msgstr ""
-
-#: kc-settings-inc/builder.php:94 kc-settings-inc/builder.php:102
-msgid "Plugins"
-msgstr ""
-
-#: kc-settings-inc/builder.php:98 kc-settings-inc/builder.php:498
-#: kc-settings-inc/builder.php:505
+#: kc-settings-inc/builder-table.php:11 kc-settings-inc/builder.php:78
 msgid "Tools"
 msgstr ""
 
-#: kc-settings-inc/builder.php:106
+#: kc-settings-inc/builder-table.php:20 kc-settings-inc/builder-table.php:49
+msgid "Activate"
+msgstr ""
+
+#: kc-settings-inc/builder-table.php:21 kc-settings-inc/builder-table.php:51
+msgid "Deactivate"
+msgstr ""
+
+#: kc-settings-inc/builder-table.php:22 kc-settings-inc/builder-table.php:53
+msgid "Delete"
+msgstr ""
+
+#: kc-settings-inc/builder-table.php:23 kc-settings-inc/builder-table.php:58
+msgid "Remove from DB"
+msgstr ""
+
+#: kc-settings-inc/builder-table.php:46
+msgid "Edit"
+msgstr ""
+
+#: kc-settings-inc/builder-table.php:58
+msgid "Delete setting value(s) from DB"
+msgstr ""
+
+#: kc-settings-inc/builder-table.php:83 kc-settings-inc/builder-table.php:86
+msgid "Clone"
+msgstr ""
+
+#: kc-settings-inc/builder-table.php:87 kc-settings-inc/builder.php:814
+msgid "Cancel"
+msgstr ""
+
+#: kc-settings-inc/builder-table.php:88
+msgid "Don't forget to change the setting properties after cloning!"
+msgstr ""
+
+#: kc-settings-inc/builder-table.php:91
+msgid "Please enable javascript to use the tool."
+msgstr ""
+
+#: kc-settings-inc/builder-table.php:104
+msgid "No setting found."
+msgstr ""
+
+#: kc-settings-inc/builder.php:68
+msgid "Plugin / theme settings"
+msgstr ""
+
+#: kc-settings-inc/builder.php:69
+msgid "Post metadata (custom fields)"
+msgstr ""
+
+#: kc-settings-inc/builder.php:70
+msgid "Term metadata"
+msgstr ""
+
+#: kc-settings-inc/builder.php:71
+msgid "User metadata"
+msgstr ""
+
+#: kc-settings-inc/builder.php:74 kc-settings-inc/plugin.php:83
+msgid "Settings"
+msgstr ""
+
+#: kc-settings-inc/builder.php:75
+msgid "Appearance"
+msgstr ""
+
+#: kc-settings-inc/builder.php:76
+msgid "Dashboard"
+msgstr ""
+
+#: kc-settings-inc/builder.php:77 kc-settings-inc/builder.php:79
+msgid "Plugins"
+msgstr ""
+
+#: kc-settings-inc/builder.php:80
 msgid "Users"
 msgstr ""
 
-#: kc-settings-inc/builder.php:110
+#: kc-settings-inc/builder.php:81
 msgid "Media"
 msgstr ""
 
-#: kc-settings-inc/builder.php:114
+#: kc-settings-inc/builder.php:82 kc-settings-inc/builder.php:191
 msgid "Links"
 msgstr ""
 
-#: kc-settings-inc/builder.php:118
+#: kc-settings-inc/builder.php:83
 msgid "Comments"
 msgstr ""
 
-#: kc-settings-inc/builder.php:122
+#: kc-settings-inc/builder.php:84
 msgid "Posts"
 msgstr ""
 
-#: kc-settings-inc/builder.php:128
+#: kc-settings-inc/builder.php:87
 msgid "Metaboxes"
 msgstr ""
 
-#: kc-settings-inc/builder.php:132
+#: kc-settings-inc/builder.php:88
 msgid "Plain"
 msgstr ""
 
-#: kc-settings-inc/builder.php:138
+#: kc-settings-inc/builder.php:91
 msgid "Text"
 msgstr ""
 
-#: kc-settings-inc/builder.php:143
+#: kc-settings-inc/builder.php:92
 msgid "Textarea"
 msgstr ""
 
-#: kc-settings-inc/builder.php:147
-msgid "Checkbox"
-msgstr ""
-
-#: kc-settings-inc/builder.php:151
+#: kc-settings-inc/builder.php:93
 msgid "Color"
 msgstr ""
 
-#: kc-settings-inc/builder.php:155
+#: kc-settings-inc/builder.php:94
 msgid "Date"
 msgstr ""
 
-#: kc-settings-inc/builder.php:159
-msgid "File"
-msgstr ""
-
-#: kc-settings-inc/builder.php:163
-msgid "Radio"
-msgstr ""
-
-#: kc-settings-inc/builder.php:171
-msgid "Select (multiple)"
-msgstr ""
-
-#: kc-settings-inc/builder.php:175
-msgid "Multiinput"
-msgstr ""
-
-#: kc-settings-inc/builder.php:179
-msgid "Special"
-msgstr ""
-
-#: kc-settings-inc/builder.php:183
+#: kc-settings-inc/builder.php:95
 msgid "Number"
 msgstr ""
 
-#: kc-settings-inc/builder.php:187
+#: kc-settings-inc/builder.php:96
 msgid "Email"
 msgstr ""
 
-#: kc-settings-inc/builder.php:191
+#: kc-settings-inc/builder.php:97
 msgid "Password"
 msgstr ""
 
-#: kc-settings-inc/builder.php:195
+#: kc-settings-inc/builder.php:98
 msgid "URL"
 msgstr ""
 
-#: kc-settings-inc/builder.php:199
+#: kc-settings-inc/builder.php:99
 msgid "Telephone"
 msgstr ""
 
-#: kc-settings-inc/builder.php:203
+#: kc-settings-inc/builder.php:100
 msgid "Month"
 msgstr ""
 
-#: kc-settings-inc/builder.php:207
+#: kc-settings-inc/builder.php:101
 msgid "Week"
 msgstr ""
 
-#: kc-settings-inc/builder.php:211
+#: kc-settings-inc/builder.php:102
 msgid "Time"
 msgstr ""
 
-#: kc-settings-inc/builder.php:215
+#: kc-settings-inc/builder.php:103
 msgid "Datetime (local)"
 msgstr ""
 
-#: kc-settings-inc/builder.php:219
+#: kc-settings-inc/builder.php:104
 msgid "Datetime (with timezone)"
 msgstr ""
 
-#: kc-settings-inc/builder.php:224
+#: kc-settings-inc/builder.php:108
 msgid "Context"
 msgstr ""
 
-#: kc-settings-inc/builder.php:227
+#: kc-settings-inc/builder.php:110
 msgid "Normal"
 msgstr ""
 
-#: kc-settings-inc/builder.php:231
+#: kc-settings-inc/builder.php:111
 msgid "Advanced"
 msgstr ""
 
-#: kc-settings-inc/builder.php:235
+#: kc-settings-inc/builder.php:112
 msgid "Side"
 msgstr ""
 
-#: kc-settings-inc/builder.php:241
+#: kc-settings-inc/builder.php:116
 msgid "Priority"
 msgstr ""
 
-#: kc-settings-inc/builder.php:244
+#: kc-settings-inc/builder.php:118
 msgid "High"
 msgstr ""
 
-#: kc-settings-inc/builder.php:248
+#: kc-settings-inc/builder.php:119
 msgid "Default"
 msgstr ""
 
-#: kc-settings-inc/builder.php:252
+#: kc-settings-inc/builder.php:120
 msgid "Low"
 msgstr ""
 
-#: kc-settings-inc/builder.php:267
+#: kc-settings-inc/builder.php:125
+msgid "Predefined options"
+msgstr ""
+
+#: kc-settings-inc/builder.php:126 kc-settings-inc/builder.php:722
+msgid "Custom options"
+msgstr ""
+
+#: kc-settings-inc/builder.php:129
+msgid "Active"
+msgstr ""
+
+#: kc-settings-inc/builder.php:130
+msgid "Inactive"
+msgstr ""
+
+#: kc-settings-inc/builder.php:133
+msgid "Yes / No"
+msgstr ""
+
+#: kc-settings-inc/builder.php:134
+msgid "Post types (public)"
+msgstr ""
+
+#: kc-settings-inc/builder.php:135
+msgid "Post types (all)"
+msgstr ""
+
+#: kc-settings-inc/builder.php:136
+msgid "Taxonomies (public)"
+msgstr ""
+
+#: kc-settings-inc/builder.php:137
+msgid "Taxonomies (all)"
+msgstr ""
+
+#: kc-settings-inc/builder.php:138
+msgid "Nav menus"
+msgstr ""
+
+#: kc-settings-inc/builder.php:139
+msgid "Image sizes (all)"
+msgstr ""
+
+#: kc-settings-inc/builder.php:140
+msgid "Image sizes (custom)"
+msgstr ""
+
+#: kc-settings-inc/builder.php:141
+msgid "Image sizes (default)"
+msgstr ""
+
+#: kc-settings-inc/builder.php:142
+msgid "Post statuses"
+msgstr ""
+
+#: kc-settings-inc/builder.php:143
+msgid "User roles"
+msgstr ""
+
+#: kc-settings-inc/builder.php:144
+msgid "Sidebars"
+msgstr ""
+
+#: kc-settings-inc/builder.php:147
 msgid "Single file"
 msgstr ""
 
-#: kc-settings-inc/builder.php:272
+#: kc-settings-inc/builder.php:148
 msgid "Single selection"
 msgstr ""
 
-#: kc-settings-inc/builder.php:276
+#: kc-settings-inc/builder.php:149
 msgid "Multiple selections"
 msgstr ""
 
-#. #-#-#-#-#  kc-settings.pot (KC Settings 2.6.1)  #-#-#-#-#
+#: kc-settings-inc/builder.php:157
+msgid "WYSIWYG Editor"
+msgstr ""
+
+#: kc-settings-inc/builder.php:158
+msgid "File"
+msgstr ""
+
+#: kc-settings-inc/builder.php:159
+msgid "Checkbox"
+msgstr ""
+
+#: kc-settings-inc/builder.php:160
+msgid "Radio"
+msgstr ""
+
+#: kc-settings-inc/builder.php:161 kc-settings-inc/form.php:99
+msgid "Select"
+msgstr ""
+
+#: kc-settings-inc/builder.php:162
+msgid "Select (multiple)"
+msgstr ""
+
+#: kc-settings-inc/builder.php:163
+msgid "Multiinput"
+msgstr ""
+
+#: kc-settings-inc/builder.php:164
+msgid "Special"
+msgstr ""
+
+#. #-#-#-#-#  kc-settings.pot (KC Settings 2.7)  #-#-#-#-#
 #. Plugin Name of the plugin/theme
-#: kc-settings-inc/builder.php:285 kc-settings-inc/builder.php:489
-#: kc-settings.php:511
+#: kc-settings-inc/builder.php:173 kc-settings-inc/builder.php:382
+#: kc-settings.php:535
 msgid "KC Settings"
 msgstr ""
 
-#: kc-settings-inc/builder.php:294 kc-settings-inc/builder.php:321
-#: kc-settings-inc/builder.php:561
+#: kc-settings-inc/builder.php:181 kc-settings-inc/builder.php:208
+#: kc-settings-inc/builder.php:397
 msgid "KC Settings Builder"
 msgstr ""
 
-#: kc-settings-inc/builder.php:297
+#: kc-settings-inc/builder.php:184
 msgid "All fields are required, unless the label is green."
 msgstr ""
 
-#: kc-settings-inc/builder.php:298
+#: kc-settings-inc/builder.php:185
 msgid ""
 "Some fields depend on other field(s), they will be shown when the dependency "
 "is selected/checked."
 msgstr ""
 
-#: kc-settings-inc/builder.php:299
+#: kc-settings-inc/builder.php:186
 msgid ""
 "Some fields (eg. ID, Prefix) can only be filled with alphanumerics, dashes "
 "and underscores, must be unique, and cannot begin with dashes or "
 "underscores. "
 msgstr ""
 
-#: kc-settings-inc/builder.php:308
+#: kc-settings-inc/builder.php:195
 msgid "Online documentation"
 msgstr ""
 
-#: kc-settings-inc/builder.php:309
+#: kc-settings-inc/builder.php:196
 msgid "Support"
 msgstr ""
 
-#: kc-settings-inc/builder.php:310
+#: kc-settings-inc/builder.php:197
 msgid "Contact"
 msgstr ""
 
-#: kc-settings-inc/builder.php:416
-msgid "Setting successfully deleted."
+#: kc-settings-inc/builder.php:263
+msgid "Setting succesfully activated."
 msgstr ""
 
-#: kc-settings-inc/builder.php:419
-msgid "Setting successfully created."
+#: kc-settings-inc/builder.php:263
+msgid "Settings succesfully activated."
 msgstr ""
 
-#: kc-settings-inc/builder.php:422
-msgid "Setting successfully updated."
+#: kc-settings-inc/builder.php:271
+msgid "Setting succesfully deactivated."
 msgstr ""
 
-#: kc-settings-inc/builder.php:450
-msgid "Create Setting"
+#: kc-settings-inc/builder.php:271
+msgid "Settings succesfully deactivated."
 msgstr ""
 
-#: kc-settings-inc/builder.php:463
-msgid "There's no setting with ID %s. Are you cheating? ;)"
+#: kc-settings-inc/builder.php:279
+msgid "Setting succesfully deleted."
 msgstr ""
 
-#: kc-settings-inc/builder.php:472
-msgid "Settings were NOT saved! Please fill all the required fields."
+#: kc-settings-inc/builder.php:279
+msgid "Settings succesfully deleted."
 msgstr ""
 
-#: kc-settings-inc/builder.php:483
+#: kc-settings-inc/builder.php:289
+msgid "Setting values succesfully removed from database."
+msgstr ""
+
+#: kc-settings-inc/builder.php:289
+msgid "Settings values succesfully removed from database."
+msgstr ""
+
+#: kc-settings-inc/builder.php:303
+msgid "Setting succesfully cloned."
+msgstr ""
+
+#: kc-settings-inc/builder.php:340
+msgid "Setting succesfully updated."
+msgstr ""
+
+#: kc-settings-inc/builder.php:344
+msgid "Setting was NOT saved! Please fill all the required fields."
+msgstr ""
+
+#: kc-settings-inc/builder.php:371 kc-settings-inc/plugin.php:111
+#: kc-settings-inc/plugin.php:163
 msgid "Save Changes"
 msgstr ""
 
-#: kc-settings-inc/builder.php:489
+#: kc-settings-inc/builder.php:376
+msgid "Create Setting"
+msgstr ""
+
+#: kc-settings-inc/builder.php:382
 msgid "Add New"
 msgstr ""
 
-#: kc-settings-inc/builder.php:492
+#: kc-settings-inc/builder.php:384
 msgid "Saved Settings"
 msgstr ""
 
-#: kc-settings-inc/builder.php:496 kc-settings-inc/builder.php:503
-#: kc-settings-inc/builder.php:569 kc-settings-inc/builder.php:667
-#: kc-settings-inc/builder.php:737
-msgid "ID"
-msgstr ""
-
-#: kc-settings-inc/builder.php:497 kc-settings-inc/builder.php:504
-#: kc-settings-inc/builder.php:573 kc-settings-inc/builder.php:749
-msgid "Type"
-msgstr ""
-
-#: kc-settings-inc/builder.php:518 kc-settings-inc/builder.php:520
-msgid "Edit this item"
-msgstr ""
-
-#: kc-settings-inc/builder.php:520
-msgid "Edit"
-msgstr ""
-
-#: kc-settings-inc/builder.php:527
-msgid "Reset options"
-msgstr ""
-
-#: kc-settings-inc/builder.php:527
-msgid "Empty"
-msgstr ""
-
-#: kc-settings-inc/builder.php:529
-msgid "Remove all sections and fields"
-msgstr ""
-
-#: kc-settings-inc/builder.php:529
-msgid "Purge"
-msgstr ""
-
-#: kc-settings-inc/builder.php:531
-msgid "Remove this setting"
-msgstr ""
-
-#: kc-settings-inc/builder.php:531
-msgid "Delete"
-msgstr ""
-
-#: kc-settings-inc/builder.php:537
-msgid "Get code"
-msgstr ""
-
-#: kc-settings-inc/builder.php:538 kc-settings-inc/builder.php:541
-msgid "Clone"
-msgstr ""
-
-#: kc-settings-inc/builder.php:542 kc-settings-inc/builder.php:847
-msgid "Cancel"
-msgstr ""
-
-#: kc-settings-inc/builder.php:543
-msgid "Don't forget to change the setting properties after cloning!"
-msgstr ""
-
-#: kc-settings-inc/builder.php:546
-msgid "Please enable javascript to use the tool"
-msgstr ""
-
-#: kc-settings-inc/builder.php:551
-msgid "No setting found."
-msgstr ""
-
-#: kc-settings-inc/builder.php:559
+#: kc-settings-inc/builder.php:395
 msgid ""
 "To create a setting, please enable javascript in your browser and reload "
 "this page."
 msgstr ""
 
-#: kc-settings-inc/builder.php:562
+#: kc-settings-inc/builder.php:398
 msgid ""
 "Please <a href=\"#\" class=\"kc-help-trigger\">read the guide</a> before "
 "creating a setting."
 msgstr ""
 
-#: kc-settings-inc/builder.php:584
+#: kc-settings-inc/builder.php:402
+msgid "Main"
+msgstr ""
+
+#: kc-settings-inc/builder.php:409
+msgid "Status"
+msgstr ""
+
+#: kc-settings-inc/builder.php:442
 msgid "Prefix"
 msgstr ""
 
-#: kc-settings-inc/builder.php:588
+#: kc-settings-inc/builder.php:446
 msgid "Menu location"
 msgstr ""
 
-#: kc-settings-inc/builder.php:599
+#: kc-settings-inc/builder.php:462
 msgid "Menu title"
 msgstr ""
 
-#: kc-settings-inc/builder.php:602
+#: kc-settings-inc/builder.php:465
 msgid "Page title"
 msgstr ""
 
-#: kc-settings-inc/builder.php:606
+#: kc-settings-inc/builder.php:469
 msgid "Page mode"
 msgstr ""
 
-#: kc-settings-inc/builder.php:617
+#: kc-settings-inc/builder.php:486
 msgid "Post type"
 msgstr ""
 
-#: kc-settings-inc/builder.php:620
+#: kc-settings-inc/builder.php:489
 msgid "No public post type found"
 msgstr ""
 
-#: kc-settings-inc/builder.php:632
+#: kc-settings-inc/builder.php:505
 msgid "Taxonomies"
 msgstr ""
 
-#: kc-settings-inc/builder.php:635
+#: kc-settings-inc/builder.php:508
 msgid "No public taxonomy found"
 msgstr ""
 
-#: kc-settings-inc/builder.php:648
+#: kc-settings-inc/builder.php:525
 msgid "Sections"
 msgstr ""
 
-#: kc-settings-inc/builder.php:659
+#: kc-settings-inc/builder.php:537
 msgid "Drag to reorder section"
 msgstr ""
 
-#: kc-settings-inc/builder.php:661
+#: kc-settings-inc/builder.php:541
 msgid "Add new section"
 msgstr ""
 
-#: kc-settings-inc/builder.php:662
+#: kc-settings-inc/builder.php:541 kc-settings-inc/builder.php:617
+#: kc-settings-inc/builder.php:739 kc-settings-inc/builder.php:794
+#: kc-settings-inc/form.php:414
+msgid "Add"
+msgstr ""
+
+#: kc-settings-inc/builder.php:542
 msgid "Remove this section"
 msgstr ""
 
-#: kc-settings-inc/builder.php:671
+#: kc-settings-inc/builder.php:542 kc-settings-inc/builder.php:618
+#: kc-settings-inc/builder.php:740 kc-settings-inc/builder.php:795
+#: kc-settings-inc/form.php:415 kc-settings-inc/form.php:514
+#: kc-settings-inc/form.php:567
+msgid "Remove"
+msgstr ""
+
+#: kc-settings-inc/builder.php:552
 msgid "Title"
 msgstr ""
 
-#: kc-settings-inc/builder.php:675 kc-settings-inc/builder.php:745
+#: kc-settings-inc/builder.php:556 kc-settings-inc/builder.php:632
 msgid "Description"
 msgstr ""
 
-#: kc-settings-inc/builder.php:679
+#: kc-settings-inc/builder.php:560
 msgid "Roles"
 msgstr ""
 
-#: kc-settings-inc/builder.php:686
+#: kc-settings-inc/builder.php:564
 msgid "No role found."
 msgstr ""
 
-#: kc-settings-inc/builder.php:700
+#: kc-settings-inc/builder.php:578
 msgid "Metabox"
 msgstr ""
 
-#: kc-settings-inc/builder.php:718
+#: kc-settings-inc/builder.php:601
 msgid "Fields"
 msgstr ""
 
-#: kc-settings-inc/builder.php:729
+#: kc-settings-inc/builder.php:613
 msgid "Drag to reorder field"
 msgstr ""
 
-#: kc-settings-inc/builder.php:731
+#: kc-settings-inc/builder.php:617
 msgid "Add new field"
 msgstr ""
 
-#: kc-settings-inc/builder.php:732
+#: kc-settings-inc/builder.php:618
 msgid "Remove this field"
 msgstr ""
 
-#: kc-settings-inc/builder.php:741 kc-settings-inc/builder.php:812
+#: kc-settings-inc/builder.php:628 kc-settings-inc/builder.php:735
+#: kc-settings-inc/builder.php:778
 msgid "Label"
 msgstr ""
 
-#: kc-settings-inc/builder.php:770
+#: kc-settings-inc/builder.php:654
 msgid "Mode"
 msgstr ""
 
-#: kc-settings-inc/builder.php:787
+#: kc-settings-inc/builder.php:672
 msgid "Preview Size"
 msgstr ""
 
-#: kc-settings-inc/builder.php:799
+#: kc-settings-inc/builder.php:688
 msgid "Options"
 msgstr ""
 
-#: kc-settings-inc/builder.php:816
+#: kc-settings-inc/builder.php:706
+msgid "Predefined option"
+msgstr ""
+
+#: kc-settings-inc/builder.php:731 kc-settings-inc/builder.php:766
+#: kc-settings-inc/form.php:361
+msgid "Value"
+msgstr ""
+
+#: kc-settings-inc/builder.php:739
 msgid "Add new option"
 msgstr ""
 
-#: kc-settings-inc/builder.php:817
+#: kc-settings-inc/builder.php:740
 msgid "Remove this option"
 msgstr ""
 
-#: kc-settings-inc/builder.php:825
+#: kc-settings-inc/builder.php:748
 msgid "Callback"
 msgstr ""
 
-#: kc-settings-inc/builder.php:831
+#: kc-settings-inc/builder.php:754
 msgid "Arguments"
 msgstr ""
 
-#: kc-settings-inc/builder.php:832
+#: kc-settings-inc/builder.php:755
 msgid "String or function name"
 msgstr ""
 
-#: kc-settings.php:161
-msgid ""
-"One of your settings doesn't have <b>prefix</b> set. Therefore it has NOT "
-"been added."
+#: kc-settings-inc/builder.php:760
+msgid "Sub-fields"
 msgstr ""
 
-#: kc-settings.php:162
-msgid ""
-"One of your settings doesn't have <b>menu title</b> set. Therefore it has "
-"NOT been added."
+#: kc-settings-inc/builder.php:765 kc-settings-inc/form.php:356
+msgid "Key"
+msgstr ""
+
+#: kc-settings-inc/builder.php:794
+msgid "Add new sub-field"
+msgstr ""
+
+#: kc-settings-inc/builder.php:795
+msgid "Remove this sub-field"
+msgstr ""
+
+#: kc-settings-inc/debug-bar-ext.php:13
+msgid "KC Debug"
+msgstr ""
+
+#: kc-settings-inc/form.php:284 kc-settings-inc/form.php:458
+msgid "Info: Drag & drop to reorder."
+msgstr ""
+
+#: kc-settings-inc/form.php:414
+msgid "Add new row"
+msgstr ""
+
+#: kc-settings-inc/form.php:415
+msgid "Remove this row"
+msgstr ""
+
+#: kc-settings-inc/form.php:416
+msgid "Clear"
+msgstr ""
+
+#: kc-settings-inc/form.php:495 kc-settings.php:540
+msgid "Add files to collection"
+msgstr ""
+
+#: kc-settings-inc/form.php:495
+msgid "Add files"
+msgstr ""
+
+#: kc-settings-inc/form.php:509
+msgid "Drag to reorder the items"
+msgstr ""
+
+#: kc-settings-inc/form.php:514
+msgid "Remove from collection"
+msgstr ""
+
+#: kc-settings-inc/form.php:565
+msgid "Change file"
+msgstr ""
+
+#: kc-settings-inc/form.php:572 kc-settings.php:542
+msgid "Select file"
+msgstr ""
+
+#: kc-settings-inc/options.php:35
+msgid "Auto Draft"
+msgstr ""
+
+#: kc-settings-inc/options.php:36
+msgid "Inherit"
+msgstr ""
+
+#: kc-settings-inc/options.php:37
+msgid "Trash"
+msgstr ""
+
+#: kc-settings-inc/options.php:38
+msgid "Scheduled"
+msgstr ""
+
+#: kc-settings-inc/options.php:45
+msgid "Yes"
+msgstr ""
+
+#: kc-settings-inc/options.php:46
+msgid "No"
+msgstr ""
+
+#: kc-settings-inc/options.php:72
+msgid "Full (original size)"
 msgstr ""
 
 #: kc-settings.php:163
-msgid ""
-"One of your settings doesn't have <b>page title</b> set. Therefore it has "
-"NOT been added."
+msgid "One of your settings doesn't have <b>prefix</b> set."
 msgstr ""
 
 #: kc-settings.php:164
-msgid ""
-"One of your settings doesn't have <b>options</b> set. Therefore it has NOT "
-"been added."
+msgid "One of your settings doesn't have <b>menu title</b> set."
 msgstr ""
 
 #: kc-settings.php:165
-msgid ""
-"One of your settings' section doesn't have <b>fields</b> set. Therefore it "
-"has NOT been added."
+msgid "One of your settings doesn't have <b>page title</b> set."
 msgstr ""
 
 #: kc-settings.php:166
-msgid ""
-"One of your settings' sections doesn't have <b>ID</b> set. Therefore it has "
-"NOT been added."
+msgid "One of your settings doesn't have <b>options</b> set."
 msgstr ""
 
 #: kc-settings.php:167
-msgid ""
-"One of your settings' sections doesn't have <b>title</b> set. Therefore it "
-"has NOT been added."
+msgid "One of your section's callback is not callable."
 msgstr ""
 
 #: kc-settings.php:168
+msgid "One of your settings' section doesn't have <b>fields</b> set."
+msgstr ""
+
+#: kc-settings.php:169
+msgid "One of your settings' sections doesn't have <b>ID</b> set."
+msgstr ""
+
+#: kc-settings.php:170
+msgid "One of your settings' sections doesn't have <b>title</b> set."
+msgstr ""
+
+#: kc-settings.php:171
 msgid ""
 "One of your settings is still using the old format for metabox setting, "
 "please migrate it to the new one."
 msgstr ""
 
-#: kc-settings.php:169
-msgid ""
-"One of your fields doesn't have <b>ID</b> set. Therefore it has NOT been "
-"added."
-msgstr ""
-
-#: kc-settings.php:170
-msgid ""
-"One of your fields doesn't have <b>title</b> set. Therefore it has NOT been "
-"added."
-msgstr ""
-
-#: kc-settings.php:171
-msgid ""
-"One of your fields doesn't have <b>type</b> set. Therefore it has NOT been "
-"added."
-msgstr ""
-
 #: kc-settings.php:172
-msgid ""
-"One of your fields doesn't have the required <b>options</b> set. Therefore "
-"it has NOT been added."
+msgid "One of your fields doesn't have <b>ID</b> set."
 msgstr ""
 
 #: kc-settings.php:173
-msgid ""
-"One of your fields doesn't have the required <b>callback</b> set, or is not "
-"callable. Therefore it has NOT been added."
+msgid "One of your fields doesn't have <b>title</b> set."
 msgstr ""
 
-#: kc-settings.php:512
+#: kc-settings.php:174
+msgid "One of your fields doesn't have <b>type</b> set."
+msgstr ""
+
+#: kc-settings.php:175
+msgid "One of your fields doesn't have the required <b>options</b> set."
+msgstr ""
+
+#: kc-settings.php:176
+msgid ""
+"One of your fields doesn't have the required <b>callback</b> set, or is not "
+"callable."
+msgstr ""
+
+#: kc-settings.php:536
 msgid "Please upload some files and then go back to this tab."
 msgstr ""
 
-#: kc-settings.php:513
+#: kc-settings.php:537
 msgid "Select all files"
 msgstr ""
 
-#: kc-settings.php:514
+#: kc-settings.php:538
 msgid "Clear selections"
 msgstr ""
 
-#: kc-settings.php:515
+#: kc-settings.php:539
 msgid "Invert selection"
 msgstr ""
 
-#: kc-settings.php:517
+#: kc-settings.php:541
 msgid ""
 "Click the \"Media Library\" tab to insert files that are already upload, or, "
 "upload your files and then go to the \"Media Library\" tab to insert the "
 "files you just uploaded."
-msgstr ""
-
-#: kc-settings.php:706
-msgid "KC Debug"
 msgstr ""
 
 #. Plugin URI of the plugin/theme
