@@ -41,13 +41,13 @@ class kcSettings_builder_table extends WP_List_Table {
 
   function column_id( $item ) {
 		$url = "options-general.php?page=kcsb&amp;id={$item['id']}&amp;_wpnonce=".wp_create_nonce( "__kcsb__{$item['id']}" )."&amp;action=";
-		$actions = array();
+		$actions = array('edit' => "<a href='".admin_url( "{$url}edit" )."'>".__('Edit')."</a>");
+
 		if ( isset($item['status']) && !$item['status'] )
 			$actions['activate'] = "<a href='".admin_url( "{$url}activate" )."'>".__('Activate')."</a>";
 		else
 			$actions['deactivate'] = "<a href='".admin_url( "{$url}deactivate" )."'>".__('Deactivate')."</a>";
 
-		$actions['edit']   = "<a href='".admin_url( "{$url}edit" )."'>".__('Edit')."</a>";
 		$actions['delete'] = "<a href='".admin_url( "{$url}delete")."'>".__('Delete')."</a>";
 
 		if ( $item['type'] === 'plugin' ) {
