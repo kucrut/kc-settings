@@ -45,7 +45,7 @@ class kcForm {
 
 		$output  = "<input type='{$args['type']}'";
 		$output .= self::_build_attr( $args['attr'] );
-		$output .= "value='".esc_attr($args['current'])."' ";
+		$output .= " value='".esc_attr($args['current'])."'";
 		$output .= " />";
 
 		return $output;
