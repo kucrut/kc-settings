@@ -536,7 +536,7 @@ class kcSettings_builder {
 							<details>
 								<summary title="<?php _e('Drag to reorder section', 'kc-settings') ?>">
 								<div class="actions">
-									<h5><?php _e( sprintf('Section #%s', "<span class='count'>{$count_s}</span>"), 'kc-settings') ?></h5>
+									<h5><?php printf( __('Section #%s', 'kc-settings'), "<span class='count'>{$count_s}</span>" ) ?></h5>
 									<p>(
 										<a class="add" title="<?php _e('Add new section', 'kc-settings') ?>"><?php _e('Add') ?></a>
 										<a class="del" title="<?php _e('Remove this section', 'kc-settings') ?>"><?php _e('Remove') ?></a>
@@ -612,7 +612,7 @@ class kcSettings_builder {
 												<details>
 													<summary title="<?php _e('Drag to reorder field', 'kc-settings') ?>">
 														<div class="actions">
-															<h5><?php _e( sprintf('Field #%s', "<span class='count'>{$count_f}</span>"), 'kc-settings') ?></h5>
+															<h5><?php printf( _('Field #%s', 'kc-settings'), "<span class='count'>{$count_s}</span>" ) ?></h5>
 															<p>(
 																<a class="add" title="<?php _e('Add new field', 'kc-settings') ?>"><?php _e('Add') ?></a>
 																<a class="del" title="<?php _e('Remove this field', 'kc-settings') ?>"><?php _e('Remove') ?></a>
