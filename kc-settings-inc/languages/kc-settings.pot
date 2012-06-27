@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the KC Settings package.
 msgid ""
 msgstr ""
-"Project-Id-Version: KC Settings 2.7\n"
+"Project-Id-Version: KC Settings 2.7.1\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/kc-settings\n"
-"POT-Creation-Date: 2012-06-20 13:17:02+00:00\n"
+"POT-Creation-Date: 2012-06-27 07:43:56+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -91,7 +91,7 @@ msgstr ""
 msgid "User metadata"
 msgstr ""
 
-#: kc-settings-inc/builder.php:74 kc-settings-inc/plugin.php:83
+#: kc-settings-inc/builder.php:74 kc-settings-inc/plugin.php:86
 msgid "Settings"
 msgstr ""
 
@@ -331,7 +331,7 @@ msgstr ""
 msgid "Special"
 msgstr ""
 
-#. #-#-#-#-#  kc-settings.pot (KC Settings 2.7)  #-#-#-#-#
+#. #-#-#-#-#  kc-settings.pot (KC Settings 2.7.1)  #-#-#-#-#
 #. Plugin Name of the plugin/theme
 #: kc-settings-inc/builder.php:173 kc-settings-inc/builder.php:382
 #: kc-settings.php:535
@@ -416,8 +416,8 @@ msgstr ""
 msgid "Setting was NOT saved! Please fill all the required fields."
 msgstr ""
 
-#: kc-settings-inc/builder.php:371 kc-settings-inc/plugin.php:111
-#: kc-settings-inc/plugin.php:163
+#: kc-settings-inc/builder.php:371 kc-settings-inc/plugin-metabox.php:23
+#: kc-settings-inc/plugin.php:114
 msgid "Save Changes"
 msgstr ""
 
@@ -497,6 +497,10 @@ msgstr ""
 msgid "Drag to reorder section"
 msgstr ""
 
+#: kc-settings-inc/builder.php:539
+msgid "Section #%s"
+msgstr ""
+
 #: kc-settings-inc/builder.php:541
 msgid "Add new section"
 msgstr ""
@@ -544,6 +548,10 @@ msgstr ""
 
 #: kc-settings-inc/builder.php:613
 msgid "Drag to reorder field"
+msgstr ""
+
+#: kc-settings-inc/builder.php:615
+msgid "Field #%s"
 msgstr ""
 
 #: kc-settings-inc/builder.php:617
