@@ -3,6 +3,7 @@
 class kcSettings_plugin {
 	var $url;
 	var $group;
+	var $metabox;
 
 	# Add settings menus and register the options
 	function __construct( $group ) {
@@ -29,8 +30,10 @@ class kcSettings_plugin {
 		if ( isset($help) )
 			kcSettings::add_help( $this->page, $help );
 
-		if ( $display == 'metabox' )
-			add_action( "load-{$this->page}", array(&$this, 'create_meta_box') );
+		if ( $display == 'metabox' ) {
+			require_once( dirname(__FILE__) . '/plugin-metabox.php' );
+			$this->metabox = new kcSettings_plugin_metabox( $this );
+		}
 
 		if ( isset($load_actions) && is_callable($load_actions) )
 			add_action( "load-{$this->page}", $load_actions, 99 );
@@ -101,7 +104,7 @@ class kcSettings_plugin {
 
 				switch ( $this->group['display'] ) {
 					case 'metabox' :
-						$this->display_meta_box();
+						$this->metabox->display();
 					break;
 					case 'plain' :
 						foreach ( $this->group['options'] as $section ) {
@@ -147,60 +150,6 @@ class kcSettings_plugin {
 
 		# Wanna do something after the options table?
 		do_action( 'kc_settings_section_after', $this->group['prefix'], $section );
-	}
-
-
-	function create_meta_box() {
-		wp_enqueue_script( 'post' );
-		add_screen_option('layout_columns', array('max' => 4, 'default' => isset($this->group['has_sidebar']) ? 2 : 1) );
-		foreach ( $this->group['options'] as $section )
-			add_meta_box( "kc-metabox-{$this->page}-{$section['id']}", $section['title'], array(&$this, 'fill_meta_box'), $this->page, $section['metabox']['context'], $section['metabox']['priority'], $section );
-	}
-
-
-	function fill_meta_box( $object, $box ) {
-		$this->settings_section( $box['args'] );
-		echo "<p><input class='button-primary' name='submit' type='submit' value='".esc_attr( __('Save Changes') )."' /></p>";
-	}
-
-
-	function display_meta_box() {
-		wp_nonce_field('closedpostboxes', 'closedpostboxesnonce', false );
-		wp_nonce_field('meta-box-order', 'meta-box-order-nonce', false );
-
-		global $screen_layout_columns;
-		$hide2 = $hide3 = $hide4 = '';
-		switch ( $screen_layout_columns ) {
-			case 4:
-				$width = 'width:25%;';
-			break;
-			case 3:
-				$width = 'width:33.333333%;';
-				$hide4 = 'display:none;';
-			break;
-			case 2:
-				$width = 'width:50%;';
-				$hide3 = $hide4 = 'display:none;';
-			break;
-			default:
-				$width = 'width:100%;';
-				$hide2 = $hide3 = $hide4 = 'display:none;';
-		}
-
-		echo "<div class='metabox-holder' id='kc-metabox-{$this->page}'>\n";
-		echo "\t<div id='postbox-container-1' class='postbox-container' style='$width'>\n";
-		do_meta_boxes( $this->page, 'normal', $this->group );
-		do_meta_boxes( $this->page, 'advanced', $this->group );
-
-		echo "\t</div>\n\t<div id='postbox-container-2' class='postbox-container' style='{$hide2}$width'>\n";
-		do_meta_boxes( $this->page, 'side', $this->group );
-
-		echo "\t</div>\n\t<div id='postbox-container-3' class='postbox-container' style='{$hide3}$width'>\n";
-		do_meta_boxes( $this->page, 'column3', $this->group );
-
-		echo "\t</div>\n\t<div id='postbox-container-4' class='postbox-container' style='{$hide4}$width'>\n";
-		do_meta_boxes( $this->page, 'column4', $this->group );
-		echo "</div>\n";
 	}
 
 
