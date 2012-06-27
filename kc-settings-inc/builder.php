@@ -27,7 +27,7 @@ class kcSettings_builder {
 							'id'                => '',
 							'title'             => '',
 							'desc'              => '',
-							'type'              => 'input',
+							'type'              => 'text',
 							'attr'              => '',
 							'option_type'       => 'custom',
 							'option_predefined' => 'yesno',
