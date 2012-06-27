@@ -268,7 +268,9 @@ jQuery(document).ready(function($) {
 		$('.hasDatepicker', $nu).each(function() {
 			$(this).removeClass('hasDatepicker').removeAttr('id').datepicker(args.datepicker[$(this).attr('type')]);
 		})
-		$('.hasColorpicker', $nu).removeAttr('style').ColorPicker(args.colorpicker);
+		$('.hasColorpicker', $nu).each(function() {
+			$(this).removeAttr('style').ColorPicker(args.colorpicker);
+		});
 
 		var $details = $('details', $nu).details();
 		if ( !h5_details )
