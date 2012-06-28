@@ -187,6 +187,8 @@ input[type="datetime"], input[type="datetime-local"] {
 .kcsb-mi {display:inline-block}
 input.kcsb-mi, textarea.kcsb-mi {width:23em}
 label input.kcsb-mi {width:auto}
+p.kcsb-mi {margin-top:0}
+p.description.kcsb-mi {margin-left:14.5em}
 .kcsb textarea {
 	min-height:8em;
 	resize:vertical}
@@ -282,6 +284,7 @@ label input.kcsb-mi {width:auto}
   padding:0}
 
 /* <details /> */
+.no-details details {display:block;}
 .no-details details > * {display: none;}
 .no-details details > summary:before {
 	content:'▸\00a0';

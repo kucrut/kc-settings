@@ -604,8 +604,8 @@ class kcSettings_builder {
 										</ul>
 									</li>
 									<li class="fields">
-										<h4 class="kcsb-ml"><?php _e('Fields', 'kc-settings') ?></h4>
-										<ul class="kcsb-mi kc-rows">
+										<h4><?php _e('Fields', 'kc-settings') ?></h4>
+										<ul class="kc-rows">
 											<?php
 												$count_f = 0;
 												foreach ( $section['fields'] as $idxF => $field ) {
