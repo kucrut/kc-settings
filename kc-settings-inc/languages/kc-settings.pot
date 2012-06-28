@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the KC Settings package.
 msgid ""
 msgstr ""
-"Project-Id-Version: KC Settings 2.7.1\n"
+"Project-Id-Version: KC Settings 2.7.2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/kc-settings\n"
-"POT-Creation-Date: 2012-06-27 07:43:56+00:00\n"
+"POT-Creation-Date: 2012-06-28 07:47:10+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -331,7 +331,7 @@ msgstr ""
 msgid "Special"
 msgstr ""
 
-#. #-#-#-#-#  kc-settings.pot (KC Settings 2.7.1)  #-#-#-#-#
+#. #-#-#-#-#  kc-settings.pot (KC Settings 2.7.2)  #-#-#-#-#
 #. Plugin Name of the plugin/theme
 #: kc-settings-inc/builder.php:173 kc-settings-inc/builder.php:382
 #: kc-settings.php:535
