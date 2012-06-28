@@ -36,7 +36,8 @@ class kcSettings_builder {
 									'key'   => '',
 									'label' => ''
 								)
-							)
+							),
+							'editor_settings' => array( 'media_buttons', 'tinymce', 'quicktags' )
 						)
 					)
 				)
@@ -151,6 +152,11 @@ class kcSettings_builder {
 			'post_types' => kcSettings_options::$post_types,
 			'taxonomies' => kcSettings_options::$taxonomies,
 			'role'       => kcSettings_options::$roles,
+			'editor_settings' => array(
+				'media_buttons' => __('Display media insert/upload buttons', 'kc-settings'),
+				'tinymce'       => __('Load tinyMCE', 'kc-settings'),
+				'quicktags'     => __('Load Quicktags', 'kc-settings')
+			)
 		);
 
 		$options['field'] = array_merge( $options['string_fields'], array(
@@ -651,7 +657,7 @@ class kcSettings_builder {
 															?>
 														</li>
 														<li class="childFieldType" data-dep='file'>
-															<label for="<?php echo "{$f_id}-mode" ?>" class="kcsb-ml"><?php _e('Mode', 'kcsb') ?></label>
+															<label for="<?php echo "{$f_id}-mode" ?>" class="kcsb-ml"><?php _e('Mode', 'kc-settings') ?></label>
 															<?php
 																echo kcForm::field(array(
 																	'type'    => 'select',
@@ -669,7 +675,7 @@ class kcSettings_builder {
 															?>
 														</li>
 														<li class="childFileSize" data-dep='single'>
-															<label for="<?php echo "{$f_id}-size" ?>" class="kcsb-ml"><?php _e('Preview Size', 'kcsb') ?></label>
+															<label for="<?php echo "{$f_id}-size" ?>" class="kcsb-ml"><?php _e('Preview Size', 'kc-settings') ?></label>
 															<?php
 																echo kcForm::field(array(
 																	'type'    => 'select',
@@ -685,7 +691,7 @@ class kcSettings_builder {
 															?>
 														</li>
 														<li class="childFieldType" data-dep='["radio", "checkbox", "select", "multiselect"]'>
-															<label for="<?php echo "{$f_id}-option_type" ?>" class="kcsb-ml"><?php _e('Options', 'kcsb') ?></label>
+															<label for="<?php echo "{$f_id}-option_type" ?>" class="kcsb-ml"><?php _e('Options', 'kc-settings') ?></label>
 															<?php
 																echo kcForm::field(array(
 																	'type'    => 'select',
@@ -703,7 +709,7 @@ class kcSettings_builder {
 															?>
 														</li>
 														<li class="childFieldOptionType" data-dep='predefined'>
-															<label for="<?php echo "{$f_id}-option_predefined" ?>" class="kcsb-ml"><?php _e('Predefined option', 'kcsb') ?></label>
+															<label for="<?php echo "{$f_id}-option_predefined" ?>" class="kcsb-ml"><?php _e('Predefined option', 'kc-settings') ?></label>
 															<?php
 																echo kcForm::field(array(
 																	'type'    => 'select',
@@ -719,7 +725,7 @@ class kcSettings_builder {
 															?>
 														</li>
 														<li class="childFieldOptionType" data-dep='custom'>
-															<label class="kcsb-ml"><?php _e('Custom options', 'kcsb') ?></label>
+															<label class="kcsb-ml"><?php _e('Custom options', 'kc-settings') ?></label>
 															<ul class="kcsb-mi kcsb-options kc-rows kc-sortable">
 																<?php
 																	if ( !isset($f_val['options']) || !is_array($f_val['options']) )
@@ -728,7 +734,7 @@ class kcSettings_builder {
 																?>
 																<li class="row" data-mode="options">
 																	<label>
-																		<span><?php _e('Value', 'kcsb') ?></span>
+																		<span><?php _e('Value', 'kc-settings') ?></span>
 																		<input class="kcsb-slug required" type="text" name="<?php echo "{$f_name}[options][{$o_idx}]" ?>[key]" value="<?php esc_attr_e($option['key']) ?>" />
 																	</label>
 																	<label>
@@ -745,19 +751,19 @@ class kcSettings_builder {
 														</li>
 														<?php if ( !isset($f_val['cb']) ) $f_val['cb'] = ''; ?>
 														<li class="childFieldType" data-dep='special'>
-															<label for="<?php echo "{$f_id}-cb" ?>" class="kcsb-ml"><?php _e('Callback', 'kcsb') ?></label>
+															<label for="<?php echo "{$f_id}-cb" ?>" class="kcsb-ml"><?php _e('Callback', 'kc-settings') ?></label>
 															<input id="<?php echo "{$f_id}-cb" ?>" class="kcsb-mi kcsb-slug required" type="text" name="<?php echo $f_name ?>[cb]" value="<?php esc_attr_e($f_val['cb']) ?>" />
 														</li>
 														<?php if ( !isset($f_val['args']) ) $f_val['args'] = ''; ?>
 														<li class="childFieldType" data-dep='special'>
 															<label for="<?php echo "{$f_id}-args" ?>" class="kcsb-ml">
-																<span class="nr"><?php _e('Arguments', 'kcsb') ?></span>
+																<span class="nr"><?php _e('Arguments', 'kc-settings') ?></span>
 																<br/><small><em>(<?php _e('String or function name', 'kc-settings') ?>)</em></small>
 															</label>
 															<input id="<?php echo "{$f_id}-args" ?>" class="kcsb-mi kcsb-slug" type="text" name="<?php echo $f_name ?>[args]" value="<?php esc_attr_e($f_val['args']) ?>" />
 														</li>
 														<li class="childFieldType" data-dep='multiinput'>
-															<label class="kcsb-ml"><?php _e('Sub-fields', 'kcsb') ?></label>
+															<label class="kcsb-ml"><?php _e('Sub-fields', 'kc-settings') ?></label>
 															<ul class="kcsb-mi kcsb-options kc-rows kc-sortable">
 																<?php
 																	if ( !isset($f_val['subfields']) || !is_array($f_val['subfields']) || empty($f_val['subfields']) ) {
@@ -797,6 +803,21 @@ class kcSettings_builder {
 																</li>
 																<?php } ?>
 															</ul>
+														</li>
+														<li class="childFieldType" data-dep='editor'>
+															<label class="kcsb-ml"><?php _e('Editor settings', 'kc-settings') ?></label>
+															<p class="kcsb-mi">
+																<?php
+																	echo kcForm::field(array(
+																		'type'    => 'checkbox',
+																		'attr'    => array( 'name' => "{$f_name}[editor_settings][]" ),
+																		'options' => $options['editor_settings'],
+																		'current' => isset($f_val['editor_settings']) ? $f_val['editor_settings'] : self::$data['defaults']['sections'][0]['fields'][0]['editor_settings'],
+																		'none'    => false
+																	));
+																?>
+																<input type="hidden" name="<?php echo "{$f_name}[editor_settings][]" ?>" value="_kc-check" />
+															</p>
 														</li>
 													</ul>
 												</details>

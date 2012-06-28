@@ -98,9 +98,19 @@ function mytheme_options( $settings ) {
 				array(
 					'id'      => 'sample_textarea',
 					'title'   => 'Textarea',
-					'type'    => 'An ordinary text area where you can write some long texts',
-					'default' => 'textarea',
-					'desc'    => 'Default value...'
+					'type'    => 'textarea',
+					'desc'    => 'An ordinary text area where you can write some long texts'
+				),
+				array(
+					'id'      => 'sample_editor',
+					'title'   => 'WYSIWYG Editor',
+					'type'    => 'editor',
+					'editor_settings' => array( // Optional, these are the defaults
+						'media_buttons' => true,
+						'tinymce'       => true,
+						'quicktags'     => true
+					),
+					'desc'    => "Wordpress' builtin WYSIWYG Editor"
 				),
 				array(
 					'id'      => 'sample_checkbox',
@@ -157,7 +167,7 @@ function mytheme_options( $settings ) {
 					'title'  => 'Multi input (multiinput)',
 					'desc'   => 'Input field with your own custom label, to create an array',
 					'type'   => 'multiinput',
-					// 'fields' are optional and will default to text and textarea if not set
+					// 'subfields' are optional and will default to text and textarea if not set
 					// each sub-field should have id, title and type
 					'subfields' => array(
 						array(

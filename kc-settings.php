@@ -223,6 +223,15 @@ class kcSettings {
 								$field['options'] = $options;
 							}
 						}
+						elseif ( $field['type'] === 'editor' ) {
+							if ( !isset($field['editor_settings']) )
+								$field['editor_settings'] = array();
+							$editor_settings = array();
+							foreach ( array('media_buttons', 'tinymce', 'quicktags') as $key )
+								$editor_settings[$key] = in_array($key, $field['editor_settings']);
+							$field['editor_settings'] = $editor_settings;
+						}
+
 						$fields[$field['id']] = $field;
 					}
 					$section['fields'] = $fields;

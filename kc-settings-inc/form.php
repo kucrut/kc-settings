@@ -123,11 +123,15 @@ class kcForm {
 		if ( !isset($args['attr']['id']) )
 			$args['attr']['id'] = 'wpeditor';
 
+		$settings = isset($args['editor_settings']) ? $args['editor_settings'] : array( 'media_buttons' => true, 'tinymce' => true, 'quicktags' => true );
+		$settings['textarea_name'] = $args['attr']['name'];
+		unset( $settings['_kc-check'] );
+
 		ob_start();
 		wp_editor(
 			$args['current'],
 			strtolower( str_replace(array('-', '_'), '', $args['attr']['id']) ),
-			array( 'textarea_name' => $args['attr']['name'] )
+			$settings
 		);
 		return ob_get_clean();
 	}
@@ -302,10 +306,9 @@ function _kc_field( $args ) {
 			'current' => $db_value
 		);
 
-		if ( isset($field['options']) )
-			$field_args['options'] = $field['options'];
-		if ( isset($field['none']) )
-			$field_args['none'] = $field['none'];
+		foreach ( array('options', 'none', 'editor_settings') as $key )
+		if ( isset($field[$key]) )
+			$field_args[$key] = $field[$key];
 
 		$output .= "\t" . kcForm::field( $field_args ) . "\n";
 		$output .= "\t{$desc}\n";
