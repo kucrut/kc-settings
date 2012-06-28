@@ -350,7 +350,7 @@ function _kc_field( $args ) {
  */
 function _kc_field_multiinput( $name, $db_value, $field ) {
 	if ( !isset($field['subfields']) || empty($field['subfields']) ) {
-		$field['fields'] = array(
+		$field['subfields'] = array(
 			array(
 				'id'    => 'key',
 				'title' => __('Key', 'kc-settings'),
