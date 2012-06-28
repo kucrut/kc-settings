@@ -267,7 +267,6 @@ function _kc_field( $args ) {
 
 	# Multiinput
 	elseif ( $type == 'multiinput' ) {
-		$output .= "<p class='info'><em>". __('Info: Drag & drop to reorder.', 'kc-settings') ."</em></p>\n";
 		$field['_id'] = $id;
 		$output .= _kc_field_multiinput( $name, $db_value, $field );
 		$output .= "\t{$desc}\n";
@@ -358,7 +357,7 @@ function _kc_field_file( $args ) {
 }
 
 /**
- * Pair option row
+ * Field: multiinput
  *
  * Generate html multiinput fields
  *
@@ -369,7 +368,7 @@ function _kc_field_file( $args ) {
  * @return $output string HTML Pair option row, with the required jQuery script
  *
  */
-function _kc_field_multiinput( $name, $db_value, $field ) {
+function _kc_field_multiinput( $name, $db_value, $field, $show_info = true ) {
 	if ( !isset($field['subfields']) || empty($field['subfields']) ) {
 		$field['subfields'] = array(
 			array(
@@ -406,7 +405,10 @@ function _kc_field_multiinput( $name, $db_value, $field ) {
 		$db_value = array( $_temp_value );
 	}
 
-	$output = "\n\t<ul class='sortable kc-rows kcs-multiinput'>\n";
+	$output = '';
+	if ( $show_info )
+		$output .= "<p class='info'><em>". __('Info: Drag & drop to reorder.', 'kc-settings') ."</em></p>\n";
+	$output .= "\n\t<ul class='sortable kc-rows kcs-multiinput'>\n";
 
 	foreach ( $db_value as $row_idx => $row_values ) {
 		$output .= "\t\t<li class='row' data-mode='{$field['id']}'>\n";
