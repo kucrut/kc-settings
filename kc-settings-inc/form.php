@@ -255,27 +255,13 @@ function _kc_field( $args ) {
 
 	# File
 	elseif ( $type == 'file' ) {
-		if ( $mode == 'post' ) {
-			$attachments_parent = $object_id;
-			$up_tab = 'gallery';
-		}
-		else {
-			$attachments_parent = 0;
-			$up_tab = 'library';
-		}
-		$param = ($field['mode'] == 'single') ? 'kcsfs' : 'kcsf';
-
-		$file_field_args = array(
+		$output .= _kc_field_file( array(
+			'parent'    => ( $mode === 'post' ) ? $object_id : 0,
 			'field'     => $field,
 			'id'        => $id,
 			'name'      => $name,
-			'db_value'  => $db_value,
-			'up_url'    => "media-upload.php?{$param}=true&amp;post_id={$attachments_parent}&amp;tab={$up_tab}&amp;TB_iframe=1"
-		);
-		if ( in_array($field['mode'], array('radio', 'checkbox')) )
-			$output .= _kc_field_file_multiple( $file_field_args );
-		else
-			$output .= _kc_field_file_single( $file_field_args );
+			'db_value'  => $db_value
+		) );
 		$output .= "\t{$desc}\n";
 	}
 
@@ -335,6 +321,41 @@ function _kc_field( $args ) {
 		return $output;
 }
 
+
+/**
+ * Field: file (back-end only)
+ *
+ * $args contents:
+ * - parent: Post ID, if this field is used for post metadata, otherwise, set to 0
+ * - field: The field array
+ * - id: HTML `id` attribute
+ * - name: HTML `name` attribute
+ * - db_value: Current value
+ *
+ * @param array $args
+ */
+function _kc_field_file( $args ) {
+	if ( $args['field']['mode'] === 'single' ) {
+		$param = 'kcsfs';
+		$fn = '_kc_field_file_single';
+	}
+	else {
+		$param = 'kcsf';
+		$fn = '_kc_field_file_multiple';
+	}
+
+	if ( isset($args['parent']) && $args['parent'] ) {
+		$tab = 'gallery';
+		$post_id = $args['parent'];
+	}
+	else {
+		$tab = 'library';
+		$post_id = 0;
+	}
+	$args['up_url'] = "media-upload.php?{$param}=true&amp;post_id={$post_id}&amp;tab={$tab}&amp;TB_iframe=1";
+
+	return call_user_func( $fn, $args );
+}
 
 /**
  * Pair option row
