@@ -564,20 +564,19 @@ class kcSettings_builder {
 									</li>
 									<li class="childType" data-dep='post'>
 										<label class="kcsb-ml nr"><?php _e('Roles', 'kc-settings') ?></label>
-										<ul class="kcsb-mi">
+										<p class="kcsb-mi">
 											<?php
 												if ( empty($options['role']) )
-													echo '<p>'.__('No role found.', 'kc-settings').'</p>';
+													_e('No role found.', 'kc-settings');
 												else
 													echo kcForm::field(array(
 														'type'      => 'checkbox',
 														'attr'      => array('name' => "{$s_name}[role][]", 'class' => 'kcsb-mi'),
 														'options'   => $options['role'],
-														'current'   => isset($s_val['role']) ? $s_val['role'] : array(),
-														'check_sep' => array("\t<li>", "</li>\n")
+														'current'   => isset($s_val['role']) ? $s_val['role'] : array()
 													));
 											?>
-										</ul>
+										</p>
 									</li>
 									<?php if ( !isset($s_val['metabox']) ) $s_val['metabox'] = array('context' => 'normal', 'priority' => 'default'); ?>
 									<li class="childType childDisplay" data-dep='["post", "metabox"]'>
