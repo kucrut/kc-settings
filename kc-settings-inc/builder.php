@@ -137,7 +137,7 @@ class kcSettings_builder {
 				'taxonomies'          => __('Taxonomies (public)', 'kc-settings'),
 				'taxonomies_all'      => __('Taxonomies (all)', 'kc-settings'),
 				'nav_menus'           => __('Nav menus', 'kc-settings'),
-				'image_sizes_all'     => __('Image sizes (all)', 'kc-settings'),
+				'image_sizes'         => __('Image sizes (all)', 'kc-settings'),
 				'image_sizes_custom'  => __('Image sizes (custom)', 'kc-settings'),
 				'image_sizes_default' => __('Image sizes (default)', 'kc-settings'),
 				'post_statuses'       => __('Post statuses', 'kc-settings'),
