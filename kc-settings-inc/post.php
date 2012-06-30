@@ -5,21 +5,23 @@ class kcSettings_post {
 
 	public static function init() {
 		self::$settings = kcSettings::get_data('settings', 'post' );
-		add_action( 'add_meta_boxes', array(__CLASS__, '_create_meta_box'), 11, 2 );
-		add_action( 'save_post', array(__CLASS__, '_save'), 11, 2 );
 
 		if ( isset(self::$settings['attachment']) ) {
-			kcSettings::add_page( 'media.php' );
-			kcSettings::add_page( 'media-upload-popup' );
-
-			add_filter( 'attachment_fields_to_edit', array(__CLASS__, '_attachment_fields_to_edit'), 10, 2 );
-			add_filter( 'attachment_fields_to_save', array(__CLASS__, '_attachment_fields_to_save'), 10, 2 );
+			require_once dirname( __FILE__ ) . '/attachment.php';
+			kcSettings_attachment::init( self::$settings['attachment'] );
+			unset( self::$settings['attachment'] );
 		}
+
+		if ( empty(self::$settings) )
+			return;
+
+		add_action( 'add_meta_boxes', array(__CLASS__, '_create'), 11, 2 );
+		add_action( 'save_post', array(__CLASS__, '_save'), 11, 2 );
 	}
 
 
 	# Create metabox
-	public static function _create_meta_box( $post_type, $post ) {
+	public static function _create( $post_type, $post ) {
 		if ( !isset(self::$settings[$post_type]) )
 			return;
 
@@ -35,13 +37,13 @@ class kcSettings_post {
 			#$priority = ( isset($section['priority']) && in_array($section['priority'], array('low', 'high')) ) ? $section['priority'] : 'high';
 
 			# add metabox
-			add_meta_box( "kc-metabox-{$post_type}-{$section['id']}", $section['title'], array(__CLASS__, '_fill_meta_box'), $post_type, $section['metabox']['context'], $section['metabox']['priority'], $section );
+			add_meta_box( "kc-metabox-{$post_type}-{$section['id']}", $section['title'], array(__CLASS__, '_fill'), $post_type, $section['metabox']['context'], $section['metabox']['priority'], $section );
 		}
 	}
 
 
 	# Populate metabox
-	public static function _fill_meta_box( $object, $box ) {
+	public static function _fill( $object, $box ) {
 		$output = '';
 		$section = $box['args'];
 		if ( isset($section['desc']) && !empty($section['desc']) )
@@ -98,45 +100,6 @@ class kcSettings_post {
 		}
 
 		return $post_id;
-	}
-
-
-	public static function _attachment_fields_to_edit( $fields, $post ) {
-		foreach ( self::$settings['attachment'] as $section ) {
-			foreach ( $section['fields'] as $field ) {
-				if ( !empty($field['file_type']) && !strstr($post->post_mime_type, $field['file_type']) )
-					continue;
-
-				$input_args = array(
-					'mode'      => 'attachment',
-					'object_id' => $post->ID,
-					'section'   => $section['id'],
-					'field'     => $field
-				);
-
-				$nu_field = array(
-					'label' => $field['title'],
-					'input' => 'html',
-					'html'  => _kc_field( $input_args )
-				);
-				if ( isset($desc) && !empty($desc) )
-					$nu_field['helps'] = $field['desc'];
-
-				$fields[$field['id']] = $nu_field;
-			}
-		}
-
-		return $fields;
-	}
-
-
-	public static function _attachment_fields_to_save( $post, $attachment ) {
-		foreach ( self::$settings['attachment'] as $section ) {
-			foreach ( $section['fields'] as $field )
-				_kc_update_meta( 'post', 'attachment', $post['ID'], $section, $field, true );
-		}
-
-		return $post;
 	}
 }
 ?>
