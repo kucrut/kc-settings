@@ -195,6 +195,9 @@ class kcSettings {
 		# Process settings from the builder
 		if ( is_array($kcsb['settings']) && !empty($kcsb['settings']) ) {
 			foreach ( $kcsb['settings'] as $setting ) {
+				if ( isset($setting['status']) && !$setting['status'] )
+					continue;
+
 				$sID = $setting['id'];
 				$kcsb['_ids']['settings'][] = $sID;
 				$type = $setting['type'];
