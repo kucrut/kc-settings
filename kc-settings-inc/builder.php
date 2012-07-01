@@ -617,7 +617,7 @@ class kcSettings_builder {
 												<details>
 													<summary title="<?php _e('Drag to reorder field', 'kc-settings') ?>">
 														<div class="actions">
-															<h5><?php printf( __('Field #%s', 'kc-settings'), "<span class='count'>{$count_s}</span>" ) ?></h5>
+															<h5><?php printf( __('Field #%s', 'kc-settings'), "<span class='count'>{$count_f}</span>" ) ?></h5>
 															<p>(
 																<a class="add" title="<?php _e('Add new field', 'kc-settings') ?>"><?php _e('Add') ?></a>
 																<a class="del" title="<?php _e('Remove this field', 'kc-settings') ?>"><?php _e('Remove') ?></a>
