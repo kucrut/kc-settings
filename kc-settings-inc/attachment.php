@@ -9,6 +9,7 @@ class kcSettings_attachment {
 		self::$settings = $settings;
 
 		kcSettings::add_page( 'media.php' );
+		kcSettings::add_page( 'media-new.php' );
 		kcSettings::add_page( 'media-upload-popup' );
 
 		add_action( 'admin_head', array(__CLASS__, 'sns'), 9 );
@@ -83,7 +84,7 @@ class kcSettings_attachment {
 
 	public static function sns() {
 		global $pagenow;
-		if ( !in_array( $pagenow, array('media-upload.php', 'media.php') ) )
+		if ( !in_array( $pagenow, array('media-upload.php', 'media.php', 'media-new.php') ) )
 			return;
 
 		wp_enqueue_script( 'quicktags' ); ?>

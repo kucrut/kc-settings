@@ -61,10 +61,15 @@ input.kcs-input {
 	padding-left:0;
 }
 #wpbody-content .kcs-multiinput input[type="text"],
-.kcs-rows input, #wpcontent .kcs-multiinput textarea {
+.kcs-rows input,
+#wpcontent .kcs-multiinput textarea {
 	margin:0;
 }
-
+.media-item .describe .kcs-multiinput td {padding-top:8px;}
+.media-item .describe .kcs-multiinput input[type="text"],
+.media-item .describe .kcs-multiinput textarea {
+	width: 385px;
+}
 #wpcontent .kcs-multiselect {
     height:7.5em;
     padding-right:.5em}
