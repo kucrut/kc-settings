@@ -105,7 +105,9 @@ function mytheme_options( $settings ) {
 					'id'      => 'sample_editor',
 					'title'   => 'WYSIWYG Editor',
 					'type'    => 'editor',
-					'editor_settings' => array( // Optional, these are the defaults
+					// Optional, these are the defaults
+					// Attachment metadata will only use QuickTags
+					'editor_settings' => array(
 						'media_buttons' => true,
 						'tinymce'       => true,
 						'quicktags'     => true
