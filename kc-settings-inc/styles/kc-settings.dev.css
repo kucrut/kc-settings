@@ -65,6 +65,7 @@ input.kcs-input {
 #wpcontent .kcs-multiinput textarea {
 	margin:0;
 }
+.media-item .describe .kcs-multiinput {width:460px}
 .media-item .describe .kcs-multiinput td {padding-top:8px;}
 .media-item .describe .kcs-multiinput input[type="text"],
 .media-item .describe .kcs-multiinput textarea {
