@@ -70,7 +70,6 @@ class kcSettings_attachment {
 				'textarea_name' => "attachments[{$post_id}][{$field_id}]",
 				'textarea_rows' => 7,
 				'media_buttons' => false,
-				'teeny'         => true,
 				'tinymce'       => false,
 				'editor_class'  => 'kcss',
 				'wpautop'       => false,
