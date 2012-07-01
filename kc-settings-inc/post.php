@@ -33,9 +33,6 @@ class kcSettings_post {
 			if ( (isset($section['role']) && !empty($section['role'])) && !kc_check_roles($section['role']) )
 				continue;
 
-			# set metabox properties
-			#$priority = ( isset($section['priority']) && in_array($section['priority'], array('low', 'high')) ) ? $section['priority'] : 'high';
-
 			# add metabox
 			add_meta_box( "kc-metabox-{$post_type}-{$section['id']}", $section['title'], array(__CLASS__, '_fill'), $post_type, $section['metabox']['context'], $section['metabox']['priority'], $section );
 		}
