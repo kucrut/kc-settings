@@ -23,18 +23,23 @@ class kcSettings_attachment {
 				if ( !empty($field['file_type']) && !strstr($post->post_mime_type, $field['file_type']) )
 					continue;
 
-				$input_args = array(
-					'mode'      => 'attachment',
-					'object_id' => $post->ID,
-					'section'   => $section['id'],
-					'field'     => $field
-				);
-
 				$nu_field = array(
 					'label' => $field['title'],
-					'input' => 'html',
-					'html'  => ($field['type'] === 'editor') ? self::field_editor( $field['id'], $post->ID, get_post_meta($post->ID, $field['id'], true) ) : _kc_field( $input_args )
+					'input' => 'html'
 				);
+
+				if ( $field['type'] === 'editor' ) {
+					$nu_field['html'] = self::field_editor( $field['id'], $post->ID, get_post_meta($post->ID, "_{$field['id']}", true) );
+				}
+				else {
+					$nu_field['html'] = _kc_field( array(
+						'mode'      => 'attachment',
+						'object_id' => $post->ID,
+						'section'   => $section['id'],
+						'field'     => $field
+					) );
+				}
+
 				if ( isset($desc) && !empty($desc) )
 					$nu_field['helps'] = $field['desc'];
 
