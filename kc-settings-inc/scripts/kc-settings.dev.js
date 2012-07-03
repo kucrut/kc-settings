@@ -189,9 +189,12 @@ jQuery(document).ready(function($) {
 	$body.on('click', '.row a.del', function(e) {
 		e.preventDefault();
 
-		var $item = $(this).closest('.row');
-		if ( !$item.siblings('.row').length )
+		var $el   = $(this),
+		    $item = $el.closest('.row');
+		if ( !$item.siblings('.row').length ) {
+			$el.siblings('a.clear').click();
 			return;
+		}
 
 		var $block = $item.parent(),
 		    mode   = $item.data('mode'),
