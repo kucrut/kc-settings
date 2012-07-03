@@ -38,7 +38,7 @@ class kcForm {
 				return false;
 
 			if ( is_callable($args['options']) )
-				$args['options'] = call_user_func( $args['options'] );
+				$args['options'] = call_user_func( $args['options'], isset( $args['args'] ) ? $args['args'] : '' );
 
 			if ( !is_array($args['options']) || empty($args['options']) )
 				return false;
@@ -442,6 +442,8 @@ function _kc_field_multiinput( $name, $db_value, $field, $show_info = true ) {
 			);
 			if ( isset($subfield['options']) )
 				$subfield_args['options'] = $subfield['options'];
+			if ( isset($subfield['args']) )
+				$subfield_args['args'] = $subfield['args'];
 
 			$output .= "\t\t\t\t\t<tr>\n";
 			$output .= "\t\t\t\t\t\t<th><label for='{$field['_id']}-{$row_idx}-{$subfield['id']}'>{$subfield['title']}</label></th>\n";

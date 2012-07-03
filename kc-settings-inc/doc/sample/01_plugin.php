@@ -114,6 +114,8 @@ function mytheme_options( $settings ) {
 					),
 					'desc'    => "Wordpress' builtin WYSIWYG Editor"
 				),
+				// checkbox, radio, select, and multiselect require options
+				// options could be an array or a function/class method that returns an array
 				array(
 					'id'      => 'sample_checkbox',
 					'title'   => 'Checkboxes (checkbox)',
@@ -163,6 +165,15 @@ function mytheme_options( $settings ) {
 						'select6' => 'Option #6'
 					),
 					'default' => 'select6'
+				),
+				array(
+					'id'      => 'sample_select2',
+					'title'   => 'Dropdown options (select)',
+					'desc'    => 'These options are the return value <code>kc_sample_options()</code>',
+					'type'    => 'select',
+					'options' => 'kc_sample_options',
+					'args'    => 'some_argument',
+					'default' => 'select1'
 				),
 				array(
 					'id'     => 'sample_multiinput',
@@ -282,5 +293,18 @@ function kc_sample_callback_dynamic_args( $field, $db_value ) {
 
 	return $field['field']['name'];
 }
+
+
+function kc_sample_options_static( $args = '' ) {
+	return array(
+		'select3' => 'Option #1',
+		'select2' => 'Option #2',
+		'select1' => 'Option #3',
+		'select4' => 'Option #4',
+		'select5' => 'Option #5',
+		'select6' => 'Option #6'
+	);
+}
+
 
 ?>
