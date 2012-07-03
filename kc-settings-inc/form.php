@@ -29,8 +29,15 @@ class kcForm {
 			return false;
 
 		if ( in_array($type, array('select', 'radio', 'checkbox')) ) {
-			if ( !isset($args['options']) || !is_array($args['options']) )
+			if ( !isset($args['options']) || empty($args['options']) )
 				return false;
+
+			if ( is_callable($args['options']) )
+				$args['options'] = call_user_func( $args['options'] );
+
+			if ( !is_array($args['options']) || empty($args['options']) )
+				return false;
+
 			elseif ( count($args['options']) == count($args['options'], COUNT_RECURSIVE) )
 				$args['options'] = self::_build_options( $args['options'] );
 		}
