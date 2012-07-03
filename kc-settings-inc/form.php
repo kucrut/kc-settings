@@ -419,9 +419,7 @@ function _kc_field_multiinput( $name, $db_value, $field, $show_info = true ) {
 		$output .= "\t\t\t\t<tbody>\n";
 		# subfields
 		foreach ( $field['subfields'] as $subfield ) {
-			$output .= "\t\t\t\t\t<tr>\n";
-			$output .= "\t\t\t\t\t\t<th><label for='{$field['_id']}-{$row_idx}-{$subfield['id']}'>{$subfield['title']}</label></th>\n";
-			$output .= "\t\t\t\t\t\t<td>" . kcForm::field(array(
+			$subfield_args = array(
 				'type'    => $subfield['type'],
 				'current' => isset($row_values[$subfield['id']]) ? $row_values[$subfield['id']] : '',
 				'attr'    => array_merge( $subfield['attr'], array(
@@ -429,7 +427,13 @@ function _kc_field_multiinput( $name, $db_value, $field, $show_info = true ) {
 					'id'    => "{$field['_id']}-{$row_idx}-{$subfield['id']}",
 					'class' => 'widefat'
 				) )
-			)) . "</td>\n";
+			);
+			if ( isset($subfield['options']) )
+				$subfield_args['options'] = $subfield['options'];
+
+			$output .= "\t\t\t\t\t<tr>\n";
+			$output .= "\t\t\t\t\t\t<th><label for='{$field['_id']}-{$row_idx}-{$subfield['id']}'>{$subfield['title']}</label></th>\n";
+			$output .= "\t\t\t\t\t\t<td>" . kcForm::field( $subfield_args ) . "</td>\n";
 			$output .= "\t\t\t</tr>\n";
 		}
 		$output .= "\t\t\t\t</tbody>\n";
