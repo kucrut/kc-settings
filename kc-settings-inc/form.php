@@ -24,6 +24,11 @@ class kcForm {
 		$args = wp_parse_args( $args, $defaults );
 
 		$type = ( in_array($args['type'], self::$i_text) ) ? 'input' : $args['type'];
+		if ( $type === 'multiselect' ) {
+			$type = 'select';
+			if ( !isset($args['attr']['multiple']) || !$args['attr']['multiple'] )
+				$args['attr']['multiple'] = true;
+		}
 
 		if ( !method_exists(__CLASS__, $type) )
 			return false;
