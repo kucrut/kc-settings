@@ -168,6 +168,10 @@ input.kcs-files {margin-right:.5em}
 #wpcontent .kcs-sideform .kcs-multiinput textarea {
 	width:195px
 }
+.widefat input.widefat,
+.widefat select.widefat {
+	background:#fff;
+}
 
 
 /*** HTML5 inputs ***/
