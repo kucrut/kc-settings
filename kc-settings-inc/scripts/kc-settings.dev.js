@@ -1,5 +1,4 @@
-var win = window.dialogArguments || opener || parent || top,
-    h5_details = false;
+var win = window.dialogArguments || opener || parent || top;
 
 (function($) {
 	// File (multiple)
@@ -71,7 +70,8 @@ var win = window.dialogArguments || opener || parent || top,
 
 
 jQuery(document).ready(function($) {
-	var $body     = $('body'),
+	var $doc      = $(this),
+			$body     = $('body'),
 	    $builder  = $('#kcsb'),
 	    $kcsbForm = $('form.kcsb'),
 	    $kcForm   = $('#kc-settings-form');
@@ -127,16 +127,6 @@ jQuery(document).ready(function($) {
 			}
 		}
 	};
-
-	/* <details /> polyfill */
-	if ( $.fn.details.support ) {
-		$('html').addClass( 'details' );
-		h5_details = true;
-	}
-	else {
-		$('html').addClass( 'no-details' );
-		$('details').details();
-	}
 
 	/*** Plugin/theme settings ***/
 	if ( $kcForm.length ) {
@@ -275,10 +265,6 @@ jQuery(document).ready(function($) {
 			$(this).removeAttr('style').ColorPicker(args.colorpicker);
 		});
 
-		var $details = $('details', $nu).details();
-		if ( !h5_details )
-			$details.children().not('summary').hide();
-
 		$item.after( $nu );
 
 		// Scroll to
@@ -302,9 +288,6 @@ jQuery(document).ready(function($) {
 				});
 			}
 		}
-
-		if ( !h5_details )
-			$details.first().not('.open').stop().children('summary').trigger('click');
 	});
 
 
@@ -553,4 +536,17 @@ jQuery(document).ready(function($) {
 		});
 	}
 
+
+	// Polyfills
+	if ( !Modernizr.details ) {
+		$doc.on('click', 'summary', function(e) {
+			var $summary = $(this),
+					$details = $summary.parent();
+
+		if ( $details.attr('open') )
+			$details.removeAttr('open');
+		else
+			$details.attr('open', 'open');
+		});
+	}
 });
