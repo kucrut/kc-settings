@@ -1,3 +1,21 @@
+/* Polyfills */
+/* 0. <details /> */
+.no-details details {display:block;}
+.no-details details > * { display:none; }
+.no-details details > summary,
+.no-details details[open] > * {
+	display:block;
+}
+.no-details details > summary:before {
+	content:'\25b8\00a0';
+	cursor:default;
+	display:inline-block;
+	position:relative;
+	top:-.15em;
+}
+.no-details details[open] > summary:before { content: '▾\00a0'; }
+
+
 /* Metaboxes */
 #kc-settings-form .meta-box-sortables {
 	margin-left:16px;
@@ -292,26 +310,6 @@ p.description.kcsb-mi {margin-left:14.5em}
   visibility: visible !important;
   margin-top:1em 0;
   padding:0}
-
-/* <details /> */
-.no-details details {display:block;}
-.no-details details > * {
-	display:none;
-	-moz-transition:1s;
-	transition:1s;
-}
-.no-details details > summary,
-.no-details details[open] > * {
-	display:block;
-}
-.no-details details > summary:before {
-	content:'\25b8\00a0';
-	cursor:default;
-	display:inline-block;
-	position:relative;
-	top:-.15em;
-}
-.no-details details[open] > summary:before { content: '▾\00a0'; }
 
 .row details summary {
 	margin:0 30px 10px 0;
