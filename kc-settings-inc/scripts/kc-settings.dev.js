@@ -535,21 +535,4 @@ jQuery(document).ready(function($) {
 				return false;
 		});
 	}
-
-
-	// Polyfills
-	if ( !Modernizr.details ) {
-		$doc.on('click', 'summary', function(e) {
-			if ( $(e.target).is('a') )
-				return;
-
-			var $summary = $(this),
-					$details = $summary.parent();
-
-			if ( $details.attr('open') )
-				$details.removeAttr('open');
-			else
-				$details.attr('open', 'open');
-		});
-	}
 });

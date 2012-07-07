@@ -1,3 +1,4 @@
+summary {cursor:default;}
 /* Polyfills */
 /* 0. <details /> */
 .no-details details {display:block;}
@@ -8,7 +9,6 @@
 }
 .no-details details > summary:before {
 	content:'\25b8\00a0';
-	cursor:default;
 	display:inline-block;
 	position:relative;
 	top:-.15em;

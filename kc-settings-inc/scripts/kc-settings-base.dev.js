@@ -36,6 +36,9 @@ function invertColor( color ) {
 
 
 (function($) {
+	var $doc = $(document);
+
+
 	$.fn.kcGoto = function( opts ) {
 		defaults = {
 			offset: -20,
@@ -216,4 +219,21 @@ function invertColor( color ) {
 			$anchors.first().trigger('click');
 		});
 	};
+
+
+	/* Polyfills */
+	if ( !Modernizr.details ) {
+		$doc.on('click', 'summary', function(e) {
+			if ( $(e.target).is('a') )
+				return;
+
+			var $summary = $(this),
+					$details = $summary.parent();
+
+			if ( $details.attr('open') )
+				$details.removeAttr('open');
+			else
+				$details.attr('open', 'open');
+		});
+	}
 })(jQuery);
