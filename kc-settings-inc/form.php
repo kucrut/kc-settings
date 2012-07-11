@@ -318,7 +318,7 @@ function _kc_field( $args ) {
 			'current' => $db_value
 		);
 
-		foreach ( array('options', 'none', 'editor_settings') as $key )
+		foreach ( array('options', 'none', 'editor_settings', 'args') as $key )
 		if ( isset($field[$key]) )
 			$field_args[$key] = $field[$key];
 
