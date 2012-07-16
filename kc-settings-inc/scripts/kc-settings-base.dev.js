@@ -476,6 +476,51 @@ function invertColor( color ) {
 	};
 
 
+	/* Component metabox toggler */
+	$.fn.kcMetaboxDeps = function() {
+		var	$kcForm = $(this),
+		    $mBoxRoot = $kcForm.find('div.metabox-holder');
+
+		if ( !$mBoxRoot.length )
+			return $kcForm;
+
+		var prefix = $mBoxRoot.attr('id'),
+		    $checks = $kcForm.find(':checkbox');
+
+		if ( !$checks.length )
+			return $kcForm;
+
+		var $secTogglers = $();
+
+		$checks.each(function() {
+			var $sectBox = $( '#'+prefix+'-'+this.value );
+			if ( !$sectBox.length )
+				return;
+
+			var $check = $(this),
+			    $target = $('#'+prefix+'-'+this.value+'-hide');
+
+			$check.data( 'sectHider', $target ).data( 'sectBox', $sectBox );
+			if ( !(this.checked === $target[0].checked) ) {
+				$target.prop('checked', this.checked).triggerHandler('click');
+			}
+
+			$secTogglers = $secTogglers.add( $check );
+		});
+
+		if ( !$secTogglers.length )
+			return $kcForm;
+
+		$secTogglers.change(function() {
+			var $el = $(this);
+			$el.data('sectHider').prop('checked', this.checked).triggerHandler('click');
+
+			// Scroll to
+			if ( this.checked )
+				$el.data('sectBox').kcGoto( {offset: -40, speed: 'slow'} );
+		});
+	};
+
 	/* Polyfills */
 	if ( !Modernizr.details ) {
 		$doc.on('click', 'summary', function(e) {

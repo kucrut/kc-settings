@@ -128,49 +128,8 @@ jQuery(document).ready(function($) {
 		}
 	};
 
-	/*** Plugin/theme settings ***/
-	if ( $kcForm.length ) {
-		var	$mBoxRoot = $kcForm.find('div.metabox-holder');
-
-		/* Theme/plugin settings page with metaboxes */
-		if ( $mBoxRoot.length ) {
-			var mBoxPrefix = $mBoxRoot.attr('id'),
-			    $checks    = $kcForm.find(':checkbox');
-
-			/* Component metabox toggler */
-			if ( $checks.length  ) {
-				var $secTogglers = $();
-
-				$checks.each(function() {
-					var $sectBox = $( '#'+mBoxPrefix+'-'+this.value );
-					if ( !$sectBox.length )
-						return;
-
-					var $check  = $(this),
-					    $target = $('#'+mBoxPrefix+'-'+this.value+'-hide');
-
-					$check.data( 'sectHider', $target ).data( 'sectBox', $sectBox );
-					if ( !(this.checked === $target[0].checked) ) {
-						$target.prop('checked', this.checked).triggerHandler('click');
-					}
-
-					$secTogglers = $secTogglers.add( $check );
-				});
-
-				if ( $secTogglers.length ) {
-					$secTogglers.change(function() {
-						var $el = $(this);
-						$el.data('sectHider').prop('checked', this.checked).triggerHandler('click');
-
-						// Scroll to
-						if ( this.checked )
-							$el.data('sectBox').kcGoto( {offset: -40, speed: 'slow'} );
-					});
-				}
-			}
-		}
-	}
-
+	/* Theme/plugin settings page with metaboxes */
+	$kcForm.kcMetaboxDeps();
 
 	// Sort
 	$('ul.kc-rows').sortable( args.sortable );
