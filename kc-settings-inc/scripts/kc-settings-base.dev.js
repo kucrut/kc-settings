@@ -161,6 +161,7 @@ function invertColor( color ) {
 	func = 'kcRowCloner',
 	active = false,
 	$_doc = $(document),
+	textInputs = ['text', 'textarea', 'color', 'date', 'datetime', 'datetime-local', 'month', 'week', 'email', 'password', 'number', 'tel', 'time', 'url'],
 	callbacks = {
 		add: [],
 		del: []
@@ -256,7 +257,7 @@ function invertColor( color ) {
 			if ( $input.data('nocleanup') === true )
 				return;
 
-			if ( this.type == 'text' || this.type == 'textarea' )
+			if ( $.inArray(this.type, textInputs) )
 				$input.removeAttr('style').val('');
 			else if ( this.type == 'checkbox' || this.type == 'radio' )
 				$input.prop('checked', this.checked);
