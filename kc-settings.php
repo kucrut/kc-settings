@@ -514,6 +514,9 @@ class kcSettings {
 		wp_register_script( 'kc-settings',      "{$path['scripts']}/kc-settings{$suffix}.js", array('kc-settings-base', 'jquery-ui-sortable', 'jquery-ui-datepicker', 'media-upload', 'thickbox'), $version, true );
 		wp_register_style(  'kc-settings',      "{$path['styles']}/kc-settings{$suffix}.css", array('thickbox'), $version );
 
+		# Builder
+		wp_register_script( 'kc-settings-builder', "{$path['scripts']}/kc-settings-builder{$suffix}.js", array('kc-settings-base', 'jquery-ui-sortable'), $version, true );
+
 		# Uploader
 		wp_register_script( 'kc-settings-upload',        "{$path['scripts']}/upload{$suffix}.js", array('jquery'), $version, true );
 		wp_register_script( 'kc-settings-upload-single', "{$path['scripts']}/upload-single{$suffix}.js", array('jquery'), $version, true );
@@ -553,7 +556,6 @@ class kcSettings {
 					'selFile'  => __( 'Select file', 'kc-settings' )
 				)
 			),
-			'_ids'  => isset( self::$data['kcsb']['_ids'] ) ? self::$data['kcsb']['_ids'] : '',
 			'paths' => self::$data['paths']
 		);
 

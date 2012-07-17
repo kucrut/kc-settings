@@ -177,8 +177,6 @@ class kcSettings_builder {
 
 	public static function create_page() {
 		$page = add_options_page( __('KC Settings', 'kc-settings'), __('KC Settings', 'kc-settings'), 'manage_options', 'kcsb', array(__CLASS__, 'builder') );
-		# Set scripts and styles
-		kcSettings::add_page( $page );
 
 		# Help
 		kcSettings::add_help( $page, array(
@@ -206,6 +204,7 @@ class kcSettings_builder {
 		) );
 
 		add_action( "load-{$page}", array(__CLASS__, 'load') );
+		add_action( "load-{$page}", array(__CLASS__, 'sns') );
 	}
 
 
@@ -366,6 +365,20 @@ class kcSettings_builder {
 		$sendback = add_query_arg( 'settings-updated', 'true', $sendback );
 		wp_redirect( $sendback );
 		exit;
+	}
+
+
+	public static function js_vars() { ?>
+<script>
+	var kcsbIDs = <?php echo json_encode( isset( self::$data['kcsb']['_ids'] ) ? self::$data['kcsb']['_ids'] : '' ) ?>;
+</script>
+	<?php }
+
+
+	public static function sns() {
+		wp_enqueue_style( 'kc-settings' );
+		wp_enqueue_script( 'kc-settings-builder' );
+		add_action( 'admin_head', array(__CLASS__, 'js_vars') );
 	}
 
 

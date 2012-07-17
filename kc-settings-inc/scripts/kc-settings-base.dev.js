@@ -191,7 +191,7 @@ function invertColor( color ) {
 			return;
 
 		e.preventDefault();
-		var $item  = $(e.currentTarget),
+		var $item  = $(this),
 		    isLast = !$item.next('.row').length,
 		    $block = $item.parent();
 
@@ -202,6 +202,8 @@ function invertColor( color ) {
 			'isLast': isLast,
 			'block': $block
 		} );
+
+		e.stopPropagation();
 	},
 
 	add = function( args ) {
@@ -227,7 +229,7 @@ function invertColor( color ) {
 			args.item = clear( args.item );
 			args.item.find('.hasdep').trigger('change');
 			args.removed = false;
-			doCallbacks( 'del', e, args, 'pret' );
+			doCallbacks( 'del', e, args );
 		}
 		else {
 			args.removed = true;
@@ -247,7 +249,7 @@ function invertColor( color ) {
 			if ( $input.data('nocleanup') === true )
 				return;
 
-			if ( $input.is('select') || this.type == 'text' || this.type == 'textarea' )
+			if ( this.type == 'text' || this.type == 'textarea' )
 				$input.removeAttr('style').val('');
 			else if ( this.type == 'checkbox' || this.type == 'radio' )
 				$input.prop('checked', this.checked);
@@ -256,7 +258,7 @@ function invertColor( color ) {
 		return item;
 	},
 
-	doCallbacks = function( mode, e, args, x ) {
+	doCallbacks = function( mode, e, args ) {
 		for ( var i=0; i < callbacks[mode].length; i++ )
 			callbacks[mode][i].call( e, args );
 	},
@@ -310,36 +312,6 @@ function invertColor( color ) {
 				}, opts.speed );
 			});
 		});
-	};
-
-
-	$.fn.kcsbUnique = function() {
-		return this.each(function() {
-			var $this	= $(this),
-			    olVal	= $this.val();
-
-			$this.data('olVal', olVal)
-				.blur(function() {
-					var $input = $(this),
-					    olVal  = $this.data('olVal'),
-					    nuVal  = $input.val();
-
-					if ( nuVal != olVal && $.inArray(nuVal, kcSettings._ids[$input.data('ids')]) > -1 )
-						$input.val('');
-				});
-		});
-	};
-
-
-	$.fn.kcsbCheck = function() {
-		var $input = $(this);
-
-		if ( ($input.attr('name') === 'kcsb[id]' && $input.val() === 'id') || $input.val() === '' ) {
-			$input.val('').focus().css('borderColor', '#ff0000');
-			return false;
-		} else {
-			$input.removeAttr('style');
-		}
 	};
 
 
