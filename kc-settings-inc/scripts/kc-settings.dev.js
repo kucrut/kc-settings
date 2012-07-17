@@ -70,11 +70,8 @@ var win = window.dialogArguments || opener || parent || top;
 
 
 jQuery(document).ready(function($) {
-	var $doc      = $(this),
-			$body     = $('body'),
-	    $builder  = $('#kcsb'),
-	    $kcsbForm = $('form.kcsb'),
-	    $kcForm   = $('#kc-settings-form');
+	var $doc    = $(this),
+	    $body   = $('body');
 
 	var args = {
 		sortable : {
@@ -129,133 +126,31 @@ jQuery(document).ready(function($) {
 	};
 
 	/* Theme/plugin settings page with metaboxes */
-	$kcForm.kcMetaboxDeps();
+	$('#kc-settings-form').kcMetaboxDeps();
+
+	// Form row cloner
+	$.kcRowCloner();
+	$.kcRowCloner.addCallback( 'add', function( obj ) {
+		$('ul.kc-rows').sortable( 'refresh' );
+		$('.hasDatepicker', obj.nuItem).each(function() {
+			$(this)
+				.removeData('datepicker')
+				.removeClass('hasDatepicker')
+				.datepicker( args.datepicker[$(this).attr('type')] );
+		})
+		$('.hasColorpicker', obj.nuItem).each(function() {
+			$(this)
+				.removeData('colorpickerId')
+				.removeAttr('style')
+				.ColorPicker(args.colorpicker);
+		});
+	});
 
 	// Sort
 	$('ul.kc-rows').sortable( args.sortable );
 
-	// Remove row
-	$body.on('click', '.row a.del', function(e) {
-		e.preventDefault();
-
-		var $el   = $(this),
-		    $item = $el.closest('.row');
-		if ( !$item.siblings('.row').length ) {
-			$el.siblings('a.clear').click();
-			return;
-		}
-
-		var $block = $item.parent(),
-		    mode   = $item.data('mode'),
-		    isLast = $item.is(':last-child');
-
-		$item.addClass('removing').fadeOut('slow', function() {
-			$item.remove();
-
-			// Reassign the input names and section/field numbering
-			if ( !isLast ) {
-				$block.kcReorder( mode, true );
-
-				if ( $kcsbForm.length ) {
-					$block.children().each(function() {
-						$('> details > summary > .actions .count', this).text( $(this).index() + 1);
-					});
-				}
-			}
-		});
-	});
-
-
-	// Add row
-	$body.on('click', '.row a.add', function(e) {
-		e.preventDefault();
-
-		var $el    = $(this),
-		    $item  = $el.closest('.row'),
-		    $block = $item.parent(),
-		    mode   = $item.data('mode'),
-		    isLast = $item.is(':last-child'),
-		    $nu    = $item.clone(false).addClass('adding'),
-		    scroll = false,
-		    speed  = 400;
-
-		if ( mode == 'sections' ) {
-			scroll = true;
-			speed  = 1200;
-		}
-		else if ( mode == 'fields' ) {
-			scroll = true;
-			speed  = 800;
-		}
-
-		// Builder fields
-		if ( $kcsbForm.length ) {
-			$nu.find('.kc-rows').each(function() {
-				$(this).children('.row').not(':first').remove();
-			});
-
-			$nu.find(':input').each(function() {
-				var $input = $(this);
-				if ( this.type == 'text' || this.type == 'textarea' )
-					$input.removeAttr('style').val('');
-				else if ( this.type == 'checkbox' || this.type == 'radio' )
-					$input.prop('checked', this.checked);
-
-				if ( $input.is('.kcsb-ids') )
-					$input.kcsbUnique();
-			});
-		}
-
-		// Settings page (multiinput)
-		else {
-			$nu.find(':input').each(function() {
-				var $input = $(this);
-				if ( $input.data('nocleanup') !== true )
-					$input.val('');
-			});
-		}
-
-		$('ul.kc-rows').sortable( args.sortable );
-		$('.hasdep', $nu).kcFormDep();
-		$('.hasDatepicker', $nu).each(function() {
-			$(this).removeClass('hasDatepicker').removeAttr('id').datepicker(args.datepicker[$(this).attr('type')]);
-		})
-		$('.hasColorpicker', $nu).each(function() {
-			$(this).removeAttr('style').ColorPicker(args.colorpicker);
-		});
-
-		$item.after( $nu );
-
-		// Scroll to
-		if ( scroll )
-			$nu.kcGoto( {offset: -100, speed: speed});
-
-		// Remove (bg) colors
-		setTimeout(function() {
-			$nu.removeClass('adding');
-		}, speed);
-
-		$block.kcReorder( mode, true );
-
-		if ( $kcsbForm.length ) {
-			if ( isLast ) {
-				$('> details > summary > .actions .count', $nu).text( $nu.index() + 1);
-			}
-			else {
-				$block.children().each(function() {
-					$('> details > summary > .actions .count', this).text( $(this).index() + 1);
-				});
-			}
-		}
-	});
-
-
-	// Clear
-	$body.on('click', '.row a.clear', function(e) {
-		e.preventDefault();
-		$(this).closest('.row').find(':input').val('');
-	});
-
+	// Tabs
+	$('.kcs-tabs').kcTabs();
 
 	// Datepicker
 	var $dateInputs = $('input[type=date], input[type=month]');
@@ -378,10 +273,6 @@ jQuery(document).ready(function($) {
 	});
 
 
-	// Tabs
-	$('.kcs-tabs').kcTabs();
-
-
 	// Add term form
 	var $addTagForm = $('#addtag');
 	if ( $addTagForm.length ) {
@@ -403,95 +294,5 @@ jQuery(document).ready(function($) {
 				$addTagForm.trigger('kcsRefreshed');
 			});
 		}
-	}
-
-	/**** Builder ****/
-	if ( $builder.length ) {
-		// Scroll to form
-		if ( !$builder.is('.hidden') )
-			$builder.kcGoto();
-
-		// Field deps
-		$('.hasdep', $builder).kcFormDep();
-
-		// Check 'slug/id' fields
-		$body.on('blur', 'input.kcsb-slug', function() {
-			var $input = $(this);
-			$input.val( kcsbSlug( $input.val() ) );
-		});
-
-		$('input.kcsb-ids').kcsbUnique();
-
-		$body.on('blur', 'input.required, input.clone-id', function() {
-			$(this).kcsbCheck();
-		});
-
-
-		// Show form
-		$('#new-kcsb').on('click', function(e) {
-			e.preventDefault();
-			$builder.kcGoto();
-		});
-
-
-		$('a.kcsb-cancel').on('click', function(e) {
-			e.preventDefault();
-			$('#kcsb').slideUp('slow');
-		});
-
-
-		// Setting clone
-		$('a.clone-open').on('click', function(e) {
-			e.preventDefault();
-			$(this).parent().children().hide().filter('div.kcsb-clone').fadeIn(function() {
-				$(this).find('input.clone-id').focus();
-			});
-		});
-
-
-		$('a.clone-do').on('click', function(e) {
-			var $el    = $(this),
-			    $input = $(this).siblings('input');
-
-			if ( $input.kcsbCheck() === false )
-				return false;
-
-			$el.attr( 'href', $el.attr('href')+'&new='+$input.val() );
-		});
-
-
-		$('input.clone-id').on('keypress', function(e) {
-			var key = e.keyCode || e.which;
-			if ( key === 13 ) {
-				e.preventDefault();
-				$(this).blur().siblings('a.clone-do').click();
-			}
-		});
-
-
-		$('.kcsb-tools a.close').on('click', function(e) {
-			e.preventDefault();
-			var $el = $(this);
-
-			$el.siblings('input').val('');
-			$el.parent().fadeOut(function() {
-				$(this).siblings().show();
-			});
-		});
-
-
-		$kcsbForm.submit(function(e) {
-			var isOK = true;
-
-			$(this).find('input.required').not(':disabled').each(function() {
-				if ( $(this).kcsbCheck() === false ) {
-					isOK = false;
-					return false;
-				}
-			});
-
-			if ( !isOK )
-				return false;
-		});
 	}
 });
