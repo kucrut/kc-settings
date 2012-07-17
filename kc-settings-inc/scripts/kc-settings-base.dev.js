@@ -183,10 +183,17 @@ function invertColor( color ) {
 	action = function(e) {
 		var $anchor = $(e.target), func;
 
-		if ( $anchor.is('a.add') )
+		if ( $anchor.is('a.add') ) {
 			func = add;
-		else if ( $anchor.is('a.del') )
+		}
+		else if ( $anchor.is('a.del') ) {
 			func = del;
+		}
+		else if ( $anchor.is('a.clear') ) {
+			clear( $(this) );
+			e.stopPropagation();
+			return;
+		}
 		else
 			return;
 
