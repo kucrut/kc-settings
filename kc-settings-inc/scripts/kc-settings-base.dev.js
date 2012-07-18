@@ -16,6 +16,151 @@ Array.prototype.unique = function() {
 	return a;
 };
 
+var win = window.dialogArguments || opener || parent || top;
+
+(function($, document) {
+	// File (multiple)
+	win.kcFileMultiple = function( files ) {
+		var $target = win.kcSettings.upload.target,
+		    current = $target.data('currentFiles'),
+		    $last   = $target.children().last(),
+		    $items  = $(),
+		    $nu     = null;
+
+		for ( var item in files ) {
+			if ( !files.hasOwnProperty(item) || $.inArray(files[item].id, current) > -1 )
+				continue;
+
+			$nu = $last.clone().removeClass('hidden');
+
+			$nu.find('img').attr('src', files[item].img);
+			$nu.find('input').val(files[item].id).prop('checked', false);
+			$nu.find('.title').text(files[item].title);
+
+			$items = $items.add( $nu );
+		}
+
+		$target.append( $items );
+		if ( $last.is('.hidden') ) {
+			$items.show();
+			$last.remove();
+		}
+
+		$target.show().prev('.info').show();
+	};
+
+	// File (single)
+	win.kcFileSingle = function( data ) {
+		var $target = win.kcSettings.upload.target,
+		    $title  = $target.find('span').text(data.title),
+		    $img    = $target.find('img').attr('src', data.img);
+
+		$target.removeAttr('data-type');
+		$target.find('input').val(data.id);
+		$target.children('a.up').hide();
+		$target.find('p').fadeIn().children('a.up').show().siblings('a.rm').show();
+
+		if ( data.type == 'image' ) {
+			$target.attr('data-type', data.type);
+			$title.hide();
+
+			// Replace preview image
+			var thumbSize = $target.data('size');
+			if ( thumbSize !== 'thumbnail' ) {
+				$.ajax({
+					type: 'POST',
+					url: ajaxurl,
+					data: { action: 'kc_get_image_url', id: data.id, size: thumbSize },
+					success: function( response ) {
+						if ( response ) {
+							$img.attr('src', response);
+						}
+					}
+				});
+			}
+		}
+		else {
+			$title.show();
+		}
+	};
+
+
+	var $_doc = $(document);
+	// File
+	$_doc.on('click', '.kcs-file a.rm', function(e) {
+		e.preventDefault();
+		var $item = $(this).closest('.row');
+
+		$item.addClass('removing').fadeOut('slow', function() {
+			// am I the only one?
+			if ( $item.siblings().length ) {
+				$item.remove();
+			}
+			// No?
+			else {
+				$item.removeClass('removing')
+					.addClass('hidden')
+					.find(':input')
+						.val('')
+						.prop('checked', false);
+
+				// Disable the field so it won't get saved upon submission
+				$('input.fileID', $item).prop('disabled', true);
+
+				// Hide the list and info
+				$item.parent().hide().prev('.info').hide();
+			}
+		});
+
+	});
+
+
+	// Add files button
+	$_doc.on('click', 'a.kcsf-upload', function(e) {
+		e.preventDefault();
+		var $el     = $(this),
+		    $target = $el.siblings('.kc-rows'),
+		    $solo   = $target.find('.row.hidden'),
+				current = [];
+
+		// If there's currently only one row and it's hidden, enable the field
+		if ( $solo.length ) {
+			$('input.fileID', $solo).prop('disabled', false);
+		}
+		else {
+			$('input.fileID', $target).each(function() {
+				current.push( this.value );
+			});
+		}
+
+		win.kcSettings.upload.target = $target.data('currentFiles', current);
+		tb_show( '', $el.attr('href') );
+	});
+
+
+	// Single file: remove
+	// Set height
+	$_doc.on('click', '.kcs-file-single a.rm', function(e) {
+		e.preventDefault();
+		$(this).fadeOut()
+			.closest('div')
+				.find('p.current').fadeOut(function() {
+					$(this).siblings('a.up').show()
+						.siblings('input').val('');
+				});
+	});
+
+	// Single file: open popup to select/upload files
+	$_doc.on('click', '.kcs-file-single a.up', function(e) {
+		e.preventDefault();
+		var $el = $(this);
+
+		win.kcSettings.upload.target = $el.closest('div');
+		tb_show( '', $el.attr('href') );
+	});
+
+})(jQuery, document);
+
 
 function kcCountObj( obj ) {
 	var count = 0;

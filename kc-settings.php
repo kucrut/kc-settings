@@ -510,7 +510,7 @@ class kcSettings {
 
 		# Common
 		wp_register_script( 'modernizr',        "{$path['scripts']}/modernizr-2.5.3-20120707{$suffix}.js", false, '2.5.3', true );
-		wp_register_script( 'kc-settings-base', "{$path['scripts']}/kc-settings-base{$suffix}.js", array('jquery', 'modernizr'), $version, true );
+		wp_register_script( 'kc-settings-base', "{$path['scripts']}/kc-settings-base{$suffix}.js", array('jquery', 'modernizr', 'media-upload', 'thickbox'), $version, true );
 		wp_localize_script( 'kc-settings-base', 'kcSettings', array(
 			'paths'  => self::$data['paths'],
 			'upload' => array(
@@ -526,7 +526,7 @@ class kcSettings {
 				)
 			)
 		) );
-		wp_register_script( 'kc-settings', "{$path['scripts']}/kc-settings{$suffix}.js", array('kc-settings-base', 'jquery-ui-sortable', 'jquery-ui-datepicker', 'media-upload', 'thickbox'), $version, true );
+		wp_register_script( 'kc-settings', "{$path['scripts']}/kc-settings{$suffix}.js", array('kc-settings-base', 'jquery-ui-sortable', 'jquery-ui-datepicker'), $version, true );
 		wp_register_style(  'kc-settings', "{$path['styles']}/kc-settings{$suffix}.css", array('thickbox'), $version );
 
 		# Builder
