@@ -67,7 +67,7 @@ class kcSettings {
 		kcSettings_options::init();
 
 		# Include samples (for development)
-		//self::_samples( array('01_plugin') );
+		self::_samples( array('01_plugin') );
 
 		# Get all settings
 		self::_bootstrap_settings();
@@ -173,7 +173,8 @@ class kcSettings {
 			'field_no_title'      => __( "One of your fields doesn't have <b>title</b> set.", 'kc-settings'),
 			'field_no_type'       => __( "One of your fields doesn't have <b>type</b> set.", 'kc-settings'),
 			'field_no_opt'        => __( "One of your fields doesn't have the required <b>options</b> set.", 'kc-settings'),
-			'field_no_cb'         => __( "One of your fields doesn't have the required <b>callback</b> set, or is not callable.", 'kc-settings')
+			'field_no_cb'         => __( "One of your fields doesn't have the required <b>callback</b> set, or is not callable.", 'kc-settings'),
+			'field_nested_multi'  => __( "multiinput fields cannot have a multiinput sub-field.", 'kc-settings')
 		);
 
 		$kcsb = array(
@@ -424,7 +425,7 @@ class kcSettings {
 	}
 
 
-	private static function _validate_fields( $type, $fields ) {
+	private static function _validate_fields( $type, $fields, $sub = false ) {
 		$defaults = array();
 		$need_options = array( 'select', 'radio', 'checkbox' );
 		$file_modes = array('single', 'radio', 'checkbox');
@@ -435,26 +436,48 @@ class kcSettings {
 			foreach ( array('id', 'title', 'type') as $c ) {
 				if ( !isset($field[$c]) || empty($field[$c]) ) {
 					trigger_error( self::$data['messages']['bootstrap']["field_no_{$c}"] );
-					unset( $fields[$idx] );
 					continue 2;
 				}
 			}
 			# Field check: need options
 			if ( in_array($field['type'], $need_options) && !isset($field['options']) ) {
 				trigger_error( self::$data['messages']['bootstrap']['field_no_opt'] );
-				unset( $fields[$idx] );
 				continue;
 			}
 			# Field check: file mode
-			if ( $field['type'] == 'file' ) {
+			elseif ( $field['type'] == 'file' ) {
 				if ( !isset($field['mode']) || !in_array($field['mode'], $file_modes) )
-					$fields[$idx]['mode'] = 'radio';
+					$field['mode'] = 'radio';
 			}
 			elseif ( $field['type'] == 'special' ) {
 				if ( !isset($field['cb']) || !is_callable($field['cb']) ) {
 					trigger_error( self::$data['messages']['bootstrap']['field_no_cb'] );
-					unset( $fields[$idx] );
 					continue;
+				}
+			}
+			elseif ( $field['type'] == 'multiinput' ) {
+				if ( $sub ) {
+					trigger_error( self::$data['messages']['bootstrap']['field_nested_multi'] );
+					continue;
+				}
+
+				$subfields = ( isset($field['subfields']) && !empty($field['subfields']) ) ? self::_validate_fields( $type, $field['subfields'], true ) : array( 'fields' => array() );
+				if ( empty($subfields['fields']) ) {
+					$field['subfields'] = array(
+						array(
+							'id'    => 'key',
+							'title' => __('Key', 'kc-settings'),
+							'type'  => 'text'
+						),
+						array(
+							'id'    => 'value',
+							'title' => __('Value', 'kc-settings'),
+							'type'  => 'textarea'
+						)
+					);
+				}
+				else {
+					$field['subfields'] = $subfields['fields'];
 				}
 			}
 

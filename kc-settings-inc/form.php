@@ -242,7 +242,12 @@ function _kc_field( $args ) {
 			$db_value = get_metadata( 'post', $object_id, "_{$id}", true );
 		break;
 
-		# 2. Others: post, term & user meta
+		# 2. Subfields of multiinput field
+		case 'subfield' :
+			extract( $args['data'], EXTR_OVERWRITE );
+		break;
+
+		# 3. Others: post, term & user meta
 		default :
 			$id = $field['id'];
 			$name = "kc-{$mode}meta[{$section}][{$id}]";
@@ -256,7 +261,7 @@ function _kc_field( $args ) {
 	$desc = ( isset($field['desc']) && !empty($field['desc']) ) ? "<{$desc_tag} class='{$desc_class}'>{$field['desc']}</{$desc_tag}>" : null;
 
 	# Let user filter the output of the setting field
-	$output = apply_filters( 'kc_settings_field_before', '', $section, $field );
+	$output = ( $mode !== 'subfield' ) ? apply_filters( 'kc_settings_field_before', '', $section, $field ) : '';
 
 	# Special option with callback
 	if ( $type == 'special' ) {
@@ -327,7 +332,8 @@ function _kc_field( $args ) {
 	}
 
 	# Let user filter the output of the setting field
-	$output = apply_filters( 'kc_settings_field_after', $output, $section, $field );
+	if ( $mode !== 'subfield' )
+		$output = apply_filters( 'kc_settings_field_after', $output, $section, $field );
 
 	if ( isset($args['echo']) && $args['echo'] )
 		echo $output;
@@ -384,21 +390,6 @@ function _kc_field_file( $args ) {
  *
  */
 function _kc_field_multiinput( $name, $db_value, $field, $show_info = true ) {
-	if ( !isset($field['subfields']) || empty($field['subfields']) ) {
-		$field['subfields'] = array(
-			array(
-				'id'    => 'key',
-				'title' => __('Key', 'kc-settings'),
-				'type'  => 'text'
-			),
-			array(
-				'id'    => 'value',
-				'title' => __('Value', 'kc-settings'),
-				'type'  => 'textarea'
-			)
-		);
-	}
-
 	# Sanitize subfields
 	foreach ( $field['subfields'] as $idx => $subfield ) {
 		# 0. attributes
@@ -431,23 +422,22 @@ function _kc_field_multiinput( $name, $db_value, $field, $show_info = true ) {
 		$output .= "\t\t\t\t<tbody>\n";
 		# subfields
 		foreach ( $field['subfields'] as $subfield ) {
+			if ( $subfield['type'] == 'multiinput' )
+				continue;
+
 			$subfield_args = array(
-				'type'    => $subfield['type'],
-				'current' => isset($row_values[$subfield['id']]) ? $row_values[$subfield['id']] : '',
-				'attr'    => array_merge( $subfield['attr'], array(
-					'name'  => "{$name}[$row_idx][{$subfield['id']}]",
-					'id'    => "{$field['_id']}-{$row_idx}-{$subfield['id']}",
-					'class' => 'widefat'
-				) )
+				'mode' => 'subfield',
+				'data' => array(
+					'db_value' => isset($row_values[$subfield['id']]) ? $row_values[$subfield['id']] : '',
+					'name'     => "{$name}[$row_idx][{$subfield['id']}]",
+					'id'       => "{$field['_id']}-{$row_idx}-{$subfield['id']}"
+				),
+				'field' => $subfield
 			);
-			if ( isset($subfield['options']) )
-				$subfield_args['options'] = $subfield['options'];
-			if ( isset($subfield['args']) )
-				$subfield_args['args'] = $subfield['args'];
 
 			$output .= "\t\t\t\t\t<tr>\n";
 			$output .= "\t\t\t\t\t\t<th><label for='{$field['_id']}-{$row_idx}-{$subfield['id']}'>{$subfield['title']}</label></th>\n";
-			$output .= "\t\t\t\t\t\t<td>" . kcForm::field( $subfield_args ) . "</td>\n";
+			$output .= "\t\t\t\t\t\t<td>" . _kc_field( $subfield_args ) . "</td>\n";
 			$output .= "\t\t\t</tr>\n";
 		}
 		$output .= "\t\t\t\t</tbody>\n";

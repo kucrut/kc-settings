@@ -206,18 +206,33 @@ function mytheme_options( $settings ) {
 					'subfields' => array(
 						array(
 							'id'    => 'key1',
-							'title' => 'Label #1',
+							'title' => 'Single line text',
 							'type'  => 'text'
 						),
 						array(
 							'id'    => 'key2',
-							'title' => 'Label #2',
+							'title' => 'Multiple-lines text',
 							'type'  => 'textarea'
 						),
 						array(
 							'id'    => 'key3',
-							'title' => 'Label #3',
-							'type'  => 'text'
+							'title' => 'Date',
+							'type'  => 'date'
+						),
+						array(
+							'id'    => 'key4',
+							'title' => 'Color',
+							'type'  => 'color'
+						),
+						array(
+							'id'    => 'key5',
+							'title' => 'Single file',
+							'type'  => 'file'
+						),
+						array(
+							'id'    => 'key6',
+							'title' => 'WP Editor',
+							'type'  => 'editor'
 						)
 					)
 				),
