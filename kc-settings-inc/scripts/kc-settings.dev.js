@@ -118,15 +118,6 @@ jQuery(document).ready(function($) {
 		}]);
 	}
 
-	// Help trigger
-	$('a.kc-help-trigger').on('click', function(e) {
-		e.preventDefault();
-
-		$('#contextual-help-link').click();
-		$('#screen-meta').kcGoto();
-	});
-
-
 	// Add term form
 	var $addTagForm = $('#addtag');
 	if ( $addTagForm.length ) {

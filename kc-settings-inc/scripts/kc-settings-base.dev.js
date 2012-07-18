@@ -647,6 +647,17 @@ function invertColor( color ) {
 		});
 	};
 
+
+	/* Misc. */
+	// Help trigger
+	$doc.on('click', 'a.kc-help-trigger', function(e) {
+		e.preventDefault();
+
+		$('#contextual-help-link').click();
+		$('#screen-meta').kcGoto();
+	});
+
+
 	/* Polyfills */
 	if ( !Modernizr.details ) {
 		$doc.on('click', 'summary', function(e) {
