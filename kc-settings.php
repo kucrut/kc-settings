@@ -511,8 +511,23 @@ class kcSettings {
 		# Common
 		wp_register_script( 'modernizr',        "{$path['scripts']}/modernizr-2.5.3-20120707{$suffix}.js", false, '2.5.3', true );
 		wp_register_script( 'kc-settings-base', "{$path['scripts']}/kc-settings-base{$suffix}.js", array('jquery', 'modernizr'), $version, true );
-		wp_register_script( 'kc-settings',      "{$path['scripts']}/kc-settings{$suffix}.js", array('kc-settings-base', 'jquery-ui-sortable', 'jquery-ui-datepicker', 'media-upload', 'thickbox'), $version, true );
-		wp_register_style(  'kc-settings',      "{$path['styles']}/kc-settings{$suffix}.css", array('thickbox'), $version );
+		wp_localize_script( 'kc-settings-base', 'kcSettings', array(
+			'paths'  => self::$data['paths'],
+			'upload' => array(
+				'text' => array(
+					'head'     => __( 'KC Settings', 'kc-settings' ),
+					'empty'    => __( 'Please upload some files and then go back to this tab.', 'kc-settings' ),
+					'checkAll' => __( 'Select all files', 'kc-settings' ),
+					'clear'    => __( 'Clear selections', 'kc-settings' ),
+					'invert'   => __( 'Invert selection', 'kc-settings' ),
+					'addFiles' => __( 'Add files to collection', 'kc-settings' ),
+					'info'     => __( 'Click the "Media Library" tab to insert files that are already upload, or, upload your files and then go to the "Media Library" tab to insert the files you just uploaded.', 'kc-settings' ),
+					'selFile'  => __( 'Select file', 'kc-settings' )
+				)
+			)
+		) );
+		wp_register_script( 'kc-settings', "{$path['scripts']}/kc-settings{$suffix}.js", array('kc-settings-base', 'jquery-ui-sortable', 'jquery-ui-datepicker', 'media-upload', 'thickbox'), $version, true );
+		wp_register_style(  'kc-settings', "{$path['styles']}/kc-settings{$suffix}.css", array('thickbox'), $version );
 
 		# Builder
 		wp_register_script( 'kc-settings-builder', "{$path['scripts']}/kc-settings-builder{$suffix}.js", array('kc-settings-base', 'jquery-ui-sortable'), $version, true );
@@ -530,42 +545,13 @@ class kcSettings {
 		wp_enqueue_style( 'kc-settings' );
 		wp_enqueue_script( 'kc-settings' );
 
-		if ( $hook_suffix != 'media-upload-popup' ) {
-			self::_js_globals();
-		}
-		else {
+		if ( $hook_suffix === 'media-upload-popup' ) {
 			if ( (isset($_REQUEST['kcsfs']) && $_REQUEST['kcsfs']) || strpos( wp_get_referer(), 'kcsfs') !== false )
 				wp_enqueue_script( 'kc-settings-upload-single' );
 			elseif ( (isset($_REQUEST['kcsf']) && $_REQUEST['kcsf']) || strpos( wp_get_referer(), 'kcsf') !== false )
 				wp_enqueue_script( 'kc-settings-upload' );
 		}
 	}
-
-
-	private static function _js_globals() {
-		$kcSettings_vars = array(
-			'upload' => array(
-				'text' => array(
-					'head'     => __( 'KC Settings', 'kc-settings' ),
-					'empty'    => __( 'Please upload some files and then go back to this tab.', 'kc-settings' ),
-					'checkAll' => __( 'Select all files', 'kc-settings' ),
-					'clear'    => __( 'Clear selections', 'kc-settings' ),
-					'invert'   => __( 'Invert selection', 'kc-settings' ),
-					'addFiles' => __( 'Add files to collection', 'kc-settings' ),
-					'info'     => __( 'Click the "Media Library" tab to insert files that are already upload, or, upload your files and then go to the "Media Library" tab to insert the files you just uploaded.', 'kc-settings' ),
-					'selFile'  => __( 'Select file', 'kc-settings' )
-				)
-			),
-			'paths' => self::$data['paths']
-		);
-
-		?>
-<script type="text/javascript">
-	//<![CDATA[
-	var kcSettings = <?php echo json_encode( $kcSettings_vars ) ?>;
-	//]]>
-</script>
-	<?php }
 
 
 	private static function _samples( $types ) {
