@@ -64,6 +64,9 @@ jQuery(document).ready(function($) {
 		}
 		$('ul.kc-rows').sortable( pluginArgs.sortable );
 	});
+	$.kcRowCloner.addCallback( 'afterAdd', function( args ) {
+		args.nuItem.kcGoto();
+	});
 
 	$.kcRowCloner.addCallback( 'del', function( args ) {
 		if ( args.isLast )

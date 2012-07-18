@@ -309,6 +309,7 @@ function invertColor( color ) {
 	textInputs = ['text', 'textarea', 'color', 'date', 'datetime', 'datetime-local', 'month', 'week', 'email', 'password', 'number', 'tel', 'time', 'url'],
 	callbacks = {
 		add: [],
+		afterAdd: [],
 		del: []
 	},
 
@@ -322,6 +323,7 @@ function invertColor( color ) {
 		active = false;
 		callbacks = {
 			add: [],
+			afterAdd: [],
 			del: []
 		};
 	},
@@ -368,8 +370,11 @@ function invertColor( color ) {
 		args.block = args.block.kcReorder( args.mode, true );
 		doCallbacks( 'add', e, args );
 
-		args.nuItem.fadeIn('slow', function() {
-			args.nuItem.removeClass('adding');
+		args.nuItem.fadeIn('fast', function() {
+			doCallbacks( 'afterAdd', e, args );
+			setTimeout(function() {
+				args.nuItem.removeClass('adding');
+			}, 1500);
 		});
 	},
 
