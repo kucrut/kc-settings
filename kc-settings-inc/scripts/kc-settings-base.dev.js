@@ -257,10 +257,11 @@ function invertColor( color ) {
 			if ( $input.data('nocleanup') === true )
 				return;
 
-			if ( $.inArray(type, textInputs) < 0 )
+			if ( $.inArray(type, textInputs) > -1 )
 				$input.removeAttr('style').val('');
 			else if ( type === 'checkbox' || type === 'radio' )
 				$input.prop('checked', this.checked);
+
 		});
 
 		return item;
