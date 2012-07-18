@@ -11,7 +11,7 @@
 					    nuVal  = $input.val();
 
 					if ( nuVal != olVal && $.inArray(nuVal, kcsbIDs[$input.data('ids')]) > -1 )
-						$input.val('').focus();
+						$input.val('').css('borderColor', '#ff0000');
 				});
 		});
 	};
