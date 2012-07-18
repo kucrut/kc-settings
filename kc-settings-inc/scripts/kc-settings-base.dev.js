@@ -216,12 +216,10 @@ function invertColor( color ) {
 
 	add = function( args ) {
 		var e = this,
-		    nu = clear( args.item.clone(true).addClass('adding').hide() );
+		    nu = clear( args.item.clone(false).addClass('adding').hide() );
 
-		$('[data-dep]', nu).removeData('kcfdInit');
 		$('.hasdep', nu).kcFormDep();
-		args.item.after( nu );
-		args.nuItem = nu;
+		args.nuItem = nu.insertAfter( args.item );
 		args.block = args.block.kcReorder( args.mode, true );
 		doCallbacks( 'add', e, args );
 
@@ -253,13 +251,15 @@ function invertColor( color ) {
 
 	clear = function( item ) {
 		item.find(':input').each(function() {
-			var $input = $(this);
+			var $input = $(this),
+			    type   = this.type;
+
 			if ( $input.data('nocleanup') === true )
 				return;
 
-			if ( $.inArray(this.type, textInputs) )
+			if ( $.inArray(type, textInputs) < 0 )
 				$input.removeAttr('style').val('');
-			else if ( this.type == 'checkbox' || this.type == 'radio' )
+			else if ( type === 'checkbox' || type === 'radio' )
 				$input.prop('checked', this.checked);
 		});
 

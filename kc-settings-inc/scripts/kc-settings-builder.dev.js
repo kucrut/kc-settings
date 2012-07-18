@@ -32,11 +32,22 @@
 
 jQuery(document).ready(function($) {
 	var $doc = $(this);
-
+	var pluginArgs = {
+		sortable : {
+			axis: 'y',
+			start: function(ev, ui) {
+				ui.placeholder.height( ui.item.outerHeight() );
+			},
+			stop: function(ev, ui) {
+				ui.item.children().each(function() {
+					$('> details > summary > .actions .count', this).text( $(this).index() + 1);
+				});
+			}
+		}
+	};
 
 	$.kcRowCloner();
 	$.kcRowCloner.addCallback( 'add', function( args ) {
-		$('ul.kc-rows').sortable( 'refresh' );
 		args.nuItem.find('.kc-rows').each(function() {
 			$(this).children('.row').not(':first').remove();
 		});
@@ -51,6 +62,7 @@ jQuery(document).ready(function($) {
 				$('> details > summary > .actions .count', this).text( $(this).index() + 1 );
 			});
 		}
+		$('ul.kc-rows').sortable( pluginArgs.sortable );
 	});
 
 	$.kcRowCloner.addCallback( 'del', function( args ) {
@@ -68,6 +80,9 @@ jQuery(document).ready(function($) {
 	// Scroll to form
 	if ( !$builder.is('.hidden') )
 		$builder.kcGoto();
+
+	// Sort
+	$('ul.kc-rows').sortable( pluginArgs.sortable );
 
 	// Field deps
 	$('.hasdep', $builder).kcFormDep();
