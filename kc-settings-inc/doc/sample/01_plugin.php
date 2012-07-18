@@ -128,6 +128,16 @@ function mytheme_options( $settings ) {
 					'default'	=> 'cbox1'
 				),
 				array(
+					'id'      => 'sample_checkbox2',
+					'title'   => 'Categories',
+					'desc'    => 'These options are the return value <code>kcSettings_options_cb::terms("category")</code>',
+					'type'    => 'checkbox',
+					'options' => array('kcSettings_options_cb', 'terms'),
+					'args'    => array( 'taxonomy' => 'category' )
+					// To modify the arguments of get_terms():
+					// 'args' => array( 'taxonomy' => 'category', 'args' => array('parent' => 1, 'exclude_tree' => 3) )
+				),
+				array(
 					'id'      => 'sample_radio',
 					'title'   => 'Radioboxes (radio)',
 					'desc'    => 'You can only select one here',
@@ -174,6 +184,17 @@ function mytheme_options( $settings ) {
 					'options' => 'kc_sample_options',
 					'args'    => 'some_argument',
 					'default' => 'select1'
+				),
+				array(
+					'id'      => 'sample_select3',
+					'title'   => 'Dropdown page',
+					'desc'    => 'These options are the return value <code>kcSettings_options_cb::posts()</code>',
+					'type'    => 'select',
+					'options' => array('kcSettings_options_cb', 'posts'),
+					'args'    => array(
+						'post_type' => 'post',
+						'args' => array('posts_per_page' => 2) // This is where the arguments for WP_Query goes
+					)
 				),
 				array(
 					'id'     => 'sample_multiinput',
@@ -281,7 +302,7 @@ function kc_sample_callback_static( $field, $db_value, $args ) {
 
 
 function kc_sample_callback_dynamic( $field, $db_value, $args ) {
-	$output  = "I'm gonna give you the value from your argument function.<br />";
+	$output  = "This is the value of your argument function.<br />";
 	$output .= "Your field name is <b>{$args}</b>, right?";
 	return $output;
 }

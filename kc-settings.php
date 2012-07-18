@@ -194,6 +194,10 @@ class kcSettings {
 
 		# Process settings from the builder
 		if ( is_array($kcsb['settings']) && !empty($kcsb['settings']) ) {
+			$pre_options = get_class_vars( 'kcSettings_options' );
+			$pre_options_cb = get_class_methods( 'kcSettings_options_cb' );
+			$pre_options_cb_args = array( 'tax', 'pt' );
+
 			foreach ( $kcsb['settings'] as $setting ) {
 				if ( isset($setting['status']) && !$setting['status'] )
 					continue;
@@ -202,7 +206,6 @@ class kcSettings {
 				$kcsb['_ids']['settings'][] = $sID;
 				$type = $setting['type'];
 				$sections = array();
-				$pre_options = get_class_vars( 'kcSettings_options' );
 
 				foreach ( $setting['sections'] as $section ) {
 					$kcsb['_ids']['sections'][] = $section['id'];
@@ -212,9 +215,21 @@ class kcSettings {
 						if ( in_array($field['type'], array('checkbox', 'radio', 'select', 'multiselect')) ) {
 							# Predefined options
 							if ( isset($field['option_type']) && $field['option_type'] == 'predefined' ) {
-								$field['options'] = $pre_options[$field['option_predefined']];
+								if ( isset($pre_options[$field['option_predefined']]) ) {
+									$field['options'] = $pre_options[$field['option_predefined']];
+								}
+								elseif ( in_array($field['option_predefined'], $pre_options_cb) ) {
+									$field['options'] = array('kcSettings_options_cb', $field['option_predefined']);
+									foreach ( $pre_options_cb_args as $_cb_arg )
+										if ( isset($field["option_predefined_cb_{$_cb_arg}"]) )
+											$field['args'] = $field["option_predefined_cb_{$_cb_arg}"];
+								}
+
 								unset( $field['option_type'] );
 								unset( $field['option_predefined'] );
+								unset( $field['option_predefined_cb'] );
+								unset( $field['option_predefined_cb_pt'] );
+								unset( $field['option_predefined_cb_tax'] );
 							}
 
 							# Custom options

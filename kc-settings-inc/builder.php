@@ -134,8 +134,10 @@ class kcSettings_builder {
 				'yesno'               => __('Yes / No', 'kc-settings'),
 				'post_types'          => __('Post types (public)', 'kc-settings'),
 				'post_types_all'      => __('Post types (all)', 'kc-settings'),
+				'posts'               => __('Posts', 'kc-settings'),
 				'taxonomies'          => __('Taxonomies (public)', 'kc-settings'),
 				'taxonomies_all'      => __('Taxonomies (all)', 'kc-settings'),
+				'terms'               => __('Terms', 'kc-settings'),
 				'nav_menus'           => __('Nav menus', 'kc-settings'),
 				'image_sizes'         => __('Image sizes (all)', 'kc-settings'),
 				'image_sizes_custom'  => __('Image sizes (custom)', 'kc-settings'),
@@ -728,10 +730,44 @@ class kcSettings_builder {
 																	'attr'    => array(
 																		'id'    => "{$f_id}-option_predefined",
 																		'name'  => "{$f_name}[option_predefined]",
-																		'class' => 'kcsb-mi'
+																		'class' => 'hasdep kcsb-mi',
+																		'data-child' => '.childFieldOptionArg',
+																		'data-scope' => 'li.row'
 																	),
 																	'options' => $options['option_predefined'],
 																	'current' => isset( $f_val['option_predefined'] ) ? $f_val['option_predefined'] : 'yesno',
+																	'none'    => false
+																));
+															?>
+														</li>
+														<li class="childFieldOptionArg" data-dep='terms'>
+															<label for="<?php echo "{$f_id}-option_predefined_cb_tax" ?>" class="kcsb-ml"><?php _e('Taxonomy', 'kc-settings') ?></label>
+															<?php
+																echo kcForm::field(array(
+																	'type'    => 'select',
+																	'attr'    => array(
+																		'id'    => "{$f_id}-option_predefined_cb_tax",
+																		'name'  => "{$f_name}[option_predefined_cb_tax]",
+																		'class' => 'kcsb-mi'
+																	),
+																	'options' => $options['taxonomies'],
+																	'current' => isset( $f_val['option_predefined_cb_tax'] ) ? $f_val['option_predefined_cb_tax'] : 'category',
+																	'none'    => false
+																));
+															?>
+														</li>
+														<li class="childFieldOptionArg" data-dep='posts'>
+															<label for="<?php echo "{$f_id}-option_predefined_cb_pt" ?>" class="kcsb-ml"><?php _e('Post type', 'kc-settings') ?></label>
+															<?php
+																echo kcForm::field(array(
+																	'type'    => 'select',
+																	'attr'    => array(
+																		'id'    => "{$f_id}-option_predefined_cb_pt",
+																		'name'  => "{$f_name}[option_predefined_cb_pt]",
+																		'class' => 'kcsb-mi'
+																	),
+																	'options' => $options['post_types'],
+																	'current' => isset( $f_val['option_predefined_cb_pt'] ) ? $f_val['option_predefined_cb_pt'] : 'page',
 																	'none'    => false
 																));
 															?>

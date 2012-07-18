@@ -38,7 +38,7 @@ class kcForm {
 				return false;
 
 			if ( is_callable($args['options']) )
-				$args['options'] = call_user_func( $args['options'], isset( $args['args'] ) ? $args['args'] : '' );
+				$args['options'] = call_user_func_array( $args['options'], isset($args['args']) ? (array) $args['args'] : array() );
 
 			if ( !is_array($args['options']) || empty($args['options']) )
 				return false;

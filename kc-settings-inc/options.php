@@ -146,4 +146,70 @@ class kcSettings_options {
 	}
 }
 
+
+class kcWalker_Terms extends Walker {
+	var $tree_type = 'category';
+	var $pad = '';
+	var $db_fields = array ('parent' => 'parent', 'id' => 'term_id');
+
+	function start_el( &$output, $term, $depth, $args, $id = 0 ) {
+		$output[$term->term_id] = str_repeat($this->pad, $depth ) . $term->name;
+	}
+}
+
+class kcWalker_Posts extends Walker {
+	var $tree_type = 'page';
+	var $pad = '';
+	var $db_fields = array ('parent' => 'post_parent', 'id' => 'ID');
+
+	function start_el( &$output, $post, $depth, $args, $id = 0 ) {
+		$output[$post->ID] = str_repeat($this->pad, $depth ) . apply_filters( 'the_title', $post->post_title );
+	}
+}
+
+
+class kcSettings_options_cb {
+	public static function terms( $taxonomy = 'category', $args = array(), $pad = '&mdash;&nbsp;' ) {
+		$none = array( '' => __('Nothing found', 'kc-settings') );
+		if ( !taxonomy_exists($taxonomy) )
+			return $none;
+
+		$args = wp_parse_args( $args, array(
+			'hide_empty' => false,
+			'hierarchical' => true
+		) );
+		$result = get_terms( $taxonomy, $args );
+		if ( is_wp_error($result) )
+			return $none;
+
+		$walk = new kcWalker_Terms;
+		$walk->pad = $pad;
+		return $walk->walk( $result, 0, $args );
+	}
+
+
+	public static function posts( $post_type = 'post', $args = array(), $pad = '&mdash;&nbsp;' ) {
+		$none = array( '' => __('Nothing found', 'kc-settings') );
+
+		if ( !isset($args['post_type']) )
+			$args['post_type'] = $post_type;
+		if ( $args['post_type'] === 'attachment' && !isset($args['post_status']) )
+			$args['post_status'] = 'inherit';
+
+		//echo '<pre>'.print_r( $args, true).'</pre>';
+
+		$q = new WP_Query( $args );
+		if ( $q->have_posts() )
+			$result = $q->posts;
+		wp_reset_postdata();
+
+		if ( !isset($result) )
+			return $none;
+
+		$walk = new kcWalker_Posts;
+		$walk->pad = $pad;
+		return $walk->walk( $result, 0, $args );
+	}
+}
+
 ?>
