@@ -269,7 +269,8 @@ input[type="datetime"], input[type="datetime-local"] {
 
 /*** Misc. ***/
 .form-table td p.info {margin-bottom:0}
-
+.kcDPMonth {padding-bottom:.2em;}
+.kcDPMonth .ui-datepicker-calendar {display:none;}
 
 /*** Builder ***/
 .kcsb {

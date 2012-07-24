@@ -36,14 +36,18 @@ jQuery(document).ready(function($) {
 			month : {
 				changeMonth: true,
 				changeYear: true,
-				showButtonPanel: true,
 				dateFormat: 'yy-mm',
+				beforeShow: function(dateText, inst) {
+					inst.dpDiv.addClass('kcDPMonth');
+				},
+				onChangeMonthYear: function(year, month, inst) {
+					var d = new Date( year, month - 1, 1 );
+					$(this).val( d.getFullYear() +'-'+ kcPad2(d.getMonth() + 1) );
+				},
 				onClose: function(dateText, inst) {
-					var $div  = $(inst.dpDiv),
-					    month = $div.find('.ui-datepicker-month :selected').val(),
-					    year  = $div.find('.ui-datepicker-year :selected').val();
-
-					$(this).datepicker('setDate', new Date(year, month, 1));
+					setTimeout(function() {
+						inst.dpDiv.removeClass('kcDPMonth');
+					}, 300);
 				}
 			}
 		}

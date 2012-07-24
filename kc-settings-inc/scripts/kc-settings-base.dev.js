@@ -18,6 +18,11 @@ Array.prototype.unique = function() {
 
 var win = window.dialogArguments || opener || parent || top;
 
+function kcPad2( number ) {
+	return (number < 10 ? '0' : '') + number;
+}
+
+
 (function($, document) {
 	// File (multiple)
 	win.kcFileMultiple = function( files ) {
