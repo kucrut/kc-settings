@@ -6,15 +6,10 @@ jQuery(document).ready(function($) {
 		sortable : {
 			axis: 'y',
 			start: function(ev, ui) {
-				ui.placeholder.height( ui.item.outerHeight() );
+				ui.placeholder.height( ui.item.height() );
 			},
 			stop: function(ev, ui) {
-				// Reassign input names
-				ui.item
-					.parent().kcReorder( ui.item.data('mode'), true )
-					.children().each(function() {
-						$('> details > summary > .actions .count', this).text( $(this).index() + 1);
-					});
+				ui.item .parent().kcReorder( ui.item.data('mode'), true );
 			}
 		},
 		colorpicker : {

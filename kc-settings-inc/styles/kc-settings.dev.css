@@ -10,11 +10,15 @@ summary {cursor:default;}
 .no-details details > summary:before {
 	content:'\25b8\00a0';
 	display:inline-block;
+	vertical-align:middle;
 	position:relative;
 	top:-.15em;
 }
 .no-details details[open] > summary:before { content: '▾\00a0'; }
 
+
+/* Always show scrollbar on the builder page */
+body.settings_page_kcsb {overflow-y:scroll;}
 
 /* Metaboxes */
 #kc-settings-form .meta-box-sortables {
@@ -29,14 +33,14 @@ summary {cursor:default;}
 
 .section-desc {
 	margin:1.5em 0;
-	line-height:1.4}
+	line-height:1.4;
+}
 
 .actions p, p.actions {
   display:inline-block;
 	text-transform:lowercase;
-	color:#555;
+	color:#333;
 }
-p.actions {padding-left:4.5em}
 .actions a {cursor:pointer}
 .actions a:before {
   content:' | ';
@@ -65,18 +69,59 @@ input.kcs-input {
 	resize:vertical;
 }
 
+/* Sortable */
+.kc-rows {
+	position:relative;
+	margin:0;
+	padding:0;
+	clear:both;
+}
+.kc-rows .row {
+	position:relative;
+	margin:0;
+	clear:both;
+	padding:6px;
+}
+.removing,
+.adding,
+.kc-rows .ui-sortable-helper,
+.kc-rows .ui-sortable-placeholder {
+  -webkit-border-radius:5px;
+  -khtml-border-radius:5px;
+  -moz-border-radius:5px;
+  border-radius:5px;
+	padding:5px !important;
+  z-index:1000;
+}
+.adding {
+  background-color:#f4ffe5;
+  border:1px solid #00892c;
+}
+.removing {
+  background-color:#ffebe8;
+  border:1px solid #cc0000;
+}
+.kc-rows .ui-sortable-helper {
+  border:1px solid #b7f158;
+  background:#ffffe0;
+}
+.kc-rows .ui-sortable-placeholder {
+  background:#fcfcfc;
+  border:1px dashed #dfdfdf;
+  visibility:visible !important;
+  padding:0;
+	position:relative;
+	z-index:0;
+}
+
 /* Multiinput */
 .kcs-multiinput {margin:0 0 .5em;}
-.kcs-multiinput .row {line-height:1}
 .kcs-multiinput table {
 	border-collapse:separate;
 	margin-bottom:0;
 }
 .kcs-multiinput th {cursor:move}
-.kcs-multiinput p.actions {
-	margin:1em 0 1.5em;
-	padding-left:0;
-}
+.kcs-multiinput p.actions {margin:1em 0 .75em;}
 #wpbody-content .kcs-multiinput input[type="text"],
 .kcs-rows input,
 #wpcontent .kcs-multiinput textarea {
@@ -88,35 +133,43 @@ input.kcs-input {
 .media-item .describe .kcs-multiinput textarea {
 	width: 385px;
 }
+#wpcontent select[multiple],
 #wpcontent .kcs-multiselect {
-    height:7.5em;
-    padding-right:.5em}
-.kcs-check, .form-wrap .kcs-check {
+	height:7.5em;
+	padding-right:.5em;
+}
+.kcs-check,
+.form-wrap .kcs-check {
 	display:inline-block;
-	background:none}
+	background:none;
+}
 
 /* Filelist */
 .kcsf-upload {display:inline-block;}
 .kcs-file .info {margin-top:0;}
 .kcs-file ul {padding-bottom:1em}
-.kcs-file .row {
-	padding:.5em;
-	margin:0}
-.kcs-file label input, .kcs-file .rm, .kcs-file img {vertical-align:middle}
+.kcs-file label input,
+.kcs-file .rm,
+.kcs-file img {
+	vertical-align:middle;
+}
 .kcs-file img {
   width:50px;
   height:auto;
-  cursor:move}
+  cursor:move;
+}
 .kcs-file .rm {
   cursor:pointer;
   display:inline-block;
   height:16px;
   width:16px;
-  background:url(images/actions.png) no-repeat 0 -48px}
+  background:url(images/actions.png) no-repeat 0 -48px;
+}
 .kcs-file .rm span {
   position: absolute !important;
   clip: rect(1px 1px 1px 1px);
-  clip: rect(1px, 1px, 1px, 1px)}
+  clip: rect(1px, 1px, 1px, 1px);
+}
 input.kcs-files {margin-right:.5em}
 .kcs-file-info {padding:1em}
 
@@ -143,24 +196,6 @@ input.kcs-files {margin-right:.5em}
 }
 .kcs-wrap {margin:1em 0}
 
-.kc-sortable .ui-sortable-helper {
-  border:1px solid #e6db55;
-  background:#ffffe0;
-  padding:1em;
-  -webkit-border-radius:5px;
-  -khtml-border-radius:5px;
-  -moz-border-radius:5px;
-  border-radius:5px}
-.kc-sortable .ui-sortable-placeholder {
-  background:#fcfcfc;
-  border: 1px dashed #dfdfdf;
-  visibility: visible !important;
-  margin-top:1em 0;
-  -webkit-border-radius:5px;
-  -khtml-border-radius:5px;
-  -moz-border-radius:5px;
-  border-radius:5px}
-
 .description .impo {color:#cc0000}
 
 /* Post sidebar metabox */
@@ -180,7 +215,6 @@ input.kcs-files {margin-right:.5em}
 	width:160px;
 	display:inline-block;
 }
-.kcs-sideform .kcs-multiinput .row {width:250px}
 #wpcontent .kcs-sideform .kcs-multiinput input,
 #wpcontent .kcs-sideform .kcs-multiinput textarea {
 	width:195px
@@ -203,27 +237,11 @@ input[type="datetime"], input[type="datetime-local"] {
 
 
 /*** Builder style ***/
-.kcsb {width:45em}
-.kcsb-block {margin-bottom:3em}
-.kcsb .checkbox {background:none}
-.kcsb-ml {
-  display:inline-block;
-  width:13em;
-  margin-right:1em;
-  vertical-align:top}
-.kcsb-mi {display:inline-block}
-input.kcsb-mi, textarea.kcsb-mi {width:23em}
-label input.kcsb-mi {width:auto}
-p.kcsb-mi {margin-top:0}
-p.description.kcsb-mi {margin-left:14.5em}
-.kcsb textarea {
-	min-height:8em;
-	resize:vertical}
-.kcsb-mi div.kcsb-mi, .kcsb-mi ul.kcsb-mi {width:23em}
-.kcsb-options label {display:block}
-.kcsb-options label span {display:inline-block;width:4em}
-.kcsb-options input {width:18em}
-.row {position:relative;margin:0}
+.kcsb {
+	width:600px;
+	position:relative;
+}
+#kcsb-table {margin-bottom:3em}
 .kcsb-clone a {
 	position:relative;
 	top:4px;
@@ -235,86 +253,57 @@ p.description.kcsb-mi {margin-left:14.5em}
 .kcsb-tools .widefat {width:auto}
 .kcsb-tools button {background:none;border:0;cursor:pointer}
 .kcsb-clone {padding-top:4px}
-
-.kcsb-sub label {
-	display:inline-block;
-	width:5em
-}
-
-.kcsb .fields > ul {padding-left:1em}
-.kcsb .fields .kcsb-ml {width:12em}
+.kcsb .checkbox {background:none}
 
 .kcsb h4 {
-  font-size:1.2em;
-  display:block;
+  font-size:1.1em;
   margin-bottom:.5em;
 }
-.kcsb h4 + .sections {margin-top:0;}
-.actions h5 {
-  display:inline-block;
+.kcsb h5 {
   font-size:1em;
-  margin:0 1em 0 0}
-.kcsb-options label {cursor:move}
-
-.removing, .adding,
-.kcsb .ui-sortable-helper,
-.kcs-multiinput .ui-sortable-helper {
-  -webkit-border-radius:5px;
-  -khtml-border-radius:5px;
-  -moz-border-radius:5px;
-  border-radius:5px;
-  padding:2px 10px;
-  margin:-2px 0 -4px -10px;
-  left:-1px;
-  top:-1px;
-  z-index:1000}
-.sections > .adding,
-.sections > .removing {
-	padding-bottom:0;
-	margin:-2px 0 -2px -10px;
+  margin:0 0 .5em;
 }
-.kcsb-options .adding,
-.kcsb-options .removing {
-	width:23em;
-	padding-bottom:0;
-	margin-bottom:-2px;
-}
-.kcs-multiinput .ui-sortable-helper,
-.kcs-multiinput .adding,
-.kcs-multiinput .removing {
-	padding:10px 0 0 10px;
-	margin:-10px 0 -2px -10px;
-}
-.kcs-file .adding,
-.kcs-file .removing {
-	margin-bottom:-2px;
-	display:inline-block;
+.kcsb .main > li {
+	padding:3px 0;
+	margin:0;
 }
 
-.adding {
-  background-color:#f4ffe5;
-  border:1px solid #00892c}
-.removing {
-  background-color:#ffebe8;
-  border:1px solid #cc0000}
-.kc-rows .ui-sortable-helper {
-  border:1px solid #b7f158;
-  background:#ffffe0}
-
-
-.kc-rows.ui-sortable {position:relative}
-.kc-rows .ui-sortable-placeholder {
-  background:#fcfcfc;
-  border: 1px dashed #dfdfdf;
-  visibility: visible !important;
-  margin-top:1em 0;
-  padding:0}
-
-.row details summary {
-	margin:0 30px 10px 0;
-	position:relative;
+.kcsb .ml {
+	position:absolute;
+	padding-top:4px;
 }
-.row details summary > *{
+.kcsb .mi {display:block;}
+.kcsb .general .ml {width:240px}
+.kcsb .general .mi {margin-left:240px}
+.kcsb .sections .main .ml {width:225px}
+.kcsb .sections .main .mi {margin-left:225px}
+.kcsb .fields .main .ml {width:210px}
+.kcsb .fields .main .mi {margin-left:210px}
+.kcsb .subfields .main .ml {width:190px}
+.kcsb .subfields .main .mi {margin-left:190px}
+
+.kcsb textarea {
+	min-height:8em;
+	width:25em;
+	resize:vertical;
+}
+
+.kcsb details > * {padding-left:10px;}
+.kcsb details > summary {padding-left:0}
+.kcsb details summary > * {
 	display:inline-block;
 	vertical-align:middle;
 }
+.kcsb .actions h5 {
+  font-size:1em;
+  margin:0 1em 0 0;
+}
+
+.mi.kc-rows {margin-left:184px;}
+.mi .regular-text {width:18em}
+.mi label {
+	display:inline-block;
+	width:6.5em;
+}
+.mi label {width:auto;}
+

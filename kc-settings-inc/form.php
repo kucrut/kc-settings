@@ -141,7 +141,7 @@ class kcForm {
 
 		ob_start();
 		wp_editor(
-			$args['current'],
+			is_string( $args['current'] ) ? $args['current'] : '',
 			strtolower( str_replace(array('-', '_'), '', $args['attr']['id']) ),
 			$settings
 		);

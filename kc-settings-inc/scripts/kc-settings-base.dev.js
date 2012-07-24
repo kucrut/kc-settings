@@ -528,7 +528,8 @@ function invertColor( color ) {
 		if ( all === true ) {
 			var $els = $el.children(),
 			    i    = 0;
-		} else {
+		}
+		else {
 			var $els = $el,
 			    i    = $el.index();
 		}

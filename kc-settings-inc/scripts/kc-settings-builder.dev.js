@@ -21,9 +21,16 @@
 		var $input = $(this);
 
 		if ( ($input.attr('name') === 'kcsb[id]' && $input.val() === 'id') || $input.val() === '' ) {
-			$input.val('').focus().css('borderColor', '#ff0000');
+			$input.parents('details').each(function() {
+				var $details = $(this);
+				if ( !$details.attr('open') )
+					$details.children('summary').click();
+			});
+			$input.val('').focus().css('borderColor', '#ff0000').kcGoto();
+
 			return false;
-		} else {
+		}
+		else {
 			$input.removeAttr('style');
 		}
 	};
@@ -36,11 +43,11 @@ jQuery(document).ready(function($) {
 		sortable : {
 			axis: 'y',
 			start: function(ev, ui) {
-				ui.placeholder.height( ui.item.outerHeight() );
+				ui.placeholder.height( ui.item.height() );
 			},
 			stop: function(ev, ui) {
-				ui.item.children().each(function() {
-					$('> details > summary > .actions .count', this).text( $(this).index() + 1);
+				ui.item.parent().children().each(function(idx) {
+					$('> details > summary .count', this).text( idx + 1);
 				});
 			}
 		}
@@ -55,11 +62,11 @@ jQuery(document).ready(function($) {
 		$('input.kcsb-ids', args.nuItem).removeData('olVal').kcsbUnique();
 
 		if ( args.isLast ) {
-			$('> details > summary > .actions .count', args.nuItem).text( args.nuItem.index() + 1 );
+			$('> details > summary .count', args.nuItem).text( args.nuItem.index() + 1 );
 		}
 		else {
 			args.block.children().each(function() {
-				$('> details > summary > .actions .count', this).text( $(this).index() + 1 );
+				$('> details > summary .count', this).text( $(this).index() + 1 );
 			});
 		}
 		$('ul.kc-rows').sortable( pluginArgs.sortable );
@@ -73,7 +80,7 @@ jQuery(document).ready(function($) {
 			return;
 
 		args.block.children().each(function() {
-			$('> details > summary > .actions .count', this).text( $(this).index() + 1 );
+			$('> details > summary .count', this).text( $(this).index() + 1 );
 		});
 	});
 
@@ -105,14 +112,16 @@ jQuery(document).ready(function($) {
 
 	// Show form
 	$('#new-kcsb').on('click', function(e) {
-		e.preventDefault();
-		$builder.kcGoto();
+		if ( $builder.is('.hidden') ) {
+			e.preventDefault();
+			$builder.kcGoto();
+		}
 	});
 
 
 	$('a.kcsb-cancel').on('click', function(e) {
 		e.preventDefault();
-		$('#kcsb').slideUp('slow');
+		$builder.slideUp('slow');
 	});
 
 
