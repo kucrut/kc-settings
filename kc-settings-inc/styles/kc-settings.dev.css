@@ -125,7 +125,7 @@ input.kcs-input {
 
 
 /* Multiinput */
-.kcs-multiinput {margin:0 0 .5em;}
+.kcs-multiinput {margin:0;}
 .kcs-multiinput table {
 	border-collapse:separate;
 	margin-bottom:0;
@@ -193,7 +193,7 @@ input.kcs-files {margin-right:.5em}
 .kcs-file-single[data-type="image"] > a {
 	display:none;
 }
-.kcs-file-single[data-type="image"] p .up {display:block;}
+.kcs-file-single[data-type="image"] p .up {display:inline-block;}
 .kcs-file-single img {
 	display:block;
 	max-width:100% !important;
@@ -265,6 +265,10 @@ input[type="datetime"], input[type="datetime-local"] {
 #edittag .kcs-field .wp-editor-wrap {
 	width:95%;
 }
+
+
+/*** Misc. ***/
+.form-table td p.info {margin-bottom:0}
 
 
 /*** Builder ***/
