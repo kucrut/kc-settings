@@ -41,8 +41,7 @@ jQuery(document).ready(function($) {
 					inst.dpDiv.addClass('kcDPMonth');
 				},
 				onChangeMonthYear: function(year, month, inst) {
-					var d = new Date( year, month - 1, 1 );
-					$(this).val( d.getFullYear() +'-'+ kcPad2(d.getMonth() + 1) );
+					$(this).val( $.datepicker.formatDate('yy-mm', new Date(year, month - 1, 1)) );
 				},
 				onClose: function(dateText, inst) {
 					setTimeout(function() {
