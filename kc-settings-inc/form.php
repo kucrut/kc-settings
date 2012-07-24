@@ -414,7 +414,7 @@ function _kc_field_multiinput( $name, $db_value, $field, $show_info = true ) {
 	$output = '';
 	if ( $show_info )
 		$output .= "<p class='info'><em>". __('Info: Drag & drop to reorder.', 'kc-settings') ."</em></p>\n";
-	$output .= "\n\t<ul class='sortable kc-rows kcs-multiinput'>\n";
+	$output .= "\n\t<ul class='kc-rows kcs-multiinput'>\n";
 
 	foreach ( $db_value as $row_idx => $row_values ) {
 		$output .= "\t\t<li class='row' data-mode='{$field['id']}'>\n";

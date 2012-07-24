@@ -16,6 +16,15 @@ summary {cursor:default;}
 }
 .no-details details[open] > summary:before { content: '▾\00a0'; }
 
+.kcs-input::-webkit-input-placeholder {
+	color:#ccc;
+	font-style:italic;
+}
+.kcs-input:-moz-placeholder {
+	color:#ccc;
+	font-style:italic;
+}
+
 
 /* Always show scrollbar on the builder page */
 body.settings_page_kcsb {overflow-y:scroll;}
@@ -113,6 +122,7 @@ input.kcs-input {
 	position:relative;
 	z-index:0;
 }
+
 
 /* Multiinput */
 .kcs-multiinput {margin:0 0 .5em;}
@@ -234,9 +244,30 @@ input[type="datetime"], input[type="datetime-local"] {
 	background:#fff;
 }
 
+/*** WP Editor ***/
+.kcs-field .quicktags-toolbar {padding:2px;}
+.kcs-field .quicktags-toolbar input {width:auto}
+.kcs-field .wp-editor-container textarea,
+.form-table .wp-editor-container textarea.wp-editor-area,
+.form-table .kcs-multiinput textarea {
+	width:99.9%;
+	display:block;
+	margin:0;
+}
+.kcs-field .wp-editor-container textarea,
+.form-table .wp-editor-container textarea {
+	border:0;
+}
+
+/*** Term metadata ***/
+#edittag .kcs-multiinput,
+#addtag .kcs-multiinput,
+#edittag .kcs-field .wp-editor-wrap {
+	width:95%;
+}
 
 
-/*** Builder style ***/
+/*** Builder ***/
 .kcsb {
 	width:600px;
 	position:relative;
