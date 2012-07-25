@@ -39,8 +39,9 @@ Please find the readme.html file inside the plugin directory for the documentati
 == Changelog ==
 
 = 2.7.3 =
-* Cleanup JS
+* Cleanup JS and Builder
 * New options helper class: kcSettings_options_cb
+* Fields that need options now accept functions/class methods
 
 = 2.7.2 =
 * Fix bug in multiinput fields

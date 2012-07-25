@@ -196,8 +196,6 @@ class kcSettings_options_cb {
 		if ( $args['post_type'] === 'attachment' && !isset($args['post_status']) )
 			$args['post_status'] = 'inherit';
 
-		//echo '<pre>'.print_r( $args, true).'</pre>';
-
 		$q = new WP_Query( $args );
 		if ( $q->have_posts() )
 			$result = $q->posts;
