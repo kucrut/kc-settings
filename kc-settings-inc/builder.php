@@ -203,6 +203,7 @@ class kcSettings_builder {
 					'<ul>
 						<li><a href="http://kucrut.github.com/kc-settings/">'.__('Online documentation', 'kc-settings').'</a></li>
 						<li><a href="http://wordpress.org/tags/kc-settings?forum_id=10">'.__('Support', 'kc-settings').'</a></li>
+						<li><a href="https://github.com/kucrut/kc-settings/issues">'.__('Request new feature', 'kc-settings').'</a></li>
 						<li><a href="http://kucrut.org/contact/">'.__('Contact', 'kc-settings').'</a></li>
 					</ul>'
 			)
