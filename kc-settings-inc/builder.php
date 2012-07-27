@@ -664,7 +664,7 @@ class kcSettings_builder {
 		?>
 		<div class="wrap">
 			<?php screen_icon('tools'); ?>
-			<h2><?php _e('KC Settings', 'kc-settings')." <a id='new-kcsb' class='add-new-h2' href='{$url}'>".__('Add New')."</a>" ?></h2>
+			<h2><?php echo __('KC Settings', 'kc-settings')." <a id='new-kcsb' class='add-new-h2' href='{$url}'>".__('Add New')."</a>" ?></h2>
 			<h3><?php _e('Saved Settings', 'kc-settings') ?></h3>
 			<form id="kcsb-table" action="" method="post">
 				<?php
