@@ -190,9 +190,9 @@ class kcSettings_builder {
 				'title'   => __( 'KC Settings Builder', 'kc-settings' ),
 				'content' =>
 					'<ul>
-						<li>'.__('All fields are required, unless the label is green.', 'kc-settings').'</li>
+						<li>'.__('All fields are required, unless stated otherwise.', 'kc-settings').'</li>
 						<li>'.__('Some fields depend on other field(s), they will be shown when the dependency is selected/checked.', 'kc-settings').'</li>
-						<li>'.__('Some fields (eg. ID, Prefix) can only be filled with alphanumerics, dashes and underscores, must be unique, and cannot begin with dashes or underscores. ', 'kc-settings').'</li>
+						<li>'.__('Some fields (eg. ID, Prefix) can only be filled with alphanumerics, dashes and underscores, must be unique, and cannot begin with dashes or underscores.', 'kc-settings').'</li>
 					</ul>'
 			),
 			array(
@@ -439,8 +439,11 @@ class kcSettings_builder {
 							<input id="<?php echo "{$f_id}-title" ?>" class="mi required regular-text" type="text" name="<?php echo $f_name ?>[title]" value="<?php esc_attr_e($f_val['title']) ?>" />
 						</li>
 						<li>
-							<label for="<?php echo "{$f_id}-desc" ?>" class="ml nr"><?php _e('Description') ?></label>
-							<textarea id="<?php echo "{$f_id}-desc" ?>" class="mi" name="<?php echo $f_name ?>[desc]" cols="25" rows="4"><?php echo isset($f_val['desc']) ? esc_textarea($f_val['desc']) : '' ?></textarea>
+							<label for="<?php echo "{$f_id}-desc" ?>" class="ml"><?php _e('Description') ?></label>
+							<div class="mi">
+								<textarea id="<?php echo "{$f_id}-desc" ?>" name="<?php echo $f_name ?>[desc]" cols="25" rows="4"><?php echo isset($f_val['desc']) ? esc_textarea($f_val['desc']) : '' ?></textarea>
+								<p class="description"><?php _e('Optional', 'kc-settings') ?></p>
+							</div>
 						</li>
 						<li>
 							<label for="<?php echo "{$f_id}-type" ?>" class="ml"><?php _e('Type') ?></label>
@@ -564,7 +567,7 @@ class kcSettings_builder {
 						</li>
 						<li class="childFieldOptionType" data-dep='custom'>
 							<label class="ml"><?php _e('Custom options', 'kc-settings') ?></label>
-							<ul class="mi kc-rows">
+							<ul class="mi options kc-rows">
 								<?php
 									if ( !isset($f_val['options']) || !is_array($f_val['options']) )
 										$f_val['options'] = array( array( 'key' => '', 'label' => '' ) );
@@ -604,11 +607,11 @@ class kcSettings_builder {
 						</li>
 						<?php if ( !isset($f_val['args']) ) $f_val['args'] = ''; ?>
 						<li class="childFieldType" data-dep='special'>
-							<label for="<?php echo "{$f_id}-args" ?>" class="ml">
-								<span class="nr"><?php _e('Arguments', 'kc-settings') ?></span>
-								<br/><small><em>(<?php _e('String or function name', 'kc-settings') ?>)</em></small>
-							</label>
-							<input id="<?php echo "{$f_id}-args" ?>" class="mi kcsb-slug regular-text" type="text" name="<?php echo $f_name ?>[args]" value="<?php esc_attr_e($f_val['args']) ?>" />
+							<label for="<?php echo "{$f_id}-args" ?>" class="ml"><?php _e('Arguments', 'kc-settings') ?></label>
+							<div class="mi">
+								<input id="<?php echo "{$f_id}-args" ?>" class="kcsb-slug regular-text" type="text" name="<?php echo $f_name ?>[args]" value="<?php esc_attr_e($f_val['args']) ?>" />
+								<p class="description"><?php _e('String or function name, optional.', 'kc-settings') ?></p>
+							</div>
 						</li>
 						<?php if ( $mode !== 'subfields' ) { ?>
 						<li class="childFieldType" data-dep='multiinput'>
@@ -661,7 +664,7 @@ class kcSettings_builder {
 		?>
 		<div class="wrap">
 			<?php screen_icon('tools'); ?>
-			<h2><?php echo __('KC Settings', 'kc-settings')." <a id='new-kcsb' class='add-new-h2' href='{$url}'>".__('Add New')."</a>" ?></h2>
+			<h2><?php _e('KC Settings', 'kc-settings')." <a id='new-kcsb' class='add-new-h2' href='{$url}'>".__('Add New')."</a>" ?></h2>
 			<h3><?php _e('Saved Settings', 'kc-settings') ?></h3>
 			<form id="kcsb-table" action="" method="post">
 				<?php
@@ -832,11 +835,14 @@ class kcSettings_builder {
 										<input id="<?php echo "{$s_id}-title" ?>" class="mi required regular-text" type="text" name="<?php echo $s_name ?>[title]" value="<?php esc_attr_e($s_val['title']) ?>" />
 									</li>
 									<li>
-										<label for="<?php echo "{$s_id}-desc" ?>" class="ml nr"><?php _e('Description') ?></label>
-										<textarea id="<?php echo "{$s_id}-desc" ?>" class="mi regular-text" name="<?php echo $s_name ?>[desc]" cols="25" rows="4"><?php echo esc_textarea($s_val['desc']) ?></textarea>
+										<label for="<?php echo "{$s_id}-desc" ?>" class="ml"><?php _e('Description', 'kc-settings') ?></label>
+										<div class="mi">
+											<textarea id="<?php echo "{$s_id}-desc" ?>" name="<?php echo $s_name ?>[desc]" cols="25" rows="4"><?php echo esc_textarea($s_val['desc']) ?></textarea>
+											<p class="description"><?php _e('Optional', 'kc-settings') ?></p>
+										</div>
 									</li>
 									<li class="childType" data-dep='post'>
-										<label class="ml nr"><?php _e('Roles', 'kc-settings') ?></label>
+										<label class="ml"><?php _e('Roles', 'kc-settings') ?></label>
 										<fieldset class="mi">
 											<?php
 												if ( empty($options['role']) ) {
@@ -850,7 +856,7 @@ class kcSettings_builder {
 														'current'   => isset($s_val['role']) ? $s_val['role'] : array()
 													));
 											?>
-											<p class="description"><?php echo __('Check one or more to only show this section for certain user roles.', 'kc-settings') ?></p>
+											<p class="description"><?php _e('Check one or more to only show this section for certain user roles (optional).', 'kc-settings') ?></p>
 											<?php } ?>
 										</fieldset>
 									</li>

@@ -309,16 +309,17 @@ input[type="datetime"], input[type="datetime-local"] {
 	padding-top:4px;
 }
 .kcsb .mi {display:block;}
-.kcsb .general .ml {width:240px}
+.kcsb .general .ml {width:235px}
 .kcsb .general .mi {margin-left:240px}
-.kcsb .sections .main .ml {width:225px}
+.kcsb .sections .main .ml {width:220px}
 .kcsb .sections .main .mi {margin-left:225px}
-.kcsb .fields .main .ml {width:210px}
+.kcsb .fields .main .ml {width:205px}
 .kcsb .fields .main .mi {margin-left:210px}
 .kcsb .subfields .main .ml {width:190px}
-.kcsb .subfields .main .mi {margin-left:190px}
+.kcsb .subfields .main .mi {margin-left:195px}
 
 .kcsb textarea {
+	display:block;
 	min-height:8em;
 	width:25em;
 	resize:vertical;
@@ -336,10 +337,9 @@ input[type="datetime"], input[type="datetime-local"] {
 }
 
 .mi.kc-rows {margin-left:184px;}
-.mi .regular-text {width:18em}
-.mi label {
+.options .regular-text {width:18em}
+.options label {
 	display:inline-block;
-	width:6.5em;
+	width:auto;
+	margin-right:.5em;
 }
-.mi label {width:auto;}
-
