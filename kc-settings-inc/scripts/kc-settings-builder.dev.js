@@ -108,7 +108,7 @@ jQuery(document).ready(function($) {
 
 	$('input.kcsb-ids').kcsbUnique();
 
-	$doc.on('blur', 'input.required, input.clone-id', function() {
+	$doc.on('blur', 'input.required', function() {
 		$(this).kcsbCheck();
 	});
 
@@ -139,7 +139,7 @@ jQuery(document).ready(function($) {
 
 	$('a.clone-do').on('click', function(e) {
 		var $el    = $(this),
-		    $input = $(this).siblings('input');
+		    $input = $el.siblings('input');
 
 		if ( $input.kcsbCheck() === false )
 			return false;
@@ -161,7 +161,7 @@ jQuery(document).ready(function($) {
 		e.preventDefault();
 		var $el = $(this);
 
-		$el.siblings('input').val('');
+		$el.siblings('input').val('').removeAttr('style');
 		$el.parent().fadeOut(function() {
 			$(this).siblings().show();
 		});

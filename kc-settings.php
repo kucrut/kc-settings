@@ -200,11 +200,12 @@ class kcSettings {
 			$pre_options_cb_args = array( 'tax', 'pt' );
 
 			foreach ( $kcsb['settings'] as $setting ) {
+				$sID = $setting['id'];
+				$kcsb['_ids']['settings'][] = $sID;
+
 				if ( isset($setting['status']) && !$setting['status'] )
 					continue;
 
-				$sID = $setting['id'];
-				$kcsb['_ids']['settings'][] = $sID;
 				$type = $setting['type'];
 				$sections = array();
 
