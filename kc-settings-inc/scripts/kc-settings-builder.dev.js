@@ -39,6 +39,8 @@
 
 jQuery(document).ready(function($) {
 	var $doc = $(this);
+	var $builder = $('#kcsb');
+
 	var pluginArgs = {
 		sortable : {
 			axis: 'y',
@@ -69,6 +71,9 @@ jQuery(document).ready(function($) {
 				$('> details > summary .count', this).text( $(this).index() + 1 );
 			});
 		}
+		if ( args.mode === 'sections' ) {
+			$('ul.general .hasdep', $builder).kcFormDep().trigger('change');
+		}
 		$('ul.kc-rows').sortable( pluginArgs.sortable );
 	});
 	$.kcRowCloner.addCallback( 'afterAdd', function( args ) {
@@ -84,8 +89,6 @@ jQuery(document).ready(function($) {
 		});
 	});
 
-
-	var $builder = $('#kcsb');
 
 	// Scroll to form
 	if ( !$builder.is('.hidden') )
