@@ -30,6 +30,28 @@ function mytheme_options( $settings ) {
 				'title'  => 'Sample Options',
 				'desc'   => 'Some description about this options group',
 				'fields' => kc_sample_fields() // TODO: See 00_fields.php and paste the fields you need here.
+			),
+			array(
+				'id'     => 'title_tagline', // This will inject new fields under the default "Site Title & Tagline" section
+				'title'  => '-', // You'll still have to put some text here eventhough it will not be used
+				'fields' => array(
+					array(
+						'id' => 'another_text',
+						'type' => 'text',
+						'title' => 'Another text'
+					)
+				)
+			),
+			array(
+				'id'     => 'colors', // This will inject new fields under the default "Colors" section
+				'title'  => '-', // You'll still have to put some text here eventhough it will not be used
+				'fields' => array(
+					array(
+						'id' => 'title_color',
+						'type' => 'color',
+						'title' => 'Site Title Text Color'
+					)
+				)
 			)
 			// You can add more sections here...
 		)

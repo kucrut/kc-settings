@@ -21,6 +21,12 @@ class kcSettings_theme {
 		'tel'      => 'WP_Customize_KC_Common_Control',
 		'textarea' => 'WP_Customize_KC_Common_Control'
 	);
+	protected static $wp_sections = array(
+		'title_tagline',
+		'colors',
+		'background_image',
+		'static_front_page'
+	);
 	protected static $count = 999;
 
 	public static function init() {
@@ -42,19 +48,27 @@ class kcSettings_theme {
 		foreach ( self::$settings as $group ) {
 			extract( $group, EXTR_OVERWRITE );
 			foreach( $group['options'] as $section ) {
+				$field_prefix = "{$prefix}_{$section['id']}";
 				# Add the section
-				$section_id = "{$prefix}_{$section['id']}";
-				$section_args = array(
-					'title'    => $section['title'],
-					'priority' => self::$count++,
-				);
-				if ( isset($section['desc']) && !empty($section['desc']) )
-					$section_args['description'] = strip_tags( $section['desc'] );
-				$wp_customize->add_section( $section_id, $section_args);
+				# 0. Inject to WP's section
+				if ( in_array($section['id'], self::$wp_sections) ) {
+					$section_id = $section['id'];
+				}
+				# 1. Create new section
+				else {
+					$section_id = $field_prefix;
+					$section_args = array(
+						'title'    => $section['title'],
+						'priority' => self::$count++,
+					);
+					if ( isset($section['desc']) && !empty($section['desc']) )
+						$section_args['description'] = strip_tags( $section['desc'] );
+					$wp_customize->add_section( $section_id, $section_args);
+				}
 
 				# Add fields
 				foreach ( $section['fields'] as $field ) {
-					$field_id = "{$section_id}_{$field['id']}";
+					$field_id = "{$field_prefix}_{$field['id']}";
 					$setting_args = array(
 						'type'       => 'theme_mod',
 						'capability' => 'edit_theme_options',
