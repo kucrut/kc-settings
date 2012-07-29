@@ -8,15 +8,29 @@
 	<style type="text/css">
 		body {
 			color:#333;
-			font:1em/1.5 'Linux Libertine', Georgia, serif}
+			font:1em/1.5 'Linux Libertine', Georgia, serif;
+		}
 		body,div,h1,.desc {margin:0;padding:0}
 		h1,h2,h3,h4,h5,h6,
 		.desc, #footer {
 			color:#4e4e4e;
 			font-family: 'Linux Biolinum', 'Helvetica', sans-serif;
 			margin:1em 0 0}
-		code,pre {color:#590000}
-		code span,pre span {color:#008C00}
+		code {color:#590000}
+		code span {color:#008C00}
+		pre span {color:#ec871d}
+		pre {
+			color:#f8f8f8;
+			background:#212121;
+			line-height:1.5;
+			padding:1em 1.5em;
+			overflow:auto;
+			-webkit-border-radius:3px;
+			-khtml-border-radius:3px;
+			-moz-border-radius:3px;
+			border-radius:3px;
+		}
+		.ccomment {color:#5f5a60}
 		a {
 			color:#007cba;
 			text-decoration:none}
@@ -44,7 +58,8 @@
 			float:right;
 			text-align:right;
 			width:49%}
-		.note {color:#00892c}
+		.note {color:#888}
+		dd {margin-left:1em}
 	</style>
 </head>
 <body>
@@ -63,6 +78,7 @@
 			<p>Currently you can use this plugin for these types of settings:</p>
 			<ul>
 				<li>Plugin/theme settings</li>
+				<li>Theme customizer (since version 2.7.4)</li>
 				<li>Post metadata (custom fields)</li>
 				<li>Term metadata</li>
 				<li>User metadata</li>
@@ -72,27 +88,27 @@
 
 			<p>Supported input types:</p>
 			<ul>
-				<li>Single line text (<code>text</code>)</li>
-				<li>Multiple lines text (<code>textarea</code>)</li>
-				<li>Email (<code>email</code>)</li>
-				<li>Color (<code>color</code>)</li>
-				<li>Date (<code>date</code>)</li>
-				<li>Month (<code>month</code>)</li>
-				<li>Time (<code>time</code>) <em class="note"># no polyfill yet</em></li>
-				<li>Datetime (<code>datetime</code>) <em class="note"># no polyfill yet</em></li>
-				<li>Local Datetime (<code>datetime-local</code>) <em class="note"># no polyfill yet</em></li>
-				<li>Week (<code>week</code>) <em class="note"># no polyfill yet</em></li>
-				<li>Radio (<code>radio</code>)</li>
-				<li>Checkboxes (<code>checkbox</code>)</li>
-				<li>Dropdown select (<code>select</code>)</li>
-				<li>Multiple select (<code>multiselect</code>)</li>
-				<li>Number (<code>number</code>)</li>
-				<li>Password (<code>password</code>)</li>
-				<li>Telephone (<code>tel</code>)</li>
-				<li>File (<code>file</code>)</li>
-				<li>Repeatable fields (<code>multiinput</code>)</li>
-				<li>WordPress Editor (<code>editor</code>)</li>
-				<li>Custom function (<code>special</code>)</li>
+				<li>Single line text: <code>text</code></li>
+				<li>Multiple lines text: <code>textarea</code></li>
+				<li>Email: <code>email</code></li>
+				<li>Color: <code>color</code></li>
+				<li>Date: <code>date</code> <em class="note">(not supported in theme customizer)</em></li>
+				<li>Month: <code>month</code> <em class="note">(not supported in theme customizer)</em></li>
+				<li>Time: <code>time</code> <em class="note">(no polyfill yet, not supported in theme customizer)</em></li>
+				<li>Datetime: <code>datetime</code> <em class="note">(no polyfill yet, not supported in theme customizer)</em></li>
+				<li>Local Datetime: <code>datetime-local</code> <em class="note">(no polyfill yet, not supported in theme customizer)</em></li>
+				<li>Week: <code>week</code> <em class="note">(no polyfill yet, not supported in theme customizer)</em></li>
+				<li>Radio: <code>radio</code></li>
+				<li>Checkboxes: <code>checkbox</code> <em class="note">(not supported in theme customizer)</em></li>
+				<li>Dropdown select: <code>select</code></li>
+				<li>Multiple select: <code>multiselect</code> <em class="note">(not supported in theme customizer)</em></li>
+				<li>Number: <code>number</code></li>
+				<li>Password: <code>password</code></li>
+				<li>Telephone: <code>tel</code></li>
+				<li>File: <code>file</code> <em class="note">(not supported in theme customizer)</em></li>
+				<li>Repeatable fields: <code>multiinput</code> <em class="note">(not supported in theme customizer)</em></li>
+				<li>WordPress Editor: <code>editor</code> <em class="note">(not supported in theme customizer)</em></li>
+				<li>Custom: <code>special</code> <em class="note">(not supported in theme customizer)</em></li>
 			</ul>
 
 			<p>If you think there are other input types that need to be added, don't hesitate to <a href="#https://github.com/kucrut/kc-settings/issues">ask</a>!</p>
@@ -101,7 +117,7 @@
 			<p>Just install it like any other WordPress plugins :)</p>
 
 			<h2 id="options">The options</h2>
-			<p>You can either create the settings using the Builder by going to <em>Settings &raquo; KC Settings</em>, or create them manually.</p>
+			<p>You can either create the settings using the Builder by going to <em>Settings &raquo; KC Settings</em>, or create them manually. Note that theme customizer is not available in the Builder.</p>
 			<p>There are a few sample options files included in the <code><span>sample</span></code> directory. Copy (examine and modify) the sample options files included in the <code>sample</code> directory to your plugin/theme directory and then include them from your theme/plugin, eg. <code>require_once TEMPLATEPATH . '/theme_options.php';</code></p>
 
 			<h2 id="get-data">Getting the data</h2>
@@ -109,27 +125,78 @@
 			<ul>
 				<li>
 					<h4>All data</h4>
-					<pre>$var = kc_get_option( <span>$prefix</span> );</pre>
-					<p>Or, you can also use WordPress' builtin function:</p>
-					<pre>$var = get_option( '<span>prefix</span>_settings' );</pre>
+<pre>
+<span>$prefix</span> = 'myPrefix';
+$var = kc_get_option( <span>$prefix</span> );
+<span class="ccomment">// Or, you can also use WordPress' builtin function:</span>
+$var = get_option( "<span>{$prefix}</span>_settings" );
+</pre>
 				</li>
 				<li>
 					<h4>Section</h4>
-					<pre>$var = kc_get_option( <span>$prefix</span>, <span>$section_id</span> );</pre>
+<pre>
+<span>$prefix</span> = 'myPrefix';
+<span>$section_id</span> = 'section_one';
+$var = kc_get_option( <span>$prefix</span>, <span>$section_id</span> );
+</pre>
 				</li>
 				<li>
 					<h4>Field</h4>
-					<pre>$var = kc_get_option( <span>$prefix</span>, <span>$section_id</span>, <span>$field_id</span> );</pre>
+<pre>
+<span>$prefix</span> = 'myPrefix';
+<span>$section_id</span> = 'section_one';
+<span>$field_id</span> = 'field_one';
+$var = kc_get_option( <span>$prefix</span>, <span>$section_id</span>, <span>$field_id</span> );
+</pre>
 				</li>
 				<li>
 					<h4>Default values</h4>
 					<p>If you have set a default value for your field, you can get it like this:</p>
-					<pre>$var = kc_get_default( <span>$type</span>, <span>$prefix</span>, <span>$section_id</span>, <span>$field_id</span> );</pre>
-					<p><em>Note:</em><br />For now, this only works for plugin/theme settings, so the $type argument should always be set to 'plugin'. <code>$section_id</code> and <code>$field_id</code> are optionals</p>
+<pre>
+<span>$prefix</span> = 'myPrefix';
+<span>$section_id</span> = 'section_one';
+<span>$field_id</span> = 'field_one';
+$var = kc_get_default( 'plugin', <span>$prefix</span>, <span>$section_id</span>, <span>$field_id</span> );
+</pre>
 				</li>
 			</ul>
 
-			<h3>Return values</h3>
+			<h3 id="get-data-plugin">Theme customization</h3>
+			<p>Just use standard WordPress function, but using the prefix, section ID, and field ID as the first argument, for example:</p>
+<pre>
+<span>$prefix</span> = 'myPrefix';
+<span>$section_id</span> = 'section_one';
+<span>$field_id</span> = 'field_one';
+$var = get_theme_mod( "<span>{$prefix}</span>_<span>{$section_id}</span>_<span>{$field_id}</span>" ); <span class="ccomment"> // Notice the underscores</span>
+</pre>
+			<p>If you have set a default value for the field and want to get it when the setting hasn't been changed:</p>
+<pre>$var = get_theme_mod( "<span>{$prefix}</span>_<span>{$section_id}</span>_<span>{$field_id}</span>", kc_get_default('theme', <span>$prefix</span>, <span>$section_id</span>, <span>$field_id</span>) );</pre>
+
+			<h3 id="get-data-cfields">Custom field / Post metadata</h3>
+			<p>Just use standard WordPress function, but prefix the meta key with an underscore, for example:</p>
+<pre>
+<span>$post_id</span> = 1;
+<span>$field_id</span> = 'field_one';
+$var = get_post_meta( <span>$post_id</span>, "_<span>{$field_id}</span>", true ); <span class="ccomment"> // Notice the underscore</span>
+</pre>
+
+			<h3 id="get-data-termmeta">Term Metadata</h3>
+			<p>You can use standard WordPress function, for example:</p>
+<pre>
+<span>$term_id</span> = 1;
+<span>$field_id</span> = 'field_one';
+$var = get_metadata( 'term', <span>$term_id</span>, <span>$field_id</span>, true );
+</pre>
+
+			<h3 id="get-data-usermeta">User Metadata</h3>
+			<p>You can use standard WordPress function, for example:</p>
+<pre>
+<span>$user_id</span> = 1;
+<span>$field_id</span> = 'field_one';
+$var = get_user_meta( <span>$user_id</span>, <span>$field_id</span>, true );
+</pre>
+
+			<h2 id="return-values">Return values</h2>
 			<ul>
 				<li>Single line text and most HTML5 inputs: <code>string</code></li>
 				<li>Multiple lines text: <code>string</code></li>
@@ -145,27 +212,6 @@
 				<li>Custom function: <code>mixed</code></li>
 			</ul>
 
-
-			<h3 id="get-data-cfields">Custom field / Post metadata</h3>
-			<p>Just use standard WordPress function, but prefix the meta key with an underscore, for example:</p>
-			<p>
-				<code>$var = get_post_meta( <span>$post_id</span>, '_<span>field_id</span>', true );</code>
-				<br />or: <br/>
-				<code>$var = get_metadata( 'post', <span>$post_id</span>, '_<span>field_id</span>', true );</code>
-			</p>
-
-			<h3 id="get-data-termmeta">Term Metadata</h3>
-			<p>You can use standard WordPress function, for example:</p>
-			<pre>$var = get_metadata( 'term', <span>'term_id'</span>, <span>$field_id</span>, true );</pre>
-
-			<h3 id="get-data-usermeta">User Metadata</h3>
-			<p>You can use standard WordPress function, for example:</p>
-			<p>
-				<code>$var = get_user_meta( <span>'user_id'</span>, <span>$field_id</span>, true );</code>
-				<br />or: <br />
-				<code>$var = get_metadata( 'user', <span>'user_id'</span>, <span>$field_id</span>, true );</code>
-			</p>
-
 			<h2 id="validation">Validation/sanitation</h2>
 			<p>All options are filtered before added to the database. You can add your own filter(s) by using one ore more of these filters:</p>
 
@@ -175,16 +221,16 @@
 					<h4>By prefix:</h4>
 					<dl>
 						<dt>Filter name:</dt>
-						<dd><code>kcv_setting_<span>prefix</span></code></dd>
+						<dd><pre>kcv_setting_<span>prefix</span></pre></dd>
 						<dt>Example:</dt>
 						<dd>
-							<pre>add_filter( 'kcv_setting_<span>myPrefix</span>', 'my_filter_function' );</pre>
-							<pre>
+<pre>
+add_filter( 'kcv_setting_<span>myPrefix</span>', 'my_filter_function' );
 function my_filter_function( $data ) {
-	// <span>.... do something with the POST data</span>
+	<span class="ccomment">// .... do something with the POST data</span>
 	return $data;
 }
-							</pre>
+</pre>
 						</dd>
 					</dl>
 				</li>
@@ -192,16 +238,16 @@ function my_filter_function( $data ) {
 					<h4>By prefix &amp; section ID:</h4>
 					<dl>
 						<dt>Filter name:</dt>
-						<dd><code>kcv_setting_<span>prefix</span>_<span>sectionID</span></code></dd>
+						<dd><pre>kcv_setting_<span>prefix</span>_<span>sectionID</span></pre></dd>
 						<dt>Example:</dt>
 						<dd>
-							<code>add_filter( 'kcv_setting_<span>myPrefix</span>_<span>mySectionID</span>', 'my_filter_function' );</code>
-							<pre>
+<pre>
+add_filter( 'kcv_setting_<span>myPrefix</span>_<span>mySectionID</span>', 'my_filter_function' );
 function my_filter_function( $section_data ) {
-	// <span>.... do something with the POST data</span>
+	<span class="ccomment">// .... do something with the POST data</span>
 	return $section_data;
 }
-							</pre>
+</pre>
 						</dd>
 					</dl>
 				</li>
@@ -209,16 +255,16 @@ function my_filter_function( $section_data ) {
 					<h4>By prefix &amp; field type:</h4>
 					<dl>
 						<dt>Filter name:</dt>
-						<dd><code>kcv_setting_<span>prefix</span>_<span>fieldType</span></code></dd>
+						<dd><pre>kcv_setting_<span>prefix</span>_<span>fieldType</span></pre></dd>
 						<dt>Example:</dt>
 						<dd>
-							<code>add_filter( 'kcv_setting_<span>myPrefix</span>_<span>textarea</span>', 'my_filter_function' );</code>
-							<pre>
+<pre>
+add_filter( 'kcv_setting_<span>myPrefix</span>_<span>textarea</span>', 'my_filter_function' );
 function my_filter_function( $field_data ) {
-	// <span>.... do something with the POST data</span>
+	<span class="ccomment">// .... do something with the POST data</span>
 	return $field_data;
 }
-							</pre>
+</pre>
 						</dd>
 					</dl>
 				</li>
@@ -226,16 +272,16 @@ function my_filter_function( $field_data ) {
 					<h4>By prefix, section ID &amp; field ID:</h4>
 					<dl>
 						<dt>Filter name:</dt>
-						<dd><code>kcv_setting_<span>prefix</span>_<span>sectionID</span>_<span>fieldID</span></code></dd>
+						<dd><pre>kcv_setting_<span>prefix</span>_<span>sectionID</span>_<span>fieldID</span></pre></dd>
 						<dt>Example:</dt>
 						<dd>
-							<code>add_filter( 'kcv_setting_<span>myPrefix</span>_<span>mySectionID</span>_<span>myFieldID</span>', 'my_filter_function' );</code>
-							<pre>
+<pre>
+add_filter( 'kcv_setting_<span>myPrefix</span>_<span>mySectionID</span>_<span>myFieldID</span>', 'my_filter_function' );
 function my_filter_function( $field_data ) {
-	// <span>.... do something with the POST data</span>
+	<span class="ccomment">// .... do something with the POST data</span>
 	return $field_data;
 }
-							</pre>
+</pre>
 						</dd>
 					</dl>
 				</li>
@@ -262,36 +308,36 @@ function my_filter_function( $nu_val, $section, $field ) {
 					<h4>By post type:</h4>
 					<dl>
 						<dt>Filter name:</dt>
-						<dd><code>kcv_postmeta_<span>postType</span></code></dd>
+						<dd><pre>kcv_postmeta_<span>postType</span></pre></dd>
 						<dt>Example:</dt>
-						<dd><code>add_filter( 'kcv_postmeta_<span>post</span>', 'my_filter_function', 10, 3 );</code></dd>
+						<dd><pre>add_filter( 'kcv_postmeta_<span>post</span>', 'my_filter_function', 10, 3 );</pre></dd>
 					</dl>
 				</li>
 				<li>
 					<h4>By post type &amp; field type:</h4>
 					<dl>
 						<dt>Filter name:</dt>
-						<dd><code>kcv_postmeta_<span>postType</span>_<span>fieldType</span></code></dd>
+						<dd><pre>kcv_postmeta_<span>postType</span>_<span>fieldType</span></pre></dd>
 						<dt>Example:</dt>
-						<dd><code>add_filter( 'kcv_postmeta_<span>post</span>_<span>textarea</span>', 'my_filter_function', 10, 3 );</code></dd>
+						<dd><pre>add_filter( 'kcv_postmeta_<span>post</span>_<span>textarea</span>', 'my_filter_function', 10, 3 );</pre></dd>
 					</dl>
 				</li>
 				<li>
 					<h4>By post type &amp; section ID:</h4>
 					<dl>
 						<dt>Filter name:</dt>
-						<dd><code>kcv_postmeta_<span>postType</span>_<span>sectionID</span></code></dd>
+						<dd><pre>kcv_postmeta_<span>postType</span>_<span>sectionID</span></pre></dd>
 						<dt>Example:</dt>
-						<dd><code>add_filter( 'kcv_postmeta_<span>post</span>_<span>mySectionID</span>', 'my_filter_function', 10, 3 );</code></dd>
+						<dd><pre>add_filter( 'kcv_postmeta_<span>post</span>_<span>mySectionID</span>', 'my_filter_function', 10, 3 );</pre></dd>
 					</dl>
 				</li>
 				<li>
 					<h4>By post type, section ID &amp; field ID:</h4>
 					<dl>
 						<dt>Filter name:</dt>
-						<dd><code>kcv_postmeta_<span>postType</span>_<span>sectionID</span>_<span>fieldID</span></code></dd>
+						<dd><pre>kcv_postmeta_<span>postType</span>_<span>sectionID</span>_<span>fieldID</span></pre></dd>
 						<dt>Example:</dt>
-						<dd><code>add_filter( 'kcv_postmeta_<span>post</span>_<span>mySectionID</span>_<span>fieldID</span>', 'my_filter_function', 10, 3 );</code></dd>
+						<dd><pre>add_filter( 'kcv_postmeta_<span>post</span>_<span>mySectionID</span>_<span>fieldID</span>', 'my_filter_function', 10, 3 );</pre></dd>
 					</dl>
 				</li>
 			</ul>
@@ -304,36 +350,36 @@ function my_filter_function( $nu_val, $section, $field ) {
 					<h4>By taxonomy:</h4>
 					<dl>
 						<dt>Filter name:</dt>
-						<dd><code>kcv_termmeta_<span>taxonomy</span></code></dd>
+						<dd><pre>kcv_termmeta_<span>taxonomy</span></pre></dd>
 						<dt>Example:</dt>
-						<dd><code>add_filter( 'kcv_termmeta_<span>category</span>', 'my_filter_function', 10, 3 );</code></dd>
+						<dd><pre>add_filter( 'kcv_termmeta_<span>category</span>', 'my_filter_function', 10, 3 );</pre></dd>
 					</dl>
 				</li>
 				<li>
 					<h4>By taxonomy &amp; field type:</h4>
 					<dl>
 						<dt>Filter name:</dt>
-						<dd><code>kcv_termmeta_<span>taxonomy</span>_<span>fieldType</span></code></dd>
+						<dd><pre>kcv_termmeta_<span>taxonomy</span>_<span>fieldType</span></pre></dd>
 						<dt>Example:</dt>
-						<dd><code>add_filter( 'kcv_termmeta_<span>category</span>_<span>textarea</span>', 'my_filter_function', 10, 3 );</code></dd>
+						<dd><pre>add_filter( 'kcv_termmeta_<span>category</span>_<span>textarea</span>', 'my_filter_function', 10, 3 );</pre></dd>
 					</dl>
 				</li>
 				<li>
 					<h4>By taxonomy &amp; section ID:</h4>
 					<dl>
 						<dt>Filter name:</dt>
-						<dd><code>kcv_termmeta_<span>taxonomy</span>_<span>sectionID</span></code></dd>
+						<dd><pre>kcv_termmeta_<span>taxonomy</span>_<span>sectionID</span></pre></dd>
 						<dt>Example:</dt>
-						<dd><code>add_filter( 'kcv_termmeta_<span>category</span>_<span>mySectionID</span>', 'my_filter_function', 10, 3 );</code></dd>
+						<dd><pre>add_filter( 'kcv_termmeta_<span>category</span>_<span>mySectionID</span>', 'my_filter_function', 10, 3 );</pre></dd>
 					</dl>
 				</li>
 				<li>
 					<h4>By taxonomy, section ID &amp; field ID:</h4>
 					<dl>
 						<dt>Filter name:</dt>
-						<dd><code>kcv_termmeta_<span>taxonomy</span>_<span>sectionID</span>_<span>fieldID</span></code></dd>
+						<dd><pre>kcv_termmeta_<span>taxonomy</span>_<span>sectionID</span>_<span>fieldID</span></pre></dd>
 						<dt>Example:</dt>
-						<dd><code>add_filter( 'kcv_termmeta_<span>category</span>_<span>mySectionID</span>_<span>fieldID</span>', 'my_filter_function', 10, 3 );</code></dd>
+						<dd><pre>add_filter( 'kcv_termmeta_<span>category</span>_<span>mySectionID</span>_<span>fieldID</span>', 'my_filter_function', 10, 3 );</pre></dd>
 					</dl>
 				</li>
 			</ul>
@@ -345,36 +391,36 @@ function my_filter_function( $nu_val, $section, $field ) {
 					<h4>Filter everything:</h4>
 					<dl>
 						<dt>Filter name:</dt>
-						<dd><code>kcv_usermeta</code></dd>
+						<dd><pre>kcv_usermeta</pre></dd>
 						<dt>Example:</dt>
-						<dd><code>add_filter( 'kcv_usermeta', 'my_filter_function', 10, 3 );</code></dd>
+						<dd><pre>add_filter( 'kcv_usermeta', 'my_filter_function', 10, 3 );</pre></dd>
 					</dl>
 				</li>
 				<li>
 					<h4>By field type:</h4>
 					<dl>
 						<dt>Filter name:</dt>
-						<dd><code>kcv_usermeta_<span>fieldType</span></code></dd>
+						<dd><pre>kcv_usermeta_<span>fieldType</span></pre></dd>
 						<dt>Example:</dt>
-						<dd><code>add_filter( 'kcv_usermeta_<span>textarea</span>', 'my_filter_function', 10, 3 );</code></dd>
+						<dd><pre>add_filter( 'kcv_usermeta_<span>textarea</span>', 'my_filter_function', 10, 3 );</pre></dd>
 					</dl>
 				</li>
 				<li>
 					<h4>By section ID:</h4>
 					<dl>
 						<dt>Filter name:</dt>
-						<dd><code>kcv_usermeta_<span>sectionID</span></code></dd>
+						<dd><pre>kcv_usermeta_<span>sectionID</span></pre></dd>
 						<dt>Example:</dt>
-						<dd><code>add_filter( 'kcv_usermeta_<span>mySectionID</span>', 'my_filter_function', 10, 3 );</code></dd>
+						<dd><pre>add_filter( 'kcv_usermeta_<span>mySectionID</span>', 'my_filter_function', 10, 3 );</pre></dd>
 					</dl>
 				</li>
 				<li>
 					<h4>By section ID &amp; field ID:</h4>
 					<dl>
 						<dt>Filter name:</dt>
-						<dd><code>kcv_usermeta_<span>sectionID</span>_<span>fieldID</span></code></dd>
+						<dd><pre>kcv_usermeta_<span>sectionID</span>_<span>fieldID</span></pre></dd>
 						<dt>Example:</dt>
-						<dd><code>add_filter( 'kcv_usermeta_<span>mySectionID</span>_<span>fieldID</span>', 'my_filter_function', 10, 3 );</code></dd>
+						<dd><pre>add_filter( 'kcv_usermeta_<span>mySectionID</span>_<span>fieldID</span>', 'my_filter_function', 10, 3 );</pre></dd>
 					</dl>
 				</li>
 			</ul>
@@ -396,10 +442,14 @@ function my_filter_function( $nu_val, $section, $field ) {
 				<li><code>kcSettings_options::$roles</code></li>
 				<li><code>kcSettings_options::$yesno</code></li>
 			</ul>
-			<p>As of version 2.7.3, you can also pass a function/class method as the options.</p>
+			<p>As of version 2.7.3, you can also use a callback as the options.</p>
 
-			<h2 id="support">Support</h2>
-			<p>If you think you found a bug, need some features added, have questions or just want to say hi, please <em>feel free</em> to <a href="http://kucrut.org/contact/">contact me.</a></p>
+			<h2 id="support">Links</h2>
+			<ul>
+				<li><a href="http://wordpress.org/tags/kc-settings?forum_id=10">Support / bug report</a></li>
+				<li><a href="https://github.com/kucrut/kc-settings/issues">Feature request</a></li>
+				<li><a href="http://kucrut.org/contact/">Donate / Contact</a></li>
+			</ul>
 		</div>
 		<div id="footer">
 			<div class="wrapper">

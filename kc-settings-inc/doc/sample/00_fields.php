@@ -20,7 +20,7 @@ function kc_sample_fields() {
 			'id'      => 'sample_tel',
 			'title'   => 'Telephone input',
 			'type'    => 'tel',
-			'default' => 'Default value',
+			'default' => '+123456789',
 			'attr'    => array('placeholder' => 'eg. +123456789')
 		),
 		array(
@@ -37,42 +37,42 @@ function kc_sample_fields() {
 		array(
 			'id'      => 'sample_date',
 			'title'   => 'Date input',
-			'type'    => 'date',
+			'type'    => 'date', // Not supported in theme customizer
 			'default' => date('Y-m-d'),
 			'desc'    => 'Format: <code>'.date('Y-m-d').'</code>'
 		),
 		array(
 			'id'      => 'sample_month',
 			'title'   => 'Month input',
-			'type'    => 'month',
+			'type'    => 'month', // Not supported in theme customizer
 			'default' => date('Y-m'),
 			'desc'    => 'Format: <code>'.date('Y-m').'</code>'
 		),
 		array(
 			'id'      => 'sample_week',
 			'title'   => 'Week input',
-			'type'    => 'week',
+			'type'    => 'week', // Not supported in theme customizer
 			'default' => date('Y-\WW'),
 			'desc'    => 'Format: <code>'.date('Y-\WW').'</code>'
 		),
 		array(
 			'id'      => 'sample_time',
 			'title'   => 'Time input',
-			'type'    => 'time',
+			'type'    => 'time', // Not supported in theme customizer
 			'default' => date('H:i'),
 			'desc'    => 'Format: <code>'.date('H:i').'</code>'
 		),
 		array(
 			'id'      => 'sample_datetime',
 			'title'   => 'Datetime input',
-			'type'    => 'datetime',
+			'type'    => 'datetime', // Not supported in theme customizer
 			'default' => date('Y-m-d\TH:i\Z'),
 			'desc'    => 'Format: <code>'.date('Y-m-d\TH:i\Z').'</code>'
 		),
 		array(
 			'id'      => 'sample_datetime-local',
 			'title'   => 'Datetime (local) input',
-			'type'    => 'datetime-local',
+			'type'    => 'datetime-local', // Not supported in theme customizer
 			'default' => date('Y-m-d\TH:i'),
 			'desc'    => 'Format: <code>'.date('Y-m-d\TH:i').'</code>'
 		),
@@ -87,12 +87,13 @@ function kc_sample_fields() {
 			'id'      => 'sample_textarea',
 			'title'   => 'Textarea',
 			'type'    => 'textarea',
-			'desc'    => 'An ordinary text area where you can write some long texts'
+			'desc'    => 'An ordinary text area where you can write some long texts',
+			'default' => 'Some text for default value here...'
 		),
 		array(
 			'id'      => 'sample_editor',
 			'title'   => 'WYSIWYG Editor',
-			'type'    => 'editor',
+			'type'    => 'editor', // Not supported in theme customizer
 			// Optional, these are the defaults
 			// Attachment metadata will only use QuickTags
 			'editor_settings' => array(
@@ -108,7 +109,7 @@ function kc_sample_fields() {
 			'id'      => 'sample_checkbox',
 			'title'   => 'Checkboxes (checkbox)',
 			'desc'    => 'You can select one or more',
-			'type'    => 'checkbox',
+			'type'    => 'checkbox', // Not supported in theme customizer
 			'options' => array(
 				'cbox1' => 'Option #1',
 				'cbox2' => 'Option #2'
@@ -119,7 +120,7 @@ function kc_sample_fields() {
 			'id'      => 'sample_checkbox2',
 			'title'   => 'Categories',
 			'desc'    => 'These options are the return value of <code>kcSettings_options_cb::terms("category")</code>',
-			'type'    => 'checkbox',
+			'type'    => 'checkbox', // Not supported in theme customizer
 			'options' => array('kcSettings_options_cb', 'terms'),
 			'args'    => array( 'taxonomy' => 'category' )
 			// To modify the arguments of get_terms():
@@ -153,7 +154,7 @@ function kc_sample_fields() {
 			'id'      => 'sample_multiselect',
 			'title'   => 'Dropdown options (multiple select)',
 			'desc'    => 'You can select more than one option here (hold control or shift key)',
-			'type'    => 'multiselect',
+			'type'    => 'multiselect', // Not supported in theme customizer
 			'options' => array(
 				'select1' => 'Option #1',
 				'select2' => 'Option #2',
@@ -188,7 +189,7 @@ function kc_sample_fields() {
 			'id'     => 'sample_multiinput',
 			'title'  => 'Multi input (multiinput)',
 			'desc'   => 'Input field with your own custom label, to create an array',
-			'type'   => 'multiinput',
+			'type'   => 'multiinput', // Not supported in theme customizer
 			// 'subfields' are optional and will default to text and textarea if not set
 			// each sub-field should have id, title and type
 			'subfields' => array(
@@ -228,7 +229,7 @@ function kc_sample_fields() {
 			'id'    => 'sample_file0',
 			'title' => 'Single file',
 			'desc'  => 'This is useful for multiple tumbnails, logo, background, etc.',
-			'type'  => 'file',
+			'type'  => 'file', // Not supported in theme customizer
 			'mode'  => 'single',
 			'size'  => 'full' // full, large, medium, thumbnail or any custom image size (only used for the preview in the backend)
 		),
@@ -236,21 +237,21 @@ function kc_sample_fields() {
 			'id'    => 'sample_file1',
 			'title' => 'File selection (single)',
 			'desc'	=> 'File list with single selection',
-			'type'  => 'file',
+			'type'  => 'file', // Not supported in theme customizer
 			'mode'  => 'radio'
 		),
 		array(
 			'id'    => 'sample_file2',
 			'title' => 'File selection (multiple)',
 			'desc'	=> 'File list with multiple selection',
-			'type'  => 'file',
+			'type'  => 'file', // Not supported in theme customizer
 			'mode'  => 'checkbox'
 		),
 		array(
 			'id'      => 'sample_callback_3',
 			'title'   => 'Callback',
 			'desc'    => 'Callback with static argument',
-			'type'    => 'special',
+			'type'    => 'special', // Not supported in theme customizer
 			'cb'      => 'kc_sample_callback_static',  // See how to handle the arguments passed at the bottom of this file
 			'args'    => "Hey, I'm the static callback argument",
 			'default' => 'Some default value'
@@ -259,7 +260,7 @@ function kc_sample_fields() {
 			'id'      => 'sample_callback_4',
 			'title'   => 'Another Callback',
 			'desc'    => 'Callback with dynamic argument (function return value)',
-			'type'    => 'special',
+			'type'    => 'special', // Not supported in theme customizer
 			'cb'      => 'kc_sample_callback_dynamic',  // See how to handle the arguments passed at the bottom of this file
 			'args'    => 'kc_sample_callback_dynamic_args',
 			'default' => 'Some default value'

@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the KC Settings package.
 msgid ""
 msgstr ""
-"Project-Id-Version: KC Settings 2.7.3\n"
+"Project-Id-Version: KC Settings 2.7.4\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/kc-settings\n"
-"POT-Creation-Date: 2012-07-27 17:38:19+00:00\n"
+"POT-Creation-Date: 2012-07-29 18:50:07+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -346,10 +346,10 @@ msgstr ""
 msgid "Load Quicktags"
 msgstr ""
 
-#. #-#-#-#-#  kc-settings.pot (KC Settings 2.7.3)  #-#-#-#-#
+#. #-#-#-#-#  kc-settings.pot (KC Settings 2.7.4)  #-#-#-#-#
 #. Plugin Name of the plugin/theme
 #: kc-settings-inc/builder.php:183 kc-settings-inc/builder.php:667
-#: kc-settings.php:556
+#: kc-settings.php:571
 msgid "KC Settings"
 msgstr ""
 
@@ -387,7 +387,7 @@ msgid "Request new feature"
 msgstr ""
 
 #: kc-settings-inc/builder.php:207
-msgid "Contact"
+msgid "Donate/Contact"
 msgstr ""
 
 #: kc-settings-inc/builder.php:274
@@ -525,7 +525,7 @@ msgstr ""
 msgid "Post type"
 msgstr ""
 
-#: kc-settings-inc/builder.php:594 kc-settings.php:474
+#: kc-settings-inc/builder.php:594 kc-settings.php:489
 msgid "Value"
 msgstr ""
 
@@ -684,7 +684,7 @@ msgstr ""
 msgid "Clear"
 msgstr ""
 
-#: kc-settings-inc/form.php:529 kc-settings.php:561
+#: kc-settings-inc/form.php:529 kc-settings.php:576
 msgid "Add files to collection"
 msgstr ""
 
@@ -704,7 +704,7 @@ msgstr ""
 msgid "Change file"
 msgstr ""
 
-#: kc-settings-inc/form.php:606 kc-settings.php:563
+#: kc-settings-inc/form.php:606 kc-settings.php:578
 msgid "Select file"
 msgstr ""
 
@@ -740,91 +740,95 @@ msgstr ""
 msgid "Nothing found"
 msgstr ""
 
-#: kc-settings.php:163
-msgid "One of your settings doesn't have <b>prefix</b> set."
-msgstr ""
-
-#: kc-settings.php:164
-msgid "One of your settings doesn't have <b>menu title</b> set."
-msgstr ""
-
-#: kc-settings.php:165
-msgid "One of your settings doesn't have <b>page title</b> set."
-msgstr ""
-
-#: kc-settings.php:166
-msgid "One of your settings doesn't have <b>options</b> set."
-msgstr ""
-
-#: kc-settings.php:167
-msgid "One of your section's callback is not callable."
+#: kc-settings-inc/theme.php:37
+msgid "Customizer"
 msgstr ""
 
 #: kc-settings.php:168
-msgid "One of your settings' section doesn't have <b>fields</b> set."
+msgid "One of your settings doesn't have <b>prefix</b> set."
 msgstr ""
 
 #: kc-settings.php:169
-msgid "One of your settings' sections doesn't have <b>ID</b> set."
+msgid "One of your settings doesn't have <b>menu title</b> set."
 msgstr ""
 
 #: kc-settings.php:170
-msgid "One of your settings' sections doesn't have <b>title</b> set."
+msgid "One of your settings doesn't have <b>page title</b> set."
 msgstr ""
 
 #: kc-settings.php:171
+msgid "One of your settings doesn't have <b>options</b> set."
+msgstr ""
+
+#: kc-settings.php:172
+msgid "One of your section's callback is not callable."
+msgstr ""
+
+#: kc-settings.php:173
+msgid "One of your settings' section doesn't have <b>fields</b> set."
+msgstr ""
+
+#: kc-settings.php:174
+msgid "One of your settings' sections doesn't have <b>ID</b> set."
+msgstr ""
+
+#: kc-settings.php:175
+msgid "One of your settings' sections doesn't have <b>title</b> set."
+msgstr ""
+
+#: kc-settings.php:176
 msgid ""
 "One of your settings is still using the old format for metabox setting, "
 "please migrate it to the new one."
 msgstr ""
 
-#: kc-settings.php:172
+#: kc-settings.php:177
 msgid "One of your fields doesn't have <b>ID</b> set."
 msgstr ""
 
-#: kc-settings.php:173
+#: kc-settings.php:178
 msgid "One of your fields doesn't have <b>title</b> set."
 msgstr ""
 
-#: kc-settings.php:174
+#: kc-settings.php:179
 msgid "One of your fields doesn't have <b>type</b> set."
 msgstr ""
 
-#: kc-settings.php:175
+#: kc-settings.php:180
 msgid "One of your fields doesn't have the required <b>options</b> set."
 msgstr ""
 
-#: kc-settings.php:176
+#: kc-settings.php:181
 msgid ""
 "One of your fields doesn't have the required <b>callback</b> set, or is not "
 "callable."
 msgstr ""
 
-#: kc-settings.php:177
+#: kc-settings.php:182
 msgid "multiinput fields cannot have a multiinput sub-field."
 msgstr ""
 
-#: kc-settings.php:469
+#: kc-settings.php:484
 msgid "Key"
 msgstr ""
 
-#: kc-settings.php:557
+#: kc-settings.php:572
 msgid "Please upload some files and then go back to this tab."
 msgstr ""
 
-#: kc-settings.php:558
+#: kc-settings.php:573
 msgid "Select all files"
 msgstr ""
 
-#: kc-settings.php:559
+#: kc-settings.php:574
 msgid "Clear selections"
 msgstr ""
 
-#: kc-settings.php:560
+#: kc-settings.php:575
 msgid "Invert selection"
 msgstr ""
 
-#: kc-settings.php:562
+#: kc-settings.php:577
 msgid ""
 "Click the \"Media Library\" tab to insert files that are already upload, or, "
 "upload your files and then go to the \"Media Library\" tab to insert the "

@@ -2,7 +2,7 @@
 
 /**
  * @package KC_Settings
- * @version 2.7.3
+ * @version 2.7.4
  */
 
 
@@ -10,7 +10,7 @@
 Plugin name: KC Settings
 Plugin URI: http://kucrut.org/kc-settings/
 Description: Easily create plugin/theme settings page, custom fields metaboxes, term meta and user meta settings.
-Version: 2.7.3
+Version: 2.7.4
 Author: Dzikri Aziz
 Author URI: http://kucrut.org/
 License: GPL v2
@@ -26,7 +26,12 @@ class kcSettings {
 		'notices'  => array( 'updated' => array(), 'error' => array() ),
 		'settings' => array(),
 		'defaults' => array(),
-		'kcsb'     => array()
+		'kcsb'     => array(),
+		'customizer_blacklist' => array(
+			'multiinput', 'multiselect', 'special', 'editor', 'checkbox'
+			, 'file', 'image', 'upload'
+			, 'date', 'datetime', 'datetime-local', 'week', 'month', 'time'
+		)
 	);
 
 
@@ -67,7 +72,7 @@ class kcSettings {
 		kcSettings_options::init();
 
 		# Include samples (for development)
-		//self::_samples( array('01_plugin', '02_post', '03_term', '04_user') );
+		// self::_samples( array('05_theme') );
 
 		# Get all settings
 		self::_bootstrap_settings();
@@ -86,7 +91,7 @@ class kcSettings {
 
 				if ( $type == 'plugin' ) {
 					foreach ( self::$data['settings']['plugin'] as $group )
-						$do = new kcSettings_plugin( $group );
+						new kcSettings_plugin( $group );
 				}
 				else {
 					call_user_func( array("kcSettings_{$type}", 'init') );
@@ -188,6 +193,7 @@ class kcSettings {
 
 		$settings = array(
 			'plugin' => array(),
+			'theme'  => array(),
 			'post'   => array(),
 			'term'   => array(),
 			'user'   => array()
@@ -326,13 +332,17 @@ class kcSettings {
 					if ( empty($group['options']) )
 						$group = null;
 				}
-
 				elseif ( in_array($type, array('post', 'term', 'user')) ) {
 					foreach ( $group as $obj => $sections ) {
 						$group[$obj] = self::_validate_sections( $type, $sections );
 						if ( empty($group[$obj]) )
 							$group = null;
 					}
+				}
+				else { # Theme customizer
+					$group['options'] = self::_validate_sections( $type, $group['options'], $group );
+					if ( empty($group['options']) )
+						$group = null;
 				}
 
 				# Include this group only if it's valid
@@ -391,7 +401,7 @@ class kcSettings {
 					$section['fields'] = $fields['fields'];
 
 					if ( !empty($fields['defaults']) )
-						$defaults['plugin'][$group['prefix']][$section['id']] = $fields['defaults'];
+						$defaults[$type][$group['prefix']][$section['id']] = $fields['defaults'];
 				}
 			}
 
@@ -433,6 +443,10 @@ class kcSettings {
 
 		foreach ( $fields as $idx => $field ) {
 			unset( $fields[$idx] );
+			# Theme customizer blacklist
+			if ( $type == 'theme' && in_array($field['type'], self::$data['customizer_blacklist']) )
+				continue;
+
 			# Field check: id, title & type
 			foreach ( array('id', 'title', 'type') as $c ) {
 				if ( !isset($field[$c]) || empty($field[$c]) ) {
@@ -483,7 +497,7 @@ class kcSettings {
 			}
 
 			# Has default value?
-			if ( $type == 'plugin' && isset($field['default']) )
+			if ( ($type == 'plugin' || $type == 'theme') && isset($field['default']) )
 				$defaults[$field['id']] = $field['default'];
 
 			$fields[$field['id']] = $field;
@@ -716,7 +730,7 @@ class kcSettings {
 			$status['kids'] = array();
 
 		$old_version = ( isset($status['version']) ) ? $status['version'] : '2.2';
-		$status['version'] = '2.7.3';
+		$status['version'] = '2.7.4';
 
 		update_option( 'kc_settings', $status );
 

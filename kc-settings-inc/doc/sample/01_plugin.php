@@ -9,8 +9,8 @@
  */
 
 
-add_filter( 'kc_plugin_settings', 'mytheme_options' );
-function mytheme_options( $settings ) {
+add_filter( 'kc_plugin_settings', 'myplugin_options' );
+function myplugin_options( $settings ) {
 	// TODO: Please copy/paste/edit the fields you need, then remove the require_once line.
 	// This is only for simplifying the development.
 	require_once dirname(__FILE__) . '/00_fields.php';

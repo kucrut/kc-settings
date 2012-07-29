@@ -4,7 +4,7 @@ Donate link: http://kucrut.org/
 Tags: theme-options, plugin-options, settings, options, term-meta, category-meta, post-meta, custom-fields, user-meta, attachment
 Requires at least: 3.3
 Tested up to: 3.4.1
-Stable tag: 2.7.3
+Stable tag: 2.7.4
 
 Easily create plugin/theme settings pages, custom fields metaboxes and term/user metadata settings.
 
@@ -37,6 +37,9 @@ Please find the readme.html file inside the plugin directory for the documentati
 5. Post settings
 
 == Changelog ==
+
+= 2.7.4 =
+* New (experimental) feature: Theme customizer
 
 = 2.7.3 =
 * Cleanup JS and Builder
