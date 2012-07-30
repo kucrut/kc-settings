@@ -20,7 +20,8 @@ add_filter( 'kc_theme_settings', 'mytheme_options' );
 function mytheme_options( $settings ) {
 	/**
 	 * TODO: Please copy/paste/edit the fields you need, then remove the require_once line.
-	 */ This is only for simplifying the development.
+	 * This is only for simplifying the development.
+	 */
 	require_once dirname(__FILE__) . '/00_fields.php';
 
 	$my_settings = array(
@@ -38,6 +39,10 @@ function mytheme_options( $settings ) {
 			array(
 				'id'     => 'sample_section',
 				'title'  => 'Sample Options',
+				/**
+				 * Any HTML tags in the description will be stripped because
+				 * this will be used as the tooltip for the section title.
+				 */
 				'desc'   => 'Some description about this options group',
 				'fields' => kc_sample_fields() // TODO: See 00_fields.php
 			),

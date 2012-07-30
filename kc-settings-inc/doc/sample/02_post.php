@@ -10,18 +10,24 @@
 
 add_filter( 'kc_post_settings', 'mypost_options2' );
 function mypost_options2( $groups ) {
-	// TODO: Please copy/paste/edit the fields you need, then remove the require_once line.
-	// This is only for simplifying the development.
+	/**
+	 * TODO: Please copy/paste/edit the fields you need, then remove the require_once line.
+	 * This is only for simplifying the development.
+	 */
 	require_once dirname(__FILE__) . '/00_fields.php';
 
 	$my_group = array(
-		'post' => array( // TODO: Change this to the desired post type name
+		'post' => array( // TODO: Change this key to the desired post type name
 			array(
 				'id'     => 'sample_section',
 				'title'  => 'Section title',
 				'desc'   => '<p>Some description about this options group</p>',
-				'role'   => array('administrator', 'editor'), // Optional. Remove this to display the metadata for all user roles.
-				'fields' => kc_sample_fields() // TODO: See 00_fields.php and paste the fields you need here.
+				/**
+				 * Optional. Uncomment this to only display the metadata settings for
+				 * certain user roles.
+				 */
+				// 'role'   => array( 'administrator', 'editor' ),
+				'fields' => kc_sample_fields() // TODO: See 00_fields.php
 			)
 		)
 	);

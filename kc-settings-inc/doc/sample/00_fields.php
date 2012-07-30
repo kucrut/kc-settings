@@ -94,8 +94,10 @@ function kc_sample_fields() {
 			'id'      => 'sample_editor',
 			'title'   => 'WYSIWYG Editor',
 			'type'    => 'editor', // Not supported in theme customizer
-			// Optional, these are the defaults
-			// Attachment metadata will only use QuickTags
+			/**
+			 * Optional, these are the defaults
+			 * NOTE: Attachment metadata will only use QuickTags
+			 */
 			'editor_settings' => array(
 				'media_buttons' => true,
 				'tinymce'       => true,
@@ -103,8 +105,11 @@ function kc_sample_fields() {
 			),
 			'desc'    => "Wordpress' builtin WYSIWYG Editor"
 		),
-		// checkbox, radio, select, and multiselect require options
-		// options could be an array or a function/class method that returns an array
+		/**
+		 * checkbox, radio, select, and multiselect require options
+		 * options could be an array or a callback (function/class method)
+		 * that returns an array
+		 */
 		array(
 			'id'      => 'sample_checkbox',
 			'title'   => 'Checkboxes (checkbox)',
@@ -123,8 +128,10 @@ function kc_sample_fields() {
 			'type'    => 'checkbox', // Not supported in theme customizer
 			'options' => array('kcSettings_options_cb', 'terms'),
 			'args'    => array( 'taxonomy' => 'category' )
-			// To modify the arguments of get_terms():
-			// 'args' => array( 'taxonomy' => 'category', 'args' => array('parent' => 1, 'exclude_tree' => 3) )
+			/**
+			 * To modify the arguments of get_terms(), for example:
+			 * 'args' => array( 'taxonomy' => 'category', 'args' => array('parent' => 1, 'exclude_tree' => 3) )
+			 */
 		),
 		array(
 			'id'      => 'sample_radio',
@@ -190,8 +197,11 @@ function kc_sample_fields() {
 			'title'  => 'Multi input (multiinput)',
 			'desc'   => 'Input field with your own custom label, to create an array',
 			'type'   => 'multiinput', // Not supported in theme customizer
-			// 'subfields' are optional and will default to text and textarea if not set
-			// each sub-field should have id, title and type
+			/**
+			 * subfields are optional and will default to text and textarea if not set.
+			 * Each sub-field should have id, title and type.
+			 * Obviously, you cannot use 'multiinput' as the type here :)
+			 */
 			'subfields' => array(
 				array(
 					'id'    => 'key1',
@@ -231,7 +241,12 @@ function kc_sample_fields() {
 			'desc'  => 'This is useful for multiple tumbnails, logo, background, etc.',
 			'type'  => 'file', // Not supported in theme customizer
 			'mode'  => 'single',
-			'size'  => 'full' // full, large, medium, thumbnail or any custom image size (only used for the preview in the backend)
+			/**
+			 * This the image size that will be used for the preview in the backend.
+			 * You can use 'full', 'large', 'medium', 'thumbnail' or any other
+			 * registered custom image size here.
+			 */
+			'size'  => 'full'
 		),
 		array(
 			'id'    => 'sample_file1',
@@ -282,9 +297,6 @@ function kc_sample_callback_dynamic( $field, $db_value, $args ) {
 
 
 function kc_sample_callback_dynamic_args( $field, $db_value ) {
-	// You can do whatever you want here and then return in
-	// So your callback function can process it.
-
 	return $field['field']['name'];
 }
 

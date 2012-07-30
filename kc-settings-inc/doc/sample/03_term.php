@@ -10,8 +10,10 @@
 
 add_filter( 'kc_term_settings', 'myterm_options' );
 function myterm_options( $groups ) {
-	// TODO: Please copy/paste/edit the fields you need, then remove the require_once line.
-	// This is only for simplifying the development.
+	/**
+	 * TODO: Please copy/paste/edit the fields you need, then remove the require_once line.
+	 * This is only for simplifying the development.
+	 */
 	require_once dirname(__FILE__) . '/00_fields.php';
 
 	$my_group = array(
@@ -21,7 +23,7 @@ function myterm_options( $groups ) {
 				'title'  => 'Section title',
 				'desc'   => '<p>Some description about this options group</p>',
 				'role'   => array('administrator', 'editor'),
-				'fields' => kc_sample_fields() // TODO: See 00_fields.php and paste the fields you need here.
+				'fields' => kc_sample_fields() // TODO: See 00_fields.php
 			)
 		)
 	);
