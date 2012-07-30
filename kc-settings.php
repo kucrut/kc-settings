@@ -80,6 +80,12 @@ class kcSettings {
 		# Backend-only stuff
 		if ( is_admin() )
 			self::_admin_init();
+
+		# Theme customizer
+		if ( isset(self::$data['settings']['theme']) && !empty(self::$data['settings']) ) {
+			require_once self::$data['paths']['inc']."/theme.php";
+			kcSettings_theme::init();
+		}
 	}
 
 
@@ -87,8 +93,10 @@ class kcSettings {
 		# Register settings
 		if ( self::$data['settings'] ) {
 			foreach ( array_keys(self::$data['settings']) as $type ) {
-				require_once self::$data['paths']['inc']."/{$type}.php";
+				if ( $type === 'theme' )
+					continue;
 
+				require_once self::$data['paths']['inc']."/{$type}.php";
 				if ( $type == 'plugin' ) {
 					foreach ( self::$data['settings']['plugin'] as $group )
 						new kcSettings_plugin( $group );

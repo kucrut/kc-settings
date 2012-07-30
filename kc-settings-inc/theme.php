@@ -28,6 +28,7 @@ class kcSettings_theme {
 		'static_front_page'
 	);
 	protected static $count = 999;
+	protected static $scripts = array();
 
 	public static function init() {
 		self::$settings = kcSettings::get_data( 'settings', 'theme' );
@@ -69,14 +70,19 @@ class kcSettings_theme {
 				# Add fields
 				foreach ( $section['fields'] as $field ) {
 					$field_id = "{$field_prefix}_{$field['id']}";
-					$setting_args = array(
+					$field_args = array(
 						'type'       => 'theme_mod',
 						'capability' => 'edit_theme_options',
 					);
 					if ( isset(self::$defaults[$prefix][$section['id']][$field['id']]) )
-						$setting_args['default'] = self::$defaults[$prefix][$section['id']][$field['id']];
+						$field_args['default'] = self::$defaults[$prefix][$section['id']][$field['id']];
 
-					$wp_customize->add_setting( $field_id, $setting_args );
+					if ( isset($field['script']) && !empty($field['script']) ) {
+						self::$scripts[$field_id] = $field['script'];
+						$field_args['transport'] = 'postMessage';
+					}
+
+					$wp_customize->add_setting( $field_id, $field_args );
 
 					# 0. WP Custom controls
 					if ( isset(self::$controls[$field['type']]) ) {
@@ -103,10 +109,33 @@ class kcSettings_theme {
 
 						$wp_customize->add_control( $field_id, $control_args );
 					}
+
 				}
 			}
 		}
+
+		if ( !empty(self::$scripts) && $wp_customize->is_preview() && !is_admin() )
+			add_action( 'wp_footer', array(__CLASS__, 'print_scripts'), 999 );
 	}
+
+
+	public static function print_scripts() {
+		$out = '';
+		foreach ( self::$scripts as $field_id => $script ) {
+			$out .= "
+wp.customize( '{$field_id}', function( value ) {
+	value.bind( function( to ) {
+		{$script}
+	} );
+} );
+";
+		} ?>
+<script>
+	(function($) {
+		<?php echo $out ?>
+	})(jQuery);
+</script>
+	<?php }
 }
 
 

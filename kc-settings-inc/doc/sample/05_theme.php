@@ -23,7 +23,7 @@ function mytheme_options( $settings ) {
 	require_once dirname(__FILE__) . '/00_fields.php';
 
 	$my_settings = array(
-		'prefix'  => 'anything',    // Use only alphanumerics, dashes and underscores here!
+		'prefix'  => 'anything', // Use only alphanumerics, dashes and underscores here!
 		'options' => array(
 			array(
 				'id'     => 'sample_section',
@@ -47,9 +47,18 @@ function mytheme_options( $settings ) {
 				'title'  => '-', // You'll still have to put some text here eventhough it will not be used
 				'fields' => array(
 					array(
-						'id' => 'title_color',
-						'type' => 'color',
-						'title' => 'Site Title Text Color'
+						'id'      => 'title_color',
+						'type'    => 'color',
+						'default' => '#555',
+						'title'   => 'Site Title text color',
+						'script'  => "$('#site-title a').css('color', to ? to : '');" // a jQuery line. 'to' is the current value
+					),
+					array(
+						'id'      => 'page_bg',
+						'type'    => 'color',
+						'default' => '#fff',
+						'title'   => 'Page background color',
+						'script'  => "$('#page').css('backgroundColor', to ? to : '');" // a jQuery line. 'to' is the current value
 					)
 				)
 			)
