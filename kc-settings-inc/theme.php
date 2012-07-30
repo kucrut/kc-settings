@@ -28,6 +28,7 @@ class kcSettings_theme {
 		'static_front_page'
 	);
 	protected static $count = 999;
+	protected static $script_files = array();
 	protected static $scripts = array();
 
 	public static function init() {
@@ -48,6 +49,13 @@ class kcSettings_theme {
 	public static function register( $wp_customize ) {
 		foreach ( self::$settings as $group ) {
 			extract( $group, EXTR_OVERWRITE );
+			if ( isset($script) && !empty($script) ) {
+				$has_script_file = true;
+				self::$script_files[$prefix] = $script;
+			}
+			else {
+				$has_script_file = false;
+			}
 			foreach( $group['options'] as $section ) {
 				$field_prefix = "{$prefix}_{$section['id']}";
 				# Add the section
@@ -76,6 +84,9 @@ class kcSettings_theme {
 					);
 					if ( isset(self::$defaults[$prefix][$section['id']][$field['id']]) )
 						$field_args['default'] = self::$defaults[$prefix][$section['id']][$field['id']];
+
+					if ( $has_script_file )
+						$field_args['transport'] = 'postMessage';
 
 					if ( isset($field['script']) && !empty($field['script']) ) {
 						self::$scripts[$field_id] = $field['script'];
@@ -114,8 +125,18 @@ class kcSettings_theme {
 			}
 		}
 
-		if ( !empty(self::$scripts) && $wp_customize->is_preview() && !is_admin() )
-			add_action( 'wp_footer', array(__CLASS__, 'print_scripts'), 999 );
+		if ( $wp_customize->is_preview() && !is_admin() ) {
+			if ( !empty(self::$script_files) )
+				add_action( 'wp_enqueue_scripts', array(__CLASS__, 'enqueue_scripts'), 999 );
+			if ( !empty(self::$scripts) )
+				add_action( 'wp_footer', array(__CLASS__, 'print_scripts'), 999 );
+		}
+	}
+
+
+	public static function enqueue_scripts() {
+		foreach ( self::$script_files as $prefix => $url )
+			wp_enqueue_script( "kctc-{$prefix}", $url, array( 'customize-preview' ), 'latest', true );
 	}
 
 

@@ -18,22 +18,37 @@
 
 add_filter( 'kc_theme_settings', 'mytheme_options' );
 function mytheme_options( $settings ) {
-	// TODO: Please copy/paste/edit the fields you need, then remove the require_once line.
-	// This is only for simplifying the development.
+	/**
+	 * TODO: Please copy/paste/edit the fields you need, then remove the require_once line.
+	 */ This is only for simplifying the development.
 	require_once dirname(__FILE__) . '/00_fields.php';
 
 	$my_settings = array(
-		'prefix'  => 'anything', // Use only alphanumerics, dashes and underscores here!
+		/**
+		 * Only alphanumerics, dashes and underscores are allowed here.
+		 */
+		'prefix'  => 'anything',
+		/**
+		 * Copy the customizer.js to your theme's directory file then
+		 * uncomment the line below if you want to load a javascript file
+		 * when viewing the theme customizer page.
+		 */
+		// 'script'  => get_stylesheet_directory_uri() . '/customizer.js',
 		'options' => array(
 			array(
 				'id'     => 'sample_section',
 				'title'  => 'Sample Options',
 				'desc'   => 'Some description about this options group',
-				'fields' => kc_sample_fields() // TODO: See 00_fields.php and paste the fields you need here.
+				'fields' => kc_sample_fields() // TODO: See 00_fields.php
 			),
 			array(
-				'id'     => 'title_tagline', // This will inject new fields under the default "Site Title & Tagline" section
-				'title'  => '-', // You'll still have to put some text here eventhough it will not be used
+				/**
+				 * This will inject new fields under the default "Site Title & Tagline" section
+				 * The title will not be used, but you still need to put something there to pass
+				 * the validator.
+				 */
+				'id'     => 'title_tagline',
+				'title'  => '-',
 				'fields' => array(
 					array(
 						'id' => 'another_text',
@@ -43,22 +58,32 @@ function mytheme_options( $settings ) {
 				)
 			),
 			array(
-				'id'     => 'colors', // This will inject new fields under the default "Colors" section
-				'title'  => '-', // You'll still have to put some text here eventhough it will not be used
+				/**
+				 * This will inject new fields under the default "Colors" section
+				 * The title will not be used, but you still need to put something there to pass
+				 * the validator.
+				 */
+				'id'     => 'colors',
+				'title'  => '-',
 				'fields' => array(
 					array(
 						'id'      => 'title_color',
 						'type'    => 'color',
 						'default' => '#555',
-						'title'   => 'Site Title text color',
-						'script'  => "$('#site-title a').css('color', to ? to : '');" // a jQuery line. 'to' is the current value
+						'title'   => 'Site Title text color'
 					),
 					array(
 						'id'      => 'page_bg',
 						'type'    => 'color',
 						'default' => '#fff',
 						'title'   => 'Page background color',
-						'script'  => "$('#page').css('backgroundColor', to ? to : '');" // a jQuery line. 'to' is the current value
+						/**
+						 * Below is a sample jQuery line to modify the preview page in realtime.
+						 * 'to' is the current value of a setting field.
+						 * You don't need this if you already have a JS file loaded and did
+						 * your stuff there.
+						 */
+						'script'  => "$('#page').css('backgroundColor', to ? to : '');"
 					)
 				)
 			)
