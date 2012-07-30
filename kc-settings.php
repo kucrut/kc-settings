@@ -77,7 +77,7 @@ class kcSettings {
 		kcSettings_options::init();
 
 		# Include samples (for development)
-		self::_samples( array('01_plugin', '02_post', '03_term', '04_user', '05_theme') );
+		// self::_samples( array('01_plugin', '02_post', '03_term', '04_user', '05_theme') );
 
 		# Get all settings
 		self::_bootstrap_settings();
