@@ -18,6 +18,7 @@ Text Domain: kc-settings
 */
 
 class kcSettings {
+	const version = '2.7.4';
 	protected static $data = array(
 		'paths'    => '',
 		'pages'    => array('media-upload-popup'),
@@ -27,6 +28,7 @@ class kcSettings {
 		'settings' => array(),
 		'defaults' => array(),
 		'kcsb'     => array(),
+		'kids'     => array(),
 		'customizer_blacklist' => array(
 			'multiinput', 'multiselect', 'special', 'editor', 'checkbox'
 			, 'file', 'image', 'upload'
@@ -61,6 +63,9 @@ class kcSettings {
 
 
 	public static function init() {
+		# Get children (plugins/themes that depend on KC Settings)
+		self::$data['kids'] = apply_filters( 'kc_settings_kids', array() );
+
 		# Setup termmeta table
 		self::_setup_termmeta_table();
 
@@ -653,10 +658,11 @@ class kcSettings {
 
 
 	/**
-	 * Lock plugin when there are other plugins/themes using it
+	 * Lock plugin/prevent deactivation when there are other plugins/themes
+	 *   that depend on it.
 	 */
 	public static function _lock( $actions, $plugin_file, $plugin_data, $context ) {
-		if ( $plugin_file == self::$data['paths']['p_file'] && !empty(self::$data['status']['kids']) )
+		if ( $plugin_file == self::$data['paths']['p_file'] && !empty(self::$data['kids']) )
 			unset( $actions['deactivate'] );
 
 		return $actions;
@@ -730,56 +736,12 @@ class kcSettings {
 		if ( version_compare(get_bloginfo('version'), '3.3', '<') )
 			wp_die( 'Please upgrade your WordPress to version 3.3 before using this plugin.' );
 
-		$status = get_option( 'kc_settings' );
-		if ( !$status )
-			$status = array();
-
-		if ( !isset($data['kids']) )
-			$status['kids'] = array();
-
-		$old_version = ( isset($status['version']) ) ? $status['version'] : '2.2';
-		$status['version'] = '2.7.4';
-
-		update_option( 'kc_settings', $status );
-
-		if ( version_compare($old_version, '2.5', '<') )
-			self::_upgrade( array('kcsb', 'kcsb_metabox') );
-	}
-
-
-	# Upgrade task(s)
-	private static function _upgrade( $parts = array() ) {
-		if ( in_array('kcsb', $parts) ) {
-			$kcsb = get_option( 'kcsb' );
-			if ( is_array($kcsb) ) {
-				foreach ( $kcsb as $id => $item ) {
-					foreach ($item['sections'] as $section_id => $section ) {
-						# Metabox (20111215)
-						if ( in_array('kcsb_metabox', $parts) ) {
-							$mb_prio = isset($section['priority']) ? $section['priority'] : 'default';
-							if ( isset($section['priority'])
-										|| ( $item['type'] == 'plugin' && !isset($item['display']) )
-										|| ( $item['display'] == 'metabox' && !isset($section['metabox']) ) ) {
-								$section['metabox'] = array(
-									'context'  => 'normal',
-									'priority' => $mb_prio
-								);
-								$item['display'] = 'metabox';
-								unset( $section['priority'] );
-							}
-						}
-
-						# Return the section
-						$item['sections'][$section_id] = $section;
-					}
-
-					# Return the item
-					$kcsb[$id] = $item;
-				}
-
-				update_option( 'kcsb', $kcsb );
-			}
-		}
+		/**
+		 * Since 2.7.4
+		 * We're not saving any plugin status to the DB anymore so the plugin
+		 *   can be bundled with a plugin/theme.
+		 */
+		delete_option( 'kc_settings' );
 	}
 
 
@@ -789,7 +751,7 @@ class kcSettings {
 	}
 
 }
-add_action( 'plugins_loaded', array('kcSettings', 'setup'), 7);
+add_action( 'plugins_loaded', array('kcSettings', 'setup'), 7 );
 
 
 # A hack for symlinks
