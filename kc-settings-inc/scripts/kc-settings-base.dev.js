@@ -510,7 +510,7 @@ function invertColor( color ) {
 			var $el      = $(this),
 			    val      = $el.val(),
 			    $targets = ( $el.data('scope') !== undefined ) ?
-			                 $el.closest( $el.data('scope') ).find( $el.data('child') ) :
+			                 $el.closest( $el.data('scope') ).children( $el.data('child') ) :
 			                 $( $el.data('child') );
 
 			if ( $targets.length )

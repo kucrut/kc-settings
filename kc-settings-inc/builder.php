@@ -58,7 +58,6 @@ class kcSettings_builder {
 		if ( !isset($kcsb['settings']) || !is_array($kcsb['settings']) )
 			$kcsb['settings'] = array();
 		self::$data['kcsb'] = $kcsb;
-		self::$data['defaults']['sections'][0]['fields'][0]['subfields'] = self::$data['defaults']['sections'][0]['fields'];
 
 		add_action( 'admin_init', array(__CLASS__, 'register'), 21 );
 		add_action( 'admin_menu', array(__CLASS__, 'create_page') );
@@ -462,7 +461,7 @@ class kcSettings_builder {
 										'name'       => "{$f_name}[type]",
 										'class'      => "hasdep mi",
 										'data-child' => '.childFieldType',
-										'data-scope' => 'li.row'
+										'data-scope' => 'ul.main'
 									),
 									'options' => $options['field'],
 									'current' => isset($f_val['type']) ? $f_val['type'] : 'text',
@@ -480,7 +479,7 @@ class kcSettings_builder {
 										'name'       => "{$f_name}[mode]",
 										'class'      => "hasdep mi",
 										'data-child' => '.childFileSize',
-										'data-scope' => 'li.row'
+          'data-scope' => 'ul.main'
 									),
 									'options' => $options['filemode'],
 									'current' => isset($f_val['mode']) ? $f_val['mode'] : 'single',
@@ -514,7 +513,7 @@ class kcSettings_builder {
 										'name'       => "{$f_name}[option_type]",
 										'class'      => "hasdep mi",
 										'data-child' => '.childFieldOptionType',
-										'data-scope' => 'li.row'
+          'data-scope' => 'ul.main'
 									),
 									'options' => $options['option_type'],
 									'current' => isset( $f_val['option_type'] ) ? $f_val['option_type'] : 'predefined',
@@ -532,7 +531,7 @@ class kcSettings_builder {
 										'name'  => "{$f_name}[option_predefined]",
 										'class' => "hasdep mi",
 										'data-child' => '.childFieldOptionArg',
-										'data-scope' => 'li.row'
+          'data-scope' => 'ul.main'
 									),
 									'options' => $options['option_predefined'],
 									'current' => isset( $f_val['option_predefined'] ) ? $f_val['option_predefined'] : 'yesno',
