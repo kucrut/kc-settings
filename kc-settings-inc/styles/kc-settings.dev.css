@@ -277,7 +277,10 @@ input[type="datetime"], input[type="datetime-local"] {
 	width:600px;
 	position:relative;
 }
-#kcsb-table {margin-bottom:3em}
+#kcsb-table,
+.kcsb-export {
+	margin-bottom:3em;
+}
 .kcsb-clone a {
 	position:relative;
 	top:4px;
@@ -342,4 +345,18 @@ input[type="datetime"], input[type="datetime-local"] {
 	display:inline-block;
 	width:auto;
 	margin-right:.5em;
+}
+.wrap h3 small {
+	font-weight:normal;
+	margin-left:.75em;
+	display:inline-block;
+	vertical-align:middle;
+}
+.kcsb-export textarea.widefat {
+	resize:vertical;
+	min-height:27em;
+	font-size:1.1em;
+	font-family: 'Luxi Mono', 'Bitstream Vera Sans Mono', 'Courier New', monospace;
+	line-height:1.4;
+	background:#fcfcfc;
 }

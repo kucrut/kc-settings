@@ -590,6 +590,10 @@ class kcSettings {
 					'info'     => __( 'Click the "Media Library" tab to insert files that are already upload, or, upload your files and then go to the "Media Library" tab to insert the files you just uploaded.', 'kc-settings' ),
 					'selFile'  => __( 'Select file', 'kc-settings' )
 				)
+			),
+			'texts' => array(
+				'show' => __('Show', 'kc-settings'),
+				'hide' => __('Hide', 'kc-settings')
 			)
 		) );
 		wp_register_script( 'kc-settings', "{$path['scripts']}/kc-settings{$suffix}.js", array('kc-settings-base', 'jquery-ui-sortable', 'jquery-ui-datepicker'), self::version, true );

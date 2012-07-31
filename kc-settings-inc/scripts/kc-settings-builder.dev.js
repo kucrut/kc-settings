@@ -181,4 +181,22 @@ jQuery(document).ready(function($) {
 		if ( !isOK )
 			return false;
 	});
+
+	$doc.on('click', 'a.kc-sh', function(e) {
+		e.preventDefault();
+
+		var $el = $(this).blur(),
+		    $target = $( $el.data('target') );
+
+		if ( $target.is(':visible') ) {
+			$target.slideUp(function() {
+				$el.text(kcSettings.texts.show);
+			});
+		}
+		else {
+			$target.slideDown(function() {
+				$el.text(kcSettings.texts.hide);
+			});
+		}
+	});
 });

@@ -1,7 +1,7 @@
 === KC Settings ===
 Contributors: kucrut
 Donate link: http://kucrut.org/
-Tags: theme-options, plugin-options, settings, options, term-meta, category-meta, post-meta, custom-fields, user-meta, attachment
+Tags: theme-options, plugin-options, settings, options, term-meta, category-meta, post-meta, custom-fields, user-meta, attachment, theme-customizer
 Requires at least: 3.3
 Tested up to: 3.4.1
 Stable tag: 2.7.5
@@ -26,7 +26,9 @@ Version 2.6 only supports WordPress 3.3+
 
 = How do I create my settings? =
 
-Please find the readme.html file inside the plugin directory for the documentation, or [view it online](http://kucrut.github.com/kc-settings/).
+Go to Settings &raquo; KC Settings and create it there. You can also export the settings from there.
+
+For complete howto, please find the readme.html file inside the plugin directory or [view it online](http://kucrut.github.com/kc-settings/).
 
 == Screenshots ==
 
@@ -39,8 +41,8 @@ Please find the readme.html file inside the plugin directory for the documentati
 == Changelog ==
 
 = 2.7.5 =
-* Finalized theme customizer, now supports realtime preview!
-* Cleanup samples
+* Finalized theme customizer, now supports realtime preview
+* New feature: KC Settings Builder exporter
 
 = 2.7.4 =
 * New (experimental) feature: Theme customizer

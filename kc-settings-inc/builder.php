@@ -50,6 +50,7 @@ class kcSettings_builder {
 
 	protected static $table;
 	protected static $item_to_edit;
+	protected static $item_to_export;
 	protected static $update_message;
 
 
@@ -320,10 +321,8 @@ class kcSettings_builder {
 			break;
 
 			case 'export' :
-				if ( isset($_REQUEST['type']) && isset(self::$data['kcsb']['items'][$_REQUEST['type']][$_REQUEST['id']]) ) {
-					echo '<pre>'.self::_exporter( $_REQUEST['type'], self::$data['kcsb']['items'][$_REQUEST['type']][$_REQUEST['id']] ).'</pre>';
-					exit;
-				}
+				if ( isset($_REQUEST['type']) && isset(self::$data['kcsb']['items'][$_REQUEST['type']][$_REQUEST['id']]) )
+					self::$item_to_export = self::_exporter( $_REQUEST['type'], self::$data['kcsb']['items'][$_REQUEST['type']][$_REQUEST['id']] );
 			break;
 		}
 
@@ -679,6 +678,12 @@ class kcSettings_builder {
 				?>
 			</form>
 
+			<?php if ( self::$item_to_export ) { ?>
+			<h3><?php _e('Export Data', 'kc-settings') ?> <small class="hide-if-no-js"><a class='kc-sh' data-target='.kcsb-export' href="#"><?php _e('Hide', 'kc-settings') ?></a></small></h3>
+			<div class="kcsb-export">
+				<textarea class="widefat" cols="30" rows="20"><?php echo self::$item_to_export ?></textarea>
+			</div>
+			<?php } ?>
 
 			<!-- Start builder -->
 			<p class="hide-if-js"><?php _e('To create a setting, please enable javascript in your browser and reload this page.', 'kc-settings') ?></p>
@@ -943,13 +948,13 @@ switch ( $type ) {
 	case 'user' :
 		$out .= '
 	$groups[] = array (
-		' . $content;
+		' . $content .
 		'
 	);';
 	break;
 	case 'plugin' :
 	$out .= '
-	$groups[] =  '. $content .
+	$groups[] = '. $content .
 		';';
 	break;
 }
