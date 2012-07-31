@@ -359,4 +359,27 @@ function kc_ajax_get_image_url() {
 	die();
 }
 
+
+/**
+ * Prettify var_export()
+ */
+function kc_var_export( $data, $use_tabs = false, $pad = 0 ) {
+	$data = var_export( $data, true );
+	$pad = (int) $pad;
+	if ( $pad )
+		$data = preg_replace( '/^/m', str_repeat(' ', $pad), $data );
+	$data = preg_replace('/^(\s+array)/m', 'array', $data );
+	$data = str_replace( "=> \n", '=> ', $data );
+
+	if ( $use_tabs )
+		$data = preg_replace_callback('/^(\s+)/m', 'kc_var_export_tabs', $data );
+
+	return $data;
+}
+
+
+function kc_var_export_tabs( $data ) {
+	return str_repeat( "\t", intval( strlen($data[1])/2 ) );
+}
+
 ?>

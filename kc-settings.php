@@ -200,7 +200,8 @@ class kcSettings {
 				'settings' => array(),
 				'sections' => array(),
 				'fields'   => array()
-			)
+			),
+			'items' => array()
 		);
 
 		$settings = array(
@@ -279,6 +280,7 @@ class kcSettings {
 				$setting['options'] = $sections;
 				unset ( $setting['sections'] );
 
+				$kcsb['items'][$type][$sID] = $setting;
 				if ( $type == 'plugin' ) {
 					$settings[$type][$sID] = $setting;
 				}

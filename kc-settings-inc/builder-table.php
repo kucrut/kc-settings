@@ -58,6 +58,9 @@ class kcSettings_builder_table extends WP_List_Table {
 				$actions['empty'] = "<span class='trash'><a href='".wp_nonce_url( admin_url("{$url}empty"), "__kcsb__{$item['id']}" )."' title='".__('Delete setting value(s) from DB', 'kc-settings')."'>".__('Remove from DB', 'kc-settings')."</a></span>";
 		}
 
+		if ( !isset($item['status']) || $item['status'] )
+			$actions['export'] = "<a href='".admin_url( "{$url}export&amp;type={$item['type']}")."'>".__('Export', 'kc-settings')."</a>";
+
 		return sprintf('%1$s %2$s', $item['id'], $this->row_actions($actions) );
   }
 
