@@ -116,6 +116,29 @@ jQuery(document).ready(function($) {
 		}]);
 	}
 
+	// Chosen
+	var $chosen = $('select.chosen');
+	if ( $chosen.length ) {
+		Modernizr.load([{
+			load: [
+				win.kcSettings.paths.scripts+'/chosen.jquery.js',
+				win.kcSettings.paths.styles+'/chosen/chosen.css'
+			],
+			complete: function() {
+				$chosen.each(function() {
+					var $el = $(this);
+
+					$el.children('option[value=""]').remove();
+
+					if ($el.prop('multiple') )
+						$el.css('width', '100%');
+
+					$el.chosen({ allow_single_deselect: !$el.prop('required') });
+				});
+			}
+		}]);
+	}
+
 	// Add term form
 	var $addTagForm = $('#addtag');
 	if ( $addTagForm.length ) {
