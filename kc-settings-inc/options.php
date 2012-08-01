@@ -195,6 +195,8 @@ class kcSettings_options_cb {
 			$args['post_type'] = $post_type;
 		if ( $args['post_type'] === 'attachment' && !isset($args['post_status']) )
 			$args['post_status'] = 'inherit';
+		if ( !isset($args['posts_per_page']) )
+			$args['posts_per_page'] =  -1;
 
 		$q = new WP_Query( $args );
 		if ( $q->have_posts() )
