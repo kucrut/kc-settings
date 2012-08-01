@@ -43,6 +43,7 @@ class kcSettings {
 			return false;
 
 		self::$data['paths'] = $paths;
+		self::$data['standalone'] = current_filter() == 'plugins_loaded';
 
 		require_once "{$paths['inc']}/form.php";
 		require_once "{$paths['inc']}/helper.php";
@@ -117,9 +118,11 @@ class kcSettings {
 		# Admin scripts n styles
 		add_action( 'admin_enqueue_scripts', array(__CLASS__, '_sns_admin') );
 
-		# Builder
-		require_once( self::$data['paths']['inc'].'/builder.php' );
-		kcSettings_builder::init();
+		# Builder: only load if NOT bundled
+		if ( self::$data['standalone'] ) {
+			require_once( self::$data['paths']['inc'].'/builder.php' );
+			kcSettings_builder::init();
+		}
 
 		# Contextual help
 		add_action( 'admin_head', array(__CLASS__, '_register_help') );
