@@ -87,10 +87,8 @@ class kcSettings {
 			self::_admin_init();
 
 		# Theme customizer
-		if ( isset(self::$data['settings']['theme']) && !empty(self::$data['settings']) ) {
+		if ( isset(self::$data['settings']['theme']) && !empty(self::$data['settings']) )
 			require_once self::$data['paths']['inc']."/theme.php";
-			kcSettings_theme::init();
-		}
 	}
 
 

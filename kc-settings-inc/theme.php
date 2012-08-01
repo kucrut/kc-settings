@@ -11,7 +11,6 @@
 
 class kcSettings_theme {
 	protected static $settings;
-	protected static $defaults;
 	protected static $controls = array(
 		'color'    => 'WP_Customize_Color_Control',
 		'image'    => 'WP_Customize_Image_Control',
@@ -32,8 +31,15 @@ class kcSettings_theme {
 	protected static $scripts = array();
 
 	public static function init() {
-		self::$settings = kcSettings::get_data( 'settings', 'theme' );
-		self::$defaults = kcSettings::get_data( 'defaults', 'theme' );
+		if ( class_exists('kcSettings') )
+			$settings = kcSettings::get_data( 'settings', 'theme' );
+		else
+			$settings = apply_filters( 'kc_theme_settings', array() );
+
+		if ( empty($settings) )
+			return false;
+
+		self::$settings = $settings;
 
 		# Add menu under Appearance
 		add_action( 'admin_menu', array(__CLASS__, 'create_menu') );
@@ -42,7 +48,7 @@ class kcSettings_theme {
 
 
 	public static function create_menu() {
-		add_theme_page( __('Customizer', 'kc-settings'), __('Customizer', 'kc-settings'), 'edit_theme_options', 'customize.php' );
+		add_theme_page( __('Customize'), __('Customize'), 'edit_theme_options', 'customize.php' );
 	}
 
 
@@ -82,8 +88,8 @@ class kcSettings_theme {
 						'type'       => 'theme_mod',
 						'capability' => 'edit_theme_options',
 					);
-					if ( isset(self::$defaults[$prefix][$section['id']][$field['id']]) )
-						$field_args['default'] = self::$defaults[$prefix][$section['id']][$field['id']];
+					if ( isset($field['default']) )
+						$field_args['default'] = $field['default'];
 
 					if ( $has_script_file )
 						$field_args['transport'] = 'postMessage';
@@ -158,6 +164,7 @@ wp.customize( '{$field_id}', function( value ) {
 </script>
 	<?php }
 }
+kcSettings_theme::init();
 
 
 require_once ABSPATH . WPINC . '/class-wp-customize-control.php';
