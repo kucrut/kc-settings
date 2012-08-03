@@ -38,6 +38,7 @@ For complete howto, please find the readme.html file inside the plugin directory
 3. Term settings (add new)
 4. Term settings (edit)
 5. Post settings
+6. Theme customizer
 
 == Changelog ==
 
