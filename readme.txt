@@ -20,7 +20,8 @@ Version 2.6 only supports WordPress 3.3+
 
 1. Use standard WordPress plugin installation or upload the `kc-settings` directory to your `wp-content/plugins` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Use the settings builder in Settings &raquo; KC Settings to create a setting or read the documentation (kc-settings-inc/doc/readme.html) on how you can add your options.
+3. Use the settings builder in Settings &raquo; KC Settings to create a setting array or read the documentation (kc-settings-inc/doc/readme.html) on how you can add your options.
+4. For other installation methods (version 2.7.6+), please read the 'Installation' section of the documentation.
 
 == Frequently Asked Questions ==
 

@@ -160,7 +160,7 @@ class kcSettings {
 		$paths = array();
 		$url = $locations[$key][1];
 		if ( $file_info['parent'] != $key )
-			$url = "/{$file_info['parent']}";
+			$url .= "/{$file_info['parent']}";
 		$inc_prefix = "{$file_info['filename']}{$inc_suffix}";
 
 		$paths['file']    = $file;
