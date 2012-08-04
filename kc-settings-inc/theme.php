@@ -167,7 +167,7 @@ wp.customize( '{$field_id}', function( value ) {
 kcSettings_theme::init();
 
 
-require_once ABSPATH . WPINC . '/class-wp-customize-control.php';
+if ( class_exists('WP_Customize_Control') ) {
 class WP_Customize_KC_Common_Control extends WP_Customize_Control {
 	public $type = 'email';
 
@@ -191,6 +191,7 @@ class WP_Customize_KC_Common_Control extends WP_Customize_Control {
 			break;
 		}
 	}
+}
 }
 
 ?>
