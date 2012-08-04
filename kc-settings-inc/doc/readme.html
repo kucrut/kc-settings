@@ -16,7 +16,14 @@
 			color:#4e4e4e;
 			font-family: 'Linux Biolinum', 'Helvetica', sans-serif;
 			margin:1em 0 0}
-		code {color:#590000;}
+		code {
+			color:#590000;
+			-webkit-tab-size: 4;
+			-moz-tab-size: 4;
+			-ms-tab-size: 4;
+			-o-tab-size: 4;
+			tab-size: 4;
+		}
 		p code {white-space:nowrap}
 		code span {color:#008C00}
 		pre span {color:#ec871d}
@@ -128,11 +135,32 @@
 						<li>Copy <code><span>kc-settings.php</span></code> and <code><span>kc-settings-inc</span></code> to your theme/plugin directory <em>(don't just copy the <code><span>kc-settings</span></code> directory)</em>.</li>
 						<li>Add this block of code to your theme's <code><span>function.php</span></code> file:
 <pre><code>function mytheme_load_kc_settings() {
+	<span class="ccomment">// Load the settings array</span>
+	require_once get_template_directory() . '/my-settings.php';
+
 	if ( class_exists('kcSettings') )
 		return;
 
-	<span class="ccomment">// Use get_stylesheet_directory() next line if you're doing this in a child theme</span>
-	<span class="ccomment">// Make sure to load the file that contains the options before the next line!</span>
+	<span class="ccomment">// This is to make sure you can have KC Settings bundled in your theme/plugin <em>and</em> as a standalone plugin</span>
+	if ( is_admin() ) {
+		global $pagenow;
+		if (
+			$pagenow === 'plugins.php'
+			&amp;&amp; (
+				<span class="ccomment">// Single plugin activation</span>
+				( isset($_REQUEST['action']) &amp;&amp; $_REQUEST['action'] === 'activate' &amp;&amp; isset($_REQUEST['plugin']) &amp;&amp; $_REQUEST['plugin'] === 'kc-settings/kc-settings.php' )
+				|| (
+					// Bulk activation
+					!empty($_POST)
+					&amp;&amp; ( ( isset($_POST['action']) &amp;&amp; $_POST['action'] === 'activate-selected' ) || ( isset($_POST['action2']) &amp;&amp; $_POST['action2'] === 'activate-selected' ) )
+					&amp;&amp; ( isset($_POST['checked']) &amp;&amp; is_array($_POST['checked']) &amp;&amp; in_array('kc-settings/kc-settings.php', $_POST['checked']) )
+				)
+			)
+		)
+			return;
+	}
+
+	<span class="ccomment">// Use get_stylesheet_directory() if you're doing this in a child theme</span>
 	require_once get_template_directory() . '/kc-settings.php';
 	kcSettings::setup();
 }
@@ -147,14 +175,16 @@ add_action( '<span>after_setup_theme</span>', 'mytheme_load_kc_settings' );
 				<dd>
 					<p>If you only need the theme customizer module, copy the <code><span>theme.php</span></code> file from the <code><span>kc-settings/kc-settings-inc/</span></code> to your theme's directory then add this block of code to your theme's <code><span>function.php</span></code> file:</p>
 <pre><code>function mytheme_load_kc_customizer() {
+	<span class="ccomment">// Load the settings array</span>
+	require_once get_template_directory() . '/mytheme-settings.php';
+
 	if ( class_exists('kcSettings') )
 		return;
 
-	<span class="ccomment">// Use get_stylesheet_directory() next line if you're doing this in a child theme</span>
-	<span class="ccomment">// Make sure to load the file that contains the options before the next line!</span>
+	<span class="ccomment">// Use get_stylesheet_directory() if you're doing this in a child theme</span>
 	require_once get_template_directory() . '/theme.php';
 }
-add_action( 'after_setup_theme', 'mytheme_load_kc_customizer', 99 );
+add_action( '<span>after_setup_theme</span>', 'mytheme_load_kc_customizer', 99 );
 </code></pre>
 					<p><strong>Note:</strong> You need to make sure that your options array is valid, because the module won't do any validation. Also, I strongly suggest to rename the <code><span>theme.php</span></code> file to something else to avoid confusion :)</p>
 
