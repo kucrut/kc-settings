@@ -657,10 +657,18 @@ function invertColor( color ) {
 	/* Misc. */
 	// Help trigger
 	$doc.on('click', 'a.kc-help-trigger', function(e) {
+		var $trigger = $(this),
+		    $target  = $($trigger.attr('href'));
 		e.preventDefault();
 
 		$('#contextual-help-link').click();
 		$('#screen-meta').kcGoto();
+
+		if ( $target.length ) {
+			setTimeout( function() {
+				$('> a', $target).click();
+			}, 500 );
+		}
 	});
 
 
