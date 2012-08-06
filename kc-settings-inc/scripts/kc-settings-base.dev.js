@@ -654,6 +654,29 @@ function invertColor( color ) {
 	};
 
 
+	$.fn.kcChosen = function() {
+		var $els = $(this);
+		Modernizr.load([{
+			load: [
+				win.kcSettings.paths.scripts+'/chosen.jquery.js',
+				win.kcSettings.paths.styles+'/chosen/chosen.css'
+			],
+			complete: function() {
+				$els.each(function() {
+					var $el = $(this);
+
+					$el.children('option[value=""]').remove();
+
+					if ($el.prop('multiple') )
+						$el.css('width', '100%');
+
+					$el.chosen({ allow_single_deselect: !$el.prop('required') });
+				});
+			}
+		}]);
+	};
+
+
 	/* Misc. */
 	// Help trigger
 	$doc.on('click', 'a.kc-help-trigger', function(e) {
