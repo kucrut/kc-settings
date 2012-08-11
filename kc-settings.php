@@ -578,7 +578,7 @@ class kcSettings {
 		$suffix = KC_SETTINGS_SNS_DEBUG ? '.dev' : '';
 
 		# Common
-		wp_register_script( 'modernizr',        "{$path['scripts']}/modernizr-2.5.3-20120707{$suffix}.js", false, '2.5.3', true );
+		wp_register_script( 'modernizr',        "{$path['scripts']}/modernizr-2.6.1-20120811{$suffix}.js", false, '2.6.1' );
 		wp_register_script( 'kc-settings-base', "{$path['scripts']}/kc-settings-base{$suffix}.js", array('jquery', 'modernizr', 'media-upload', 'thickbox'), self::version, true );
 		wp_localize_script( 'kc-settings-base', 'kcSettings', array(
 			'paths'  => self::$data['paths'],
