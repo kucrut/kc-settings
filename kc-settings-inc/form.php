@@ -157,7 +157,7 @@ class kcForm {
 	}
 
 
-	private static function _build_attr( $attr ) {
+	public static function _build_attr( $attr, $q = '"' ) {
 		if ( !is_array($attr) || empty($attr) )
 			return '';
 
@@ -166,7 +166,7 @@ class kcForm {
 
 		$output = '';
 		foreach ( $attr as $k => $v )
-			$output .= " {$k}='".esc_attr($v)."'";
+			$output .= " {$k}={$q}".esc_attr($v)."{$q}";
 
 		return $output;
 	}
