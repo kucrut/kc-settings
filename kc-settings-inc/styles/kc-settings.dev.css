@@ -360,3 +360,11 @@ input[type="datetime"], input[type="datetime-local"] {
 	line-height:1.4;
 	background:#fcfcfc;
 }
+.help-tab-content pre {
+	background:#eaeaea;
+	max-height:20em;
+	overflow:auto;
+	padding:.75em;
+	border-radius:.3em;
+}
+.help-tab-content pre .ccomment {color:#8a8a8a}
