@@ -105,12 +105,20 @@ class kcForm {
 
 
 	public static function select( $args ) {
-		if ( !isset($args['none']) || ( isset($args['none']) && $args['none'] !== false ) ) {
-			$args['none'] = array(
-				'value'   => '',
-				'label'   => '&mdash;&nbsp;'.__('Select', 'kc-settings').'&nbsp;&mdash;'
+		if ( isset($args['none']) ) {
+			if ( $args['none'] )
+				$none = $args['none'];
+			else
+				$none = false;
+		}
+		else {
+			$none = '&mdash;&nbsp;'.__('Select', 'kc-settings').'&nbsp;&mdash;';
+		}
+		if ( $none ) {
+			$args['options'] = array_merge(
+				array( array('value' => '', 'label' => $none) ),
+				$args['options']
 			);
-			$args['options'] = array_merge( array($args['none']), $args['options'] );
 		}
 
 		if ( !is_array($args['current']) )
@@ -167,7 +175,7 @@ class kcForm {
 	private static function _build_options( $options ) {
 		$out = array();
 		foreach ( $options as $v => $l )
-			$out[] = array( 'value' => $v, 'label'	=> $l );
+			$out[] = array( 'value' => $v, 'label' => $l );
 
 		return $out;
 	}

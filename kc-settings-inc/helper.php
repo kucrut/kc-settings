@@ -382,4 +382,21 @@ function kc_var_export_tabs( $data ) {
 	return str_repeat( "\t", intval( strlen($data[1])/2 ) );
 }
 
+
+/**
+ * Get current URL
+ * @return string Current URL
+ * @since 2.7.7
+ * @link http://kovshenin.com/2012/current-url-in-wordpress/
+ */
+function kc_get_current_url() {
+	global $wp;
+	if ( get_option('permalink_structure') )
+		$current_url = home_url( $wp->request );
+	else
+		$current_url = add_query_arg( $wp->query_string, '', home_url() );
+
+	return $current_url;
+}
+
 ?>
