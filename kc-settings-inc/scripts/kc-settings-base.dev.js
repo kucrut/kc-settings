@@ -686,17 +686,26 @@ function invertColor( color ) {
 	/* Misc. */
 	// Help trigger
 	$doc.on('click', 'a.kc-help-trigger', function(e) {
+		e.preventDefault();
 		var $trigger = $(this),
 		    $target  = $($trigger.attr('href'));
-		e.preventDefault();
 
-		$('#contextual-help-link').click();
+		if ( !$('#screen-options-wrap').is(':hidden') ) {
+			$('#show-settings-link').trigger('click');
+			setTimeout( function() {
+				$('#contextual-help-link').click();
+			}, 500 );
+		}
+		else {
+			$('#contextual-help-link').click();
+		}
+
 		$('#screen-meta').kcGoto();
 
 		if ( $target.length ) {
 			setTimeout( function() {
 				$('> a', $target).click();
-			}, 500 );
+			}, 700 );
 		}
 	});
 
