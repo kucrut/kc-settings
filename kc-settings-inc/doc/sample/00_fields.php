@@ -127,7 +127,10 @@ function kc_sample_fields() {
 			'desc'    => 'These options are the return value of <code>kcSettings_options_cb::terms("category")</code>',
 			'type'    => 'checkbox', // Not supported in theme customizer
 			'options' => array('kcSettings_options_cb', 'terms'),
-			'args'    => array( 'taxonomy' => 'category' )
+			'args'    => array(
+				'taxonomy' => 'category',
+				'args' => array( 'depth' => 0 )
+			)
 			/**
 			 * To modify the arguments of get_terms(), for example:
 			 * 'args' => array( 'taxonomy' => 'category', 'args' => array('parent' => 1, 'exclude_tree' => 3) )
