@@ -394,7 +394,7 @@ function kc_get_current_url() {
 	if ( get_option('permalink_structure') )
 		$current_url = home_url( $wp->request );
 	else
-		$current_url = add_query_arg( $wp->query_string, '', home_url() );
+		$current_url = add_query_arg( $wp->query_string, '', trailingslashit(home_url()) );
 
 	return $current_url;
 }
