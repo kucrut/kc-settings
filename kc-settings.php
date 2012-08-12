@@ -33,7 +33,8 @@ class kcSettings {
 			'multiinput', 'multiselect', 'special', 'editor', 'checkbox'
 			, 'file', 'image', 'upload'
 			, 'date', 'datetime', 'datetime-local', 'week', 'month', 'time'
-		)
+		),
+		'is_kcs_page' => false
 	);
 
 
@@ -112,6 +113,9 @@ class kcSettings {
 
 		# Lock
 		add_filter( 'plugin_action_links', array(__CLASS__, '_lock'), 10, 4 );
+
+		# Admin body class
+		add_action( 'admin_body_class', array(__CLASS__, 'admin_body_class') );
 
 		# Admin scripts n styles
 		add_action( 'admin_enqueue_scripts', array(__CLASS__, '_sns_admin') );
@@ -611,9 +615,19 @@ class kcSettings {
 	}
 
 
+	public static function admin_body_class( $classes ) {
+		if ( self::$data['is_kcs_page'] )
+			$classes .= 'kc-settings-page';
+
+		return $classes;
+	}
+
+
 	public static function _sns_admin( $hook_suffix ) {
 		if ( !in_array($hook_suffix, self::$data['pages']) )
 			return;
+
+		self::$data['is_kcs_page'] = true;
 
 		wp_enqueue_style( 'kc-settings' );
 		wp_enqueue_script( 'kc-settings' );

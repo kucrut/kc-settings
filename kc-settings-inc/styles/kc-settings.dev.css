@@ -27,7 +27,10 @@ summary {cursor:default;}
 
 
 /* Always show scrollbar on the builder page */
-body.settings_page_kcsb {overflow-y:scroll;}
+body.settings_page_kcsb,
+body.kc-settings-page {
+	overflow-y:scroll;
+}
 
 /* Metaboxes */
 #kc-settings-form .meta-box-sortables {
