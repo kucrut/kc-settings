@@ -969,6 +969,3 @@ switch ( $type ) {
 		return $out;
 	}
 }
-
-
-?>

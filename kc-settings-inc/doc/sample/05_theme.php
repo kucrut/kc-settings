@@ -99,5 +99,3 @@ function mytheme_options( $settings ) {
 	$settings[] = $my_settings;
 	return $settings;
 }
-
-?>

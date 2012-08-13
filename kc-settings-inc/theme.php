@@ -193,5 +193,3 @@ class WP_Customize_KC_Common_Control extends WP_Customize_Control {
 	}
 }
 }
-
-?>

@@ -119,5 +119,3 @@ class kcSettings_builder_table extends WP_List_Table {
 		return ( $order === 'asc' ) ? $result : -$result;
 	}
 }
-
-?>

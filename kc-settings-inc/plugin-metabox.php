@@ -63,5 +63,3 @@ class kcSettings_plugin_metabox {
 		echo "</div>\n";
 	}
 }
-
-?>

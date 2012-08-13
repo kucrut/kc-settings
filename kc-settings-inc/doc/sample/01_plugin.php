@@ -80,5 +80,3 @@ function myplugin_options( $settings ) {
 	$settings[] = $my_settings;
 	return $settings;
 }
-
-?>

@@ -95,5 +95,3 @@ class kcSettings_attachment {
 		self::$sns_done = true;
 	}
 }
-
-?>

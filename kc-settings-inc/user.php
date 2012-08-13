@@ -77,6 +77,3 @@ class kcSettings_user {
 	}
 
 }
-
-
-?>

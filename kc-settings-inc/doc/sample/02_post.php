@@ -35,5 +35,3 @@ function mypost_options2( $groups ) {
 	$groups[] = $my_group;
 	return $groups;
 }
-
-?>

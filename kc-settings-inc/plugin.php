@@ -192,5 +192,3 @@ class kcSettings_plugin {
 		return apply_filters( "kc_psv", $nu_val );
 	}
 }
-
-?>

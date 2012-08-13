@@ -111,5 +111,3 @@ class kcSettings_term {
 		}
 	}
 }
-
-?>

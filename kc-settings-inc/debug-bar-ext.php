@@ -31,5 +31,3 @@ class kcDebug {
 		echo $this->content;
 	}
 }
-
-?>

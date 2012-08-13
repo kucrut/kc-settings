@@ -35,5 +35,3 @@ function my_user_options( $groups ) {
 	$groups[] = $my_group;
 	return $groups;
 }
-
-?>

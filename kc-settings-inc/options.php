@@ -226,5 +226,3 @@ class kcSettings_options_cb {
 		return $walk->walk( $result, $args['depth'], $args );
 	}
 }
-
-?>

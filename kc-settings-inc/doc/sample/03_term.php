@@ -31,5 +31,3 @@ function myterm_options( $groups ) {
 	$groups[] = $my_group;
 	return $groups;
 }
-
-?>

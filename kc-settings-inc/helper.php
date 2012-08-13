@@ -398,5 +398,3 @@ function kc_get_current_url() {
 
 	return $current_url;
 }
-
-?>

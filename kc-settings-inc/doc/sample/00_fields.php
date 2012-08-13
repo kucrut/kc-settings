@@ -327,5 +327,3 @@ function kc_sample_options( $args = '' ) {
 		'select6' => 'Option #6'
 	);
 }
-
-?>

@@ -99,4 +99,3 @@ class kcSettings_post {
 		return $post_id;
 	}
 }
-?>

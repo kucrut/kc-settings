@@ -617,6 +617,3 @@ function _kc_field_file_single( $args ) {
 
 	return $out;
 }
-
-
-?>
