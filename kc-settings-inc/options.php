@@ -169,14 +169,16 @@ class kcWalker_Posts extends Walker {
 	}
 }
 
-class kcWalker_Menu extends Walker {
-	var $tree_type = array( 'post_type', 'taxonomy', 'custom' );
-	var $db_fields = array( 'parent' => 'menu_item_parent', 'id' => 'db_id' );
-	var $pad = '';
+if ( !class_exists('kcWalker_Menu') ) {
+	class kcWalker_Menu extends Walker {
+		var $tree_type = array( 'post_type', 'taxonomy', 'custom' );
+		var $db_fields = array( 'parent' => 'menu_item_parent', 'id' => 'db_id' );
+		var $pad = '';
 
-	function start_el( &$output, $item, $depth = 0, $args = array(), $id = 0 ) {
-		$indent = ( $depth && !empty($this->pad) ) ? str_repeat( $this->pad, $depth ) .'&nbsp;' : '';
-		$output[$item->url] = $indent . apply_filters( 'the_title', $item->title, $item->ID );
+		function start_el( &$output, $item, $depth = 0, $args = array(), $id = 0 ) {
+			$indent = ( $depth && !empty($this->pad) ) ? str_repeat( $this->pad, $depth ) .'&nbsp;' : '';
+			$output[$item->ID] = $indent . apply_filters( 'the_title', $item->title, $item->ID );
+		}
 	}
 }
 
