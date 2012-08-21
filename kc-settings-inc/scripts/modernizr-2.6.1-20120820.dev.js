@@ -45,7 +45,7 @@ window.Modernizr = (function( window, document, undefined ) {
 
     slice = classes.slice,
 
-    featureName, 
+    featureName,
 
 
     injectElementWithStyles = function( rule, callback, nodes, testnames ) {
@@ -97,7 +97,7 @@ window.Modernizr = (function( window, document, undefined ) {
       return bool;
 
      },
- 
+
 
     isEventSupported = (function() {
 
@@ -144,7 +144,7 @@ window.Modernizr = (function( window, document, undefined ) {
       };
     }
     else {
-      hasOwnProp = function (object, property) { 
+      hasOwnProp = function (object, property) {
         return ((property in object) && is(object.constructor.prototype[property], 'undefined'));
       };
     }
@@ -612,7 +612,7 @@ window.Modernizr = (function( window, document, undefined ) {
 
        }
 
-       return Modernizr; 
+       return Modernizr;
      };
 
 
@@ -731,7 +731,7 @@ window.Modernizr = (function( window, document, undefined ) {
     var elements = html5.elements;
     return typeof elements == 'string' ? elements.split(' ') : elements;
   }
-  
+
     /**
    * Returns the data associated to the given document
    * @private
@@ -1144,12 +1144,12 @@ window.Modernizr = (function( window, document, undefined ) {
 Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 
 // a[download] attribute
-// When used on an <a>, this attribute signifies that the resource it 
-// points to should be downloaded by the browser rather than navigating to it. 
+// When used on an <a>, this attribute signifies that the resource it
+// points to should be downloaded by the browser rather than navigating to it.
 // http://developers.whatwg.org/links.html#downloading-resources
 // By Addy Osmani
 
-Modernizr.addTest('adownload', 
+Modernizr.addTest('adownload',
   !!('download' in document.createElement('a'))
 );
 // Mozilla Audio Data API
@@ -1215,16 +1215,6 @@ Modernizr.addTest('webaudio', !!(window.webkitAudioContext || window.AudioContex
 
 Modernizr.addTest('contenteditable',
         'contentEditable' in document.documentElement);
-// Blob constructor
-// http://dev.w3.org/2006/webapi/FileAPI/#constructorBlob
-
-Modernizr.addTest('blobconstructor', function () {
-    try {
-        return !!new Blob();
-    } catch (e) {
-        return false;
-    }
-});
 
 // by tauren
 // https://github.com/Modernizr/Modernizr/issues/191
@@ -1263,9 +1253,9 @@ Modernizr.addTest('cors', 'withCredentials' in new XMLHttpRequest());/*
 }());
 /*
 	Allan Lei https://github.com/allanlei
-	
+
 	Check adapted from https://github.com/brandonaaron/jquery-cssHooks/blob/master/bgpos.js
-	
+
 	Test: http://jsfiddle.net/allanlei/R8AYS/
 */
 Modernizr.addTest('bgpositionxy', function() {
@@ -1278,7 +1268,7 @@ Modernizr.addTest('bgpositionxy', function() {
 });// developer.mozilla.org/en/CSS/background-repeat
 
 // test page: jsbin.com/uzesun/
-// http://jsfiddle.net/ryanseddon/yMLTQ/6/    
+// http://jsfiddle.net/ryanseddon/yMLTQ/6/
 
 (function(){
 
@@ -1288,9 +1278,9 @@ function getBgRepeatValue(elem){
              getComputedStyle(elem, null).getPropertyValue('background') :
              elem.currentStyle['background']);
 }
-  
 
-Modernizr.testStyles(' #modernizr { background-repeat: round; } ', function(elem, rule){ 
+
+Modernizr.testStyles(' #modernizr { background-repeat: round; } ', function(elem, rule){
 
   Modernizr.addTest('bgrepeatround', getBgRepeatValue(elem) == 'round');
 
@@ -1298,7 +1288,7 @@ Modernizr.testStyles(' #modernizr { background-repeat: round; } ', function(elem
 
 
 
-Modernizr.testStyles(' #modernizr { background-repeat: space; } ', function(elem, rule){ 
+Modernizr.testStyles(' #modernizr { background-repeat: space; } ', function(elem, rule){
 
   Modernizr.addTest('bgrepeatspace', getBgRepeatValue(elem) == 'space');
 
@@ -1309,7 +1299,7 @@ Modernizr.testStyles(' #modernizr { background-repeat: space; } ', function(elem
 
 // developer.mozilla.org/en/CSS/background-size
 
-Modernizr.testStyles( '#modernizr{background-size:cover}', function( elem ) { 
+Modernizr.testStyles( '#modernizr{background-size:cover}', function( elem ) {
 	var style = window.getComputedStyle
 		? window.getComputedStyle( elem, null )
 		: elem.currentStyle;
@@ -1348,7 +1338,7 @@ Modernizr.addTest('cubicbezierrange', function() {
 
 
 
-Modernizr.testStyles(' #modernizr { display: run-in; } ', function(elem, rule){ 
+Modernizr.testStyles(' #modernizr { display: run-in; } ', function(elem, rule){
 
   var ret = (window.getComputedStyle ?
          getComputedStyle(elem, null).getPropertyValue('display') :
@@ -1371,24 +1361,24 @@ Modernizr.addTest('cssfilters', function() {
 // more testing neccessary perhaps.
 
 Modernizr.addTest( "display-table",function(){
-  
+
   var doc   = window.document,
-      docElem = doc.documentElement,   
+      docElem = doc.documentElement,
       parent  = doc.createElement( "div" ),
       child = doc.createElement( "div" ),
       childb  = doc.createElement( "div" ),
       ret;
-  
+
   parent.style.cssText = "display: table";
-  child.style.cssText = childb.style.cssText = "display: table-cell; padding: 10px";    
-          
+  child.style.cssText = childb.style.cssText = "display: table-cell; padding: 10px";
+
   parent.appendChild( child );
   parent.appendChild( childb );
   docElem.insertBefore( parent, docElem.firstChild );
-  
+
   ret = child.offsetLeft < childb.offsetLeft;
   docElem.removeChild(parent);
-  return ret; 
+  return ret;
 });
 
 // last-child pseudo selector
@@ -1571,7 +1561,7 @@ Modernizr.addTest("userselect",function(){
 Modernizr.addTest('subpixelfont', function() {
     var bool,
         styles = "#modernizr{position: absolute; top: -10em; visibility:hidden; font: normal 10px arial;}#subpixel{float: left; font-size: 33.3333%;}";
-    
+
     // see https://github.com/Modernizr/Modernizr/blob/master/modernizr.js#L97
     Modernizr.testStyles(styles, function(elem) {
         var subpixel = elem.firstChild;
@@ -1580,7 +1570,7 @@ Modernizr.addTest('subpixelfont', function() {
 
         bool = window.getComputedStyle
             ? window.getComputedStyle(subpixel, null).getPropertyValue("width") !== '44px'
-            : false;   
+            : false;
     }, 1, ['subpixel']);
 
     return bool;
@@ -1588,31 +1578,20 @@ Modernizr.addTest('subpixelfont', function() {
 /*
 	Custom protocol handler support
 	http://developers.whatwg.org/timers.html#custom-handlers
-	
+
 	Added by @benschwarz
 */
 
 Modernizr.addTest('customprotocolhandler', function () {
     return !!navigator.registerProtocolHandler;
 });
-// DataView 
+// DataView
 // https://developer.mozilla.org/en/JavaScript_typed_arrays/DataView
 // By Addy Osmani
 Modernizr.addTest('dataview', (typeof DataView !== 'undefined' && 'getFloat64' in DataView.prototype));// classList
 // https://developer.mozilla.org/en/DOM/element.classList
 // By Addy Osmani
 Modernizr.addTest('classlist', 'classList' in document.documentElement);
-// by james a rosen.
-// https://github.com/Modernizr/Modernizr/issues/258
-
-Modernizr.addTest('createelement-attrs', function() {
-  try {
-    return document.createElement("<input name='test' />").getAttribute('name') == 'test';
-  } catch(e) {
-    return false;
-  }
-});
-
 
 // dataset API for data-* attributes
 // test by @phiggins42
@@ -1752,7 +1731,7 @@ Modernizr.addTest('emoji', function() {
 // test by @kangax
 
 Modernizr.addTest('strictmode', function(){
-	return (function(){ "use strict"; return !this; })(); 
+	return (function(){ "use strict"; return !this; })();
 });//By Shi Chuan
 //Part of Device Access aspect of HTML5, same category as geolocation
 //W3C Editor's Draft at http://dev.w3.org/geo/api/spec-source-orientation.html
@@ -1833,7 +1812,7 @@ Modernizr.addTest('fileinput', function() {
 // by @alrra
 
 
-// `webkitSpeech` in elem 
+// `webkitSpeech` in elem
 // doesn`t work correctly in all versions of Chromium based browsers.
 //   It can return false even if they have support for speech i.imgur.com/2Y40n.png
 //  Testing with 'onwebkitspeechchange' seems to fix this problem
@@ -1845,21 +1824,21 @@ Modernizr.addTest('fileinput', function() {
 // FIXME: add support for detecting the new spec'd behavior
 
 Modernizr.addTest('speechinput', function(){
-    var elem = document.createElement('input'); 
-    return 'speech' in elem || 'onwebkitspeechchange' in elem; 
+    var elem = document.createElement('input');
+    return 'speech' in elem || 'onwebkitspeechchange' in elem;
 });// testing for placeholder attribute in inputs and textareas
 // re-using Modernizr.input if available
 
 Modernizr.addTest('placeholder', function(){
 
-  return !!( 'placeholder' in ( Modernizr.input    || document.createElement('input')    ) && 
+  return !!( 'placeholder' in ( Modernizr.input    || document.createElement('input')    ) &&
              'placeholder' in ( Modernizr.textarea || document.createElement('textarea') )
            );
 
 });
 // This implementation only tests support for interactive form validation.
 // To check validation for a specific type or a specific other constraint,
-// the test can be combined: 
+// the test can be combined:
 //    - Modernizr.inputtypes.numer && Modernizr.formvalidation (browser supports rangeOverflow, typeMismatch etc. for type=number)
 //    - Modernizr.input.required && Modernizr.formvalidation (browser supports valueMissing)
 //
@@ -1895,13 +1874,13 @@ Modernizr.addTest('formvalidation', function(){
         e.stopPropagation();
     };
 
-    // Calling form.submit() doesn't trigger interactive validation, 
+    // Calling form.submit() doesn't trigger interactive validation,
     // use a submit button instead
     //older opera browsers need a name attribute
     form.innerHTML = '<input name="modTest" required><button></button>';
 
     // FF4 doesn't trigger "invalid" event if form is not in the DOM tree
-    // Chrome throws error if invalid input is not visible when submitting 
+    // Chrome throws error if invalid input is not visible when submitting
     form.style.position = 'absolute';
     form.style.top = '-99999em';
 
@@ -1916,7 +1895,7 @@ Modernizr.addTest('formvalidation', function(){
 
     body.appendChild(form);
 
-    input = form.getElementsByTagName('input')[0];	
+    input = form.getElementsByTagName('input')[0];
 
     // Record whether "invalid" event is fired
     input.oninvalid = function(e) {
@@ -1976,7 +1955,7 @@ Modernizr.addTest('ie8compat',function(){
 (function () {
 
     if (!Modernizr.canvas) return false;
-    
+
     var image = new Image(),
         canvas = document.createElement('canvas'),
         ctx = canvas.getContext('2d');
@@ -2008,7 +1987,7 @@ Modernizr.addTest('ie8compat',function(){
 
   image.onerror = function() {
       Modernizr.addTest('webp', false);
-  };  
+  };
   image.onload = function() {
       Modernizr.addTest('webp', function() { return image.width == 1; });
   };
@@ -2071,10 +2050,10 @@ Modernizr.addTest('xhr2', 'FormData' in window);
 // Notifications
 // By Theodoor van Donge
 
-// window.webkitNotifications is only used by Chrome 
+// window.webkitNotifications is only used by Chrome
 //	http://www.html5rocks.com/en/tutorials/notifications/quick/
 
-// window.Notification only exist in the draft specs 
+// window.Notification only exist in the draft specs
 //	http://dev.w3.org/2006/webapi/WebNotifications/publish/Notifications.html#idl-if-Notification
 
 Modernizr.addTest('notification', !!Modernizr.prefixed('Notifications', window));// Navigation Timing (Performance)
@@ -2094,7 +2073,7 @@ Modernizr.addTest('quotamanagement', function(){
 });
 
 // requestAnimationFrame
-// Offload animation repainting to browser for optimized performance. 
+// Offload animation repainting to browser for optimized performance.
 // http://dvcs.w3.org/hg/webperf/raw-file/tip/specs/RequestAnimationFrame/Overview.html
 // By Addy Osmani
 
@@ -2123,30 +2102,30 @@ Modernizr.addTest('svgfilters', function(){
 });
 /**
  * Unicode special character support
- * 
+ *
  * Detection is made by testing missing glyph box rendering against star character
  * If widths are the same, this "probably" means the browser didn't support the star character and rendered a glyph box instead
  * Just need to ensure the font characters have different widths
- * 
+ *
  * Warning : positive Unicode support doesn't mean you can use it inside <title>, this seams more related to OS & Language packs
  */
 Modernizr.addTest('unicode', function() {
-	
-	
+
+
 	var bool,
 
 		missingGlyph = document.createElement('span'),
-		
+
 		star = document.createElement('span');
 
 	Modernizr.testStyles('#modernizr{font-family:Arial,sans;font-size:300em;}', function(node) {
 
 		missingGlyph.innerHTML = '&#5987';
-		star.innerHTML = '&#9734';		
-		
+		star.innerHTML = '&#9734';
+
 		node.appendChild(missingGlyph);
 		node.appendChild(star);
-		
+
 		bool = 'offsetWidth' in missingGlyph && missingGlyph.offsetWidth !== star.offsetWidth;
 	});
 
@@ -2165,7 +2144,7 @@ Modernizr.addTest('userdata', function(){
 // This test is asynchronous. Watch out.
 
 
-// in IE7 in HTTPS this can cause a Mixed Content security popup. 
+// in IE7 in HTTPS this can cause a Mixed Content security popup.
 //  github.com/Modernizr/Modernizr/issues/362
 // To avoid that you can create a new iframe and inject this.. perhaps..
 
@@ -2177,7 +2156,7 @@ Modernizr.addTest('userdata', function(){
 
   datauri.onerror = function() {
       Modernizr.addTest('datauri', function () { return false; });
-  };  
+  };
   datauri.onload = function() {
       Modernizr.addTest('datauri', function () { return (datauri.width == 1 && datauri.height == 1); });
   };
@@ -2195,47 +2174,6 @@ Modernizr.addTest('webintents', function() {
   return !!Modernizr.prefixed('startActivity', navigator);
 });
 
-// Grab the WebGL extensions currently supported and add to the Modernizr.webgl object
-// spec: www.khronos.org/registry/webgl/specs/latest/#5.13.14
-
-// based on code from ilmari heikkinen
-// code.google.com/p/graphics-detect/source/browse/js/detect.js
-
-
-(function(){
-
-    if (!Modernizr.webgl) return;
-
-    var canvas, ctx, exts;
-
-    try {
-        canvas  = document.createElement('canvas');
-        ctx     = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-        exts    = ctx.getSupportedExtensions();
-    }
-    catch (e) {
-        return;
-    }
-
-    if (ctx === undefined) {
-        Modernizr.webgl = new Boolean(false);
-    }
-    else {
-        Modernizr.webgl = new Boolean(true);
-    }
-
-
-    for (var i = -1, len = exts.length; ++i < len; ){
-        Modernizr.webgl[exts[i]] = true;
-    }
-
-    // hack for addressing modernizr testsuite failures. sorry.
-    if (window.TEST && TEST.audvid){
-        TEST.audvid.push('webgl');
-    }
-
-    canvas = undefined;
-})();
 // tests if page is iframed
 
 // github.com/Modernizr/Modernizr/issues/242
