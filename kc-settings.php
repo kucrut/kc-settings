@@ -597,6 +597,9 @@ class kcSettings {
 		wp_register_script( 'jquery-colorpicker', "{$path['scripts']}/colorpicker/js/colorpicker{$suffix}.js", array('jquery'), null, true );
 		wp_register_style(  'jquery-colorpicker', "{$path['scripts']}/colorpicker/css/colorpicker{$suffix}.css", false, null );
 
+		wp_register_script( 'jquery-ui-slider-access', "{$path['scripts']}/jquery-ui-sliderAccess{$suffix}.js", array('jquery-ui-slider'), '0.2', true );
+		wp_register_script( 'jquery-ui-datetimepicker', "{$path['scripts']}/jquery-ui-timepicker-addon{$suffix}.js", array('jquery-ui-datepicker', 'jquery-ui-slider-access'), '1.0.1', true );
+
 		# Builder
 		wp_register_script( 'kc-settings-builder', "{$path['scripts']}/kc-settings-builder{$suffix}.js", array('kc-settings-base', 'jquery-ui-sortable'), self::version, true );
 
@@ -638,7 +641,7 @@ class kcSettings {
 	var kcSettings = <?php echo json_encode( array(
 		'locale' => get_locale(),
 		'paths'  => self::$data['paths'],
-		'js'     => kc_get_sns( array('jquery-ui-datepicker', 'thickbox', 'jquery-ui-sortable', 'jquery-colorpicker', 'chosen'), 'js' ),
+		'js'     => kc_get_sns( array('jquery-ui-datepicker', 'jquery-ui-datetimepicker', 'thickbox', 'jquery-ui-sortable', 'jquery-colorpicker', 'chosen'), 'js' ),
 		'css'    => kc_get_sns( array('jquery-ui', 'thickbox', 'chosen', 'jquery-colorpicker'), 'css' ),
 		'upload' => array(
 			'text' => array(
@@ -653,8 +656,80 @@ class kcSettings {
 			)
 		),
 		'texts' => array(
-			'show' => __('Show', 'kc-settings'),
-			'hide' => __('Hide', 'kc-settings')
+			'show'   => __('Show', 'kc-settings'),
+			'hide'   => __('Hide', 'kc-settings'),
+			'now'    => __('Now', 'kc-settings'),
+			'done'   => __('Done', 'kc-settings'),
+			'time'   => __('Time', 'kc-settings'),
+			'hour'   => __('Hour', 'kc-settings'),
+			'minute' => __('Minute', 'kc-settings'),
+			'today'  => __('Today', 'kc-settings'),
+			'prev'   => __('Prev', 'kc-settings'),
+			'next'   => __('Next', 'kc-settings'),
+			'chooseTime' => __('Choose time', 'kc-settings'),
+			'monthNames' => array(
+				'full'  => array(
+					__('January', 'kc-settings'),
+					__('February', 'kc-settings'),
+					__('March', 'kc-settings'),
+					__('April', 'kc-settings'),
+					__('May', 'kc-settings'),
+					__('June', 'kc-settings'),
+					__('July', 'kc-settings'),
+					__('August', 'kc-settings'),
+					__('September', 'kc-settings'),
+					__('October', 'kc-settings'),
+					__('November', 'kc-settings'),
+					__('December', 'kc-settings')
+				),
+				'shrt' => array(
+					_x('Jan', 'month short name', 'kc-settings'),
+					_x('Feb', 'month short name', 'kc-settings'),
+					_x('Mar', 'month short name', 'kc-settings'),
+					_x('Apr', 'month short name', 'kc-settings'),
+					_x('May', 'month short name', 'kc-settings'),
+					_x('Jun', 'month short name', 'kc-settings'),
+					_x('Jul', 'month short name', 'kc-settings'),
+					_x('Aug', 'month short name', 'kc-settings'),
+					_x('Sep', 'month short name', 'kc-settings'),
+					_x('Oct', 'month short name', 'kc-settings'),
+					_x('Nov', 'month short name', 'kc-settings'),
+					_x('Dec', 'month short name', 'kc-settings')
+				)
+			),
+			'dayNames' => array(
+				'full'  => array(
+					__('Sunday', 'kc-settings'),
+					__('Monday', 'kc-settings'),
+					__('Tuesday', 'kc-settings'),
+					__('Wednesday', 'kc-settings'),
+					__('Thursday', 'kc-settings'),
+					__('Friday', 'kc-settings'),
+					__('Saturday', 'kc-settings')
+				),
+				'shrt' => array(
+					_x('Sun', 'day short name', 'kc-settings'),
+					_x('Mon', 'day short name', 'kc-settings'),
+					_x('Tue', 'day short name', 'kc-settings'),
+					_x('Wed', 'day short name', 'kc-settings'),
+					_x('Thu', 'day short name', 'kc-settings'),
+					_x('Fri', 'day short name', 'kc-settings'),
+					_x('Sat', 'day short name', 'kc-settings')
+				),
+				'min'   => array(
+					_x('Su', 'day min name', 'kc-settings'),
+					_x('Mo', 'day min name', 'kc-settings'),
+					_x('Tu', 'day min name', 'kc-settings'),
+					_x('We', 'day min name', 'kc-settings'),
+					_x('Th', 'day min name', 'kc-settings'),
+					_x('Fr', 'day min name', 'kc-settings'),
+					_x('Sa', 'day min name', 'kc-settings')
+				)
+			),
+			'weekNames' => array(
+				'full' => __('Week', 'kc-settings'),
+				'shrt' => _x('Wk', 'week short', 'kc-settings'),
+			)
 		)
 	) ); ?>
 </script>

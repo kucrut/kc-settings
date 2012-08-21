@@ -34,9 +34,10 @@ jQuery(document).ready(function($) {
 				showButtonPanel: true
 			},
 			month : {
+				dateFormat: 'yy-mm',
 				changeMonth: true,
 				changeYear: true,
-				dateFormat: 'yy-mm',
+				showButtonPanel: true,
 				beforeShow: function(dateText, inst) {
 					inst.dpDiv.addClass('kcDPMonth');
 				},
@@ -48,6 +49,31 @@ jQuery(document).ready(function($) {
 						inst.dpDiv.removeClass('kcDPMonth');
 					}, 300);
 				}
+			},
+			datetime: {
+				dateFormat: 'yy-mm-dd',
+				timeFormat: 'hh:mm',
+				separator: 'T',
+				stepHour: 1,
+				stepMinute: 1,
+				currentText: kcSettings.texts.now
+			},
+			text: {
+				isRTL: win.isRTL,
+				timeText: kcSettings.texts.time,
+				hourText: kcSettings.texts.hour,
+				minuteText: kcSettings.texts.minute,
+				currentText: kcSettings.texts.today,
+				closeText: kcSettings.texts.done,
+				nextText: kcSettings.texts.next,
+				prevText: kcSettings.texts.prev,
+				dayNames: kcSettings.texts.dayNames.full,
+				dayNamesMin: kcSettings.texts.dayNames.min,
+				dayNamesShort: kcSettings.texts.dayNames.shrt,
+				monthNames: kcSettings.texts.monthNames.full,
+				monthNamesShort: kcSettings.texts.monthNames.shrt,
+				weekHeader: kcSettings.texts.weekNames.shrt,
+				timeOnlyTitle: kcSettings.texts.chooseTime
 			}
 		}
 	};
@@ -86,8 +112,40 @@ jQuery(document).ready(function($) {
 			load: kcGetSNS('jquery_ui_datepicker', kcSettings.js).concat( kcGetSNS('jquery_ui', kcSettings.css) ),
 			complete: function() {
 				$dateInputs.each(function() {
-					$(this).datepicker( args.datepicker[$(this).attr('type')] );
+					$(this).datepicker( $.extend( args.datepicker[$(this).attr('type')], args.datepicker.text ) );
 				});
+			}
+		}]);
+	}
+
+	var $dtInputs = $('input[type=datetime]');
+	if ( $dtInputs.length && Modernizr.inputtypes['datetime'] === false ) {
+		Modernizr.load([{
+			load: kcGetSNS('jquery_ui_datetimepicker', kcSettings.js),
+			complete: function() {
+				var _conf = $.extend( args.datepicker.text, args.datepicker.datetime );
+				$dtInputs.datetimepicker( $.extend( _conf, {timeFormat: 'hh:mmZ'} ) );
+			}
+		}]);
+	}
+
+	var $dtlInputs = $('input[type=datetime-local]');
+	if ( $dtlInputs.length && Modernizr.inputtypes['datetime-local'] === false ) {
+		Modernizr.load([{
+			load: kcGetSNS('jquery_ui_datetimepicker', kcSettings.js),
+			complete: function() {
+				$dtlInputs.datetimepicker( $.extend( args.datepicker.text, args.datepicker.datetime ) );
+			}
+		}]);
+	}
+
+
+	var $timeInputs = $('input[type=time]');
+	if ( $timeInputs.length && Modernizr.inputtypes['time'] === false ) {
+		Modernizr.load([{
+			load: kcGetSNS('jquery_ui_datetimepicker', kcSettings.js),
+			complete: function() {
+				$timeInputs.timepicker( $.extend( args.datepicker.text, args.datepicker.datetime ) );
 			}
 		}]);
 	}
