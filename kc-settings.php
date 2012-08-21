@@ -575,6 +575,7 @@ class kcSettings {
 
 	public static function _sns_register() {
 		$path = self::$data['paths'];
+		$admin_color = get_user_option( 'admin_color' );
 
 		if ( !defined('KC_SETTINGS_SNS_DEBUG') )
 			define( 'KC_SETTINGS_SNS_DEBUG', false );
@@ -582,36 +583,26 @@ class kcSettings {
 		$suffix = KC_SETTINGS_SNS_DEBUG ? '.dev' : '';
 
 		# Common
-		wp_register_script( 'modernizr',        "{$path['scripts']}/modernizr-2.6.1-20120811{$suffix}.js", false, '2.6.1' );
-		wp_register_script( 'kc-settings-base', "{$path['scripts']}/kc-settings-base{$suffix}.js", array('jquery', 'modernizr', 'media-upload', 'thickbox'), self::version, true );
-		wp_localize_script( 'kc-settings-base', 'kcSettings', array(
-			'paths'  => self::$data['paths'],
-			'upload' => array(
-				'text' => array(
-					'head'     => __( 'KC Settings', 'kc-settings' ),
-					'empty'    => __( 'Please upload some files and then go back to this tab.', 'kc-settings' ),
-					'checkAll' => __( 'Select all files', 'kc-settings' ),
-					'clear'    => __( 'Clear selections', 'kc-settings' ),
-					'invert'   => __( 'Invert selection', 'kc-settings' ),
-					'addFiles' => __( 'Add files to collection', 'kc-settings' ),
-					'info'     => __( 'Click the "Media Library" tab to insert files that are already upload, or, upload your files and then go to the "Media Library" tab to insert the files you just uploaded.', 'kc-settings' ),
-					'selFile'  => __( 'Select file', 'kc-settings' )
-				)
-			),
-			'texts' => array(
-				'show' => __('Show', 'kc-settings'),
-				'hide' => __('Hide', 'kc-settings')
-			)
-		) );
-		wp_register_script( 'kc-settings', "{$path['scripts']}/kc-settings{$suffix}.js", array('kc-settings-base', 'jquery-ui-sortable', 'jquery-ui-datepicker'), self::version, true );
-		wp_register_style(  'kc-settings', "{$path['styles']}/kc-settings{$suffix}.css", array('thickbox'), self::version );
+		wp_register_script( 'modernizr',        "{$path['scripts']}/modernizr-2.6.1-20120820{$suffix}.js", false, '2.6.1-20120820', false );
+		wp_register_script( 'kc-settings-base', "{$path['scripts']}/kc-settings-base{$suffix}.js", array('jquery', 'modernizr', 'json2'), self::version, true );
+		wp_register_script( 'kc-settings', "{$path['scripts']}/kc-settings{$suffix}.js", array('kc-settings-base', 'jquery-ui-sortable'), self::version, true );
+		wp_register_style(  'kc-settings', "{$path['styles']}/kc-settings{$suffix}.css", false, self::version );
+
+		$jqui_theme = ( $admin_color == 'fresh' ) ? 'flick' : 'cupertino';
+		wp_register_style(  'jquery-ui', "{$path['styles']}/jquery-ui/{$jqui_theme}/style{$suffix}.css", false, '1.8.23' );
+
+		wp_register_script( 'chosen', "{$path['scripts']}/chosen.jquery{$suffix}.js", array('jquery'), '0.9.8', true );
+		wp_register_style(  'chosen', "{$path['styles']}/chosen/chosen{$suffix}.css", false, '0.9.8' );
+
+		wp_register_script( 'jquery-colorpicker', "{$path['scripts']}/colorpicker/js/colorpicker{$suffix}.js", array('jquery'), null, true );
+		wp_register_style(  'jquery-colorpicker', "{$path['scripts']}/colorpicker/css/colorpicker{$suffix}.css", false, null );
 
 		# Builder
 		wp_register_script( 'kc-settings-builder', "{$path['scripts']}/kc-settings-builder{$suffix}.js", array('kc-settings-base', 'jquery-ui-sortable'), self::version, true );
 
 		# Uploader
-		wp_register_script( 'kc-settings-upload',        "{$path['scripts']}/upload{$suffix}.js", array('jquery'), self::version, true );
-		wp_register_script( 'kc-settings-upload-single', "{$path['scripts']}/upload-single{$suffix}.js", array('jquery'), self::version, true );
+		wp_register_script( 'kc-settings-upload',        "{$path['scripts']}/upload{$suffix}.js", array('media-upload'), self::version, true );
+		wp_register_script( 'kc-settings-upload-single', "{$path['scripts']}/upload-single{$suffix}.js", array('media-upload'), self::version, true );
 	}
 
 
@@ -627,6 +618,7 @@ class kcSettings {
 		if ( !in_array($hook_suffix, self::$data['pages']) )
 			return;
 
+		add_action( 'admin_print_footer_scripts', array(__CLASS__, '_sns_vars'), 9 );
 		self::$data['is_kcs_page'] = true;
 
 		wp_enqueue_style( 'kc-settings' );
@@ -639,6 +631,34 @@ class kcSettings {
 				wp_enqueue_script( 'kc-settings-upload' );
 		}
 	}
+
+
+	public static function _sns_vars() { ?>
+<script>
+	var kcSettings = <?php echo json_encode( array(
+		'locale' => get_locale(),
+		'paths'  => self::$data['paths'],
+		'js'     => kc_get_sns( array('jquery-ui-datepicker', 'thickbox', 'jquery-ui-sortable', 'jquery-colorpicker', 'chosen'), 'js' ),
+		'css'    => kc_get_sns( array('jquery-ui', 'thickbox', 'chosen', 'jquery-colorpicker'), 'css' ),
+		'upload' => array(
+			'text' => array(
+				'head'     => __( 'KC Settings', 'kc-settings' ),
+				'empty'    => __( 'Please upload some files and then go back to this tab.', 'kc-settings' ),
+				'checkAll' => __( 'Select all files', 'kc-settings' ),
+				'clear'    => __( 'Clear selections', 'kc-settings' ),
+				'invert'   => __( 'Invert selection', 'kc-settings' ),
+				'addFiles' => __( 'Add files to collection', 'kc-settings' ),
+				'info'     => __( 'Click the "Media Library" tab to insert files that are already upload, or, upload your files and then go to the "Media Library" tab to insert the files you just uploaded.', 'kc-settings' ),
+				'selFile'  => __( 'Select file', 'kc-settings' )
+			)
+		),
+		'texts' => array(
+			'show' => __('Show', 'kc-settings'),
+			'hide' => __('Hide', 'kc-settings')
+		)
+	) ); ?>
+</script>
+	<?php }
 
 
 	private static function _samples( $types ) {

@@ -20,7 +20,7 @@ jQuery(document).ready(function($) {
 				var clr = '#'+hex;
 				$(el).css({
 					backgroundColor: clr,
-					color: invertColor( clr )
+					color: clr
 				})
 					.val( clr )
 					.ColorPickerHide();
@@ -82,9 +82,8 @@ jQuery(document).ready(function($) {
 	// Datepicker
 	var $dateInputs = $('input[type=date], input[type=month]');
 	if ( $dateInputs.length && Modernizr.inputtypes.date === false ) {
-		var jquiTheme = $('body').is('.admin-color-classic') ? 'cupertino' : 'flick';
 		Modernizr.load([{
-			load: win.kcSettings.paths.styles+'/jquery-ui/'+jquiTheme+'/style.css',
+			load: kcGetSNS('jquery_ui_datepicker', kcSettings.js).concat( kcGetSNS('jquery_ui', kcSettings.css) ),
 			complete: function() {
 				$dateInputs.each(function() {
 					$(this).datepicker( args.datepicker[$(this).attr('type')] );
@@ -97,11 +96,7 @@ jQuery(document).ready(function($) {
 	var $colorInputs = $('input[type=color]');
 	if ( $colorInputs.length && Modernizr.inputtypes.color === false ) {
 		Modernizr.load([{
-			load: [
-				win.kcSettings.paths.scripts+'/colorpicker/js/colorpicker.js',
-				win.kcSettings.paths.scripts+'/colorpicker/css/colorpicker.css',
-				win.kcSettings.paths.scripts+'/rgbcolor.js'
-			],
+			load: kcGetSNS( 'jquery_colorpicker', kcSettings.js).concat( kcGetSNS('jquery_colorpicker', kcSettings.css) ),
 			complete: function () {
 				$colorInputs.ColorPicker(args.colorpicker)
 				.each(function() {
@@ -109,7 +104,7 @@ jQuery(document).ready(function($) {
 					if ( $el.val() !== '' )
 						$el.css({
 							backgroundColor: this.value,
-							color: invertColor( this.value )
+							color: this.value
 						});
 				});
 			}

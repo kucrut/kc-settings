@@ -398,3 +398,61 @@ function kc_get_current_url() {
 
 	return $current_url;
 }
+
+
+if ( !function_exists('kc_get_sns') ) {
+/**
+ * Get scripts and styles sources
+ *
+ * @since 2.7.7
+ *
+ * @param array|string $handles Registered script/style handle(s)
+ * @param string $type js|css Defaults to 'js'
+ * @param array $_output Internal
+ *
+ * @return array Scripts/styles sources and status
+ */
+function kc_get_sns( $handles, $type = 'js', $_output = array() ) {
+	if ( $type == 'css' ) {
+		global $wp_styles;
+		$sources = $wp_styles;
+	}
+	else {
+		global $wp_scripts;
+		$sources = $wp_scripts;
+	}
+
+	foreach ( (array) $handles as $id ) {
+		if ( isset($_output[$id]) || !isset($sources->registered[$id]) )
+			continue;
+
+		$src = $sources->registered[$id]->src;
+		if ( substr( $sources->registered[$id]->src, 0, 1 ) === '/' )
+			$src = home_url($src);
+
+		$_id = str_replace( '-', '_', $id );
+		$_output[$_id] = array(
+			'src'   => $src,
+			'queue' => (int) wp_script_is( $id )
+		);
+		if ( isset($sources->registered[$id]->extra['data']) )
+			$_output[$_id]['data'] = $sources->registered[$id]->extra['data'];
+
+		if ( empty($sources->registered[$id]->deps) )
+			continue;
+
+		$_x = clone $sources;
+		$_x->all_deps( $id );
+		$_output[$_id]['deps'] = array_map(
+			function( $id ) {
+				return str_replace( '-', '_', $id );
+			},
+			$_x->to_do
+		);
+
+		$_output = kc_get_sns( $sources->registered[$id]->deps, $type, $_output );
+	}
+
+	return $_output;
+}
+}

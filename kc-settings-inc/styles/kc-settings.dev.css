@@ -237,6 +237,11 @@ input.kcs-files {margin-right:.5em}
 	background:#fff;
 }
 
+.form-field input[type="checkbox"],
+.form-field input[type="radio"] {
+	width:auto;
+}
+
 
 /*** HTML5 inputs ***/
 input[type="number"], input[type="color"],
@@ -245,6 +250,11 @@ input[type="week"], input[type="time"],
 input[type="datetime"], input[type="datetime-local"] {
 	text-align:right;
 	background:#fff;
+}
+input[type="color"] {
+	cursor:default;
+	width:3em !important;
+	padding:0 !important;
 }
 
 /*** WP Editor ***/
@@ -261,6 +271,7 @@ input[type="datetime"], input[type="datetime-local"] {
 .form-table .wp-editor-container textarea {
 	border:0;
 }
+.form-wrap .kcs-field .kcs-file label {display:inline-block;}
 
 /*** Term metadata ***/
 #edittag .kcs-multiinput,

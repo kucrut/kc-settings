@@ -18,6 +18,37 @@ Array.prototype.unique = function() {
 
 var win = window.dialogArguments || opener || parent || top;
 
+var kcGetSNS = function( id, sources ) {
+	if ( !sources.hasOwnProperty(id) )
+		return false;
+
+	var printVars = function( item ) {
+		if ( !item.hasOwnProperty('data') )
+			return;
+
+		var data = item.data.split(' = ', 2);
+		window[ data[0].substr(4) ] = JSON.parse(data[1].replace(/;$/, ''));
+	};
+
+	var out = [];
+	if ( !sources[id].hasOwnProperty('deps') ) {
+		out.push(sources[id].src);
+		printVars( sources[id] );
+	}
+	else {
+		for ( var i = 0; i < sources[id].deps.length; i++ ) {
+			// Only add js/css that hasn't been queued by WP
+			if ( !sources[sources[id].deps[i]].queue ) {
+				out.push( sources[sources[id].deps[i]].src );
+				printVars( sources[sources[id].deps[i]] );
+			}
+		}
+	}
+
+	return out;
+};
+
+
 (function($, document) {
 	// File (multiple)
 	win.kcFileMultiple = function( files ) {
@@ -86,7 +117,13 @@ var win = window.dialogArguments || opener || parent || top;
 
 
 	var $_doc = $(document);
-	// File
+	var $kcUps = $('.kcs-file, .kcs-file-single');
+	if ( $kcUps.length ) {
+		Modernizr.load( kcGetSNS('thickbox', kcSettings.js).concat( kcGetSNS('thickbox', kcSettings.css) ) );
+	}
+
+
+	// File: multiple
 	$_doc.on('click', '.kcs-file a.rm', function(e) {
 		e.preventDefault();
 		var $item = $(this).closest('.row');
@@ -111,16 +148,14 @@ var win = window.dialogArguments || opener || parent || top;
 				$item.parent().hide().prev('.info').hide();
 			}
 		});
-
 	});
-
 
 	// Add files button
 	$_doc.on('click', 'a.kcsf-upload', function(e) {
 		e.preventDefault();
 		var $el     = $(this),
-		    $target = $el.siblings('.kc-rows'),
-		    $solo   = $target.find('.row.hidden'),
+				$target = $el.siblings('.kc-rows'),
+				$solo   = $target.find('.row.hidden'),
 				current = [];
 
 		// If there's currently only one row and it's hidden, enable the field
@@ -158,7 +193,6 @@ var win = window.dialogArguments || opener || parent || top;
 		win.kcSettings.upload.target = $el.closest('div');
 		tb_show( '', $el.attr('href') );
 	});
-
 })(jQuery, document);
 
 
@@ -454,7 +488,6 @@ function invertColor( color ) {
 (function($) {
 	var $doc = $(document);
 
-
 	$.fn.kcGoto = function( opts ) {
 		defaults = {
 			offset: -20,
@@ -663,18 +696,15 @@ function invertColor( color ) {
 	$.fn.kcChosen = function() {
 		var $els = $(this);
 		Modernizr.load([{
-			load: [
-				win.kcSettings.paths.scripts+'/chosen.jquery.js',
-				win.kcSettings.paths.styles+'/chosen/chosen.css'
-			],
+			load: kcGetSNS('chosen', kcSettings.js).concat( kcGetSNS('chosen', kcSettings.css) ),
 			complete: function() {
 				$els.each(function() {
 					var $el = $(this);
 
 					$el.children('option[value=""]').remove();
 
-					if ($el.prop('multiple') )
-						$el.css('width', '100%');
+					var w = ($el.prop('multiple') ) ? '100%' : $el.width() + 25;
+					$el.css('width', w);
 
 					$el.chosen({ allow_single_deselect: !$el.prop('required') });
 				});
