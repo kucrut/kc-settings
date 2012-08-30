@@ -1,3 +1,2184 @@
-window.Modernizr=(function(A,c,g){var J="2.6.1",w={},y=true,M=c.documentElement,a="modernizr",I=c.createElement(a),E=I.style,L=c.createElement("input"),C=":)",b={}.toString,j=" -webkit- -moz- -o- -ms- ".split(" "),h="Webkit Moz O ms",F=h.split(" "),K=h.toLowerCase().split(" "),H={svg:"http://www.w3.org/2000/svg"},l={},p={},f={},e=[],k=e.slice,s,n=function(U,W,P,V){var O,T,R,N=c.createElement("div"),S=c.body,Q=S?S:c.createElement("body");if(parseInt(P,10)){while(P--){R=c.createElement("div");R.id=V?V[P]:a+(P+1);N.appendChild(R)}}O=["&#173;",'<style id="s',a,'">',U,"</style>"].join("");N.id=a;(S?N:Q).innerHTML+=O;Q.appendChild(N);if(!S){Q.style.background="";M.appendChild(Q)}T=W(N,U);!S?Q.parentNode.removeChild(Q):N.parentNode.removeChild(N);return !!T},G=function(P){var O=A.matchMedia||A.msMatchMedia;if(O){return O(P).matches}var N;n("@media "+P+" { #"+a+" { position: absolute; } }",function(Q){N=(A.getComputedStyle?getComputedStyle(Q,null):Q.currentStyle)["position"]=="absolute"});return N},o=(function(){var O={select:"input",change:"input",submit:"form",reset:"form",error:"img",load:"img",abort:"img"};function N(P,R){R=R||c.createElement(O[P]||"div");P="on"+P;var Q=P in R;if(!Q){if(!R.setAttribute){R=c.createElement("div")}if(R.setAttribute&&R.removeAttribute){R.setAttribute(P,"");Q=r(R[P],"function");if(!r(R[P],"undefined")){R[P]=g}R.removeAttribute(P)}}R=null;return Q}return N})(),i=({}).hasOwnProperty,x;if(!r(i,"undefined")&&!r(i.call,"undefined")){x=function(N,O){return i.call(N,O)}}else{x=function(N,O){return((O in N)&&r(N.constructor.prototype[O],"undefined"))}}if(!Function.prototype.bind){Function.prototype.bind=function d(P){var Q=this;if(typeof Q!="function"){throw new TypeError()}var N=k.call(arguments,1),O=function(){if(this instanceof O){var T=function(){};T.prototype=Q.prototype;var S=new T();var R=Q.apply(S,N.concat(k.call(arguments)));if(Object(R)===R){return R}return S}else{return Q.apply(P,N.concat(k.call(arguments)))}};return O}}function D(N){E.cssText=N}function u(O,N){return D(j.join(O+";")+(N||""))}function r(O,N){return typeof O===N}function t(O,N){return !!~(""+O).indexOf(N)}function z(P,N){for(var O in P){var Q=P[O];if(!t(Q,"-")&&E[Q]!==g){return N=="pfx"?Q:true}}return false}function q(O,R,Q){for(var N in O){var P=R[O[N]];if(P!==g){if(Q===false){return O[N]}if(r(P,"function")){return P.bind(Q||R)}return P}}return false}function m(R,N,Q){var O=R.charAt(0).toUpperCase()+R.slice(1),P=(R+" "+F.join(O+" ")+O).split(" ");if(r(N,"string")||r(N,"undefined")){return z(P,N)}else{P=(R+" "+(K).join(O+" ")+O).split(" ");return q(P,N,Q)}}l.flexbox=function(){return m("flexWrap")};l.canvas=function(){var N=c.createElement("canvas");return !!(N.getContext&&N.getContext("2d"))};l.canvastext=function(){return !!(w.canvas&&r(c.createElement("canvas").getContext("2d").fillText,"function"))};l.webgl=function(){return !!A.WebGLRenderingContext};l.touch=function(){var N;if(("ontouchstart" in A)||A.DocumentTouch&&c instanceof DocumentTouch){N=true}else{n(["@media (",j.join("touch-enabled),("),a,")","{#modernizr{top:9px;position:absolute}}"].join(""),function(O){N=O.offsetTop===9})}return N};l.geolocation=function(){return"geolocation" in navigator};l.postmessage=function(){return !!A.postMessage};l.websqldatabase=function(){return !!A.openDatabase};l.indexedDB=function(){return !!m("indexedDB",A)};l.hashchange=function(){return o("hashchange",A)&&(c.documentMode===g||c.documentMode>7)};l.history=function(){return !!(A.history&&history.pushState)};l.draganddrop=function(){var N=c.createElement("div");return("draggable" in N)||("ondragstart" in N&&"ondrop" in N)};l.websockets=function(){return"WebSocket" in A||"MozWebSocket" in A};l.rgba=function(){D("background-color:rgba(150,255,150,.5)");return t(E.backgroundColor,"rgba")};l.hsla=function(){D("background-color:hsla(120,40%,100%,.5)");return t(E.backgroundColor,"rgba")||t(E.backgroundColor,"hsla")};l.multiplebgs=function(){D("background:url(https://),url(https://),red url(https://)");return(/(url\s*\(.*?){3}/).test(E.background)};l.backgroundsize=function(){return m("backgroundSize")};l.borderimage=function(){return m("borderImage")};l.borderradius=function(){return m("borderRadius")};l.boxshadow=function(){return m("boxShadow")};l.textshadow=function(){return c.createElement("div").style.textShadow===""};l.opacity=function(){u("opacity:.55");return(/^0.55$/).test(E.opacity)};l.cssanimations=function(){return m("animationName")};l.csscolumns=function(){return m("columnCount")};l.cssgradients=function(){var P="background-image:",O="gradient(linear,left top,right bottom,from(#9f9),to(white));",N="linear-gradient(left top,#9f9, white);";D((P+"-webkit- ".split(" ").join(O+P)+j.join(N+P)).slice(0,-P.length));return t(E.backgroundImage,"gradient")};l.cssreflections=function(){return m("boxReflect")};l.csstransforms=function(){return !!m("transform")};l.csstransforms3d=function(){var N=!!m("perspective");if(N&&"webkitPerspective" in M.style){n("@media (transform-3d),(-webkit-transform-3d){#modernizr{left:9px;position:absolute;height:3px;}}",function(O,P){N=O.offsetLeft===9&&O.offsetHeight===3})}return N};l.csstransitions=function(){return m("transition")};l.fontface=function(){var N;n('@font-face {font-family:"font";src:url("https://")}',function(R,S){var Q=c.getElementById("smodernizr"),O=Q.sheet||Q.styleSheet,P=O?(O.cssRules&&O.cssRules[0]?O.cssRules[0].cssText:O.cssText||""):"";N=/src/i.test(P)&&P.indexOf(S.split(" ")[0])===0});return N};l.generatedcontent=function(){var N;n(['#modernizr:after{content:"',C,'";visibility:hidden}'].join(""),function(O){N=O.offsetHeight>=1});return N};l.video=function(){var O=c.createElement("video"),N=false;try{if(N=!!O.canPlayType){N=new Boolean(N);N.ogg=O.canPlayType('video/ogg; codecs="theora"').replace(/^no$/,"");N.h264=O.canPlayType('video/mp4; codecs="avc1.42E01E"').replace(/^no$/,"");N.webm=O.canPlayType('video/webm; codecs="vp8, vorbis"').replace(/^no$/,"")}}catch(P){}return N};l.audio=function(){var O=c.createElement("audio"),N=false;try{if(N=!!O.canPlayType){N=new Boolean(N);N.ogg=O.canPlayType('audio/ogg; codecs="vorbis"').replace(/^no$/,"");N.mp3=O.canPlayType("audio/mpeg;").replace(/^no$/,"");N.wav=O.canPlayType('audio/wav; codecs="1"').replace(/^no$/,"");N.m4a=(O.canPlayType("audio/x-m4a;")||O.canPlayType("audio/aac;")).replace(/^no$/,"")}}catch(P){}return N};l.localstorage=function(){try{localStorage.setItem(a,a);localStorage.removeItem(a);return true}catch(N){return false}};l.sessionstorage=function(){try{sessionStorage.setItem(a,a);sessionStorage.removeItem(a);return true}catch(N){return false}};l.webworkers=function(){return !!A.Worker};l.applicationcache=function(){return !!A.applicationCache};l.svg=function(){return !!c.createElementNS&&!!c.createElementNS(H.svg,"svg").createSVGRect};l.inlinesvg=function(){var N=c.createElement("div");N.innerHTML="<svg/>";return(N.firstChild&&N.firstChild.namespaceURI)==H.svg};l.smil=function(){return !!c.createElementNS&&/SVGAnimate/.test(b.call(c.createElementNS(H.svg,"animate")))};l.svgclippaths=function(){return !!c.createElementNS&&/SVGClipPath/.test(b.call(c.createElementNS(H.svg,"clipPath")))};function B(){w.input=(function(P){for(var O=0,N=P.length;O<N;O++){f[P[O]]=!!(P[O] in L)}if(f.list){f.list=!!(c.createElement("datalist")&&A.HTMLDataListElement)}return f})("autocomplete autofocus list placeholder max min multiple pattern required step".split(" "));w.inputtypes=(function(Q){for(var P=0,O,S,R,N=Q.length;P<N;P++){L.setAttribute("type",S=Q[P]);O=L.type!=="text";if(O){L.value=C;L.style.cssText="position:absolute;visibility:hidden;";if(/^range$/.test(S)&&L.style.WebkitAppearance!==g){M.appendChild(L);R=c.defaultView;O=R.getComputedStyle&&R.getComputedStyle(L,null).WebkitAppearance!=="textfield"&&(L.offsetHeight!==0);M.removeChild(L)}else{if(/^(search|tel)$/.test(S)){}else{if(/^(url|email)$/.test(S)){O=L.checkValidity&&L.checkValidity()===false}else{O=L.value!=C}}}}p[Q[P]]=!!O}return p})("search tel url email datetime date month week time datetime-local number range color".split(" "))}for(var v in l){if(x(l,v)){s=v.toLowerCase();w[s]=l[v]();e.push((w[s]?"":"no-")+s)}}w.input||B();w.addTest=function(O,P){if(typeof O=="object"){for(var N in O){if(x(O,N)){w.addTest(N,O[N])}}}else{O=O.toLowerCase();if(w[O]!==g){return w}P=typeof P=="function"?P():P;if(y){M.className+=" "+(P?"":"no-")+O}w[O]=P}return w};D("");I=L=null;w._version=J;w._prefixes=j;w._domPrefixes=K;w._cssomPrefixes=F;w.mq=G;w.hasEvent=o;w.testProp=function(N){return z([N])};w.testAllProps=m;w.testStyles=n;w.prefixed=function(P,O,N){if(!O){return m(P,"pfx")}else{return m(P,O,N)}};M.className=M.className.replace(/(^|\s)no-js(\s|$)/,"$1$2")+(y?" js "+e.join(" "):"");return w})(this,this.document);
+/* Modernizr 2.6.1 (Custom Build) | MIT & BSD
+ * Build: http://modernizr.com/download/#-fontface-backgroundsize-borderimage-borderradius-boxshadow-flexbox-flexbox_legacy-hsla-multiplebgs-opacity-rgba-textshadow-cssanimations-csscolumns-generatedcontent-cssgradients-cssreflections-csstransforms-csstransforms3d-csstransitions-applicationcache-canvas-canvastext-draganddrop-hashchange-history-audio-video-indexeddb-input-inputtypes-localstorage-postmessage-sessionstorage-websockets-websqldatabase-webworkers-geolocation-inlinesvg-smil-svg-svgclippaths-touch-webgl-printshiv-cssclasses-teststyles-testprop-testallprops-hasevent-prefixes-domprefixes-a_download-audio_audiodata_api-audio_webaudio_api-battery_api-battery_level-blob_constructor-canvas_todataurl_type-contenteditable-cookies-cors-css_backgroundposition-shorthand-css_backgroundposition-xy-css_backgroundrepeat-css_backgroundsizecover-css_boxsizing-css_calc-css_cubicbezierrange-css_displayrunin-css_displaytable-css_filters-css_lastchild-css_mask-css_mediaqueries-css_overflow_scrolling-css_pointerevents-css_remunit-css_regions-css_resize-css_scrollbars-css_subpixelfont-css_userselect-custom_protocol_handler-dataview_api-dom_classlist-dom_createElement_attrs-dom_dataset-dom_microdata-elem_datalist-elem_details-elem_output-elem_progress_meter-elem_ruby-elem_time-elem_track-emoji-es5_strictmode-event_deviceorientation_motion-exif_orientation-file_api-forms_fileinput-file_filesystem-forms_placeholder-forms_speechinput-forms_validation-fullscreen_api-gamepad-getusermedia-ie8compat-img_apng-img_webp-json-lists_reversed-network_connection-network_eventsource-network_xhr2-notification-performance-quota_management_api-requestanimationframe-script_async-script_defer-style_scoped-svg_filters-unicode-url_data_uri-userdata-vibration-web_intents-webgl_extensions-window_framed-load
+ */
+;
+
+
+
+window.Modernizr = (function( window, document, undefined ) {
+
+    var version = '2.6.1',
+
+    Modernizr = {},
+
+    enableClasses = true,
+
+    docElement = document.documentElement,
+
+    mod = 'modernizr',
+    modElem = document.createElement(mod),
+    mStyle = modElem.style,
+
+    inputElem  = document.createElement('input')  ,
+
+    smile = ':)',
+
+    toString = {}.toString,
+
+    prefixes = ' -webkit- -moz- -o- -ms- '.split(' '),
+
+
+
+    omPrefixes = 'Webkit Moz O ms',
+
+    cssomPrefixes = omPrefixes.split(' '),
+
+    domPrefixes = omPrefixes.toLowerCase().split(' '),
+
+    ns = {'svg': 'http://www.w3.org/2000/svg'},
+
+    tests = {},
+    inputs = {},
+    attrs = {},
+
+    classes = [],
+
+    slice = classes.slice,
+
+    featureName,
+
+
+    injectElementWithStyles = function( rule, callback, nodes, testnames ) {
+
+      var style, ret, node,
+          div = document.createElement('div'),
+                body = document.body,
+                fakeBody = body ? body : document.createElement('body');
+
+      if ( parseInt(nodes, 10) ) {
+                      while ( nodes-- ) {
+              node = document.createElement('div');
+              node.id = testnames ? testnames[nodes] : mod + (nodes + 1);
+              div.appendChild(node);
+          }
+      }
+
+                style = ['&#173;','<style id="s', mod, '">', rule, '</style>'].join('');
+      div.id = mod;
+          (body ? div : fakeBody).innerHTML += style;
+      fakeBody.appendChild(div);
+      if ( !body ) {
+                fakeBody.style.background = "";
+          docElement.appendChild(fakeBody);
+      }
+
+      ret = callback(div, rule);
+        !body ? fakeBody.parentNode.removeChild(fakeBody) : div.parentNode.removeChild(div);
+
+      return !!ret;
+
+    },
+
+    testMediaQuery = function( mq ) {
+
+      var matchMedia = window.matchMedia || window.msMatchMedia;
+      if ( matchMedia ) {
+        return matchMedia(mq).matches;
+      }
+
+      var bool;
+
+      injectElementWithStyles('@media ' + mq + ' { #' + mod + ' { position: absolute; } }', function( node ) {
+        bool = (window.getComputedStyle ?
+                  getComputedStyle(node, null) :
+                  node.currentStyle)['position'] == 'absolute';
+      });
+
+      return bool;
+
+     },
+
+
+    isEventSupported = (function() {
+
+      var TAGNAMES = {
+        'select': 'input', 'change': 'input',
+        'submit': 'form', 'reset': 'form',
+        'error': 'img', 'load': 'img', 'abort': 'img'
+      };
+
+      function isEventSupported( eventName, element ) {
+
+        element = element || document.createElement(TAGNAMES[eventName] || 'div');
+        eventName = 'on' + eventName;
+
+            var isSupported = eventName in element;
+
+        if ( !isSupported ) {
+                if ( !element.setAttribute ) {
+            element = document.createElement('div');
+          }
+          if ( element.setAttribute && element.removeAttribute ) {
+            element.setAttribute(eventName, '');
+            isSupported = is(element[eventName], 'function');
+
+                    if ( !is(element[eventName], 'undefined') ) {
+              element[eventName] = undefined;
+            }
+            element.removeAttribute(eventName);
+          }
+        }
+
+        element = null;
+        return isSupported;
+      }
+      return isEventSupported;
+    })(),
+
+
+    _hasOwnProperty = ({}).hasOwnProperty, hasOwnProp;
+
+    if ( !is(_hasOwnProperty, 'undefined') && !is(_hasOwnProperty.call, 'undefined') ) {
+      hasOwnProp = function (object, property) {
+        return _hasOwnProperty.call(object, property);
+      };
+    }
+    else {
+      hasOwnProp = function (object, property) {
+        return ((property in object) && is(object.constructor.prototype[property], 'undefined'));
+      };
+    }
+
+
+    if (!Function.prototype.bind) {
+      Function.prototype.bind = function bind(that) {
+
+        var target = this;
+
+        if (typeof target != "function") {
+            throw new TypeError();
+        }
+
+        var args = slice.call(arguments, 1),
+            bound = function () {
+
+            if (this instanceof bound) {
+
+              var F = function(){};
+              F.prototype = target.prototype;
+              var self = new F();
+
+              var result = target.apply(
+                  self,
+                  args.concat(slice.call(arguments))
+              );
+              if (Object(result) === result) {
+                  return result;
+              }
+              return self;
+
+            } else {
+
+              return target.apply(
+                  that,
+                  args.concat(slice.call(arguments))
+              );
+
+            }
+
+        };
+
+        return bound;
+      };
+    }
+
+    function setCss( str ) {
+        mStyle.cssText = str;
+    }
+
+    function setCssAll( str1, str2 ) {
+        return setCss(prefixes.join(str1 + ';') + ( str2 || '' ));
+    }
+
+    function is( obj, type ) {
+        return typeof obj === type;
+    }
+
+    function contains( str, substr ) {
+        return !!~('' + str).indexOf(substr);
+    }
+
+    function testProps( props, prefixed ) {
+        for ( var i in props ) {
+            var prop = props[i];
+            if ( !contains(prop, "-") && mStyle[prop] !== undefined ) {
+                return prefixed == 'pfx' ? prop : true;
+            }
+        }
+        return false;
+    }
+
+    function testDOMProps( props, obj, elem ) {
+        for ( var i in props ) {
+            var item = obj[props[i]];
+            if ( item !== undefined) {
+
+                            if (elem === false) return props[i];
+
+                            if (is(item, 'function')){
+                                return item.bind(elem || obj);
+                }
+
+                            return item;
+            }
+        }
+        return false;
+    }
+
+    function testPropsAll( prop, prefixed, elem ) {
+
+        var ucProp  = prop.charAt(0).toUpperCase() + prop.slice(1),
+            props   = (prop + ' ' + cssomPrefixes.join(ucProp + ' ') + ucProp).split(' ');
+
+            if(is(prefixed, "string") || is(prefixed, "undefined")) {
+          return testProps(props, prefixed);
+
+            } else {
+          props = (prop + ' ' + (domPrefixes).join(ucProp + ' ') + ucProp).split(' ');
+          return testDOMProps(props, prefixed, elem);
+        }
+    }    tests['flexbox'] = function() {
+      return testPropsAll('flexWrap');
+    };    tests['canvas'] = function() {
+        var elem = document.createElement('canvas');
+        return !!(elem.getContext && elem.getContext('2d'));
+    };
+
+    tests['canvastext'] = function() {
+        return !!(Modernizr['canvas'] && is(document.createElement('canvas').getContext('2d').fillText, 'function'));
+    };
+
+
+
+    tests['webgl'] = function() {
+        return !!window.WebGLRenderingContext;
+    };
+
+
+    tests['touch'] = function() {
+        var bool;
+
+        if(('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch) {
+          bool = true;
+        } else {
+          injectElementWithStyles(['@media (',prefixes.join('touch-enabled),('),mod,')','{#modernizr{top:9px;position:absolute}}'].join(''), function( node ) {
+            bool = node.offsetTop === 9;
+          });
+        }
+
+        return bool;
+    };
+
+
+
+    tests['geolocation'] = function() {
+        return 'geolocation' in navigator;
+    };
+
+
+    tests['postmessage'] = function() {
+      return !!window.postMessage;
+    };
+
+
+    tests['websqldatabase'] = function() {
+      return !!window.openDatabase;
+    };
+
+    tests['indexedDB'] = function() {
+      return !!testPropsAll("indexedDB", window);
+    };
+
+    tests['hashchange'] = function() {
+      return isEventSupported('hashchange', window) && (document.documentMode === undefined || document.documentMode > 7);
+    };
+
+    tests['history'] = function() {
+      return !!(window.history && history.pushState);
+    };
+
+    tests['draganddrop'] = function() {
+        var div = document.createElement('div');
+        return ('draggable' in div) || ('ondragstart' in div && 'ondrop' in div);
+    };
+
+    tests['websockets'] = function() {
+        return 'WebSocket' in window || 'MozWebSocket' in window;
+    };
+
+
+    tests['rgba'] = function() {
+        setCss('background-color:rgba(150,255,150,.5)');
+
+        return contains(mStyle.backgroundColor, 'rgba');
+    };
+
+    tests['hsla'] = function() {
+            setCss('background-color:hsla(120,40%,100%,.5)');
+
+        return contains(mStyle.backgroundColor, 'rgba') || contains(mStyle.backgroundColor, 'hsla');
+    };
+
+    tests['multiplebgs'] = function() {
+                setCss('background:url(https://),url(https://),red url(https://)');
+
+            return (/(url\s*\(.*?){3}/).test(mStyle.background);
+    };    tests['backgroundsize'] = function() {
+        return testPropsAll('backgroundSize');
+    };
+
+    tests['borderimage'] = function() {
+        return testPropsAll('borderImage');
+    };
+
+
+
+    tests['borderradius'] = function() {
+        return testPropsAll('borderRadius');
+    };
+
+    tests['boxshadow'] = function() {
+        return testPropsAll('boxShadow');
+    };
+
+    tests['textshadow'] = function() {
+        return document.createElement('div').style.textShadow === '';
+    };
+
+
+    tests['opacity'] = function() {
+                setCssAll('opacity:.55');
+
+                    return (/^0.55$/).test(mStyle.opacity);
+    };
+
+
+    tests['cssanimations'] = function() {
+        return testPropsAll('animationName');
+    };
+
+
+    tests['csscolumns'] = function() {
+        return testPropsAll('columnCount');
+    };
+
+
+    tests['cssgradients'] = function() {
+        var str1 = 'background-image:',
+            str2 = 'gradient(linear,left top,right bottom,from(#9f9),to(white));',
+            str3 = 'linear-gradient(left top,#9f9, white);';
+
+        setCss(
+                       (str1 + '-webkit- '.split(' ').join(str2 + str1) +
+                       prefixes.join(str3 + str1)).slice(0, -str1.length)
+        );
+
+        return contains(mStyle.backgroundImage, 'gradient');
+    };
+
+
+    tests['cssreflections'] = function() {
+        return testPropsAll('boxReflect');
+    };
+
+
+    tests['csstransforms'] = function() {
+        return !!testPropsAll('transform');
+    };
+
+
+    tests['csstransforms3d'] = function() {
+
+        var ret = !!testPropsAll('perspective');
+
+                        if ( ret && 'webkitPerspective' in docElement.style ) {
+
+                      injectElementWithStyles('@media (transform-3d),(-webkit-transform-3d){#modernizr{left:9px;position:absolute;height:3px;}}', function( node, rule ) {
+            ret = node.offsetLeft === 9 && node.offsetHeight === 3;
+          });
+        }
+        return ret;
+    };
+
+
+    tests['csstransitions'] = function() {
+        return testPropsAll('transition');
+    };
+
+
+
+    tests['fontface'] = function() {
+        var bool;
+
+        injectElementWithStyles('@font-face {font-family:"font";src:url("https://")}', function( node, rule ) {
+          var style = document.getElementById('smodernizr'),
+              sheet = style.sheet || style.styleSheet,
+              cssText = sheet ? (sheet.cssRules && sheet.cssRules[0] ? sheet.cssRules[0].cssText : sheet.cssText || '') : '';
+
+          bool = /src/i.test(cssText) && cssText.indexOf(rule.split(' ')[0]) === 0;
+        });
+
+        return bool;
+    };
+
+    tests['generatedcontent'] = function() {
+        var bool;
+
+        injectElementWithStyles(['#modernizr:after{content:"',smile,'";visibility:hidden}'].join(''), function( node ) {
+          bool = node.offsetHeight >= 1;
+        });
+
+        return bool;
+    };
+    tests['video'] = function() {
+        var elem = document.createElement('video'),
+            bool = false;
+
+            try {
+            if ( bool = !!elem.canPlayType ) {
+                bool      = new Boolean(bool);
+                bool.ogg  = elem.canPlayType('video/ogg; codecs="theora"')      .replace(/^no$/,'');
+
+                            bool.h264 = elem.canPlayType('video/mp4; codecs="avc1.42E01E"') .replace(/^no$/,'');
+
+                bool.webm = elem.canPlayType('video/webm; codecs="vp8, vorbis"').replace(/^no$/,'');
+            }
+
+        } catch(e) { }
+
+        return bool;
+    };
+
+    tests['audio'] = function() {
+        var elem = document.createElement('audio'),
+            bool = false;
+
+        try {
+            if ( bool = !!elem.canPlayType ) {
+                bool      = new Boolean(bool);
+                bool.ogg  = elem.canPlayType('audio/ogg; codecs="vorbis"').replace(/^no$/,'');
+                bool.mp3  = elem.canPlayType('audio/mpeg;')               .replace(/^no$/,'');
+
+                                                    bool.wav  = elem.canPlayType('audio/wav; codecs="1"')     .replace(/^no$/,'');
+                bool.m4a  = ( elem.canPlayType('audio/x-m4a;')            ||
+                              elem.canPlayType('audio/aac;'))             .replace(/^no$/,'');
+            }
+        } catch(e) { }
+
+        return bool;
+    };
+
+
+    tests['localstorage'] = function() {
+        try {
+            localStorage.setItem(mod, mod);
+            localStorage.removeItem(mod);
+            return true;
+        } catch(e) {
+            return false;
+        }
+    };
+
+    tests['sessionstorage'] = function() {
+        try {
+            sessionStorage.setItem(mod, mod);
+            sessionStorage.removeItem(mod);
+            return true;
+        } catch(e) {
+            return false;
+        }
+    };
+
+
+    tests['webworkers'] = function() {
+        return !!window.Worker;
+    };
+
+
+    tests['applicationcache'] = function() {
+        return !!window.applicationCache;
+    };
+
+
+    tests['svg'] = function() {
+        return !!document.createElementNS && !!document.createElementNS(ns.svg, 'svg').createSVGRect;
+    };
+
+    tests['inlinesvg'] = function() {
+      var div = document.createElement('div');
+      div.innerHTML = '<svg/>';
+      return (div.firstChild && div.firstChild.namespaceURI) == ns.svg;
+    };
+
+    tests['smil'] = function() {
+        return !!document.createElementNS && /SVGAnimate/.test(toString.call(document.createElementNS(ns.svg, 'animate')));
+    };
+
+
+    tests['svgclippaths'] = function() {
+        return !!document.createElementNS && /SVGClipPath/.test(toString.call(document.createElementNS(ns.svg, 'clipPath')));
+    };
+
+    function webforms() {
+                                            Modernizr['input'] = (function( props ) {
+            for ( var i = 0, len = props.length; i < len; i++ ) {
+                attrs[ props[i] ] = !!(props[i] in inputElem);
+            }
+            if (attrs.list){
+                                  attrs.list = !!(document.createElement('datalist') && window.HTMLDataListElement);
+            }
+            return attrs;
+        })('autocomplete autofocus list placeholder max min multiple pattern required step'.split(' '));
+                            Modernizr['inputtypes'] = (function(props) {
+
+            for ( var i = 0, bool, inputElemType, defaultView, len = props.length; i < len; i++ ) {
+
+                inputElem.setAttribute('type', inputElemType = props[i]);
+                bool = inputElem.type !== 'text';
+
+                                                    if ( bool ) {
+
+                    inputElem.value         = smile;
+                    inputElem.style.cssText = 'position:absolute;visibility:hidden;';
+
+                    if ( /^range$/.test(inputElemType) && inputElem.style.WebkitAppearance !== undefined ) {
+
+                      docElement.appendChild(inputElem);
+                      defaultView = document.defaultView;
+
+                                        bool =  defaultView.getComputedStyle &&
+                              defaultView.getComputedStyle(inputElem, null).WebkitAppearance !== 'textfield' &&
+                                                                                  (inputElem.offsetHeight !== 0);
+
+                      docElement.removeChild(inputElem);
+
+                    } else if ( /^(search|tel)$/.test(inputElemType) ){
+                                                                                    } else if ( /^(url|email)$/.test(inputElemType) ) {
+                                        bool = inputElem.checkValidity && inputElem.checkValidity() === false;
+
+                    } else {
+                                        bool = inputElem.value != smile;
+                    }
+                }
+
+                inputs[ props[i] ] = !!bool;
+            }
+            return inputs;
+        })('search tel url email datetime date month week time datetime-local number range color'.split(' '));
+        }
+    for ( var feature in tests ) {
+        if ( hasOwnProp(tests, feature) ) {
+                                    featureName  = feature.toLowerCase();
+            Modernizr[featureName] = tests[feature]();
+
+            classes.push((Modernizr[featureName] ? '' : 'no-') + featureName);
+        }
+    }
+
+    Modernizr.input || webforms();
+
+
+     Modernizr.addTest = function ( feature, test ) {
+       if ( typeof feature == 'object' ) {
+         for ( var key in feature ) {
+           if ( hasOwnProp( feature, key ) ) {
+             Modernizr.addTest( key, feature[ key ] );
+           }
+         }
+       } else {
+
+         feature = feature.toLowerCase();
+
+         if ( Modernizr[feature] !== undefined ) {
+                                              return Modernizr;
+         }
+
+         test = typeof test == 'function' ? test() : test;
+
+         if (enableClasses) {
+           docElement.className += ' ' + (test ? '' : 'no-') + feature;
+         }
+         Modernizr[feature] = test;
+
+       }
+
+       return Modernizr;
+     };
+
+
+    setCss('');
+    modElem = inputElem = null;
+
+
+    Modernizr._version      = version;
+
+    Modernizr._prefixes     = prefixes;
+    Modernizr._domPrefixes  = domPrefixes;
+    Modernizr._cssomPrefixes  = cssomPrefixes;
+
+    Modernizr.mq            = testMediaQuery;
+
+    Modernizr.hasEvent      = isEventSupported;
+
+    Modernizr.testProp      = function(prop){
+        return testProps([prop]);
+    };
+
+    Modernizr.testAllProps  = testPropsAll;
+
+
+    Modernizr.testStyles    = injectElementWithStyles;
+    Modernizr.prefixed      = function(prop, obj, elem){
+      if(!obj) {
+        return testPropsAll(prop, 'pfx');
+      } else {
+            return testPropsAll(prop, obj, elem);
+      }
+    };
+
+
+    docElement.className = docElement.className.replace(/(^|\s)no-js(\s|$)/, '$1$2') +
+
+                                                    (enableClasses ? ' js ' + classes.join(' ') : '');
+
+    return Modernizr;
+
+})(this, this.document);
 /*! HTML5 Shiv v3.6 | @afarkas @jdalton @jon_neal @rem | MIT/GPL2 Licensed */
-(function(o,s){var g=o.html5||{};var j=/^<|^(?:button|map|select|textarea|object|iframe|option|optgroup)$/i;var d=/^<|^(?:a|b|button|code|div|fieldset|form|h1|h2|h3|h4|h5|h6|i|iframe|img|input|label|li|link|ol|option|p|param|q|script|select|span|strong|style|table|tbody|td|textarea|tfoot|th|thead|tr|ul)$/i;var x;var k="_html5shiv";var c=0;var u={};var h;(function(){try{var A=s.createElement("a");A.innerHTML="<xyz></xyz>";x=("hidden" in A);h=A.childNodes.length==1||(function(){(s.createElement)("a");var C=s.createDocumentFragment();return(typeof C.cloneNode=="undefined"||typeof C.createDocumentFragment=="undefined"||typeof C.createElement=="undefined")}())}catch(B){x=true;h=true}}());function i(A,C){var D=A.createElement("p"),B=A.getElementsByTagName("head")[0]||A.documentElement;D.innerHTML="x<style>"+C+"</style>";return B.insertBefore(D.lastChild,B.firstChild)}function q(){var A=n.elements;return typeof A=="string"?A.split(" "):A}function w(A){var B=u[A[k]];if(!B){B={};c++;A[k]=c;u[c]=B}return B}function t(D,A,C){if(!A){A=s}if(h){return A.createElement(D)}if(!C){C=w(A)}var B;if(C.cache[D]){B=C.cache[D].cloneNode()}else{if(d.test(D)){B=(C.cache[D]=C.createElem(D)).cloneNode()}else{B=C.createElem(D)}}return B.canHaveChildren&&!j.test(D)?C.frag.appendChild(B):B}function y(C,E){if(!C){C=s}if(h){return C.createDocumentFragment()}E=E||w(C);var F=E.frag.cloneNode(),D=0,B=q(),A=B.length;for(;D<A;D++){F.createElement(B[D])}return F}function z(A,B){if(!B.cache){B.cache={};B.createElem=A.createElement;B.createFrag=A.createDocumentFragment;B.frag=B.createFrag()}A.createElement=function(C){if(!n.shivMethods){return B.createElem(C)}return t(C,A,B)};A.createDocumentFragment=Function("h,f","return function(){var n=f.cloneNode(),c=n.createElement;h.shivMethods&&("+q().join().replace(/\w+/g,function(C){B.createElem(C);B.frag.createElement(C);return'c("'+C+'")'})+");return n}")(n,B.frag)}function e(A){if(!A){A=s}var B=w(A);if(n.shivCSS&&!x&&!B.hasCSS){B.hasCSS=!!i(A,"article,aside,figcaption,figure,footer,header,hgroup,nav,section{display:block}mark{background:#FF0;color:#000}")}if(!h){z(A,B)}return A}var n={elements:g.elements||"abbr article aside audio bdi canvas data datalist details figcaption figure footer header hgroup mark meter nav output progress section summary time video",shivCSS:(g.shivCSS!==false),supportsUnknownElements:h,shivMethods:(g.shivMethods!==false),type:"default",shivDocument:e,createElement:t,createDocumentFragment:y};o.html5=n;e(s);var b=/^$|\b(?:all|print)\b/;var l="html5shiv";var r=!h&&(function(){var A=s.documentElement;return !(typeof s.namespaces=="undefined"||typeof s.parentWindow=="undefined"||typeof A.applyElement=="undefined"||typeof A.removeNode=="undefined"||typeof o.attachEvent=="undefined")}());function f(E){var F,C=E.getElementsByTagName("*"),D=C.length,B=RegExp("^(?:"+q().join("|")+")$","i"),A=[];while(D--){F=C[D];if(B.test(F.nodeName)){A.push(F.applyElement(v(F)))}}return A}function v(C){var D,A=C.attributes,B=A.length,E=C.ownerDocument.createElement(l+":"+C.nodeName);while(B--){D=A[B];D.specified&&E.setAttribute(D.nodeName,D.nodeValue)}E.style.cssText=C.style.cssText;return E}function a(D){var F,E=D.split("{"),B=E.length,A=RegExp("(^|[\\s,>+~])("+q().join("|")+")(?=[[\\s,>+~#.:]|$)","gi"),C="$1"+l+"\\:$2";while(B--){F=E[B]=E[B].split("}");F[F.length-1]=F[F.length-1].replace(A,C);E[B]=F.join("}")}return E.join("{")}function p(B){var A=B.length;while(A--){B[A].removeNode()}}function m(A){var G,E,D=w(A),C=A.namespaces,F=A.parentWindow;if(!r||A.printShived){return A}if(typeof C[l]=="undefined"){C.add(l)}function B(){clearTimeout(D._removeSheetTimer);if(G){G.removeNode(true)}G=null}F.attachEvent("onbeforeprint",function(){B();var H,L,J,N=A.styleSheets,K=[],I=N.length,M=Array(I);while(I--){M[I]=N[I]}while((J=M.pop())){if(!J.disabled&&b.test(J.media)){try{H=J.imports;L=H.length}catch(O){L=0}for(I=0;I<L;I++){M.push(H[I])}try{K.push(J.cssText)}catch(O){}}}K=a(K.reverse().join(""));E=f(A);G=i(A,K)});F.attachEvent("onafterprint",function(){p(E);clearTimeout(D._removeSheetTimer);D._removeSheetTimer=setTimeout(B,500)});A.printShived=true;return A}n.type+=" print";n.shivPrint=m;m(s)}(this,document));(function(ad,ac,ab){function aa(b){return"[object Function]"==P.call(b)}function Z(b){return"string"==typeof b}function Y(){}function X(b){return !b||"loaded"==b||"complete"==b||"uninitialized"==b}function W(){var b=O.shift();M=1,b?b.t?R(function(){("c"==b.t?L.injectCss:L.injectJs)(b.s,0,b.a,b.x,b.e,1)},0):(b(),W()):M=0}function V(w,v,t,s,q,p,n){function m(a){if(!g&&X(h.readyState)&&(x.r=g=1,!M&&W(),h.onload=h.onreadystatechange=null,a)){"img"!=w&&R(function(){I.removeChild(h)},50);for(var c in D[v]){D[v].hasOwnProperty(c)&&D[v][c].onload()}}}var n=n||L.errorTimeout,h=ac.createElement(w),g=0,b=0,x={t:t,s:v,e:q,a:p,x:n};1===D[v]&&(b=1,D[v]=[]),"object"==w?h.data=v:(h.src=v,h.type=w),h.width=h.height="0",h.onerror=h.onload=h.onreadystatechange=function(){m.call(this,b)},O.splice(s,0,x),"img"!=w&&(b||2===D[v]?(I.insertBefore(h,J?null:Q),R(m,n)):D[v].push(h))}function U(g,e,j,i,h){return M=0,e=e||"j",Z(g)?V("c"==e?G:H,g,e,this.i++,j,i,h):(O.splice(this.i++,0,g),1==O.length&&W()),this}function T(){var b=L;return b.loader={load:U,i:0},b}var S=ac.documentElement,R=ad.setTimeout,Q=ac.getElementsByTagName("script")[0],P={}.toString,O=[],M=0,K="MozAppearance" in S.style,J=K&&!!ac.createRange().compareNode,I=J?S:Q.parentNode,S=ad.opera&&"[object Opera]"==P.call(ad.opera),S=!!ac.attachEvent&&!S,H=K?"object":S?"script":"img",G=S?"script":H,F=Array.isArray||function(b){return"[object Array]"==P.call(b)},E=[],D={},C={timeout:function(d,c){return c.length&&(d.timeout=c[0]),d}},N,L;L=function(e){function c(i){var i=i.split("!"),h=E.length,q=i.pop(),p=i.length,q={url:q,origUrl:q,prefixes:i},o,l,j;for(l=0;l<p;l++){j=i[l].split("="),(o=C[j.shift()])&&(q=o(q,j))}for(l=0;l<h;l++){q=E[l](q)}return q}function n(b,s,r,q,p){var o=c(b),l=o.autoCallback;o.url.split(".").pop().split("?").shift(),o.bypass||(s&&(s=aa(s)?s:s[b]||s[q]||s[b.split("/").pop().split("?")[0]]),o.instead?o.instead(b,s,r,q,p):(D[o.url]?o.noexec=!0:D[o.url]=1,r.load(o.url,o.forceCSS||!o.forceJS&&"css"==o.url.split(".").pop().split("?").shift()?"c":ab,o.noexec,o.attrs,o.timeout),(aa(s)||aa(l))&&r.load(function(){T(),s&&s(o.origUrl,p,q),l&&l(o.origUrl,p,q),D[o.url]=2})))}function m(w,v){function u(b,h){if(b){if(Z(b)){h||(r=function(){var i=[].slice.call(arguments);q.apply(this,i),p()}),n(b,r,v,0,t)}else{if(Object(b)===b){for(g in o=function(){var a=0,i;for(i in b){b.hasOwnProperty(i)&&a++}return a}(),b){b.hasOwnProperty(g)&&(!h&&!--o&&(aa(r)?r=function(){var i=[].slice.call(arguments);q.apply(this,i),p()}:r[g]=function(i){return function(){var a=[].slice.call(arguments);i&&i.apply(this,a),p()}}(q[g])),n(b[g],r,v,g,t))}}}}else{!h&&p()}}var t=!!w.test,s=w.load||w.both,r=w.callback||Y,q=r,p=w.complete||Y,o,g;u(t?w.yep:w.nope,!!s),s&&u(s)}var k,f,d=this.yepnope.loader;if(Z(e)){n(e,0,d,0)}else{if(F(e)){for(k=0;k<e.length;k++){f=e[k],Z(f)?n(f,0,d,0):F(f)?L(f):Object(f)===f&&m(f,d)}}else{Object(e)===e&&m(e,d)}}},L.addPrefix=function(d,c){C[d]=c},L.addFilter=function(b){E.push(b)},L.errorTimeout=10000,null==ac.readyState&&ac.addEventListener&&(ac.readyState="loading",ac.addEventListener("DOMContentLoaded",N=function(){ac.removeEventListener("DOMContentLoaded",N,0),ac.readyState="complete"},0)),ad.yepnope=T(),ad.yepnope.executeStack=W,ad.yepnope.injectJs=function(r,q,p,n,m,h){var g=ac.createElement("script"),f,b,n=n||L.errorTimeout;g.src=r;for(b in p){g.setAttribute(b,p[b])}q=h?W:q||Y,g.onreadystatechange=g.onload=function(){!f&&X(g.readyState)&&(f=1,q(),g.onload=g.onreadystatechange=null)},R(function(){f||(f=1,q(1))},n),m?g.onload():Q.parentNode.insertBefore(g,Q)},ad.yepnope.injectCss=function(b,n,m,l,k,h){var l=ac.createElement("link"),f,n=h?W:n||Y;l.href=b,l.rel="stylesheet",l.type="text/css";for(f in m){l.setAttribute(f,m[f])}k||(Q.parentNode.insertBefore(l,Q),R(n,0))}})(this,document);Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0))};Modernizr.addTest("adownload",!!("download" in document.createElement("a")));Modernizr.addTest("audiodata",!!(window.Audio));(function(){if(!Modernizr.canvas){return false}var c=new Image(),b=document.createElement("canvas"),a=b.getContext("2d");c.onload=function(){a.drawImage(c,0,0);Modernizr.addTest("todataurljpeg",function(){return b.toDataURL("image/jpeg").indexOf("data:image/jpeg")===0});Modernizr.addTest("todataurlwebp",function(){return b.toDataURL("image/webp").indexOf("data:image/webp")===0})};c.src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="}());Modernizr.addTest("battery",!!Modernizr.prefixed("battery",navigator));Modernizr.addTest("lowbattery",function(){var b=0.2,a=Modernizr.prefixed("battery",navigator);return !!(a&&!a.charging&&a.level<=b)});Modernizr.addTest("webaudio",!!(window.webkitAudioContext||window.AudioContext));Modernizr.addTest("contenteditable","contentEditable" in document.documentElement);Modernizr.addTest("cookies",function(){if(navigator.cookieEnabled){return true}document.cookie="cookietest=1";var a=document.cookie.indexOf("cookietest=")!=-1;document.cookie="cookietest=1; expires=Thu, 01-Jan-1970 00:00:01 GMT";return a});Modernizr.addTest("cors","withCredentials" in new XMLHttpRequest());(function(){var b=document.createElement("a"),a=b.style,c="right 10px bottom 10px";Modernizr.addTest("bgpositionshorthand",function(){a.cssText="background-position: "+c+";";return(a.backgroundPosition===c)})}());Modernizr.addTest("bgpositionxy",function(){return Modernizr.testStyles("#modernizr {background-position: 3px 5px;}",function(c){var d=window.getComputedStyle?getComputedStyle(c,null):c.currentStyle;var b=(d.backgroundPositionX=="3px")||(d["background-position-x"]=="3px");var a=(d.backgroundPositionY=="5px")||(d["background-position-y"]=="5px");return b&&a})});(function(){function a(b){return(window.getComputedStyle?getComputedStyle(b,null).getPropertyValue("background"):b.currentStyle.background)}Modernizr.testStyles(" #modernizr { background-repeat: round; } ",function(b,c){Modernizr.addTest("bgrepeatround",a(b)=="round")});Modernizr.testStyles(" #modernizr { background-repeat: space; } ",function(b,c){Modernizr.addTest("bgrepeatspace",a(b)=="space")})})();Modernizr.testStyles("#modernizr{background-size:cover}",function(b){var a=window.getComputedStyle?window.getComputedStyle(b,null):b.currentStyle;Modernizr.addTest("bgsizecover",a.backgroundSize=="cover")});Modernizr.addTest("boxsizing",function(){return Modernizr.testAllProps("boxSizing")&&(document.documentMode===undefined||document.documentMode>7)});Modernizr.addTest("csscalc",function(a,c,b){c="width:";b="calc(10px);";a=document.createElement("div");a.style.cssText=c+Modernizr._prefixes.join(b+c);return !!a.style.length});Modernizr.addTest("cubicbezierrange",function(){var a=document.createElement("div");a.style.cssText=Modernizr._prefixes.join("transition-timing-function:cubic-bezier(1,0,0,1.1); ");return !!a.style.length});Modernizr.testStyles(" #modernizr { display: run-in; } ",function(b,c){var a=(window.getComputedStyle?getComputedStyle(b,null).getPropertyValue("display"):b.currentStyle.display);Modernizr.addTest("display-runin",a=="run-in")});Modernizr.addTest("cssfilters",function(){el=document.createElement("div");el.style.cssText=Modernizr._prefixes.join("filter:blur(2px); ");return !!el.style.length&&((document.documentMode===undefined||document.documentMode>9))});Modernizr.addTest("display-table",function(){var e=window.document,a=e.documentElement,d=e.createElement("div"),f=e.createElement("div"),b=e.createElement("div"),c;d.style.cssText="display: table";f.style.cssText=b.style.cssText="display: table-cell; padding: 10px";d.appendChild(f);d.appendChild(b);a.insertBefore(d,a.firstChild);c=f.offsetLeft<b.offsetLeft;a.removeChild(d);return c});Modernizr.addTest("lastchild",function(){return Modernizr.testStyles("#modernizr div {width:100px} #modernizr :last-child{width:200px;display:block}",function(a){return a.lastChild.offsetWidth>a.firstChild.offsetWidth},2)});Modernizr.addTest("cssmask",Modernizr.testAllProps("mask-repeat"));Modernizr.addTest("mediaqueries",Modernizr.mq("only all"));Modernizr.addTest("overflowscrolling",function(){return Modernizr.testAllProps("overflowScrolling")});Modernizr.addTest("pointerevents",function(){var b=document.createElement("x"),c=document.documentElement,d=window.getComputedStyle,a;if(!("pointerEvents" in b.style)){return false}b.style.pointerEvents="auto";b.style.pointerEvents="x";c.appendChild(b);a=d&&d(b,"").pointerEvents==="auto";c.removeChild(b);return !!a});Modernizr.addTest("cssremunit",function(){var b=document.createElement("div");try{b.style.fontSize="3rem"}catch(a){}return(/rem/).test(b.style.fontSize)});Modernizr.addTest("regions",function(){var g=Modernizr.prefixed("flowFrom"),d=Modernizr.prefixed("flowInto");if(!g||!d){return false}var a=document.createElement("div"),e=document.createElement("div"),h=document.createElement("div"),c="modernizr_flow_for_regions_check";e.innerText="M";a.style.cssText="top: 150px; left: 150px; padding: 0px;";h.style.cssText="width: 50px; height: 50px; padding: 42px;";h.style[g]=c;a.appendChild(e);a.appendChild(h);document.documentElement.appendChild(a);var f,i,b=e.getBoundingClientRect();e.style[d]=c;f=e.getBoundingClientRect();i=f.left-b.left;document.documentElement.removeChild(a);e=h=a=undefined;return(i==42)});Modernizr.addTest("cssresize",Modernizr.testAllProps("resize"));Modernizr.addTest("cssscrollbar",function(){var a,b="#modernizr{overflow: scroll; width: 40px }#"+Modernizr._prefixes.join("scrollbar{width:0px} #modernizr::").split("#").slice(1).join("#")+"scrollbar{width:0px}";Modernizr.testStyles(b,function(c){a="scrollWidth" in c&&c.scrollWidth==40});return a});Modernizr.addTest("userselect",function(){return Modernizr.testAllProps("user-select")});Modernizr.addTest("subpixelfont",function(){var a,b="#modernizr{position: absolute; top: -10em; visibility:hidden; font: normal 10px arial;}#subpixel{float: left; font-size: 33.3333%;}";Modernizr.testStyles(b,function(c){var d=c.firstChild;d.innerHTML="This is a text written in Arial";a=window.getComputedStyle?window.getComputedStyle(d,null).getPropertyValue("width")!=="44px":false},1,["subpixel"]);return a});Modernizr.addTest("customprotocolhandler",function(){return !!navigator.registerProtocolHandler});Modernizr.addTest("dataview",(typeof DataView!=="undefined"&&"getFloat64" in DataView.prototype));Modernizr.addTest("classlist","classList" in document.documentElement);Modernizr.addTest("dataset",function(){var a=document.createElement("div");a.setAttribute("data-a-b","c");return !!(a.dataset&&a.dataset.aB==="c")});Modernizr.addTest("microdata",!!(document.getItems));Modernizr.addTest("datalistelem",Modernizr.input.list);Modernizr.addTest("details",function(){var e=document,c=e.createElement("details"),b,a,d;if(!("open" in c)){return false}a=e.body||(function(){var f=e.documentElement;b=true;return f.insertBefore(e.createElement("body"),f.firstElementChild||f.firstChild)}());c.innerHTML="<summary>a</summary>b";c.style.display="block";a.appendChild(c);d=c.offsetHeight;c.open=true;d=d!=c.offsetHeight;a.removeChild(c);b&&a.parentNode.removeChild(a);return d});Modernizr.addTest("outputelem","value" in document.createElement("output"));Modernizr.addTest("progressbar",function(){return document.createElement("progress").max!==undefined});Modernizr.addTest("meter",function(){return document.createElement("meter").max!==undefined});Modernizr.addTest("ruby",function(){var c=document.createElement("ruby"),b=document.createElement("rt"),e=document.createElement("rp"),d=document.documentElement,f="display",h="fontSize";c.appendChild(e);c.appendChild(b);d.appendChild(c);if(a(e,f)=="none"||a(c,f)=="ruby"&&a(b,f)=="ruby-text"||a(e,h)=="6pt"&&a(b,h)=="6pt"){g();return true}else{g();return false}function a(j,k){var i;if(window.getComputedStyle){i=document.defaultView.getComputedStyle(j,null).getPropertyValue(k)}else{if(j.currentStyle){i=j.currentStyle[k]}}return i}function g(){d.removeChild(c);c=null;b=null;e=null}});Modernizr.addTest("time","valueAsDate" in document.createElement("time"));Modernizr.addTest("track",(typeof(document.createElement("video").addTextTrack)==="function"));Modernizr.addTest("emoji",function(){if(!Modernizr.canvastext){return false}var b=document.createElement("canvas"),a=b.getContext("2d");a.textBaseline="top";a.font="32px Arial";a.fillText("\ud83d\ude03",0,0);return a.getImageData(16,16,1,1).data[0]!==0});Modernizr.addTest("strictmode",function(){return(function(){return !this})()});Modernizr.addTest("devicemotion",("DeviceMotionEvent" in window));Modernizr.addTest("deviceorientation",("DeviceOrientationEvent" in window));(function(){var a=new Image();a.onerror=function(){Modernizr.addTest("exif-orientation",function(){return false})};a.onload=function(){Modernizr.addTest("exif-orientation",function(){return a.width!==2})};a.src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/4QAiRXhpZgAASUkqAAgAAAABABIBAwABAAAABgASAAAAAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAABAAIDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD+/iiiigD/2Q=="})();Modernizr.addTest("filereader",function(){return !!(window.File&&window.FileList&&window.FileReader)});Modernizr.addTest("filesystem",!!Modernizr.prefixed("requestFileSystem",window));Modernizr.addTest("fileinput",function(){var a=document.createElement("input");a.type="file";return !a.disabled});Modernizr.addTest("speechinput",function(){var a=document.createElement("input");return"speech" in a||"onwebkitspeechchange" in a});Modernizr.addTest("placeholder",function(){return !!("placeholder" in (Modernizr.input||document.createElement("input"))&&"placeholder" in (Modernizr.textarea||document.createElement("textarea")))});(function(a,b){b.formvalidationapi=false;b.formvalidationmessage=false;b.addTest("formvalidation",function(){var g=a.createElement("form");if(!("checkValidity" in g)){return false}var d=a.body,f=a.documentElement,c=false,h=false,e;b.formvalidationapi=true;g.onsubmit=function(i){if(!window.opera){i.preventDefault()}i.stopPropagation()};g.innerHTML='<input name="modTest" required><button></button>';g.style.position="absolute";g.style.top="-99999em";if(!d){c=true;d=a.createElement("body");d.style.background="";f.appendChild(d)}d.appendChild(g);e=g.getElementsByTagName("input")[0];e.oninvalid=function(i){h=true;i.preventDefault();i.stopPropagation()};b.formvalidationmessage=!!e.validationMessage;g.getElementsByTagName("button")[0].click();d.removeChild(g);c&&f.removeChild(d);return h})})(document,window.Modernizr);Modernizr.addTest("gamepads",!!Modernizr.prefixed("gamepads",navigator));Modernizr.addTest("fullscreen",function(){for(var a=0;a<Modernizr._domPrefixes.length;a++){if(document[Modernizr._domPrefixes[a].toLowerCase()+"CancelFullScreen"]){return true}}return !!document.cancelFullScreen||false});Modernizr.addTest("getusermedia",!!Modernizr.prefixed("getUserMedia",navigator));Modernizr.addTest("ie8compat",function(){return(!window.addEventListener&&document.documentMode&&document.documentMode===7)});(function(){if(!Modernizr.canvas){return false}var c=new Image(),b=document.createElement("canvas"),a=b.getContext("2d");c.onload=function(){Modernizr.addTest("apng",function(){if(typeof b.getContext=="undefined"){return false}else{a.drawImage(c,0,0);return a.getImageData(0,0,1,1).data[3]===0}})};c.src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACGFjVEwAAAABAAAAAcMq2TYAAAANSURBVAiZY2BgYPgPAAEEAQB9ssjfAAAAGmZjVEwAAAAAAAAAAQAAAAEAAAAAAAAAAAD6A+gBAbNU+2sAAAARZmRBVAAAAAEImWNgYGBgAAAABQAB6MzFdgAAAABJRU5ErkJggg=="}());(function(){var a=new Image();a.onerror=function(){Modernizr.addTest("webp",false)};a.onload=function(){Modernizr.addTest("webp",function(){return a.width==1})};a.src="data:image/webp;base64,UklGRiwAAABXRUJQVlA4ICAAAAAUAgCdASoBAAEAL/3+/3+CAB/AAAFzrNsAAP5QAAAAAA=="}());Modernizr.addTest("json",!!window.JSON&&!!JSON.parse);Modernizr.addTest("olreversed","reversed" in document.createElement("ol"));Modernizr.addTest("lowbandwidth",function(){var a=navigator.connection||{type:0};return a.type==3||a.type==4||/^[23]g$/.test(a.type)});Modernizr.addTest("eventsource",!!window.EventSource);Modernizr.addTest("xhr2","FormData" in window);Modernizr.addTest("notification",!!Modernizr.prefixed("Notifications",window));Modernizr.addTest("performance",!!Modernizr.prefixed("performance",window));Modernizr.addTest("quotamanagement",function(){var a=Modernizr.prefixed("StorageInfo",window);return !!(a&&"TEMPORARY" in a&&"PERSISTENT" in a)});Modernizr.addTest("raf",!!Modernizr.prefixed("requestAnimationFrame",window));Modernizr.addTest("scriptasync","async" in document.createElement("script"));Modernizr.addTest("scriptdefer","defer" in document.createElement("script"));Modernizr.addTest("stylescoped","scoped" in document.createElement("style"));Modernizr.addTest("svgfilters",function(){var a=false;try{a=typeof SVGFEColorMatrixElement!==undefined&&SVGFEColorMatrixElement.SVG_FECOLORMATRIX_TYPE_SATURATE==2}catch(b){}return a});Modernizr.addTest("unicode",function(){var a,b=document.createElement("span"),c=document.createElement("span");Modernizr.testStyles("#modernizr{font-family:Arial,sans;font-size:300em;}",function(d){b.innerHTML="&#5987";c.innerHTML="&#9734";d.appendChild(b);d.appendChild(c);a="offsetWidth" in b&&b.offsetWidth!==c.offsetWidth});return a});Modernizr.addTest("userdata",function(){return !!document.createElement("div").addBehavior});(function(){var a=new Image();a.onerror=function(){Modernizr.addTest("datauri",function(){return false})};a.onload=function(){Modernizr.addTest("datauri",function(){return(a.width==1&&a.height==1)})};a.src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="})();Modernizr.addTest("vibrate",!!Modernizr.prefixed("vibrate",navigator));Modernizr.addTest("webintents",function(){return !!Modernizr.prefixed("startActivity",navigator)});Modernizr.addTest("framed",function(){return window.location!=top.location});
+;(function(window, document) {
+/*jshint evil:true */
+  /** Preset options */
+  var options = window.html5 || {};
+
+  /** Used to skip problem elements */
+  var reSkip = /^<|^(?:button|map|select|textarea|object|iframe|option|optgroup)$/i;
+
+  /** Not all elements can be cloned in IE (this list can be shortend) **/
+  var saveClones = /^<|^(?:a|b|button|code|div|fieldset|form|h1|h2|h3|h4|h5|h6|i|iframe|img|input|label|li|link|ol|option|p|param|q|script|select|span|strong|style|table|tbody|td|textarea|tfoot|th|thead|tr|ul)$/i;
+
+  /** Detect whether the browser supports default html5 styles */
+  var supportsHtml5Styles;
+
+  /** Name of the expando, to work with multiple documents or to re-shiv one document */
+  var expando = '_html5shiv';
+
+  /** The id for the the documents expando */
+  var expanID = 0;
+
+  /** Cached data for each document */
+  var expandoData = {};
+
+  /** Detect whether the browser supports unknown elements */
+  var supportsUnknownElements;
+
+  (function() {
+    try {
+        var a = document.createElement('a');
+        a.innerHTML = '<xyz></xyz>';
+        //if the hidden property is implemented we can assume, that the browser supports basic HTML5 Styles
+        supportsHtml5Styles = ('hidden' in a);
+
+        supportsUnknownElements = a.childNodes.length == 1 || (function() {
+          // assign a false positive if unable to shiv
+          (document.createElement)('a');
+          var frag = document.createDocumentFragment();
+          return (
+            typeof frag.cloneNode == 'undefined' ||
+            typeof frag.createDocumentFragment == 'undefined' ||
+            typeof frag.createElement == 'undefined'
+          );
+        }());
+    } catch(e) {
+      supportsHtml5Styles = true;
+      supportsUnknownElements = true;
+    }
+
+  }());
+
+  /*--------------------------------------------------------------------------*/
+
+  /**
+   * Creates a style sheet with the given CSS text and adds it to the document.
+   * @private
+   * @param {Document} ownerDocument The document.
+   * @param {String} cssText The CSS text.
+   * @returns {StyleSheet} The style element.
+   */
+  function addStyleSheet(ownerDocument, cssText) {
+    var p = ownerDocument.createElement('p'),
+        parent = ownerDocument.getElementsByTagName('head')[0] || ownerDocument.documentElement;
+
+    p.innerHTML = 'x<style>' + cssText + '</style>';
+    return parent.insertBefore(p.lastChild, parent.firstChild);
+  }
+
+  /**
+   * Returns the value of `html5.elements` as an array.
+   * @private
+   * @returns {Array} An array of shived element node names.
+   */
+  function getElements() {
+    var elements = html5.elements;
+    return typeof elements == 'string' ? elements.split(' ') : elements;
+  }
+
+    /**
+   * Returns the data associated to the given document
+   * @private
+   * @param {Document} ownerDocument The document.
+   * @returns {Object} An object of data.
+   */
+  function getExpandoData(ownerDocument) {
+    var data = expandoData[ownerDocument[expando]];
+    if (!data) {
+        data = {};
+        expanID++;
+        ownerDocument[expando] = expanID;
+        expandoData[expanID] = data;
+    }
+    return data;
+  }
+
+  /**
+   * returns a shived element for the given nodeName and document
+   * @memberOf html5
+   * @param {String} nodeName name of the element
+   * @param {Document} ownerDocument The context document.
+   * @returns {Object} The shived element.
+   */
+  function createElement(nodeName, ownerDocument, data){
+    if (!ownerDocument) {
+        ownerDocument = document;
+    }
+    if(supportsUnknownElements){
+        return ownerDocument.createElement(nodeName);
+    }
+    if (!data) {
+        data = getExpandoData(ownerDocument);
+    }
+    var node;
+
+    if (data.cache[nodeName]) {
+        node = data.cache[nodeName].cloneNode();
+    } else if (saveClones.test(nodeName)) {
+        node = (data.cache[nodeName] = data.createElem(nodeName)).cloneNode();
+    } else {
+        node = data.createElem(nodeName);
+    }
+
+    // Avoid adding some elements to fragments in IE < 9 because
+    // * Attributes like `name` or `type` cannot be set/changed once an element
+    //   is inserted into a document/fragment
+    // * Link elements with `src` attributes that are inaccessible, as with
+    //   a 403 response, will cause the tab/window to crash
+    // * Script elements appended to fragments will execute when their `src`
+    //   or `text` property is set
+    return node.canHaveChildren && !reSkip.test(nodeName) ? data.frag.appendChild(node) : node;
+  }
+
+  /**
+   * returns a shived DocumentFragment for the given document
+   * @memberOf html5
+   * @param {Document} ownerDocument The context document.
+   * @returns {Object} The shived DocumentFragment.
+   */
+  function createDocumentFragment(ownerDocument, data){
+    if (!ownerDocument) {
+        ownerDocument = document;
+    }
+    if(supportsUnknownElements){
+        return ownerDocument.createDocumentFragment();
+    }
+    data = data || getExpandoData(ownerDocument);
+    var clone = data.frag.cloneNode(),
+        i = 0,
+        elems = getElements(),
+        l = elems.length;
+    for(;i<l;i++){
+        clone.createElement(elems[i]);
+    }
+    return clone;
+  }
+
+  /**
+   * Shivs the `createElement` and `createDocumentFragment` methods of the document.
+   * @private
+   * @param {Document|DocumentFragment} ownerDocument The document.
+   * @param {Object} data of the document.
+   */
+  function shivMethods(ownerDocument, data) {
+    if (!data.cache) {
+        data.cache = {};
+        data.createElem = ownerDocument.createElement;
+        data.createFrag = ownerDocument.createDocumentFragment;
+        data.frag = data.createFrag();
+    }
+
+
+    ownerDocument.createElement = function(nodeName) {
+      //abort shiv
+      if (!html5.shivMethods) {
+          return data.createElem(nodeName);
+      }
+      return createElement(nodeName, ownerDocument, data);
+    };
+
+    ownerDocument.createDocumentFragment = Function('h,f', 'return function(){' +
+      'var n=f.cloneNode(),c=n.createElement;' +
+      'h.shivMethods&&(' +
+        // unroll the `createElement` calls
+        getElements().join().replace(/\w+/g, function(nodeName) {
+          data.createElem(nodeName);
+          data.frag.createElement(nodeName);
+          return 'c("' + nodeName + '")';
+        }) +
+      ');return n}'
+    )(html5, data.frag);
+  }
+
+  /*--------------------------------------------------------------------------*/
+
+  /**
+   * Shivs the given document.
+   * @memberOf html5
+   * @param {Document} ownerDocument The document to shiv.
+   * @returns {Document} The shived document.
+   */
+  function shivDocument(ownerDocument) {
+    if (!ownerDocument) {
+        ownerDocument = document;
+    }
+    var data = getExpandoData(ownerDocument);
+
+    if (html5.shivCSS && !supportsHtml5Styles && !data.hasCSS) {
+      data.hasCSS = !!addStyleSheet(ownerDocument,
+        // corrects block display not defined in IE6/7/8/9
+        'article,aside,figcaption,figure,footer,header,hgroup,nav,section{display:block}' +
+        // adds styling not present in IE6/7/8/9
+        'mark{background:#FF0;color:#000}'
+      );
+    }
+    if (!supportsUnknownElements) {
+      shivMethods(ownerDocument, data);
+    }
+    return ownerDocument;
+  }
+
+  /*--------------------------------------------------------------------------*/
+
+  /**
+   * The `html5` object is exposed so that more elements can be shived and
+   * existing shiving can be detected on iframes.
+   * @type Object
+   * @example
+   *
+   * // options can be changed before the script is included
+   * html5 = { 'elements': 'mark section', 'shivCSS': false, 'shivMethods': false };
+   */
+  var html5 = {
+
+    /**
+     * An array or space separated string of node names of the elements to shiv.
+     * @memberOf html5
+     * @type Array|String
+     */
+    'elements': options.elements || 'abbr article aside audio bdi canvas data datalist details figcaption figure footer header hgroup mark meter nav output progress section summary time video',
+
+    /**
+     * A flag to indicate that the HTML5 style sheet should be inserted.
+     * @memberOf html5
+     * @type Boolean
+     */
+    'shivCSS': (options.shivCSS !== false),
+
+    /**
+     * Is equal to true if a browser supports creating unknown/HTML5 elements
+     * @memberOf html5
+     * @type boolean
+     */
+    'supportsUnknownElements': supportsUnknownElements,
+
+    /**
+     * A flag to indicate that the document's `createElement` and `createDocumentFragment`
+     * methods should be overwritten.
+     * @memberOf html5
+     * @type Boolean
+     */
+    'shivMethods': (options.shivMethods !== false),
+
+    /**
+     * A string to describe the type of `html5` object ("default" or "default print").
+     * @memberOf html5
+     * @type String
+     */
+    'type': 'default',
+
+    // shivs the document according to the specified `html5` object options
+    'shivDocument': shivDocument,
+
+    //creates a shived element
+    createElement: createElement,
+
+    //creates a shived documentFragment
+    createDocumentFragment: createDocumentFragment
+  };
+
+  /*--------------------------------------------------------------------------*/
+
+  // expose html5
+  window.html5 = html5;
+
+  // shiv the document
+  shivDocument(document);
+
+  /*------------------------------- Print Shiv -------------------------------*/
+
+  /** Used to filter media types */
+  var reMedia = /^$|\b(?:all|print)\b/;
+
+  /** Used to namespace printable elements */
+  var shivNamespace = 'html5shiv';
+
+  /** Detect whether the browser supports shivable style sheets */
+  var supportsShivableSheets = !supportsUnknownElements && (function() {
+    // assign a false negative if unable to shiv
+    var docEl = document.documentElement;
+    return !(
+      typeof document.namespaces == 'undefined' ||
+      typeof document.parentWindow == 'undefined' ||
+      typeof docEl.applyElement == 'undefined' ||
+      typeof docEl.removeNode == 'undefined' ||
+      typeof window.attachEvent == 'undefined'
+    );
+  }());
+
+  /*--------------------------------------------------------------------------*/
+
+  /**
+   * Wraps all HTML5 elements in the given document with printable elements.
+   * (eg. the "header" element is wrapped with the "html5shiv:header" element)
+   * @private
+   * @param {Document} ownerDocument The document.
+   * @returns {Array} An array wrappers added.
+   */
+  function addWrappers(ownerDocument) {
+    var node,
+        nodes = ownerDocument.getElementsByTagName('*'),
+        index = nodes.length,
+        reElements = RegExp('^(?:' + getElements().join('|') + ')$', 'i'),
+        result = [];
+
+    while (index--) {
+      node = nodes[index];
+      if (reElements.test(node.nodeName)) {
+        result.push(node.applyElement(createWrapper(node)));
+      }
+    }
+    return result;
+  }
+
+  /**
+   * Creates a printable wrapper for the given element.
+   * @private
+   * @param {Element} element The element.
+   * @returns {Element} The wrapper.
+   */
+  function createWrapper(element) {
+    var node,
+        nodes = element.attributes,
+        index = nodes.length,
+        wrapper = element.ownerDocument.createElement(shivNamespace + ':' + element.nodeName);
+
+    // copy element attributes to the wrapper
+    while (index--) {
+      node = nodes[index];
+      node.specified && wrapper.setAttribute(node.nodeName, node.nodeValue);
+    }
+    // copy element styles to the wrapper
+    wrapper.style.cssText = element.style.cssText;
+    return wrapper;
+  }
+
+  /**
+   * Shivs the given CSS text.
+   * (eg. header{} becomes html5shiv\:header{})
+   * @private
+   * @param {String} cssText The CSS text to shiv.
+   * @returns {String} The shived CSS text.
+   */
+  function shivCssText(cssText) {
+    var pair,
+        parts = cssText.split('{'),
+        index = parts.length,
+        reElements = RegExp('(^|[\\s,>+~])(' + getElements().join('|') + ')(?=[[\\s,>+~#.:]|$)', 'gi'),
+        replacement = '$1' + shivNamespace + '\\:$2';
+
+    while (index--) {
+      pair = parts[index] = parts[index].split('}');
+      pair[pair.length - 1] = pair[pair.length - 1].replace(reElements, replacement);
+      parts[index] = pair.join('}');
+    }
+    return parts.join('{');
+  }
+
+  /**
+   * Removes the given wrappers, leaving the original elements.
+   * @private
+   * @params {Array} wrappers An array of printable wrappers.
+   */
+  function removeWrappers(wrappers) {
+    var index = wrappers.length;
+    while (index--) {
+      wrappers[index].removeNode();
+    }
+  }
+
+  /*--------------------------------------------------------------------------*/
+
+  /**
+   * Shivs the given document for print.
+   * @memberOf html5
+   * @param {Document} ownerDocument The document to shiv.
+   * @returns {Document} The shived document.
+   */
+  function shivPrint(ownerDocument) {
+    var shivedSheet,
+        wrappers,
+        data = getExpandoData(ownerDocument),
+        namespaces = ownerDocument.namespaces,
+        ownerWindow = ownerDocument.parentWindow;
+
+    if (!supportsShivableSheets || ownerDocument.printShived) {
+      return ownerDocument;
+    }
+    if (typeof namespaces[shivNamespace] == 'undefined') {
+      namespaces.add(shivNamespace);
+    }
+
+    function removeSheet() {
+      clearTimeout(data._removeSheetTimer);
+      if (shivedSheet) {
+          shivedSheet.removeNode(true);
+      }
+      shivedSheet= null;
+    }
+
+    ownerWindow.attachEvent('onbeforeprint', function() {
+
+      removeSheet();
+
+      var imports,
+          length,
+          sheet,
+          collection = ownerDocument.styleSheets,
+          cssText = [],
+          index = collection.length,
+          sheets = Array(index);
+
+      // convert styleSheets collection to an array
+      while (index--) {
+        sheets[index] = collection[index];
+      }
+      // concat all style sheet CSS text
+      while ((sheet = sheets.pop())) {
+        // IE does not enforce a same origin policy for external style sheets...
+        // but has trouble with some dynamically created stylesheets
+        if (!sheet.disabled && reMedia.test(sheet.media)) {
+
+          try {
+            imports = sheet.imports;
+            length = imports.length;
+          } catch(er){
+            length = 0;
+          }
+
+          for (index = 0; index < length; index++) {
+            sheets.push(imports[index]);
+          }
+
+          try {
+            cssText.push(sheet.cssText);
+          } catch(er){}
+        }
+      }
+
+      // wrap all HTML5 elements with printable elements and add the shived style sheet
+      cssText = shivCssText(cssText.reverse().join(''));
+      wrappers = addWrappers(ownerDocument);
+      shivedSheet = addStyleSheet(ownerDocument, cssText);
+
+    });
+
+    ownerWindow.attachEvent('onafterprint', function() {
+      // remove wrappers, leaving the original elements, and remove the shived style sheet
+      removeWrappers(wrappers);
+      clearTimeout(data._removeSheetTimer);
+      data._removeSheetTimer = setTimeout(removeSheet, 500);
+    });
+
+    ownerDocument.printShived = true;
+    return ownerDocument;
+  }
+
+  /*--------------------------------------------------------------------------*/
+
+  // expose API
+  html5.type += ' print';
+  html5.shivPrint = shivPrint;
+
+  // shiv for print
+  shivPrint(document);
+
+}(this, document));/*yepnope1.5.4|WTFPL*/
+(function(a,b,c){function d(a){return"[object Function]"==o.call(a)}function e(a){return"string"==typeof a}function f(){}function g(a){return!a||"loaded"==a||"complete"==a||"uninitialized"==a}function h(){var a=p.shift();q=1,a?a.t?m(function(){("c"==a.t?B.injectCss:B.injectJs)(a.s,0,a.a,a.x,a.e,1)},0):(a(),h()):q=0}function i(a,c,d,e,f,i,j){function k(b){if(!o&&g(l.readyState)&&(u.r=o=1,!q&&h(),l.onload=l.onreadystatechange=null,b)){"img"!=a&&m(function(){t.removeChild(l)},50);for(var d in y[c])y[c].hasOwnProperty(d)&&y[c][d].onload()}}var j=j||B.errorTimeout,l=b.createElement(a),o=0,r=0,u={t:d,s:c,e:f,a:i,x:j};1===y[c]&&(r=1,y[c]=[]),"object"==a?l.data=c:(l.src=c,l.type=a),l.width=l.height="0",l.onerror=l.onload=l.onreadystatechange=function(){k.call(this,r)},p.splice(e,0,u),"img"!=a&&(r||2===y[c]?(t.insertBefore(l,s?null:n),m(k,j)):y[c].push(l))}function j(a,b,c,d,f){return q=0,b=b||"j",e(a)?i("c"==b?v:u,a,b,this.i++,c,d,f):(p.splice(this.i++,0,a),1==p.length&&h()),this}function k(){var a=B;return a.loader={load:j,i:0},a}var l=b.documentElement,m=a.setTimeout,n=b.getElementsByTagName("script")[0],o={}.toString,p=[],q=0,r="MozAppearance"in l.style,s=r&&!!b.createRange().compareNode,t=s?l:n.parentNode,l=a.opera&&"[object Opera]"==o.call(a.opera),l=!!b.attachEvent&&!l,u=r?"object":l?"script":"img",v=l?"script":u,w=Array.isArray||function(a){return"[object Array]"==o.call(a)},x=[],y={},z={timeout:function(a,b){return b.length&&(a.timeout=b[0]),a}},A,B;B=function(a){function b(a){var a=a.split("!"),b=x.length,c=a.pop(),d=a.length,c={url:c,origUrl:c,prefixes:a},e,f,g;for(f=0;f<d;f++)g=a[f].split("="),(e=z[g.shift()])&&(c=e(c,g));for(f=0;f<b;f++)c=x[f](c);return c}function g(a,e,f,g,h){var i=b(a),j=i.autoCallback;i.url.split(".").pop().split("?").shift(),i.bypass||(e&&(e=d(e)?e:e[a]||e[g]||e[a.split("/").pop().split("?")[0]]),i.instead?i.instead(a,e,f,g,h):(y[i.url]?i.noexec=!0:y[i.url]=1,f.load(i.url,i.forceCSS||!i.forceJS&&"css"==i.url.split(".").pop().split("?").shift()?"c":c,i.noexec,i.attrs,i.timeout),(d(e)||d(j))&&f.load(function(){k(),e&&e(i.origUrl,h,g),j&&j(i.origUrl,h,g),y[i.url]=2})))}function h(a,b){function c(a,c){if(a){if(e(a))c||(j=function(){var a=[].slice.call(arguments);k.apply(this,a),l()}),g(a,j,b,0,h);else if(Object(a)===a)for(n in m=function(){var b=0,c;for(c in a)a.hasOwnProperty(c)&&b++;return b}(),a)a.hasOwnProperty(n)&&(!c&&!--m&&(d(j)?j=function(){var a=[].slice.call(arguments);k.apply(this,a),l()}:j[n]=function(a){return function(){var b=[].slice.call(arguments);a&&a.apply(this,b),l()}}(k[n])),g(a[n],j,b,n,h))}else!c&&l()}var h=!!a.test,i=a.load||a.both,j=a.callback||f,k=j,l=a.complete||f,m,n;c(h?a.yep:a.nope,!!i),i&&c(i)}var i,j,l=this.yepnope.loader;if(e(a))g(a,0,l,0);else if(w(a))for(i=0;i<a.length;i++)j=a[i],e(j)?g(j,0,l,0):w(j)?B(j):Object(j)===j&&h(j,l);else Object(a)===a&&h(a,l)},B.addPrefix=function(a,b){z[a]=b},B.addFilter=function(a){x.push(a)},B.errorTimeout=1e4,null==b.readyState&&b.addEventListener&&(b.readyState="loading",b.addEventListener("DOMContentLoaded",A=function(){b.removeEventListener("DOMContentLoaded",A,0),b.readyState="complete"},0)),a.yepnope=k(),a.yepnope.executeStack=h,a.yepnope.injectJs=function(a,c,d,e,i,j){var k=b.createElement("script"),l,o,e=e||B.errorTimeout;k.src=a;for(o in d)k.setAttribute(o,d[o]);c=j?h:c||f,k.onreadystatechange=k.onload=function(){!l&&g(k.readyState)&&(l=1,c(),k.onload=k.onreadystatechange=null)},m(function(){l||(l=1,c(1))},e),i?k.onload():n.parentNode.insertBefore(k,n)},a.yepnope.injectCss=function(a,c,d,e,g,i){var e=b.createElement("link"),j,c=i?h:c||f;e.href=a,e.rel="stylesheet",e.type="text/css";for(j in d)e.setAttribute(j,d[j]);g||(n.parentNode.insertBefore(e,n),m(c,0))}})(this,document);
+Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
+
+// a[download] attribute
+// When used on an <a>, this attribute signifies that the resource it
+// points to should be downloaded by the browser rather than navigating to it.
+// http://developers.whatwg.org/links.html#downloading-resources
+// By Addy Osmani
+
+Modernizr.addTest('adownload',
+  !!('download' in document.createElement('a'))
+);
+// Mozilla Audio Data API
+// https://wiki.mozilla.org/Audio_Data_API
+// by Addy Osmani
+Modernizr.addTest('audiodata', !!(window.Audio));
+// canvas.toDataURL type support
+// http://www.w3.org/TR/html5/the-canvas-element.html#dom-canvas-todataurl
+
+// This test is asynchronous. Watch out.
+
+(function () {
+
+    if (!Modernizr.canvas) {
+        return false;
+    }
+
+    var image = new Image(),
+        canvas = document.createElement('canvas'),
+        ctx = canvas.getContext('2d');
+
+    image.onload = function() {
+        ctx.drawImage(image, 0, 0);
+
+        Modernizr.addTest('todataurljpeg', function() {
+            return canvas.toDataURL('image/jpeg').indexOf('data:image/jpeg') === 0;
+        });
+        Modernizr.addTest('todataurlwebp', function() {
+            return canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+        });
+    };
+
+    image.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==';
+}());
+
+// Battery API
+// https://developer.mozilla.org/en/DOM/window.navigator.mozBattery
+// By: Paul Sayre
+
+Modernizr.addTest('battery',
+	!!Modernizr.prefixed('battery', navigator)
+);
+// Low Battery Level
+// Enable a developer to remove CPU intensive CSS/JS when battery is low
+// developer.mozilla.org/en/DOM/window.navigator.mozBattery
+// By: Paul Sayre
+
+Modernizr.addTest('lowbattery', function () {
+	var minLevel = 0.20,
+		battery = Modernizr.prefixed('battery', navigator);
+	return !!(battery && !battery.charging && battery.level <= minLevel);
+});
+// Web Audio API
+// https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html
+// By Addy Osmani
+Modernizr.addTest('webaudio', !!(window.webkitAudioContext || window.AudioContext));
+// contentEditable
+// http://www.whatwg.org/specs/web-apps/current-work/multipage/editing.html#contenteditable
+
+// this is known to false positive in some mobile browsers
+// here is a whitelist of verified working browsers:
+// https://github.com/NielsLeenheer/html5test/blob/549f6eac866aa861d9649a0707ff2c0157895706/scripts/engine.js#L2083
+
+Modernizr.addTest('contenteditable',
+        'contentEditable' in document.documentElement);
+
+// by tauren
+// https://github.com/Modernizr/Modernizr/issues/191
+
+Modernizr.addTest('cookies', function () {
+  // Quick test if browser has cookieEnabled host property
+  if (navigator.cookieEnabled) return true;
+  // Create cookie
+  document.cookie = "cookietest=1";
+  var ret = document.cookie.indexOf("cookietest=") != -1;
+  // Delete cookie
+  document.cookie = "cookietest=1; expires=Thu, 01-Jan-1970 00:00:01 GMT";
+  return ret;
+});
+
+// cors
+// By Theodoor van Donge
+Modernizr.addTest('cors', 'withCredentials' in new XMLHttpRequest());/*
+    https://developer.mozilla.org/en/CSS/background-position
+    http://www.w3.org/TR/css3-background/#background-position
+
+    Example: http://jsfiddle.net/Blink/bBXvt/
+*/
+
+(function() {
+
+    var elem = document.createElement('a'),
+        eStyle = elem.style,
+        val = "right 10px bottom 10px";
+
+    Modernizr.addTest('bgpositionshorthand', function(){
+        eStyle.cssText = "background-position: " + val + ";";
+        return (eStyle.backgroundPosition === val);
+    });
+
+}());
+/*
+	Allan Lei https://github.com/allanlei
+
+	Check adapted from https://github.com/brandonaaron/jquery-cssHooks/blob/master/bgpos.js
+
+	Test: http://jsfiddle.net/allanlei/R8AYS/
+*/
+Modernizr.addTest('bgpositionxy', function() {
+    return Modernizr.testStyles('#modernizr {background-position: 3px 5px;}', function(elem) {
+        var cssStyleDeclaration = window.getComputedStyle ? getComputedStyle(elem, null) : elem.currentStyle;
+        var xSupport = (cssStyleDeclaration.backgroundPositionX == '3px') || (cssStyleDeclaration['background-position-x'] == '3px');
+        var ySupport = (cssStyleDeclaration.backgroundPositionY == '5px') || (cssStyleDeclaration['background-position-y'] == '5px');
+        return xSupport && ySupport;
+    });
+});// developer.mozilla.org/en/CSS/background-repeat
+
+// test page: jsbin.com/uzesun/
+// http://jsfiddle.net/ryanseddon/yMLTQ/6/
+
+(function(){
+
+
+function getBgRepeatValue(elem){
+    return (window.getComputedStyle ?
+             getComputedStyle(elem, null).getPropertyValue('background') :
+             elem.currentStyle['background']);
+}
+
+
+Modernizr.testStyles(' #modernizr { background-repeat: round; } ', function(elem, rule){
+
+  Modernizr.addTest('bgrepeatround', getBgRepeatValue(elem) == 'round');
+
+});
+
+
+
+Modernizr.testStyles(' #modernizr { background-repeat: space; } ', function(elem, rule){
+
+  Modernizr.addTest('bgrepeatspace', getBgRepeatValue(elem) == 'space');
+
+});
+
+
+})();
+
+// developer.mozilla.org/en/CSS/background-size
+
+Modernizr.testStyles( '#modernizr{background-size:cover}', function( elem ) {
+	var style = window.getComputedStyle
+		? window.getComputedStyle( elem, null )
+		: elem.currentStyle;
+	Modernizr.addTest( 'bgsizecover', style.backgroundSize == 'cover' );
+});
+// developer.mozilla.org/en/CSS/box-sizing
+// github.com/Modernizr/Modernizr/issues/248
+
+Modernizr.addTest("boxsizing",function(){
+    return Modernizr.testAllProps("boxSizing") && (document.documentMode === undefined || document.documentMode > 7);
+});
+
+
+// Method of allowing calculated values for length units, i.e. width: calc(100%-3em) http://caniuse.com/#search=calc
+// By @calvein
+
+Modernizr.addTest('csscalc', function(el, prop, value) {
+    prop = 'width:';
+    value = 'calc(10px);';
+    el = document.createElement('div');
+    el.style.cssText = prop + Modernizr._prefixes.join(value + prop);
+    return !!el.style.length;
+});// cubic-bezier values can't be > 1 for Webkit until bug #45761 (https://bugs.webkit.org/show_bug.cgi?id=45761) is fixed
+// By @calvein
+
+Modernizr.addTest('cubicbezierrange', function() {
+    var el = document.createElement('div');
+    el.style.cssText = Modernizr._prefixes.join('transition-timing-function' + ':cubic-bezier(1,0,0,1.1); ');
+    return !!el.style.length;
+});
+
+// by alanhogan
+
+// https://github.com/Modernizr/Modernizr/issues/198
+// http://css-tricks.com/596-run-in/
+
+
+
+Modernizr.testStyles(' #modernizr { display: run-in; } ', function(elem, rule){
+
+  var ret = (window.getComputedStyle ?
+         getComputedStyle(elem, null).getPropertyValue('display') :
+         elem.currentStyle['display']);
+
+  Modernizr.addTest('display-runin', ret == 'run-in');
+
+});
+
+// https://github.com/Modernizr/Modernizr/issues/615
+// documentMode is needed for false positives in oldIE, please see issue above
+Modernizr.addTest('cssfilters', function() {
+    el = document.createElement('div');
+    el.style.cssText = Modernizr._prefixes.join('filter' + ':blur(2px); ');
+    return !!el.style.length && ((document.documentMode === undefined || document.documentMode > 9));
+});// display: table and table-cell test. (both are tested under one name "table-cell" )
+// By @scottjehl
+
+// all additional table display values are here: http://pastebin.com/Gk9PeVaQ though Scott has seen some IE false positives with that sort of weak detection.
+// more testing neccessary perhaps.
+
+Modernizr.addTest( "display-table",function(){
+
+  var doc   = window.document,
+      docElem = doc.documentElement,
+      parent  = doc.createElement( "div" ),
+      child = doc.createElement( "div" ),
+      childb  = doc.createElement( "div" ),
+      ret;
+
+  parent.style.cssText = "display: table";
+  child.style.cssText = childb.style.cssText = "display: table-cell; padding: 10px";
+
+  parent.appendChild( child );
+  parent.appendChild( childb );
+  docElem.insertBefore( parent, docElem.firstChild );
+
+  ret = child.offsetLeft < childb.offsetLeft;
+  docElem.removeChild(parent);
+  return ret;
+});
+
+// last-child pseudo selector
+// https://github.com/Modernizr/Modernizr/pull/304
+
+
+Modernizr.addTest('lastchild', function(){
+
+  return Modernizr.testStyles("#modernizr div {width:100px} #modernizr :last-child{width:200px;display:block}", function (elem) {
+    return elem.lastChild.offsetWidth > elem.firstChild.offsetWidth;
+  }, 2);
+
+});
+
+// this tests passes for webkit's proprietary `-webkit-mask` feature
+//   www.webkit.org/blog/181/css-masks/
+//   developer.apple.com/library/safari/#documentation/InternetWeb/Conceptual/SafariVisualEffectsProgGuide/Masks/Masks.html
+
+// it does not pass mozilla's implementation of `mask` for SVG
+
+//   developer.mozilla.org/en/CSS/mask
+//   developer.mozilla.org/En/Applying_SVG_effects_to_HTML_content
+
+// Can combine with clippaths for awesomeness: http://generic.cx/for/webkit/test.html
+
+Modernizr.addTest('cssmask', Modernizr.testAllProps('mask-repeat'));
+
+
+Modernizr.addTest('mediaqueries', Modernizr.mq('only all'));
+// johanbrook.com/browsers/native-momentum-scrolling-ios-5/
+// introduced in iOS5b2. Possible API may change...
+
+Modernizr.addTest("overflowscrolling",function(){
+    return Modernizr.testAllProps("overflowScrolling");
+});
+
+
+
+// developer.mozilla.org/en/CSS/pointer-events
+
+// Test and project pages:
+// ausi.github.com/Feature-detection-technique-for-pointer-events/
+// github.com/ausi/Feature-detection-technique-for-pointer-events/wiki
+// github.com/Modernizr/Modernizr/issues/80
+
+
+Modernizr.addTest('pointerevents', function(){
+    var element = document.createElement('x'),
+        documentElement = document.documentElement,
+        getComputedStyle = window.getComputedStyle,
+        supports;
+    if(!('pointerEvents' in element.style)){
+        return false;
+    }
+    element.style.pointerEvents = 'auto';
+    element.style.pointerEvents = 'x';
+    documentElement.appendChild(element);
+    supports = getComputedStyle &&
+        getComputedStyle(element, '').pointerEvents === 'auto';
+    documentElement.removeChild(element);
+    return !!supports;
+});
+
+// test by github.com/nsfmc
+
+// "The 'rem' unit ('root em') is relative to the computed
+// value of the 'font-size' value of the root element."
+// http://www.w3.org/TR/css3-values/#relative0
+// you can test by checking if the prop was ditched
+
+// http://snook.ca/archives/html_and_css/font-size-with-rem
+
+Modernizr.addTest('cssremunit', function(){
+
+  var div = document.createElement('div');
+  try {
+    div.style.fontSize = '3rem';
+  } catch(er){}
+  return (/rem/).test(div.style.fontSize);
+
+});
+// CSS Regions
+// http://www.w3.org/TR/css3-regions/
+// By: Mihai Balan
+
+// We start with a CSS parser test then we check page geometry to see if it's affected by regions
+// Later we might be able to retire the second part, as WebKit builds with the false positives die out
+
+Modernizr.addTest('regions', function() {
+
+	/* Get the 'flowFrom' property name available in the browser. Either default or vendor prefixed.
+	If the property name can't be found we'll get Boolean 'false' and fail quickly */
+	var flowFromProperty = Modernizr.prefixed("flowFrom"),
+		flowIntoProperty = Modernizr.prefixed("flowInto");
+
+	if (!flowFromProperty || !flowIntoProperty){
+		return false;
+	}
+
+	/* If CSS parsing is there, try to determine if regions actually work. */
+	var container		= document.createElement('div'),
+		content			= document.createElement('div'),
+		region			= document.createElement('div'),
+
+	/* we create a random, unlikely to be generated flow number to make sure we don't
+	clash with anything more vanilla, like 'flow', or 'article', or 'f1' */
+	flowName = 'modernizr_flow_for_regions_check';
+
+	/* First create a div with two adjacent divs inside it. The first will be the
+	content, the second will be the region. To be able to distinguish between the two,
+	we'll give the region a particular padding */
+	content.innerText		= 'M';
+	container.style.cssText	= 'top: 150px; left: 150px; padding: 0px;';
+	region.style.cssText	= 'width: 50px; height: 50px; padding: 42px;';
+
+	region.style[flowFromProperty] = flowName;
+	container.appendChild(content);
+	container.appendChild(region);
+	document.documentElement.appendChild(container);
+
+	/* Now compute the bounding client rect, before and after attempting to flow the
+	content div in the region div. If regions are enabled, the after bounding rect
+	should reflect the padding of the region div.*/
+	var flowedRect, delta,
+		plainRect = content.getBoundingClientRect();
+
+
+	content.style[flowIntoProperty] = flowName;
+	flowedRect = content.getBoundingClientRect();
+
+	delta = flowedRect.left - plainRect.left;
+	document.documentElement.removeChild(container);
+	content = region = container = undefined;
+
+	return (delta == 42);
+});
+
+// Test for CSS 3 UI "resize" property
+// http://www.w3.org/TR/css3-ui/#resize
+// https://developer.mozilla.org/en/CSS/resize
+
+Modernizr.addTest('cssresize', Modernizr.testAllProps('resize'));
+
+
+// Stylable scrollbars detection
+Modernizr.addTest('cssscrollbar', function() {
+
+	var bool,
+
+		styles = "#modernizr{overflow: scroll; width: 40px }#" +
+			Modernizr._prefixes
+				.join("scrollbar{width:0px}"+' #modernizr::')
+				.split('#')
+				.slice(1)
+				.join('#') + "scrollbar{width:0px}";
+
+	Modernizr.testStyles(styles, function(node) {
+		bool = 'scrollWidth' in node && node.scrollWidth == 40;
+	});
+
+	return bool;
+
+});
+// -moz-user-select:none test.
+
+// by ryan seddon
+//https://github.com/Modernizr/Modernizr/issues/250
+
+
+Modernizr.addTest("userselect",function(){
+    return Modernizr.testAllProps("user-select");
+});
+
+/*
+ * Test for SubPixel Font Rendering
+ * (to infer if GDI or DirectWrite is used on Windows)
+ * Authors: @derSchepp, @gerritvanaaken, @rodneyrehm, @yatil, @ryanseddon
+ * Web: https://github.com/gerritvanaaken/subpixeldetect
+ */
+Modernizr.addTest('subpixelfont', function() {
+    var bool,
+        styles = "#modernizr{position: absolute; top: -10em; visibility:hidden; font: normal 10px arial;}#subpixel{float: left; font-size: 33.3333%;}";
+
+    // see https://github.com/Modernizr/Modernizr/blob/master/modernizr.js#L97
+    Modernizr.testStyles(styles, function(elem) {
+        var subpixel = elem.firstChild;
+
+        subpixel.innerHTML = 'This is a text written in Arial';
+
+        bool = window.getComputedStyle
+            ? window.getComputedStyle(subpixel, null).getPropertyValue("width") !== '44px'
+            : false;
+    }, 1, ['subpixel']);
+
+    return bool;
+});
+/*
+	Custom protocol handler support
+	http://developers.whatwg.org/timers.html#custom-handlers
+
+	Added by @benschwarz
+*/
+
+Modernizr.addTest('customprotocolhandler', function () {
+    return !!navigator.registerProtocolHandler;
+});
+// DataView
+// https://developer.mozilla.org/en/JavaScript_typed_arrays/DataView
+// By Addy Osmani
+Modernizr.addTest('dataview', (typeof DataView !== 'undefined' && 'getFloat64' in DataView.prototype));// classList
+// https://developer.mozilla.org/en/DOM/element.classList
+// By Addy Osmani
+Modernizr.addTest('classlist', 'classList' in document.documentElement);
+
+// dataset API for data-* attributes
+// test by @phiggins42
+
+Modernizr.addTest('dataset', function(){
+  var n = document.createElement("div");
+  n.setAttribute("data-a-b", "c");
+  return !!(n.dataset && n.dataset.aB === "c");
+});
+// Microdata support
+// http://www.w3.org/TR/html5/microdata.html
+// By Addy Osmani
+Modernizr.addTest('microdata', !!(document['getItems']));
+
+// lol. we already have a test for datalist built in! silly you.
+
+
+// Helpful links while you're here, though..
+
+// http://css-tricks.com/15346-relevant-dropdowns-polyfill-for-datalist/
+// http://miketaylr.com/test/datalist.html
+// http://miketaylr.com/code/datalist.html
+
+Modernizr.addTest('datalistelem', Modernizr.input.list );
+// By @mathias, based on http://mths.be/axh
+Modernizr.addTest('details', function() {
+    var doc = document,
+        el = doc.createElement('details'),
+        fake,
+        root,
+        diff;
+    if (!('open' in el)) { // return early if possible; thanks @aFarkas!
+        return false;
+    }
+    root = doc.body || (function() {
+        var de = doc.documentElement;
+        fake = true;
+        return de.insertBefore(doc.createElement('body'), de.firstElementChild || de.firstChild);
+    }());
+    el.innerHTML = '<summary>a</summary>b';
+    el.style.display = 'block';
+    root.appendChild(el);
+    diff = el.offsetHeight;
+    el.open = true;
+    diff = diff != el.offsetHeight;
+    root.removeChild(el);
+    fake && root.parentNode.removeChild(root);
+    return diff;
+});// <output>
+// http://www.whatwg.org/specs/web-apps/current-work/multipage/the-button-element.html#the-output-element
+// by Addy Osmani
+Modernizr.addTest('outputelem', 'value' in document.createElement('output'));
+//By Stefan Wallin
+
+//tests for progressbar-support. All browsers that don't support progressbar returns undefined =)
+Modernizr.addTest("progressbar",function(){
+    return document.createElement('progress').max !== undefined;
+});
+
+//tests for meter-support. All browsers that don't support meters returns undefined =)
+Modernizr.addTest("meter",function(){
+    return document.createElement('meter').max !== undefined;
+});
+// Browser support test for the HTML5 <ruby>, <rt> and <rp> elements
+// http://www.whatwg.org/specs/web-apps/current-work/multipage/text-level-semantics.html#the-ruby-element
+//
+// by @alrra
+
+Modernizr.addTest('ruby', function () {
+
+    var ruby = document.createElement('ruby'),
+        rt = document.createElement('rt'),
+        rp = document.createElement('rp'),
+        docElement = document.documentElement,
+        displayStyleProperty = 'display',
+        fontSizeStyleProperty = 'fontSize'; // 'fontSize' - because it`s only used for IE6 and IE7
+
+    ruby.appendChild(rp);
+    ruby.appendChild(rt);
+    docElement.appendChild(ruby);
+
+    // browsers that support <ruby> hide the <rp> via "display:none"
+    if ( getStyle(rp, displayStyleProperty) == 'none' ||                                                       // for non-IE browsers
+    // but in IE browsers <rp> has "display:inline" so, the test needs other conditions:
+        getStyle(ruby, displayStyleProperty) == 'ruby' && getStyle(rt, displayStyleProperty) == 'ruby-text' || // for IE8 & IE9
+        getStyle(rp, fontSizeStyleProperty) == '6pt' && getStyle(rt, fontSizeStyleProperty) == '6pt' ) {       // for IE6 & IE7
+
+        cleanUp();
+        return true;
+
+    } else {
+        cleanUp();
+        return false;
+    }
+
+    function getStyle( element, styleProperty ) {
+        var result;
+
+        if ( window.getComputedStyle ) {     // for non-IE browsers
+            result = document.defaultView.getComputedStyle(element,null).getPropertyValue(styleProperty);
+        } else if ( element.currentStyle ) { // for IE
+            result = element.currentStyle[styleProperty];
+        }
+
+        return result;
+    }
+
+    function cleanUp() {
+        docElement.removeChild(ruby);
+        // the removed child node still exists in memory, so ...
+        ruby = null;
+        rt = null;
+        rp = null;
+    }
+
+});
+// <time> element
+// http://www.whatwg.org/specs/web-apps/current-work/multipage/rendering.html#the-time-element-0
+// by Addy Osmani
+Modernizr.addTest('time', 'valueAsDate' in document.createElement('time'));
+// Track element
+// http://www.w3.org/TR/html5/video.html#the-track-element
+// By Addy Osmani
+Modernizr.addTest('track', (typeof (document.createElement('video').addTextTrack) === 'function'));
+// Requires a Modernizr build with `canvastext` included
+// http://www.modernizr.com/download/#-canvas-canvastext
+Modernizr.addTest('emoji', function() {
+  if (!Modernizr.canvastext) return false;
+  var node = document.createElement('canvas'),
+      ctx = node.getContext('2d');
+  ctx.textBaseline = 'top';
+  ctx.font = '32px Arial';
+  ctx.fillText('\ud83d\ude03', 0, 0); // "smiling face with open mouth" emoji
+  return ctx.getImageData(16, 16, 1, 1).data[0] !== 0;
+});// strict mode
+
+// test by @kangax
+
+Modernizr.addTest('strictmode', function(){
+	return (function(){ "use strict"; return !this; })();
+});//By Shi Chuan
+//Part of Device Access aspect of HTML5, same category as geolocation
+//W3C Editor's Draft at http://dev.w3.org/geo/api/spec-source-orientation.html
+//Implementation by iOS Safari at http://goo.gl/fhce3 and http://goo.gl/rLKz8
+
+
+//test for Device Motion Event support, returns boolean value true/false
+Modernizr.addTest('devicemotion', ('DeviceMotionEvent' in window) );
+
+//test for Device Orientation Event support, returns boolean value true/false
+Modernizr.addTest('deviceorientation', ('DeviceOrientationEvent' in window) );
+// EXIF Orientation test
+
+// iOS looks at the EXIF Orientation flag in jpgs and rotates the image
+// accordingly. Looks like most desktop browsers just ignore this data.
+
+// description: www.impulseadventure.com/photo/exif-orientation.html
+
+// Bug trackers:
+//    bugzil.la/298619 (unimplemented)
+//    crbug.com/56845 (looks incomplete)
+//    webk.it/19688 (available upstream but its up all ports to turn on individually)
+//
+
+// detect by Paul Sayre
+
+
+(function(){
+
+  var img = new Image();
+
+  img.onerror = function() {
+      Modernizr.addTest('exif-orientation', function () { return false; });
+  };
+
+  img.onload = function() {
+      Modernizr.addTest('exif-orientation', function () { return img.width !== 2; });
+  };
+
+  // There may be a way to shrink this more, it's a 1x2 white jpg with the orientation flag set to 6
+  img.src = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/4QAiRXhpZgAASUkqAAgAAAABABIBAwABAAAABgASAAAAAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAABAAIDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD+/iiiigD/2Q==";
+
+})();
+/**
+ * file tests for the File API specification
+ *   Tests for objects specific to the File API W3C specification without
+ *   being redundant (don't bother testing for Blob since it is assumed
+ *   to be the File object's prototype.
+ *
+ *   Will fail in Safari 5 due to its lack of support for the standards
+ *   defined FileReader object
+ */
+Modernizr.addTest('filereader', function () {
+    return !!(window.File && window.FileList && window.FileReader);
+});
+// Filesystem API
+// dev.w3.org/2009/dap/file-system/file-dir-sys.html
+
+// The API will be present in Chrome incognito, but will throw an exception.
+// See crbug.com/93417
+//
+// By Eric Bidelman (@ebidel)
+
+Modernizr.addTest('filesystem', !!Modernizr.prefixed('requestFileSystem', window));
+
+// Detects whether input type="file" is available on the platform
+// E.g. iOS < 6 and some android version don't support this
+
+//  It's useful if you want to hide the upload feature of your app on devices that
+//  don't support it (iphone, ipad, etc).
+
+Modernizr.addTest('fileinput', function() {
+    var elem = document.createElement('input');
+    elem.type = 'file';
+    return !elem.disabled;
+});
+// speech input for inputs
+// by @alrra
+
+
+// `webkitSpeech` in elem
+// doesn`t work correctly in all versions of Chromium based browsers.
+//   It can return false even if they have support for speech i.imgur.com/2Y40n.png
+//  Testing with 'onwebkitspeechchange' seems to fix this problem
+
+// this detect only checks the webkit version because
+// the speech attribute is likely to be deprecated in favor of a JavaScript API.
+// http://lists.w3.org/Archives/Public/public-webapps/2011OctDec/att-1696/speechapi.html
+
+// FIXME: add support for detecting the new spec'd behavior
+
+Modernizr.addTest('speechinput', function(){
+    var elem = document.createElement('input');
+    return 'speech' in elem || 'onwebkitspeechchange' in elem;
+});// testing for placeholder attribute in inputs and textareas
+// re-using Modernizr.input if available
+
+Modernizr.addTest('placeholder', function(){
+
+  return !!( 'placeholder' in ( Modernizr.input    || document.createElement('input')    ) &&
+             'placeholder' in ( Modernizr.textarea || document.createElement('textarea') )
+           );
+
+});
+// This implementation only tests support for interactive form validation.
+// To check validation for a specific type or a specific other constraint,
+// the test can be combined:
+//    - Modernizr.inputtypes.numer && Modernizr.formvalidation (browser supports rangeOverflow, typeMismatch etc. for type=number)
+//    - Modernizr.input.required && Modernizr.formvalidation (browser supports valueMissing)
+//
+(function(document, Modernizr){
+
+
+Modernizr.formvalidationapi = false;
+Modernizr.formvalidationmessage = false;
+
+Modernizr.addTest('formvalidation', function(){
+    var form = document.createElement('form');
+    if ( !('checkValidity' in form) ) {
+        return false;
+    }
+    var body = document.body,
+
+    html = document.documentElement,
+
+    bodyFaked = false,
+
+    invaildFired = false,
+
+    input;
+
+    Modernizr.formvalidationapi = true;
+
+    // Prevent form from being submitted
+    form.onsubmit = function(e) {
+        //Opera does not validate form, if submit is prevented
+        if ( !window.opera ) {
+            e.preventDefault();
+        }
+        e.stopPropagation();
+    };
+
+    // Calling form.submit() doesn't trigger interactive validation,
+    // use a submit button instead
+    //older opera browsers need a name attribute
+    form.innerHTML = '<input name="modTest" required><button></button>';
+
+    // FF4 doesn't trigger "invalid" event if form is not in the DOM tree
+    // Chrome throws error if invalid input is not visible when submitting
+    form.style.position = 'absolute';
+    form.style.top = '-99999em';
+
+    // We might in <head> in which case we need to create body manually
+    if ( !body ) {
+        bodyFaked = true;
+        body = document.createElement('body');
+        //avoid crashing IE8, if background image is used
+        body.style.background = "";
+        html.appendChild(body);
+    }
+
+    body.appendChild(form);
+
+    input = form.getElementsByTagName('input')[0];
+
+    // Record whether "invalid" event is fired
+    input.oninvalid = function(e) {
+        invaildFired = true;
+        e.preventDefault();
+        e.stopPropagation();
+    };
+
+    //Opera does not fully support the validationMessage property
+    Modernizr.formvalidationmessage = !!input.validationMessage;
+
+    // Submit form by clicking submit button
+    form.getElementsByTagName('button')[0].click();
+
+    // Don't forget to clean up
+    body.removeChild(form);
+    bodyFaked && html.removeChild(body);
+
+    return invaildFired;
+});
+
+
+})(document, window.Modernizr);// GamePad API
+// https://dvcs.w3.org/hg/gamepad/raw-file/default/gamepad.html
+// By Eric Bidelman
+
+Modernizr.addTest('gamepads', !!Modernizr.prefixed('gamepads', navigator));
+Modernizr.addTest('fullscreen',function(){
+     for(var i = 0; i < Modernizr._domPrefixes.length; i++) {
+        if( document[Modernizr._domPrefixes[i].toLowerCase() + 'CancelFullScreen'])
+            return true;
+     }
+     return !!document['cancelFullScreen'] || false;
+});
+
+// http://developer.apple.com/library/safari/documentation/AudioVideo/Conceptual/Using_HTML5_Audio_Video/ControllingMediaWithJavaScript/ControllingMediaWithJavaScript.html#//apple_ref/doc/uid/TP40009523-CH3-SW20
+// https://developer.mozilla.org/en/API/Fullscreen
+// getUserMedia
+// http://www.whatwg.org/specs/web-apps/current-work/multipage/video-conferencing-and-peer-to-peer-communication.html
+// By Eric Bidelman
+
+Modernizr.addTest('getusermedia', !!Modernizr.prefixed('getUserMedia', navigator));
+// IE8 compat mode aka Fake IE7
+// by Erich Ocean
+
+// In this case, IE8 will be acting as IE7. You may choose to remove features in this case.
+
+// related:
+// james.padolsey.com/javascript/detect-ie-in-js-using-conditional-comments/
+
+Modernizr.addTest('ie8compat',function(){
+    return (!window.addEventListener && document.documentMode && document.documentMode === 7);
+});
+// Animated PNG
+// http://en.wikipedia.org/wiki/APNG
+// By Addy Osmani
+(function () {
+
+    if (!Modernizr.canvas) return false;
+
+    var image = new Image(),
+        canvas = document.createElement('canvas'),
+        ctx = canvas.getContext('2d');
+
+
+    image.onload = function () {
+        Modernizr.addTest('apng', function () {
+            if (typeof canvas.getContext == 'undefined') {
+                return false;
+            } else {
+                ctx.drawImage(image, 0, 0);
+                return ctx.getImageData(0, 0, 1, 1).data[3] === 0;
+            }
+        });
+    };
+
+    image.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACGFjVEwAAAABAAAAAcMq2TYAAAANSURBVAiZY2BgYPgPAAEEAQB9ssjfAAAAGmZjVEwAAAAAAAAAAQAAAAEAAAAAAAAAAAD6A+gBAbNU+2sAAAARZmRBVAAAAAEImWNgYGBgAAAABQAB6MzFdgAAAABJRU5ErkJggg==";
+
+}());
+// code.google.com/speed/webp/
+// by rich bradshaw, ryan seddon, and paul irish
+
+
+// This test is asynchronous. Watch out.
+
+(function(){
+
+  var image = new Image();
+
+  image.onerror = function() {
+      Modernizr.addTest('webp', false);
+  };
+  image.onload = function() {
+      Modernizr.addTest('webp', function() { return image.width == 1; });
+  };
+
+  image.src = 'data:image/webp;base64,UklGRiwAAABXRUJQVlA4ICAAAAAUAgCdASoBAAEAL/3+/3+CAB/AAAFzrNsAAP5QAAAAAA==';
+
+}());// native JSON support.
+// developer.mozilla.org/en/JSON
+
+// this will also succeed if you've loaded the JSON2.js polyfill ahead of time
+//   ... but that should be obvious. :)
+
+Modernizr.addTest('json', !!window.JSON && !!JSON.parse);
+
+// impressivewebs.com/reverse-ordered-lists-html5
+// polyfill: github.com/impressivewebs/HTML5-Reverse-Ordered-Lists
+
+
+Modernizr.addTest('olreversed', 'reversed' in document.createElement('ol'));
+// determining low-bandwidth via navigator.connection
+
+// There are two iterations of the navigator.connection interface:
+
+// The first is present in Android 2.2+ and only in the Browser (not WebView)
+// : docs.phonegap.com/en/1.2.0/phonegap_connection_connection.md.html#connection.type
+// : davidbcalhoun.com/2010/using-navigator-connection-android
+
+// The second is specced at dev.w3.org/2009/dap/netinfo/ and perhaps landing in WebKit
+// : bugs.webkit.org/show_bug.cgi?id=73528
+
+// unknown devices are assumed as fast
+// for more rigorous network testing, consider boomerang.js: github.com/bluesmoon/boomerang/
+
+Modernizr.addTest('lowbandwidth', function() {
+
+  var connection = navigator.connection || { type: 0 }; // polyfill
+
+  return connection.type == 3 || // connection.CELL_2G
+      connection.type == 4 || // connection.CELL_3G
+      /^[23]g$/.test(connection.type); // string value in new spec
+});
+
+// server sent events aka eventsource
+// dev.w3.org/html5/eventsource/
+
+Modernizr.addTest('eventsource', !!window.EventSource);
+
+
+// XML HTTP Request Level 2
+// www.w3.org/TR/XMLHttpRequest2/
+
+// Much more details at github.com/Modernizr/Modernizr/issues/385
+
+// all three of these details report consistently across all target browsers:
+//   !!(window.ProgressEvent);
+//   !!(window.FormData);
+//   window.XMLHttpRequest && "withCredentials" in new XMLHttpRequest;
+
+Modernizr.addTest('xhr2', 'FormData' in window);
+// Notifications
+// By Theodoor van Donge
+
+// window.webkitNotifications is only used by Chrome
+//	http://www.html5rocks.com/en/tutorials/notifications/quick/
+
+// window.Notification only exist in the draft specs
+//	http://dev.w3.org/2006/webapi/WebNotifications/publish/Notifications.html#idl-if-Notification
+
+Modernizr.addTest('notification', !!Modernizr.prefixed('Notifications', window));// Navigation Timing (Performance)
+// https://dvcs.w3.org/hg/webperf/raw-file/tip/specs/NavigationTiming/
+// http://www.html5rocks.com/en/tutorials/webperformance/basics/
+// By Scott Murphy (uxder)
+Modernizr.addTest('performance', !!Modernizr.prefixed('performance', window));// Quota Storage Management API
+// This API can be used to check how much quota an origin is using and request more
+
+// Currently only implemented in Chrome.
+// https://developers.google.com/chrome/whitepapers/storage
+// By Addy Osmani
+
+Modernizr.addTest('quotamanagement', function(){
+  var storage = Modernizr.prefixed('StorageInfo', window);
+  return !!(storage && 'TEMPORARY' in storage && 'PERSISTENT' in storage);
+});
+
+// requestAnimationFrame
+// Offload animation repainting to browser for optimized performance.
+// http://dvcs.w3.org/hg/webperf/raw-file/tip/specs/RequestAnimationFrame/Overview.html
+// By Addy Osmani
+
+Modernizr.addTest('raf', !!Modernizr.prefixed('requestAnimationFrame', window));// async script
+// By Theodoor van Donge
+Modernizr.addTest('scriptasync', 'async' in document.createElement('script'));// defer script
+// By Theodoor van Donge
+Modernizr.addTest('scriptdefer', 'defer' in document.createElement('script'));// Browser support test for <style scoped>
+// http://www.w3.org/TR/html5/the-style-element.html#attr-style-scoped
+//
+// by @alrra
+
+Modernizr.addTest( 'stylescoped', 'scoped' in document.createElement('style') );
+// Detect support for svg filters - http://www.w3.org/TR/SVG11/filters.html.
+// Should fail in Safari: http://stackoverflow.com/questions/9739955/feature-detecting-support-for-svg-filters.
+// detect by erik dahlstrom
+
+Modernizr.addTest('svgfilters', function(){
+	var result = false;
+    try {
+      result = typeof SVGFEColorMatrixElement !== undefined &&
+               SVGFEColorMatrixElement.SVG_FECOLORMATRIX_TYPE_SATURATE == 2;
+    }
+    catch(e) {}
+    return result;
+});
+/**
+ * Unicode special character support
+ *
+ * Detection is made by testing missing glyph box rendering against star character
+ * If widths are the same, this "probably" means the browser didn't support the star character and rendered a glyph box instead
+ * Just need to ensure the font characters have different widths
+ *
+ * Warning : positive Unicode support doesn't mean you can use it inside <title>, this seams more related to OS & Language packs
+ */
+Modernizr.addTest('unicode', function() {
+
+
+	var bool,
+
+		missingGlyph = document.createElement('span'),
+
+		star = document.createElement('span');
+
+	Modernizr.testStyles('#modernizr{font-family:Arial,sans;font-size:300em;}', function(node) {
+
+		missingGlyph.innerHTML = '&#5987';
+		star.innerHTML = '&#9734';
+
+		node.appendChild(missingGlyph);
+		node.appendChild(star);
+
+		bool = 'offsetWidth' in missingGlyph && missingGlyph.offsetWidth !== star.offsetWidth;
+	});
+
+	return bool;
+
+});// test if IE userdata supported
+// msdn.microsoft.com/en-us/library/ms531424(v=vs.85).aspx
+// test by @stereobooster
+
+Modernizr.addTest('userdata', function(){
+  return !!document.createElement('div').addBehavior;
+});
+// data uri test.
+// https://github.com/Modernizr/Modernizr/issues/14
+
+// This test is asynchronous. Watch out.
+
+
+// in IE7 in HTTPS this can cause a Mixed Content security popup.
+//  github.com/Modernizr/Modernizr/issues/362
+// To avoid that you can create a new iframe and inject this.. perhaps..
+
+
+(function(){
+
+  var datauri = new Image();
+
+
+  datauri.onerror = function() {
+      Modernizr.addTest('datauri', function () { return false; });
+  };
+  datauri.onload = function() {
+      Modernizr.addTest('datauri', function () { return (datauri.width == 1 && datauri.height == 1); });
+  };
+
+  datauri.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+
+})();
+// Vibration API
+// http://www.w3.org/TR/vibration/
+// https://developer.mozilla.org/en/DOM/window.navigator.mozVibrate
+Modernizr.addTest('vibrate', !!Modernizr.prefixed('vibrate', navigator));// Tests for the ability to use Web Intents (http://webintents.org).
+// By Eric Bidelman
+
+Modernizr.addTest('webintents', function() {
+  return !!Modernizr.prefixed('startActivity', navigator);
+});
+
+// tests if page is iframed
+
+// github.com/Modernizr/Modernizr/issues/242
+
+Modernizr.addTest('framed', function(){
+  return window.location != top.location;
+});
+;

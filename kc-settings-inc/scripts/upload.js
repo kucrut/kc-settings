@@ -1,1 +1,93 @@
-var win=window.dialogArguments||opener||parent||top;(function(d){var c=win.kcSettings.upload.text,e=win.kcSettings.upload.target.data("currentFiles"),b=d(),a=d('<div class="kcs-wrap"><h4>'+c.head+'</h4> <a class="button check-all">'+c.checkAll+'</a> <a class="button check-clear">'+c.clear+'</a> <a class="button check-invert">'+c.invert+'</a> <a class="button add-checked">'+c.addFiles+"</a></div>").on("click","a",function(i){i.preventDefault();var f=d(this);if(f.is(".check-all")){b.prop("checked",true)}else{if(f.is(".check-clear")){b.prop("checked",false)}else{if(f.is(".check-invert")){b.each(function(){d(this).prop("checked",!this.checked)})}else{if(f.is(".add-checked")){var j=b.filter(":checked"),h=j.length;if(!h){return}var g={};j.each(function(){var k=this.value,m="file_"+k,l=d(this);g["file_"+k]={id:k,title:l.siblings(".title").text(),img:l.closest(".media-item").find(".pinkynail").attr("src")}});win.kcFileMultiple(g);win.tb_remove()}}}}});d.fn.kcsfPrepare=function(g,f){return this.each(function(){var h=d(this),i=h.children();if(!i.length){return}if(!h.siblings("div.kcs-wrap").length){h.parent().append(a)}i.each(function(m){var k=d(this);if(k.find("input.kcs-files").length){return}var j=g?f:k.attr("id").split("-")[2],l=(d.inArray(j,e)>-1)?' checked="checked"':"",n=d('<input type="checkbox" value="'+j+'" '+l+'class="kcs-files" />');b=b.add(n);k.children(".new").prepend(n).wrapInner("<label />")})})};d(document).ready(function(f){f("#library-form, #gallery-form").find("#media-items").kcsfPrepare(false);f("#media-upload").ajaxComplete(function(h,i,g){if(i.status!==200||g.url!=="async-upload.php"){return}f("#media-items",this).kcsfPrepare(true,i.responseText.match(/type-of-(\d+)/)[1])})})})(jQuery);
+var win = window.dialogArguments || opener || parent || top;
+
+(function($) {
+	var texts    = win.kcSettings.upload.text,
+	    current  = win.kcSettings.upload.target.data('currentFiles'),
+	    $checks  = $(),
+	    $buttons = $('<div class="kcs-wrap"><h4>'+texts.head+'</h4> <a class="button check-all">'+texts.checkAll+'</a> <a class="button check-clear">'+texts.clear+'</a> <a class="button check-invert">'+texts.invert+'</a> <a class="button add-checked">'+texts.addFiles+'</a></div>')
+				.on('click', 'a', function(e) {
+					e.preventDefault();
+					var $el = $(this);
+
+					if ( $el.is('.check-all') ) {
+						$checks.prop('checked', true);
+					}
+					else if ( $el.is('.check-clear') ) {
+						$checks.prop('checked', false);
+					}
+					else if ( $el.is('.check-invert') ) {
+						$checks.each(function() {
+							$(this).prop('checked', !this.checked);
+						});
+					}
+					else if ( $el.is('.add-checked') ) {
+						var $items = $checks.filter(':checked'),
+						    count  = $items.length;
+
+						if ( !count )
+							return;
+
+						var files = {};
+						$items.each(function() {
+							var postID = this.value,
+							    key    = 'file_'+postID,
+							    $el    = $(this);
+
+							files['file_'+postID] = {
+								id : postID,
+								title: $el.siblings('.title').text(),
+								img: $el.closest('.media-item').find('.pinkynail').attr('src')
+							}
+						});
+
+						win.kcFileMultiple( files );
+						win.tb_remove();
+					}
+				});
+
+
+	$.fn.kcsfPrepare = function( isAjax, newID ) {
+		return this.each(function() {
+			var $wrap = $(this),
+			    $items = $wrap.children();
+
+			if ( !$items.length )
+				return;
+
+			if ( !$wrap.siblings('div.kcs-wrap').length )
+				$wrap.parent().append($buttons);
+
+			$items.each(function(e) {
+				var $item = $(this);
+				if ( $item.find('input.kcs-files').length )
+					return;
+
+				var postID  = isAjax ? newID : $item.attr('id').split("-")[2],
+				    checked = ( $.inArray(postID, current) > -1 ) ? ' checked="checked"' : '',
+				    $check  = $('<input type="checkbox" value="'+postID+'" '+checked+'class="kcs-files" />');
+
+				// Add new checkbox to the collection
+				$checks = $checks.add( $check );
+
+				$item.children('.new')
+					.prepend($check)
+					.wrapInner('<label />');
+			});
+		});
+	};
+
+
+	$(document).ready(function($) {
+		// Gallery & Media Library tabs
+		$('#library-form, #gallery-form').find('#media-items').kcsfPrepare( false );
+
+		// From computer / Upload tab
+		$('#media-upload').ajaxComplete(function(e, xhr, settings) {
+			if ( xhr.status !== 200 || settings.url !== 'async-upload.php' )
+				return;
+
+			$('#media-items', this).kcsfPrepare( true, xhr.responseText.match(/type-of-(\d+)/)[1] );
+		});
+	});
+})(jQuery);
+

@@ -580,7 +580,7 @@ class kcSettings {
 		if ( !defined('KC_SETTINGS_SNS_DEBUG') )
 			define( 'KC_SETTINGS_SNS_DEBUG', false );
 
-		$suffix = KC_SETTINGS_SNS_DEBUG ? '.dev' : '';
+		$suffix = KC_SETTINGS_SNS_DEBUG ? '' : '.min';
 
 		# Common
 		wp_register_script( 'modernizr',        "{$path['scripts']}/modernizr-2.6.1-20120820{$suffix}.js", false, '2.6.1-20120820', false );
