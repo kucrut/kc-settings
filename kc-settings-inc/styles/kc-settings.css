@@ -140,7 +140,10 @@ input.kcs-input {
 #wpcontent .kcs-multiinput textarea {
 	margin:0;
 }
-.kcs-multiinput td.mceIframeContainer {background:#fff}
+.kcs-multiinput td.mceIframeContainer,
+.kcs-multiinput .wp-editor-container {
+	background:#fff;
+}
 .kcs-multiinput .mceToolbar {padding-right:0 !important}
 .media-item .describe .kcs-multiinput {width:460px}
 .media-item .describe .kcs-multiinput td {padding-top:8px;}
@@ -268,8 +271,9 @@ input[type="color"] {
 .kcs-field .quicktags-toolbar input {width:auto}
 .kcs-field .wp-editor-container textarea,
 .form-table .wp-editor-container textarea.wp-editor-area,
-.form-table .kcs-multiinput textarea {
-	width:99.9%;
+.form-table .kcs-multiinput textarea,
+#profile-page .form-table textarea.wp-editor-area {
+	width:99.9% !important;
 	display:block;
 	margin:0;
 }
