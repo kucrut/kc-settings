@@ -20,7 +20,7 @@ class kcSettings_builder_table extends WP_List_Table {
 			'activate'   => __('Activate'),
 			'deactivate' => __('Deactivate'),
 			'delete'     => __('Delete'),
-			'empty'      => __('Remove from DB')
+			'empty'      => __('Cleanup values', 'kc-settings')
 		);
 		return $actions;
 	}
@@ -55,7 +55,7 @@ class kcSettings_builder_table extends WP_List_Table {
 		if ( $item['type'] === 'plugin' ) {
 			$values = kc_get_option( $item['prefix'] );
 			if ( false !== $values && !empty($values) )
-				$actions['empty'] = "<span class='trash'><a href='".wp_nonce_url( admin_url("{$url}empty"), "__kcsb__{$item['id']}" )."' title='".__('Delete setting value(s) from DB', 'kc-settings')."'>".__('Remove from DB', 'kc-settings')."</a></span>";
+				$actions['empty'] = "<span class='trash'><a href='".wp_nonce_url( admin_url("{$url}empty"), "__kcsb__{$item['id']}" )."' title='".__('Delete setting value(s) from DB', 'kc-settings')."'>".__('Cleanup values', 'kc-settings')."</a></span>";
 		}
 
 		if ( !isset($item['status']) || $item['status'] )

@@ -1,15 +1,15 @@
 <?php
 
 /**
- * Sample user metadata options.
- * This is very similiar to post/term metadata options,
- * except that it doesn't have a post type/taxonomy name
+ * Sample attachment metadata options.
+ * Make sure to change the post type name as needed.
+ * Built-in WordPress post types are: post, page, attachment
  *
  * @see 00_fields.php for complete field types.
  */
 
-add_filter( 'kc_user_settings', 'kc_settings_sample_user' );
-function kc_settings_sample_user( $groups ) {
+add_filter( 'kc_post_settings', 'kc_settings_sample_attachment' );
+function kc_settings_sample_attachment( $groups ) {
 	/**
 	 * TODO: Please copy/paste/edit the fields you need, then remove the require_once line.
 	 * This is only for simplifying the development.
@@ -17,7 +17,7 @@ function kc_settings_sample_user( $groups ) {
 	require_once dirname(__FILE__) . '/00_fields.php';
 
 	$my_group = array(
-		array(
+		'attachment' => array( // TODO: Change this key to the desired post type name
 			array(
 				'id'     => 'sample_section',
 				'title'  => 'Section title',
@@ -26,7 +26,7 @@ function kc_settings_sample_user( $groups ) {
 				 * Optional. Uncomment this to only display the metadata settings for
 				 * certain user roles.
 				 */
-				// 'role'   => array('administrator', 'editor'),
+				// 'role'   => array( 'administrator', 'editor' ),
 				'fields' => kc_settings_sample_fields() // TODO: See 00_fields.php
 			)
 		)

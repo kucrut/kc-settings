@@ -8,8 +8,8 @@
  * @see 00_fields.php for complete field types.
  */
 
-add_filter( 'kc_post_settings', 'mypost_options2' );
-function mypost_options2( $groups ) {
+add_filter( 'kc_post_settings', 'kc_settings_sample_post' );
+function kc_settings_sample_post( $groups ) {
 	/**
 	 * TODO: Please copy/paste/edit the fields you need, then remove the require_once line.
 	 * This is only for simplifying the development.
@@ -27,7 +27,7 @@ function mypost_options2( $groups ) {
 				 * certain user roles.
 				 */
 				// 'role'   => array( 'administrator', 'editor' ),
-				'fields' => kc_sample_fields() // TODO: See 00_fields.php
+				'fields' => kc_settings_sample_fields() // TODO: See 00_fields.php
 			)
 		)
 	);

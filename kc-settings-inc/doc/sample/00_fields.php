@@ -1,6 +1,6 @@
 <?php
 
-function kc_sample_fields() {
+function kc_settings_sample_fields() {
 	return array(
 		array(
 			'id'      => 'sample_text',
@@ -178,9 +178,9 @@ function kc_sample_fields() {
 		array(
 			'id'      => 'sample_select2',
 			'title'   => 'Dropdown options (select)',
-			'desc'    => 'These options are the return value of <code>kc_sample_options()</code>',
+			'desc'    => 'These options are the return value of <code>kc_settings_sample_options()</code>',
 			'type'    => 'select',
-			'options' => 'kc_sample_options',
+			'options' => 'kc_settings_sample_options',
 			'args'    => 'some_argument',
 			'default' => 'select1'
 		),
@@ -270,7 +270,7 @@ function kc_sample_fields() {
 			'title'   => 'Callback',
 			'desc'    => 'Callback with static argument',
 			'type'    => 'special', // Not supported in theme customizer
-			'cb'      => 'kc_sample_callback_static',  // See how to handle the arguments passed at the bottom of this file
+			'cb'      => 'kc_settings_sample_callback_static',  // See how to handle the arguments passed at the bottom of this file
 			'args'    => "Hey, I'm the static callback argument",
 			'default' => 'Some default value'
 		),
@@ -279,32 +279,32 @@ function kc_sample_fields() {
 			'title'   => 'Another Callback',
 			'desc'    => 'Callback with dynamic argument (function return value)',
 			'type'    => 'special', // Not supported in theme customizer
-			'cb'      => 'kc_sample_callback_dynamic',  // See how to handle the arguments passed at the bottom of this file
-			'args'    => 'kc_sample_callback_dynamic_args',
+			'cb'      => 'kc_settings_sample_callback_dynamic',  // See how to handle the arguments passed at the bottom of this file
+			'args'    => 'kc_settings_sample_callback_dynamic_args',
 			'default' => 'Some default value'
 		)
 	);
 }
 
 
-function kc_sample_callback_static( $field, $db_value, $args ) {
+function kc_settings_sample_callback_static( $field, $db_value, $args ) {
 	return $args;
 }
 
 
-function kc_sample_callback_dynamic( $field, $db_value, $args ) {
+function kc_settings_sample_callback_dynamic( $field, $db_value, $args ) {
 	$output  = "This is the value of your argument function.<br />";
 	$output .= "Your field name is <b>{$args}</b>, right?";
 	return $output;
 }
 
 
-function kc_sample_callback_dynamic_args( $field, $db_value ) {
+function kc_settings_sample_callback_dynamic_args( $field, $db_value ) {
 	return $field['field']['name'];
 }
 
 
-function kc_sample_options_static( $args = '' ) {
+function kc_settings_sample_options_static( $args = '' ) {
 	// You can process the $args here ...
 	return array(
 		'select3' => 'Option #1',
@@ -316,7 +316,7 @@ function kc_sample_options_static( $args = '' ) {
 	);
 }
 
-function kc_sample_options( $args = '' ) {
+function kc_settings_sample_options( $args = '' ) {
 	// You can process the $args here ...
 	return array(
 		'select1' => 'Option #1',

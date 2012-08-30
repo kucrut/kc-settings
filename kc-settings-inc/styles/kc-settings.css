@@ -140,6 +140,8 @@ input.kcs-input {
 #wpcontent .kcs-multiinput textarea {
 	margin:0;
 }
+.kcs-multiinput td.mceIframeContainer {background:#fff}
+.kcs-multiinput .mceToolbar {padding-right:0 !important}
 .media-item .describe .kcs-multiinput {width:460px}
 .media-item .describe .kcs-multiinput td {padding-top:8px;}
 .media-item .describe .kcs-multiinput input[type="text"],

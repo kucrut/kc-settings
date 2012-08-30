@@ -48,7 +48,8 @@ jQuery(document).ready(function($) {
 					setTimeout(function() {
 						inst.dpDiv.removeClass('kcDPMonth');
 					}, 300);
-				}
+				},
+				currentText: kcSettings.texts.now
 			},
 			datetime: {
 				dateFormat: 'yy-mm-dd',
@@ -112,7 +113,7 @@ jQuery(document).ready(function($) {
 			load: kcGetSNS('jquery_ui_datepicker', kcSettings.js).concat( kcGetSNS('jquery_ui', kcSettings.css) ),
 			complete: function() {
 				$dateInputs.each(function() {
-					$(this).datepicker( $.extend( args.datepicker[$(this).attr('type')], args.datepicker.text ) );
+					$(this).datepicker( $.extend( args.datepicker.text, args.datepicker[$(this).attr('type')] ) );
 				});
 			}
 		}]);

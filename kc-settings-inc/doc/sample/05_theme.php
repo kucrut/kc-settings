@@ -16,8 +16,8 @@
  */
 
 
-add_filter( 'kc_theme_settings', 'mytheme_options' );
-function mytheme_options( $settings ) {
+add_filter( 'kc_theme_settings', 'kc_settings_sample_theme' );
+function kc_settings_sample_theme( $settings ) {
 	/**
 	 * TODO: Please copy/paste/edit the fields you need, then remove the require_once line.
 	 * This is only for simplifying the development.
@@ -44,7 +44,7 @@ function mytheme_options( $settings ) {
 				 * this will be used as the tooltip for the section title.
 				 */
 				'desc'   => 'Some description about this options group',
-				'fields' => kc_sample_fields() // TODO: See 00_fields.php
+				'fields' => kc_settings_sample_fields() // TODO: See 00_fields.php
 			),
 			array(
 				/**

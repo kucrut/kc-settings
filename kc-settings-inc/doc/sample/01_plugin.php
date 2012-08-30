@@ -9,8 +9,8 @@
  */
 
 
-add_filter( 'kc_plugin_settings', 'myplugin_options' );
-function myplugin_options( $settings ) {
+add_filter( 'kc_plugin_settings', 'kc_settings_sample_plugin' );
+function kc_settings_sample_plugin( $settings ) {
 	/**
 	 * TODO: Please copy/paste/edit the fields you need, then remove the require_once line.
 	 * This is only for simplifying the development.
@@ -56,7 +56,7 @@ function myplugin_options( $settings ) {
 				'id'     => 'sample_section',
 				'title'  => 'Sample Options',
 				'desc'   => '<p>Some description about this options group</p>',
-				'fields' => kc_sample_fields() // TODO: See 00_fields.php
+				'fields' => kc_settings_sample_fields() // TODO: See 00_fields.php
 			)
 			// You can add more sections here...
 		),
