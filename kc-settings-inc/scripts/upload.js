@@ -4,20 +4,20 @@ var win = window.dialogArguments || opener || parent || top;
 	var texts    = win.kcSettings.upload.text,
 	    current  = win.kcSettings.upload.target.data('currentFiles'),
 	    $checks  = $(),
-	    $buttons = $('<div class="kcs-wrap"><h4>'+texts.head+'</h4> <a class="button check-all">'+texts.checkAll+'</a> <a class="button check-clear">'+texts.clear+'</a> <a class="button check-invert">'+texts.invert+'</a> <a class="button add-checked">'+texts.addFiles+'</a></div>')
+	    $buttons = $('<div class="kcs-wrap"><h4>'+texts.head+'</h4> <a class="button check-all">'+texts.checkAll+'</a> <a class="button check-invert">'+texts.invert+'</a> <a class="button check-clear">'+texts.clear+'</a> <a class="button add-checked">'+texts.addFiles+'</a></div>')
 				.on('click', 'a', function(e) {
 					e.preventDefault();
 					var $el = $(this);
 
 					if ( $el.is('.check-all') ) {
-						$checks.prop('checked', true);
+						$checks.prop('checked', true).trigger('change');
 					}
 					else if ( $el.is('.check-clear') ) {
-						$checks.prop('checked', false);
+						$checks.prop('checked', false).trigger('change');
 					}
 					else if ( $el.is('.check-invert') ) {
 						$checks.each(function() {
-							$(this).prop('checked', !this.checked);
+							$(this).prop('checked', !this.checked).trigger('change');
 						});
 					}
 					else if ( $el.is('.add-checked') ) {
@@ -73,11 +73,24 @@ var win = window.dialogArguments || opener || parent || top;
 					.prepend($check)
 					.wrapInner('<label />');
 			});
+
+			$checks.trigger('change');
 		});
 	};
 
 
 	$(document).ready(function($) {
+		$('body').on('change', 'input.kcs-files', function() {
+			var $checked = $checks.filter(function(idx) {
+				return $(this).prop('checked');
+			});
+
+			if ( $checked.length )
+				$('a.add-checked, a.check-clear', $buttons).show();
+			else
+				$('a.add-checked, a.check-clear', $buttons).hide();
+		});
+
 		// Gallery & Media Library tabs
 		$('#library-form, #gallery-form').find('#media-items').kcsfPrepare( false );
 
