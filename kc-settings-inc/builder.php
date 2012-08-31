@@ -873,7 +873,7 @@ class kcSettings_builder {
 										</fieldset>
 									</li>
 									<?php if ( !isset($s_val['metabox']) ) $s_val['metabox'] = array('context' => 'normal', 'priority' => 'default'); ?>
-									<li class="childType childDisplay" data-dep='["post", "metabox"]'>
+									<li class="childType childDisplay _sd_post-type" data-dep='["post", "metabox"]'>
 										<label class="ml"><?php _e('Metabox', 'kc-settings') ?></label>
 										<ul class="mi main">
 											<?php foreach ( $options['metabox'] as $mb_prop => $prop ) { ?>

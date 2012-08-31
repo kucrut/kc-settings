@@ -99,6 +99,17 @@ jQuery(document).ready(function($) {
 
 	// Field deps
 	$('.hasdep', $builder).kcFormDep();
+	// Special: disable metabox checkboxes for attachment
+	$('#_kcsb-post_type').on('change', function() {
+		if ( this.value === 'attachment' ) {
+			$('li._sd_post-type').hide()
+				.find('input').prop('disabled', true);
+		}
+		else {
+			$('li._sd_post-type').show()
+				.find('input').prop('disabled', false);
+		}
+	}).trigger('change');
 
 	// Check 'slug/id' fields
 	$doc.on('blur', 'input.kcsb-slug', function() {
