@@ -16,6 +16,16 @@ Array.prototype.unique = function() {
 	return a;
 };
 
+Object.kcGetSize = function(obj) {
+	var size = 0, key;
+	for (key in obj) {
+		if (obj.hasOwnProperty(key)) size++;
+	}
+
+	return size;
+};
+
+
 var win = window.dialogArguments || opener || parent || top;
 
 var kcGetSNS = function( id, sources ) {
@@ -710,6 +720,57 @@ function invertColor( color ) {
 				});
 			}
 		}]);
+	};
+
+
+	// Polyfill : input : color
+	$.fn.kcPFiColor = function( config ) {
+		if ( Modernizr.inputtypes.color !== false )
+			return this;
+
+		var $els = $(this);
+		if ( typeof $.fn.ColorPicker !== 'function' ) {
+			return Modernizr.load([{
+				load: kcGetSNS( 'jquery_colorpicker', win.kcSettings.js).concat( kcGetSNS('jquery_colorpicker', win.kcSettings.css) ),
+				complete: function() {
+					$els.kcPFiColor( config );
+				}
+			}]);
+		}
+
+		return this.each(function() {
+			$(this).ColorPicker( config )
+				.each(function() {
+					var $el = $(this).addClass('hasColorpicker');
+					if ( $el.val() !== '' ) {
+						$el.css({
+							backgroundColor: this.value,
+							color: this.value
+						});
+					}
+				});
+		});
+	};
+
+
+	// Polyfill : input : color
+	$.fn.kcPFiDate = function( config ) {
+		if ( Modernizr.inputtypes.date !== false )
+			return this;
+
+		var $els = $(this);
+		if ( typeof $.fn.datepicker !== 'function' ) {
+			return Modernizr.load([{
+				load: kcGetSNS('jquery_ui_datepicker', win.kcSettings.js).concat( kcGetSNS('jquery_ui', win.kcSettings.css) ),
+				complete: function() {
+					$els.kcPFiDate( config );
+				}
+			}]);
+		}
+
+		return this.each(function() {
+			$(this).datepicker( config );
+		});
 	};
 
 

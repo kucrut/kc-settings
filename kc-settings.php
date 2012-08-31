@@ -641,7 +641,7 @@ class kcSettings {
 	var kcSettings = <?php echo json_encode( array(
 		'locale' => get_locale(),
 		'paths'  => self::$data['paths'],
-		'js'     => kc_get_sns( array('jquery-ui-datepicker', 'jquery-ui-datetimepicker', 'thickbox', 'jquery-ui-sortable', 'jquery-colorpicker', 'chosen'), 'js' ),
+		'js'     => kc_get_sns( array('jquery-ui-datepicker', 'thickbox', 'jquery-ui-sortable', 'jquery-colorpicker', 'chosen'), 'js' ),
 		'css'    => kc_get_sns( array('jquery-ui', 'thickbox', 'chosen', 'jquery-colorpicker'), 'css' ),
 		'upload' => array(
 			'text' => array(
