@@ -15,6 +15,7 @@ class kcSettings_term {
 
 		add_action( 'edit_term', array(__CLASS__, '_save'), 10, 3);
 		add_action( 'create_term', array(__CLASS__, '_save'), 10, 3);
+		add_action( 'delete_term', array(__CLASS__, '_delete'), 10, 3);
 	}
 
 
@@ -105,9 +106,27 @@ class kcSettings_term {
 			   || ( isset($_POST['action']) && $_POST['action'] == 'inline-save-tax' ) )
 			return $term_id;
 
-		foreach ( self::$settings[$taxonomy] as $section ) {
+		foreach ( self::$settings[$taxonomy] as $section )
 			foreach ( $section['fields'] as $field )
 				_kc_update_meta( 'term', $taxonomy, $term_id, $section, $field );
-		}
+	}
+
+
+	/**
+	 * Delete term meta upon term deletion
+	 *
+	 * @param int $term_id Term ID
+	 * @param int $tt_id Term Taxonomy ID
+	 * @param string $taxonomy Taxonomy name
+	 *
+	 * @since 2.7.7
+	 */
+	public static function _delete( $term_id, $tt_id, $taxonomy ) {
+		if ( !isset(self::$settings[$taxonomy]) )
+			return;
+
+		foreach ( self::$settings[$taxonomy] as $section )
+			foreach ( $section['fields'] as $field )
+				delete_metadata( 'term', $term_id, $field['id'] );
 	}
 }
