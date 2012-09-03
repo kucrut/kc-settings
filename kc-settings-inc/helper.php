@@ -401,6 +401,10 @@ function kc_get_current_url() {
 
 
 if ( !function_exists('kc_get_sns') ) {
+function kc_get_sns_replacer( $id ) {
+	return str_replace( '-', '_', $id );
+}
+
 /**
  * Get scripts and styles sources
  *
@@ -443,12 +447,7 @@ function kc_get_sns( $handles, $type = 'js', $_output = array() ) {
 
 		$_x = clone $sources;
 		$_x->all_deps( $id );
-		$_output[$_id]['deps'] = array_map(
-			function( $id ) {
-				return str_replace( '-', '_', $id );
-			},
-			$_x->to_do
-		);
+		$_output[$_id]['deps'] = array_map( 'kc_get_sns_replacer' $_x->to_do );
 
 		$_output = kc_get_sns( $sources->registered[$id]->deps, $type, $_output );
 	}
