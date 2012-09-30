@@ -587,6 +587,7 @@ class kcSettings {
 		wp_register_script( 'kc-settings-base', "{$path['scripts']}/kc-settings-base{$suffix}.js", array('jquery', 'modernizr', 'json2'), self::version, true );
 		wp_register_script( 'kc-settings', "{$path['scripts']}/kc-settings{$suffix}.js", array('kc-settings-base', 'jquery-ui-sortable'), self::version, true );
 		wp_register_style(  'kc-settings', "{$path['styles']}/kc-settings{$suffix}.css", false, self::version );
+		add_action( 'admin_print_footer_scripts', array(__CLASS__, '_sns_vars'), 9 );
 
 		$jqui_theme = ( $admin_color == 'fresh' ) ? 'flick' : 'cupertino';
 		wp_register_style(  'jquery-ui', "{$path['styles']}/jquery-ui/{$jqui_theme}/style{$suffix}.css", false, '1.8.23' );
@@ -621,7 +622,6 @@ class kcSettings {
 		if ( !in_array($hook_suffix, self::$data['pages']) )
 			return;
 
-		add_action( 'admin_print_footer_scripts', array(__CLASS__, '_sns_vars'), 9 );
 		self::$data['is_kcs_page'] = true;
 
 		wp_enqueue_style( 'kc-settings' );
@@ -636,7 +636,10 @@ class kcSettings {
 	}
 
 
-	public static function _sns_vars() { ?>
+	public static function _sns_vars() {
+		global $wp_scripts;
+		if ( !in_array('kc-settings-base', $wp_scripts->in_footer) )
+			return; ?>
 <script>
 	var kcSettings = <?php echo json_encode( array(
 		'locale' => get_locale(),

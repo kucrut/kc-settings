@@ -383,7 +383,6 @@ class kcSettings_builder {
 		wp_enqueue_style( 'kc-settings' );
 		wp_enqueue_script( 'kc-settings-builder' );
 		wp_localize_script( 'kc-settings-builder', 'kcsbIDs', isset( self::$data['kcsb']['_ids'] ) ? self::$data['kcsb']['_ids'] : '' );
-		add_action( 'admin_print_footer_scripts', array('kcSettings', '_sns_vars'), 9 );
 	}
 
 
