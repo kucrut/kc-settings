@@ -17,7 +17,7 @@ License: GPL v2
 Text Domain: kc-settings
 */
 
-class kcSettings {
+final class kcSettings {
 	const version = '2.7.7';
 	protected static $data = array(
 		'paths'    => '',
