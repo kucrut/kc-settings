@@ -263,13 +263,19 @@ function _kc_field( $args ) {
 			$db_value = ( isset($object_id) && $object_id != '' ) ? get_metadata( 'post', $object_id, $key, true ) : null;
 		break;
 
-		# 4. Others: post, term & user meta
+		# 4. Nav menu
+		case 'menu_nav' :
+			$id = "kc-menu_navmeta-{$section}-{$field['id']}";
+			$name = "kc-termmeta[{$section}][{$field['id']}]";
+			$key = $field['id'];
+			$db_value = ( isset($object_id) && $object_id != '' ) ? get_metadata( 'term', $object_id, $key, true ) : null;
+		break;
+
+		# 5. Others: post, term & user meta
 		default :
 			$id = $field['id'];
 			$name = "kc-{$mode}meta[{$section}][{$id}]";
-			if ( $mode == 'menu_item' )
-				$name .= "[{$object_id}]";
-			$key = ( $mode == 'post' || $mode == 'menu_item' ) ? "_{$id}" : $id;
+			$key = ( $mode == 'post' ) ? "_{$id}" : $id;
 			$db_value = ( isset($object_id) && $object_id != '' ) ? get_metadata( $mode, $object_id, $key, true ) : null;
 		break;
 	}

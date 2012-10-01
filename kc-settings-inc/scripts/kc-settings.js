@@ -56,6 +56,9 @@ jQuery(document).ready(function($) {
 	/* Theme/plugin settings page with metaboxes */
 	$('#kc-settings-form').kcMetaboxDeps();
 
+	$('#kc-menu_navmeta').prependTo( $('#post-body') )
+		.show();
+
 	// Form row cloner
 	$.kcRowCloner();
 	$.kcRowCloner.addCallback( 'add', function( obj ) {

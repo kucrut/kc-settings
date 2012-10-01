@@ -335,6 +335,15 @@ input[type="color"] {
 	display: block;
 }
 
+/*** Nav menu metadata ***/
+#kc-menu_navmeta {
+	display: none;
+}
+#kc-menu_navmeta h2 {
+	font-family: Georgia, "Times New Roman", "Bitstream Charter", Times, serif;
+	font-size: 1.25em;
+}
+
 /*** Builder ***/
 .kcsb {
 	width:600px;

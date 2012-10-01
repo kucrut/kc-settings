@@ -2,7 +2,7 @@
 
 /**
  * @package KC_Settings
- * @version 2.7.8
+ * @version 2.7.9
  */
 
 
@@ -10,7 +10,7 @@
 Plugin name: KC Settings
 Plugin URI: http://kucrut.org/kc-settings/
 Description: Easily create plugin/theme settings page, custom fields metaboxes, term meta and user meta settings.
-Version: 2.7.8
+Version: 2.7.9
 Author: Dzikri Aziz
 Author URI: http://kucrut.org/
 License: GPL v2
@@ -18,7 +18,7 @@ Text Domain: kc-settings
 */
 
 final class kcSettings {
-	const version = '2.7.8';
+	const version = '2.7.9';
 	protected static $data = array(
 		'paths'    => '',
 		'pages'    => array('media-upload-popup'),
@@ -39,6 +39,9 @@ final class kcSettings {
 				'multiinput', 'editor', 'file', 'image', 'upload'
 				, 'date', 'datetime', 'datetime-local', 'week', 'month', 'time'
 			),
+			'menu_nav' => array(
+				'editor', 'multiinput'
+			)
 		),
 		'is_kcs_page' => false
 	);
@@ -84,7 +87,7 @@ final class kcSettings {
 		kcSettings_options::init();
 
 		# Include samples (for development)
-		// self::_samples( array('01_plugin', '02_post', '03_term', '04_user', '05_theme', '06_attachment', '07_menu_item') );
+		// self::_samples( array('01_plugin', '02_post', '03_term', '04_user', '05_theme', '06_attachment', '07_menu_item', '08_menu_nav') );
 
 		# Get all settings
 		self::_bootstrap_settings();
@@ -223,7 +226,8 @@ final class kcSettings {
 			'post'      => array(),
 			'term'      => array(),
 			'user'      => array(),
-			'menu_item' => array()
+			'menu_item' => array(),
+			'menu_nav'  => array()
 		);
 
 		# Process settings from the builder
@@ -372,7 +376,7 @@ final class kcSettings {
 					if ( empty($group['options']) )
 						$group = null;
 				}
-				elseif ( $type == 'menu_item' ) {
+				elseif ( $type == 'menu_item' || $type == 'menu_nav' ) {
 					$group = self::_validate_sections( $type, $group );
 					if ( empty($group) )
 						$group = null;
@@ -399,11 +403,13 @@ final class kcSettings {
 		}
 
 		# Merge nav menu item metadata
-		if ( isset($nu['menu_item']) ) {
-			$_temp_menu_items = array();
-			foreach ( $nu['menu_item'] as $group )
-				$_temp_menu_items = array_merge( $_temp_menu_items, $group );
-			$nu['menu_item'] = $_temp_menu_items;
+		foreach ( array('menu_item', 'menu_nav') as $_type ) {
+			if ( isset($nu[$_type]) ) {
+				$_temp = array();
+				foreach ( $nu[$_type] as $group )
+					$_temp = array_merge( $_temp, $group );
+				$nu[$_type] = $_temp;
+			}
 		}
 
 		return $nu;

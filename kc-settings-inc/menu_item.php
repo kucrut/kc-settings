@@ -49,7 +49,6 @@ final class kcSettings_menu_item {
 	
 
 	public static function _save( $menu_id, $menu_item_db_id, $args ) {
-		echo '<pre>' . print_r( $_POST, true ) . '<pre>';exit;
 		foreach ( self::$sections as $section )
 			foreach ( $section['fields'] as $field )
 				_kc_update_meta( 'post', 'nav_menu_item', $menu_item_db_id, $section, $field );
