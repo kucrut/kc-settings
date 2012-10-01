@@ -92,6 +92,7 @@
 				<li>Term metadata</li>
 				<li>User metadata</li>
 				<li>Nav menu item metadata (since version 2.7.8)</li>
+				<li>Nav menu metadata (since version 2.7.9)</li>
 			</ul>
 
 			<p>For plugin/theme setting pages, you have the option to choose between 'plain' and 'metaboxes' display types. For post metaboxes/custom fields and plugin/theme setting pages with display time set to metaboxes, you can freely set the metaboxes positions/contexts and priorities.</p>
@@ -116,8 +117,8 @@
 				<li>Password: <code>password</code></li>
 				<li>Telephone: <code>tel</code></li>
 				<li>File: <code>file</code> <em class="note">(not supported in theme customizer and menu item metadata)</em></li>
-				<li>Repeatable fields: <code>multiinput</code> <em class="note">(not supported in theme customizer and menu item metadata)</em></li>
-				<li>WordPress Editor: <code>editor</code> <em class="note">(not supported in theme customizer and menu item metadata)</em></li>
+				<li>Repeatable fields: <code>multiinput</code> <em class="note">(not supported in theme customizer, menu and menu item metadata)</em></li>
+				<li>WordPress Editor: <code>editor</code> <em class="note">(not supported in theme customizer, menu and menu item metadata)</em></li>
 				<li>Custom: <code>special</code> <em class="note">(not supported in theme customizer)</em></li>
 			</ul>
 
@@ -243,14 +244,14 @@ $var = get_theme_mod( "<span>{$prefix}</span>_<span>{$section_id}</span>_<span>{
 			<p>If you have set a default value for the field and want to get it when the setting hasn't been changed:</p>
 <pre><code>$var = get_theme_mod( "<span>{$prefix}</span>_<span>{$section_id}</span>_<span>{$field_id}</span>", kc_get_default('theme', <span>$prefix</span>, <span>$section_id</span>, <span>$field_id</span>) );</code></pre>
 
-			<h3 id="get-data-cfields">Custom field / Post metadata, Nav menu item metadata</h3>
+			<h3 id="get-data-cfields">Custom field / Post metadata &amp; Nav menu item metadata</h3>
 			<p>Just use standard WordPress function, but prefix the meta key with an underscore, for example:</p>
 <pre><code><span>$post_id</span> = 1;
 <span>$field_id</span> = 'field_one';
 $var = get_post_meta( <span>$post_id</span>, "_<span>{$field_id}</span>", true ); <span class="ccomment"> // Notice the underscore</span>
 </code></pre>
 
-			<h3 id="get-data-termmeta">Term Metadata</h3>
+			<h3 id="get-data-termmeta">Term Metadata &amp; Nav Menu Metadata</h3>
 			<p>You can use standard WordPress function, for example:</p>
 <pre><code><span>$term_id</span> = 1;
 <span>$field_id</span> = 'field_one';
@@ -365,7 +366,7 @@ function my_filter_function( $field_data ) {
 }
 </code></pre>
 
-			<h3 id="validation-cfields">Custom Fields / Post metadata, Nav menu item metadata</h3>
+			<h3 id="validation-cfields">Custom Fields / Post metadata &amp; Nav menu item metadata</h3>
 			<ul>
 				<li>
 					<h4>By post type:</h4>
@@ -406,7 +407,7 @@ function my_filter_function( $field_data ) {
 				</li>
 			</ul>
 
-			<h3 id="validation-termmeta">Term meta</h3>
+			<h3 id="validation-termmeta">Term &amp; Nav menu metadata</h3>
 			<p>The filters used for validating term meta values are very similiar with custom fields' filters. The only difference is that you'd use taxonomy name instead of post type name. Also the filters are prefixed with <code>kcv_termmeta_</code> instead of <code>kcv_postmeta_</code>. Here are the filters used:</p>
 			<p>And here are the filters:</p>
 			<ul>
@@ -418,6 +419,7 @@ function my_filter_function( $field_data ) {
 						<dt>Example:</dt>
 						<dd><pre><code>add_filter( 'kcv_termmeta_<span>category</span>', 'my_filter_function', 10, 3 );</code></pre></dd>
 					</dl>
+					<p><strong>Note:</strong> For nav menu, use <code>nav_menu</code> as the taxonomy name.</p>
 				</li>
 				<li>
 					<h4>By taxonomy &amp; field type:</h4>
