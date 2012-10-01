@@ -91,6 +91,7 @@
 				<li>Post metadata (custom fields)</li>
 				<li>Term metadata</li>
 				<li>User metadata</li>
+				<li>Nav menu item metadata (since version 2.7.8)</li>
 			</ul>
 
 			<p>For plugin/theme setting pages, you have the option to choose between 'plain' and 'metaboxes' display types. For post metaboxes/custom fields and plugin/theme setting pages with display time set to metaboxes, you can freely set the metaboxes positions/contexts and priorities.</p>
@@ -101,12 +102,12 @@
 				<li>Multiple lines text: <code>textarea</code></li>
 				<li>Email: <code>email</code></li>
 				<li>Color: <code>color</code></li>
-				<li>Date: <code>date</code> <em class="note">(not supported in theme customizer)</em></li>
-				<li>Month: <code>month</code> <em class="note">(not supported in theme customizer)</em></li>
-				<li>Time: <code>time</code> <em class="note">(no polyfill yet, not supported in theme customizer)</em></li>
-				<li>Datetime: <code>datetime</code> <em class="note">(no polyfill yet, not supported in theme customizer)</em></li>
-				<li>Local Datetime: <code>datetime-local</code> <em class="note">(no polyfill yet, not supported in theme customizer)</em></li>
-				<li>Week: <code>week</code> <em class="note">(no polyfill yet, not supported in theme customizer)</em></li>
+				<li>Date: <code>date</code> <em class="note">(not supported in theme customizer and menu item metadata)</em></li>
+				<li>Month: <code>month</code> <em class="note">(not supported in theme customizer and menu item metadata)</em></li>
+				<li>Time: <code>time</code> <em class="note">(no polyfill yet, not supported in theme customizer and menu item metadata)</em></li>
+				<li>Datetime: <code>datetime</code> <em class="note">(no polyfill yet, not supported in theme customizer and menu item metadata)</em></li>
+				<li>Local Datetime: <code>datetime-local</code> <em class="note">(no polyfill yet, not supported in theme customizer and menu item metadata)</em></li>
+				<li>Week: <code>week</code> <em class="note">(no polyfill yet, not supported in theme customizer and menu item metadata)</em></li>
 				<li>Radio: <code>radio</code></li>
 				<li>Checkboxes: <code>checkbox</code> <em class="note">(not supported in theme customizer)</em></li>
 				<li>Dropdown select: <code>select</code></li>
@@ -114,9 +115,9 @@
 				<li>Number: <code>number</code></li>
 				<li>Password: <code>password</code></li>
 				<li>Telephone: <code>tel</code></li>
-				<li>File: <code>file</code> <em class="note">(not supported in theme customizer)</em></li>
-				<li>Repeatable fields: <code>multiinput</code> <em class="note">(not supported in theme customizer)</em></li>
-				<li>WordPress Editor: <code>editor</code> <em class="note">(not supported in theme customizer)</em></li>
+				<li>File: <code>file</code> <em class="note">(not supported in theme customizer and menu item metadata)</em></li>
+				<li>Repeatable fields: <code>multiinput</code> <em class="note">(not supported in theme customizer and menu item metadata)</em></li>
+				<li>WordPress Editor: <code>editor</code> <em class="note">(not supported in theme customizer and menu item metadata)</em></li>
 				<li>Custom: <code>special</code> <em class="note">(not supported in theme customizer)</em></li>
 			</ul>
 
@@ -141,7 +142,7 @@
 	if ( class_exists('kcSettings') )
 		return;
 
-	<span class="ccomment">// This is to make sure you can have KC Settings bundled in your theme/plugin <em>and</em> as a standalone plugin</span>
+	<span class="ccomment">// This is to avoid the conflict when KC Settings is bundled in your theme/plugin <em>and</em> installed as plugin</span>
 	if ( is_admin() ) {
 		global $pagenow;
 		if (
@@ -150,7 +151,7 @@
 				<span class="ccomment">// Single plugin activation</span>
 				( isset($_REQUEST['action']) &amp;&amp; $_REQUEST['action'] === 'activate' &amp;&amp; isset($_REQUEST['plugin']) &amp;&amp; $_REQUEST['plugin'] === 'kc-settings/kc-settings.php' )
 				|| (
-					// Bulk activation
+					<span class="ccomment">// Bulk activation</span>
 					!empty($_POST)
 					&amp;&amp; ( ( isset($_POST['action']) &amp;&amp; $_POST['action'] === 'activate-selected' ) || ( isset($_POST['action2']) &amp;&amp; $_POST['action2'] === 'activate-selected' ) )
 					&amp;&amp; ( isset($_POST['checked']) &amp;&amp; is_array($_POST['checked']) &amp;&amp; in_array('kc-settings/kc-settings.php', $_POST['checked']) )
@@ -242,7 +243,7 @@ $var = get_theme_mod( "<span>{$prefix}</span>_<span>{$section_id}</span>_<span>{
 			<p>If you have set a default value for the field and want to get it when the setting hasn't been changed:</p>
 <pre><code>$var = get_theme_mod( "<span>{$prefix}</span>_<span>{$section_id}</span>_<span>{$field_id}</span>", kc_get_default('theme', <span>$prefix</span>, <span>$section_id</span>, <span>$field_id</span>) );</code></pre>
 
-			<h3 id="get-data-cfields">Custom field / Post metadata</h3>
+			<h3 id="get-data-cfields">Custom field / Post metadata, Nav menu item metadata</h3>
 			<p>Just use standard WordPress function, but prefix the meta key with an underscore, for example:</p>
 <pre><code><span>$post_id</span> = 1;
 <span>$field_id</span> = 'field_one';
@@ -364,7 +365,7 @@ function my_filter_function( $field_data ) {
 }
 </code></pre>
 
-			<h3 id="validation-cfields">Custom Fields / Post Meta</h3>
+			<h3 id="validation-cfields">Custom Fields / Post metadata, Nav menu item metadata</h3>
 			<ul>
 				<li>
 					<h4>By post type:</h4>
@@ -374,6 +375,7 @@ function my_filter_function( $field_data ) {
 						<dt>Example:</dt>
 						<dd><pre><code>add_filter( 'kcv_postmeta_<span>post</span>', 'my_filter_function', 10, 3 );</code></pre></dd>
 					</dl>
+					<p><strong>Note:</strong> For menu item metadata, use <code>nav_menu_item</code> as the post type.</p>
 				</li>
 				<li>
 					<h4>By post type &amp; field type:</h4>

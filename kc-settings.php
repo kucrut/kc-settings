@@ -2,7 +2,7 @@
 
 /**
  * @package KC_Settings
- * @version 2.7.7
+ * @version 2.7.8
  */
 
 
@@ -10,7 +10,7 @@
 Plugin name: KC Settings
 Plugin URI: http://kucrut.org/kc-settings/
 Description: Easily create plugin/theme settings page, custom fields metaboxes, term meta and user meta settings.
-Version: 2.7.7
+Version: 2.7.8
 Author: Dzikri Aziz
 Author URI: http://kucrut.org/
 License: GPL v2
@@ -18,7 +18,7 @@ Text Domain: kc-settings
 */
 
 final class kcSettings {
-	const version = '2.7.7';
+	const version = '2.7.8';
 	protected static $data = array(
 		'paths'    => '',
 		'pages'    => array('media-upload-popup'),
@@ -29,10 +29,16 @@ final class kcSettings {
 		'defaults' => array(),
 		'kcsb'     => array(),
 		'kids'     => array(),
-		'customizer_blacklist' => array(
-			'multiinput', 'multiselect', 'special', 'editor', 'checkbox'
-			, 'file', 'image', 'upload'
-			, 'date', 'datetime', 'datetime-local', 'week', 'month', 'time'
+		'blacklist' => array(
+			'theme' => array(
+				'multiinput', 'multiselect', 'special', 'editor', 'checkbox'
+				, 'file', 'image', 'upload'
+				, 'date', 'datetime', 'datetime-local', 'week', 'month', 'time'
+			),
+			'menu_item' => array(
+				'multiinput', 'editor', 'file', 'image', 'upload'
+				, 'date', 'datetime', 'datetime-local', 'week', 'month', 'time'
+			),
 		),
 		'is_kcs_page' => false
 	);
@@ -78,7 +84,7 @@ final class kcSettings {
 		kcSettings_options::init();
 
 		# Include samples (for development)
-		// self::_samples( array('01_plugin', '02_post', '03_term', '04_user', '05_theme') );
+		// self::_samples( array('01_plugin', '02_post', '03_term', '04_user', '05_theme', '06_attachment', '07_menu_item') );
 
 		# Get all settings
 		self::_bootstrap_settings();
@@ -212,11 +218,12 @@ final class kcSettings {
 		);
 
 		$settings = array(
-			'plugin' => array(),
-			'theme'  => array(),
-			'post'   => array(),
-			'term'   => array(),
-			'user'   => array()
+			'plugin'    => array(),
+			'theme'     => array(),
+			'post'      => array(),
+			'term'      => array(),
+			'user'      => array(),
+			'menu_item' => array()
 		);
 
 		# Process settings from the builder
@@ -360,9 +367,14 @@ final class kcSettings {
 							$group = null;
 					}
 				}
-				else { # Theme customizer
+				elseif ( $type == 'theme' ) {
 					$group['options'] = self::_validate_sections( $type, $group['options'], $group );
 					if ( empty($group['options']) )
+						$group = null;
+				}
+				elseif ( $type == 'menu_item' ) {
+					$group = self::_validate_sections( $type, $group );
+					if ( empty($group) )
 						$group = null;
 				}
 
@@ -380,9 +392,18 @@ final class kcSettings {
 
 		}
 
+		# Merge Post, Term & User metadata
 		foreach ( array('post', 'term', 'user') as $type ) {
 			if ( isset($nu[$type]) )
 				$nu[$type] = self::_bootstrap_meta( $nu[$type] );
+		}
+
+		# Merge nav menu item metadata
+		if ( isset($nu['menu_item']) ) {
+			$_temp_menu_items = array();
+			foreach ( $nu['menu_item'] as $group )
+				$_temp_menu_items = array_merge( $_temp_menu_items, $group );
+			$nu['menu_item'] = $_temp_menu_items;
 		}
 
 		return $nu;
@@ -464,8 +485,8 @@ final class kcSettings {
 
 		foreach ( $fields as $idx => $field ) {
 			unset( $fields[$idx] );
-			# Theme customizer blacklist
-			if ( $type == 'theme' && in_array($field['type'], self::$data['customizer_blacklist']) )
+			# Blacklisted field types
+			if ( isset(self::$data['blacklist'][$type]) && in_array($field['type'], self::$data['blacklist'][$type]) )
 				continue;
 
 			# Field check: id, title & type

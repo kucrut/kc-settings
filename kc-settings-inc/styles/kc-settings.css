@@ -305,6 +305,36 @@ input[type="color"] {
 .kcDPMonth {padding-bottom:.2em;}
 .kcDPMonth .ui-datepicker-calendar {display:none;}
 
+
+/*** Nav menu item metadata ***/
+.kc-menu-item-section {
+	padding-top: .5em;
+	clear: both;
+}
+.kc-menu-item-section h2 {
+	font-size: 1em;
+	font-weight: bold;
+	line-height: 1;
+	padding: 0;
+}
+.kc-menu-item-section .kcs-field-wrap {
+	display: block;
+	color: #333;
+}
+.kc-menu-item-section input.kcs-input {
+	width: 99%;
+}
+.kc-menu-item-section .kcs-checkbox-wrap {
+	max-height: 7.4em;
+	overflow: auto;
+}
+.kc-menu-item-section .kcs-check {
+	font-style: normal;
+}
+.kc-menu-item-section .kcs-multiselect {
+	display: block;
+}
+
 /*** Builder ***/
 .kcsb {
 	width:600px;

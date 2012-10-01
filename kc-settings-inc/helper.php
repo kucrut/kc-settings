@@ -266,6 +266,8 @@ function _kc_update_meta( $meta_type = 'post', $object_type_name, $object_id, $s
 	}
 	elseif ( isset($_POST["kc-{$meta_type}meta"][$section['id']][$field['id']]) ) {
 		$nu_val = $_POST["kc-{$meta_type}meta"][$section['id']][$field['id']];
+		if ( $meta_type == 'post' && $object_type_name == 'nav_menu_item' && isset($nu_val[$object_id]) )
+			$nu_val = $nu_val[$object_id];
 	}
 
 	# default sanitation

@@ -255,18 +255,28 @@ function _kc_field( $args ) {
 			extract( $args['data'], EXTR_OVERWRITE );
 		break;
 
-		# 3. Others: post, term & user meta
+		# 3. Menu item
+		case 'menu_item' :
+			$id = "edit-menu-item-{$section}-{$field['id']}-{$object_id}";
+			$name = "kc-postmeta[{$section}][{$field['id']}][{$object_id}]";
+			$key = "_{$field['id']}";
+			$db_value = ( isset($object_id) && $object_id != '' ) ? get_metadata( 'post', $object_id, $key, true ) : null;
+		break;
+
+		# 4. Others: post, term & user meta
 		default :
 			$id = $field['id'];
 			$name = "kc-{$mode}meta[{$section}][{$id}]";
-			$key = ( $mode == 'post' ) ? "_{$id}" : $id;
+			if ( $mode == 'menu_item' )
+				$name .= "[{$object_id}]";
+			$key = ( $mode == 'post' || $mode == 'menu_item' ) ? "_{$id}" : $id;
 			$db_value = ( isset($object_id) && $object_id != '' ) ? get_metadata( $mode, $object_id, $key, true ) : null;
 		break;
 	}
 
 	$desc_tag   = ( isset($desc_tag) ) ? $desc_tag : 'p';
 	$desc_class = ( $mode == 'attachment' ) ? 'help' : 'description';
-	$desc = ( isset($field['desc']) && !empty($field['desc']) ) ? "<{$desc_tag} class='{$desc_class}'>{$field['desc']}</{$desc_tag}>" : null;
+	$desc       = ( isset($field['desc']) && !empty($field['desc']) ) ? "<{$desc_tag} class='{$desc_class}'>{$field['desc']}</{$desc_tag}>" : null;
 
 	# Let user filter the output of the setting field
 	$output = ( $mode !== 'subfield' ) ? apply_filters( 'kc_settings_field_before', '', $section, $field ) : '';
@@ -285,7 +295,7 @@ function _kc_field( $args ) {
 	# File
 	elseif ( $type == 'file' ) {
 		$output .= _kc_field_file( array(
-			'parent'    => ( $mode === 'post' ) ? $object_id : 0,
+			'parent'    => ( $mode === 'post' || $mode === 'menu_item' ) ? $object_id : 0,
 			'field'     => $field,
 			'id'        => $id,
 			'name'      => $name,
@@ -322,6 +332,8 @@ function _kc_field( $args ) {
 		}
 		if ( in_array($type, array_merge($i_text, array('textarea'))) ) {
 			$field_attr['class'] .= ' kcs-input';
+			if ( $mode == 'menu_item' )
+				$field_attr['class'] .= ' widefat';
 		}
 
 
