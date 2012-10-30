@@ -610,7 +610,7 @@ final class kcSettings {
 		$suffix = KC_SETTINGS_SNS_DEBUG ? '' : '.min';
 
 		# Common
-		wp_register_script( 'modernizr',        "{$path['scripts']}/modernizr-2.6.1-20120820{$suffix}.js", false, '2.6.1-20120820', false );
+		wp_register_script( 'modernizr',        "{$path['scripts']}/modernizr-2.6.2-20121030{$suffix}.js", false, '2.6.2-20121030', false );
 		wp_register_script( 'kc-settings-base', "{$path['scripts']}/kc-settings-base{$suffix}.js", array('jquery', 'modernizr', 'json2'), self::version, true );
 		wp_register_script( 'kc-settings', "{$path['scripts']}/kc-settings{$suffix}.js", array('kc-settings-base', 'jquery-ui-sortable'), self::version, true );
 		wp_register_style(  'kc-settings', "{$path['styles']}/kc-settings{$suffix}.css", false, self::version );

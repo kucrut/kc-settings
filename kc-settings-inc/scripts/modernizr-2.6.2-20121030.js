@@ -1,5 +1,5 @@
-/* Modernizr 2.6.1 (Custom Build) | MIT & BSD
- * Build: http://modernizr.com/download/#-fontface-backgroundsize-borderimage-borderradius-boxshadow-flexbox-flexbox_legacy-hsla-multiplebgs-opacity-rgba-textshadow-cssanimations-csscolumns-generatedcontent-cssgradients-cssreflections-csstransforms-csstransforms3d-csstransitions-applicationcache-canvas-canvastext-draganddrop-hashchange-history-audio-video-indexeddb-input-inputtypes-localstorage-postmessage-sessionstorage-websockets-websqldatabase-webworkers-geolocation-inlinesvg-smil-svg-svgclippaths-touch-webgl-printshiv-cssclasses-teststyles-testprop-testallprops-hasevent-prefixes-domprefixes-a_download-audio_audiodata_api-audio_webaudio_api-battery_api-battery_level-blob_constructor-canvas_todataurl_type-contenteditable-cookies-cors-css_backgroundposition-shorthand-css_backgroundposition-xy-css_backgroundrepeat-css_backgroundsizecover-css_boxsizing-css_calc-css_cubicbezierrange-css_displayrunin-css_displaytable-css_filters-css_lastchild-css_mask-css_mediaqueries-css_overflow_scrolling-css_pointerevents-css_remunit-css_regions-css_resize-css_scrollbars-css_subpixelfont-css_userselect-custom_protocol_handler-dataview_api-dom_classlist-dom_createElement_attrs-dom_dataset-dom_microdata-elem_datalist-elem_details-elem_output-elem_progress_meter-elem_ruby-elem_time-elem_track-emoji-es5_strictmode-event_deviceorientation_motion-exif_orientation-file_api-forms_fileinput-file_filesystem-forms_placeholder-forms_speechinput-forms_validation-fullscreen_api-gamepad-getusermedia-ie8compat-img_apng-img_webp-json-lists_reversed-network_connection-network_eventsource-network_xhr2-notification-performance-quota_management_api-requestanimationframe-script_async-script_defer-style_scoped-svg_filters-unicode-url_data_uri-userdata-vibration-web_intents-webgl_extensions-window_framed-load
+/* Modernizr 2.6.2 (Custom Build) | MIT & BSD
+ * Build: http://modernizr.com/download/#-fontface-backgroundsize-borderimage-borderradius-boxshadow-flexbox-flexboxlegacy-hsla-multiplebgs-opacity-rgba-textshadow-cssanimations-csscolumns-generatedcontent-cssgradients-cssreflections-csstransforms-csstransforms3d-csstransitions-applicationcache-canvas-canvastext-draganddrop-hashchange-history-audio-video-indexeddb-input-inputtypes-localstorage-postmessage-sessionstorage-websockets-websqldatabase-webworkers-geolocation-inlinesvg-smil-svg-svgclippaths-touch-webgl-printshiv-mq-cssclasses-prefixed-teststyles-testprop-testallprops-hasevent-prefixes-domprefixes-a_download-audio_audiodata_api-audio_webaudio_api-battery_api-battery_level-blob_constructor-canvas_todataurl_type-contenteditable-contentsecuritypolicy-contextmenu-cookies-cors-css_backgroundposition_shorthand-css_backgroundposition_xy-css_backgroundrepeat-css_backgroundsizecover-css_boxsizing-css_calc-css_cubicbezierrange-css_displayrunin-css_displaytable-css_filters-css_hyphens-css_lastchild-css_mask-css_mediaqueries-css_objectfit-css_overflow_scrolling-css_pointerevents-css_positionsticky-css_remunit-css_regions-css_resize-css_scrollbars-css_subpixelfont-css_supports-css_userselect-css_vhunit-css_vmaxunit-css_vminunit-css_vwunit-custom_protocol_handler-dataview_api-dom_classlist-dom_createElement_attrs-dom_dataset-dom_microdata-elem_datalist-elem_details-elem_output-elem_progress_meter-elem_ruby-elem_time-elem_track-emoji-es5_strictmode-event_deviceorientation_motion-exif_orientation-file_api-forms_fileinput-forms_formattribute-file_filesystem-forms_placeholder-forms_speechinput-forms_validation-fullscreen_api-gamepad-ie8compat-iframe_sandbox-iframe_seamless-iframe_srcdoc-img_apng-img_webp-json-lists_reversed-network_connection-network_eventsource-network_xhr2-notification-performance-pointerlock_api-quota_management_api-requestanimationframe-script_async-script_defer-style_scoped-svg_filters-unicode-url_data_uri-userdata-vibration-web_intents-webgl_extensions-window_framed-workers_blobworkers-workers_dataworkers-workers_sharedworkers-load
  */
 ;
 
@@ -7,7 +7,7 @@
 
 window.Modernizr = (function( window, document, undefined ) {
 
-    var version = '2.6.1',
+    var version = '2.6.2',
 
     Modernizr = {},
 
@@ -45,15 +45,15 @@ window.Modernizr = (function( window, document, undefined ) {
 
     slice = classes.slice,
 
-    featureName,
+    featureName, 
 
 
     injectElementWithStyles = function( rule, callback, nodes, testnames ) {
 
-      var style, ret, node,
+      var style, ret, node, docOverflow,
           div = document.createElement('div'),
                 body = document.body,
-                fakeBody = body ? body : document.createElement('body');
+                fakeBody = body || document.createElement('body');
 
       if ( parseInt(nodes, 10) ) {
                       while ( nodes-- ) {
@@ -68,12 +68,20 @@ window.Modernizr = (function( window, document, undefined ) {
           (body ? div : fakeBody).innerHTML += style;
       fakeBody.appendChild(div);
       if ( !body ) {
-                fakeBody.style.background = "";
+                fakeBody.style.background = '';
+                fakeBody.style.overflow = 'hidden';
+          docOverflow = docElement.style.overflow;
+          docElement.style.overflow = 'hidden';
           docElement.appendChild(fakeBody);
       }
 
       ret = callback(div, rule);
-        !body ? fakeBody.parentNode.removeChild(fakeBody) : div.parentNode.removeChild(div);
+        if ( !body ) {
+          fakeBody.parentNode.removeChild(fakeBody);
+          docElement.style.overflow = docOverflow;
+      } else {
+          div.parentNode.removeChild(div);
+      }
 
       return !!ret;
 
@@ -97,7 +105,7 @@ window.Modernizr = (function( window, document, undefined ) {
       return bool;
 
      },
-
+ 
 
     isEventSupported = (function() {
 
@@ -144,7 +152,7 @@ window.Modernizr = (function( window, document, undefined ) {
       };
     }
     else {
-      hasOwnProp = function (object, property) {
+      hasOwnProp = function (object, property) { 
         return ((property in object) && is(object.constructor.prototype[property], 'undefined'));
       };
     }
@@ -249,7 +257,15 @@ window.Modernizr = (function( window, document, undefined ) {
         }
     }    tests['flexbox'] = function() {
       return testPropsAll('flexWrap');
-    };    tests['canvas'] = function() {
+    };
+
+
+    tests['flexboxlegacy'] = function() {
+        return testPropsAll('boxDirection');
+    };
+
+
+    tests['canvas'] = function() {
         var elem = document.createElement('canvas');
         return !!(elem.getContext && elem.getContext('2d'));
     };
@@ -434,8 +450,8 @@ window.Modernizr = (function( window, document, undefined ) {
     tests['generatedcontent'] = function() {
         var bool;
 
-        injectElementWithStyles(['#modernizr:after{content:"',smile,'";visibility:hidden}'].join(''), function( node ) {
-          bool = node.offsetHeight >= 1;
+        injectElementWithStyles(['#',mod,'{font:0/0 a}#',mod,':after{content:"',smile,'";visibility:hidden;font:3px/1 a}'].join(''), function( node ) {
+          bool = node.offsetHeight >= 3;
         });
 
         return bool;
@@ -605,14 +621,14 @@ window.Modernizr = (function( window, document, undefined ) {
 
          test = typeof test == 'function' ? test() : test;
 
-         if (enableClasses) {
+         if (typeof enableClasses !== "undefined" && enableClasses) {
            docElement.className += ' ' + (test ? '' : 'no-') + feature;
          }
          Modernizr[feature] = test;
 
        }
 
-       return Modernizr;
+       return Modernizr; 
      };
 
 
@@ -731,7 +747,7 @@ window.Modernizr = (function( window, document, undefined ) {
     var elements = html5.elements;
     return typeof elements == 'string' ? elements.split(' ') : elements;
   }
-
+  
     /**
    * Returns the data associated to the given document
    * @private
@@ -1149,14 +1165,23 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 // http://developers.whatwg.org/links.html#downloading-resources
 // By Addy Osmani
 
-Modernizr.addTest('adownload',
-  !!('download' in document.createElement('a'))
-);
+Modernizr.addTest('adownload', 'download' in document.createElement('a'));
 // Mozilla Audio Data API
 // https://wiki.mozilla.org/Audio_Data_API
 // by Addy Osmani
 Modernizr.addTest('audiodata', !!(window.Audio));
-// canvas.toDataURL type support
+// Web Audio API
+// https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html
+// By Addy Osmani
+Modernizr.addTest('webaudio', !!(window.webkitAudioContext || window.AudioContext));
+
+// Battery API
+// https://developer.mozilla.org/en/DOM/window.navigator.mozBattery
+// By: Paul Sayre
+
+Modernizr.addTest('battery',
+	!!Modernizr.prefixed('battery', navigator)
+);// canvas.toDataURL type support
 // http://www.w3.org/TR/html5/the-canvas-element.html#dom-canvas-todataurl
 
 // This test is asynchronous. Watch out.
@@ -1185,13 +1210,6 @@ Modernizr.addTest('audiodata', !!(window.Audio));
     image.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==';
 }());
 
-// Battery API
-// https://developer.mozilla.org/en/DOM/window.navigator.mozBattery
-// By: Paul Sayre
-
-Modernizr.addTest('battery',
-	!!Modernizr.prefixed('battery', navigator)
-);
 // Low Battery Level
 // Enable a developer to remove CPU intensive CSS/JS when battery is low
 // developer.mozilla.org/en/DOM/window.navigator.mozBattery
@@ -1202,10 +1220,16 @@ Modernizr.addTest('lowbattery', function () {
 		battery = Modernizr.prefixed('battery', navigator);
 	return !!(battery && !battery.charging && battery.level <= minLevel);
 });
-// Web Audio API
-// https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html
-// By Addy Osmani
-Modernizr.addTest('webaudio', !!(window.webkitAudioContext || window.AudioContext));
+// Blob constructor
+// http://dev.w3.org/2006/webapi/FileAPI/#constructorBlob
+
+Modernizr.addTest('blobconstructor', function () {
+    try {
+        return !!new Blob();
+    } catch (e) {
+        return false;
+    }
+});
 // contentEditable
 // http://www.whatwg.org/specs/web-apps/current-work/multipage/editing.html#contenteditable
 
@@ -1215,6 +1239,27 @@ Modernizr.addTest('webaudio', !!(window.webkitAudioContext || window.AudioContex
 
 Modernizr.addTest('contenteditable',
         'contentEditable' in document.documentElement);
+// Test for (experimental) Content Security Policy 1.1 support.
+//
+// This feature is still quite experimental, but is available now in Chrome 22.
+// If the `SecurityPolicy` property is available, you can be sure the browser
+// supports CSP. If it's not available, the browser still might support an
+// earlier version of the CSP spec.
+//
+// Editor's Draft: https://dvcs.w3.org/hg/content-security-policy/raw-file/tip/csp-specification.dev.html
+
+Modernizr.addTest('contentsecuritypolicy', 'SecurityPolicy' in document);
+// http://www.w3.org/TR/html5/interactive-elements.html#context-menus
+// Demo at http://thewebrocks.com/demos/context-menu/
+Modernizr.addTest(
+  'contextmenu', 
+  ('contextMenu' in document.documentElement && 'HTMLMenuItemElement' in window) 
+);
+
+
+
+
+
 
 // by tauren
 // https://github.com/Modernizr/Modernizr/issues/191
@@ -1232,7 +1277,7 @@ Modernizr.addTest('cookies', function () {
 
 // cors
 // By Theodoor van Donge
-Modernizr.addTest('cors', 'withCredentials' in new XMLHttpRequest());/*
+Modernizr.addTest('cors', !!(window.XMLHttpRequest && 'withCredentials' in new XMLHttpRequest()));/*
     https://developer.mozilla.org/en/CSS/background-position
     http://www.w3.org/TR/css3-background/#background-position
 
@@ -1253,9 +1298,9 @@ Modernizr.addTest('cors', 'withCredentials' in new XMLHttpRequest());/*
 }());
 /*
 	Allan Lei https://github.com/allanlei
-
+	
 	Check adapted from https://github.com/brandonaaron/jquery-cssHooks/blob/master/bgpos.js
-
+	
 	Test: http://jsfiddle.net/allanlei/R8AYS/
 */
 Modernizr.addTest('bgpositionxy', function() {
@@ -1268,7 +1313,7 @@ Modernizr.addTest('bgpositionxy', function() {
 });// developer.mozilla.org/en/CSS/background-repeat
 
 // test page: jsbin.com/uzesun/
-// http://jsfiddle.net/ryanseddon/yMLTQ/6/
+// http://jsfiddle.net/ryanseddon/yMLTQ/6/    
 
 (function(){
 
@@ -1278,9 +1323,9 @@ function getBgRepeatValue(elem){
              getComputedStyle(elem, null).getPropertyValue('background') :
              elem.currentStyle['background']);
 }
+  
 
-
-Modernizr.testStyles(' #modernizr { background-repeat: round; } ', function(elem, rule){
+Modernizr.testStyles(' #modernizr { background-repeat: round; } ', function(elem, rule){ 
 
   Modernizr.addTest('bgrepeatround', getBgRepeatValue(elem) == 'round');
 
@@ -1288,7 +1333,7 @@ Modernizr.testStyles(' #modernizr { background-repeat: round; } ', function(elem
 
 
 
-Modernizr.testStyles(' #modernizr { background-repeat: space; } ', function(elem, rule){
+Modernizr.testStyles(' #modernizr { background-repeat: space; } ', function(elem, rule){ 
 
   Modernizr.addTest('bgrepeatspace', getBgRepeatValue(elem) == 'space');
 
@@ -1300,9 +1345,10 @@ Modernizr.testStyles(' #modernizr { background-repeat: space; } ', function(elem
 // developer.mozilla.org/en/CSS/background-size
 
 Modernizr.testStyles( '#modernizr{background-size:cover}', function( elem ) {
-	var style = window.getComputedStyle
-		? window.getComputedStyle( elem, null )
+	var style = window.getComputedStyle ?
+		window.getComputedStyle( elem, null )
 		: elem.currentStyle;
+		
 	Modernizr.addTest( 'bgsizecover', style.backgroundSize == 'cover' );
 });
 // developer.mozilla.org/en/CSS/box-sizing
@@ -1316,13 +1362,16 @@ Modernizr.addTest("boxsizing",function(){
 // Method of allowing calculated values for length units, i.e. width: calc(100%-3em) http://caniuse.com/#search=calc
 // By @calvein
 
-Modernizr.addTest('csscalc', function(el, prop, value) {
-    prop = 'width:';
-    value = 'calc(10px);';
-    el = document.createElement('div');
+Modernizr.addTest('csscalc', function() {
+    var prop = 'width:';
+    var value = 'calc(10px);';
+    var el = document.createElement('div');
+
     el.style.cssText = prop + Modernizr._prefixes.join(value + prop);
+
     return !!el.style.length;
-});// cubic-bezier values can't be > 1 for Webkit until bug #45761 (https://bugs.webkit.org/show_bug.cgi?id=45761) is fixed
+});
+// cubic-bezier values can't be > 1 for Webkit until bug #45761 (https://bugs.webkit.org/show_bug.cgi?id=45761) is fixed
 // By @calvein
 
 Modernizr.addTest('cubicbezierrange', function() {
@@ -1338,7 +1387,7 @@ Modernizr.addTest('cubicbezierrange', function() {
 
 
 
-Modernizr.testStyles(' #modernizr { display: run-in; } ', function(elem, rule){
+Modernizr.testStyles(' #modernizr { display: run-in; } ', function(elem, rule){ 
 
   var ret = (window.getComputedStyle ?
          getComputedStyle(elem, null).getPropertyValue('display') :
@@ -1348,39 +1397,244 @@ Modernizr.testStyles(' #modernizr { display: run-in; } ', function(elem, rule){
 
 });
 
-// https://github.com/Modernizr/Modernizr/issues/615
-// documentMode is needed for false positives in oldIE, please see issue above
-Modernizr.addTest('cssfilters', function() {
-    el = document.createElement('div');
-    el.style.cssText = Modernizr._prefixes.join('filter' + ':blur(2px); ');
-    return !!el.style.length && ((document.documentMode === undefined || document.documentMode > 9));
-});// display: table and table-cell test. (both are tested under one name "table-cell" )
+// display: table and table-cell test. (both are tested under one name "table-cell" )
 // By @scottjehl
 
 // all additional table display values are here: http://pastebin.com/Gk9PeVaQ though Scott has seen some IE false positives with that sort of weak detection.
 // more testing neccessary perhaps.
 
 Modernizr.addTest( "display-table",function(){
-
+  
   var doc   = window.document,
-      docElem = doc.documentElement,
+      docElem = doc.documentElement,   
       parent  = doc.createElement( "div" ),
       child = doc.createElement( "div" ),
       childb  = doc.createElement( "div" ),
       ret;
-
+  
   parent.style.cssText = "display: table";
-  child.style.cssText = childb.style.cssText = "display: table-cell; padding: 10px";
-
+  child.style.cssText = childb.style.cssText = "display: table-cell; padding: 10px";    
+          
   parent.appendChild( child );
   parent.appendChild( childb );
   docElem.insertBefore( parent, docElem.firstChild );
-
+  
   ret = child.offsetLeft < childb.offsetLeft;
   docElem.removeChild(parent);
-  return ret;
+  return ret; 
 });
 
+// https://github.com/Modernizr/Modernizr/issues/615
+// documentMode is needed for false positives in oldIE, please see issue above
+Modernizr.addTest('cssfilters', function() {
+    var el = document.createElement('div');
+    el.style.cssText = Modernizr._prefixes.join('filter' + ':blur(2px); ');
+    return !!el.style.length && ((document.documentMode === undefined || document.documentMode > 9));
+});/* see http://davidnewton.ca/the-current-state-of-hyphenation-on-the-web
+   http://davidnewton.ca/demos/hyphenation/test.html
+
+
+There are three tests:
+   1. csshyphens      - tests hyphens:auto actually adds hyphens to text
+   2. softhyphens     - tests that &shy; does its job
+   3. softhyphensfind - tests that in-browser Find functionality still works correctly with &shy;
+
+These tests currently require document.body to be present
+
+Hyphenation is language specific, sometimes.
+  See for more details: http://code.google.com/p/hyphenator/source/diff?spec=svn975&r=975&format=side&path=/trunk/Hyphenator.js#sc_svn975_313
+
+If loading Hyphenator.js via Modernizr.load, be cautious of issue 158: http://code.google.com/p/hyphenator/issues/detail?id=158
+
+More details at https://github.com/Modernizr/Modernizr/issues/312
+
+*/
+
+(function() {
+
+	if (!document.body){
+		window.console && console.warn('document.body doesn\'t exist. Modernizr hyphens test needs it.');
+		return;
+	}
+
+	// functional test of adding hyphens:auto
+	function test_hyphens_css() {
+		try {
+			/* create a div container and a span within that
+			 * these have to be appended to document.body, otherwise some browsers can give false negative */
+			var div = document.createElement('div'),
+				span = document.createElement('span'),
+				divStyle = div.style,
+				spanHeight = 0,
+				spanWidth = 0,
+				result = false,
+				firstChild = document.body.firstElementChild || document.body.firstChild;
+
+			div.appendChild(span);
+			span.innerHTML = 'Bacon ipsum dolor sit amet jerky velit in culpa hamburger et. Laborum dolor proident, enim dolore duis commodo et strip steak. Salami anim et, veniam consectetur dolore qui tenderloin jowl velit sirloin. Et ad culpa, fatback cillum jowl ball tip ham hock nulla short ribs pariatur aute. Pig pancetta ham bresaola, ut boudin nostrud commodo flank esse cow tongue culpa. Pork belly bresaola enim pig, ea consectetur nisi. Fugiat officia turkey, ea cow jowl pariatur ullamco proident do laborum velit sausage. Magna biltong sint tri-tip commodo sed bacon, esse proident aliquip. Ullamco ham sint fugiat, velit in enim sed mollit nulla cow ut adipisicing nostrud consectetur. Proident dolore beef ribs, laborum nostrud meatball ea laboris rump cupidatat labore culpa. Shankle minim beef, velit sint cupidatat fugiat tenderloin pig et ball tip. Ut cow fatback salami, bacon ball tip et in shank strip steak bresaola. In ut pork belly sed mollit tri-tip magna culpa veniam, short ribs qui in andouille ham consequat. Dolore bacon t-bone, velit short ribs enim strip steak nulla. Voluptate labore ut, biltong swine irure jerky. Cupidatat excepteur aliquip salami dolore. Ball tip strip steak in pork dolor. Ad in esse biltong. Dolore tenderloin exercitation ad pork loin t-bone, dolore in chicken ball tip qui pig. Ut culpa tongue, sint ribeye dolore ex shank voluptate hamburger. Jowl et tempor, boudin pork chop labore ham hock drumstick consectetur tri-tip elit swine meatball chicken ground round. Proident shankle mollit dolore. Shoulder ut duis t-bone quis reprehenderit. Meatloaf dolore minim strip steak, laboris ea aute bacon beef ribs elit shank in veniam drumstick qui. Ex laboris meatball cow tongue pork belly. Ea ball tip reprehenderit pig, sed fatback boudin dolore flank aliquip laboris eu quis. Beef ribs duis beef, cow corned beef adipisicing commodo nisi deserunt exercitation. Cillum dolor t-bone spare ribs, ham hock est sirloin. Brisket irure meatloaf in, boudin pork belly sirloin ball tip. Sirloin sint irure nisi nostrud aliqua. Nostrud nulla aute, enim officia culpa ham hock. Aliqua reprehenderit dolore sunt nostrud sausage, ea boudin pork loin ut t-bone ham tempor. Tri-tip et pancetta drumstick laborum. Ham hock magna do nostrud in proident. Ex ground round fatback, venison non ribeye in.';
+
+			document.body.insertBefore(div, firstChild);
+
+			/* get size of unhyphenated text */
+			divStyle.cssText = 'position:absolute;top:0;left:0;width:5em;text-align:justify;text-justification:newspaper;';
+			spanHeight = span.offsetHeight;
+			spanWidth = span.offsetWidth;
+
+			/* compare size with hyphenated text */
+			divStyle.cssText = 'position:absolute;top:0;left:0;width:5em;text-align:justify;'+
+												 'text-justification:newspaper;'+
+												 Modernizr._prefixes.join('hyphens:auto; ');
+
+			result = (span.offsetHeight != spanHeight || span.offsetWidth != spanWidth);
+
+			/* results and cleanup */
+			document.body.removeChild(div);
+			div.removeChild(span);
+
+			return result;
+		} catch(e) {
+			return false;
+		}
+	}
+
+	// for the softhyphens test
+	function test_hyphens(delimiter, testWidth) {
+		try {
+			/* create a div container and a span within that
+			 * these have to be appended to document.body, otherwise some browsers can give false negative */
+			var div = document.createElement('div'),
+				span = document.createElement('span'),
+				divStyle = div.style,
+				spanSize = 0,
+				result = false,
+				result1 = false,
+				result2 = false,
+				firstChild = document.body.firstElementChild || document.body.firstChild;
+
+			divStyle.cssText = 'position:absolute;top:0;left:0;overflow:visible;width:1.25em;';
+			div.appendChild(span);
+			document.body.insertBefore(div, firstChild);
+
+
+			/* get height of unwrapped text */
+			span.innerHTML = 'mm';
+			spanSize = span.offsetHeight;
+
+			/* compare height w/ delimiter, to see if it wraps to new line */
+			span.innerHTML = 'm' + delimiter + 'm';
+			result1 = (span.offsetHeight > spanSize);
+
+			/* if we're testing the width too (i.e. for soft-hyphen, not zws),
+			 * this is because tested Blackberry devices will wrap the text but not display the hyphen */
+			if (testWidth) {
+				/* get width of wrapped, non-hyphenated text */
+				span.innerHTML = 'm<br />m';
+				spanSize = span.offsetWidth;
+
+				/* compare width w/ wrapped w/ delimiter to see if hyphen is present */
+				span.innerHTML = 'm' + delimiter + 'm';
+				result2 = (span.offsetWidth > spanSize);
+			} else {
+				result2 = true;
+			}
+
+			/* results and cleanup */
+			if (result1 === true && result2 === true) { result = true; }
+			document.body.removeChild(div);
+			div.removeChild(span);
+
+			return result;
+		} catch(e) {
+			return false;
+		}
+	}
+
+	// testing if in-browser Find functionality will work on hyphenated text
+	function test_hyphens_find(delimiter) {
+		try {
+			/* create a dummy input for resetting selection location, and a div container
+			 * these have to be appended to document.body, otherwise some browsers can give false negative
+			 * div container gets the doubled testword, separated by the delimiter
+			 * Note: giving a width to div gives false positive in iOS Safari */
+			var dummy = document.createElement('input'),
+				div = document.createElement('div'),
+				testword = 'lebowski',
+				result = false,
+				textrange,
+				firstChild = document.body.firstElementChild || document.body.firstChild;
+
+			div.innerHTML = testword + delimiter + testword;
+
+			document.body.insertBefore(div, firstChild);
+			document.body.insertBefore(dummy, div);
+
+
+			/* reset the selection to the dummy input element, i.e. BEFORE the div container
+			 *   stackoverflow.com/questions/499126/jquery-set-cursor-position-in-text-area */
+			if (dummy.setSelectionRange) {
+				dummy.focus();
+				dummy.setSelectionRange(0,0);
+			} else if (dummy.createTextRange) {
+				textrange = dummy.createTextRange();
+				textrange.collapse(true);
+				textrange.moveEnd('character', 0);
+				textrange.moveStart('character', 0);
+				textrange.select();
+			}
+
+			/* try to find the doubled testword, without the delimiter */
+			if (window.find) {
+				result = window.find(testword + testword);
+			} else {
+				try {
+					textrange = window.self.document.body.createTextRange();
+					result = textrange.findText(testword + testword);
+				} catch(e) {
+					result = false;
+				}
+			}
+
+			document.body.removeChild(div);
+			document.body.removeChild(dummy);
+
+			return result;
+		} catch(e) {
+			return false;
+		}
+	}
+
+	Modernizr.addTest("csshyphens", function() {
+
+		if (!Modernizr.testAllProps('hyphens')) return false;
+
+		/* Chrome lies about its hyphens support so we need a more robust test
+				crbug.com/107111
+		*/
+		try {
+			return test_hyphens_css();
+		} catch(e) {
+			return false;
+		}
+	});
+
+	Modernizr.addTest("softhyphens", function() {
+		try {
+			// use numeric entity instead of &shy; in case it's XHTML
+			return test_hyphens('&#173;', true) && test_hyphens('&#8203;', false);
+		} catch(e) {
+			return false;
+		}
+	});
+
+	Modernizr.addTest("softhyphensfind", function() {
+		try {
+			return test_hyphens_find('&#173;') && test_hyphens_find('&#8203;');
+		} catch(e) {
+			return false;
+		}
+	});
+
+})();
 // last-child pseudo selector
 // https://github.com/Modernizr/Modernizr/pull/304
 
@@ -1408,6 +1662,11 @@ Modernizr.addTest('cssmask', Modernizr.testAllProps('mask-repeat'));
 
 
 Modernizr.addTest('mediaqueries', Modernizr.mq('only all'));
+// dev.opera.com/articles/view/css3-object-fit-object-position/
+
+Modernizr.addTest('object-fit',
+	!!Modernizr.prefixed('objectFit')
+);
 // johanbrook.com/browsers/native-momentum-scrolling-ios-5/
 // introduced in iOS5b2. Possible API may change...
 
@@ -1440,6 +1699,19 @@ Modernizr.addTest('pointerevents', function(){
         getComputedStyle(element, '').pointerEvents === 'auto';
     documentElement.removeChild(element);
     return !!supports;
+});
+// Sticky positioning - constrains an element to be positioned inside the
+// intersection of its container box, and the viewport.
+Modernizr.addTest('csspositionsticky', function () {
+
+    var prop = 'position:';
+    var value = 'sticky';
+    var el = document.createElement('modernizr');
+    var mStyle = el.style;
+
+    mStyle.cssText = prop + Modernizr._prefixes.join(value + ';' + prop).slice(0, -prop.length);
+
+    return mStyle.position.indexOf(value) !== -1;
 });
 
 // test by github.com/nsfmc
@@ -1542,16 +1814,6 @@ Modernizr.addTest('cssscrollbar', function() {
 	return bool;
 
 });
-// -moz-user-select:none test.
-
-// by ryan seddon
-//https://github.com/Modernizr/Modernizr/issues/250
-
-
-Modernizr.addTest("userselect",function(){
-    return Modernizr.testAllProps("user-select");
-});
-
 /*
  * Test for SubPixel Font Rendering
  * (to infer if GDI or DirectWrite is used on Windows)
@@ -1561,37 +1823,117 @@ Modernizr.addTest("userselect",function(){
 Modernizr.addTest('subpixelfont', function() {
     var bool,
         styles = "#modernizr{position: absolute; top: -10em; visibility:hidden; font: normal 10px arial;}#subpixel{float: left; font-size: 33.3333%;}";
-
+    
     // see https://github.com/Modernizr/Modernizr/blob/master/modernizr.js#L97
     Modernizr.testStyles(styles, function(elem) {
         var subpixel = elem.firstChild;
 
         subpixel.innerHTML = 'This is a text written in Arial';
 
-        bool = window.getComputedStyle
-            ? window.getComputedStyle(subpixel, null).getPropertyValue("width") !== '44px'
+        bool = window.getComputedStyle ?
+            window.getComputedStyle(subpixel, null).getPropertyValue("width") !== '44px'
             : false;
     }, 1, ['subpixel']);
 
     return bool;
 });
+// http://dev.w3.org/csswg/css3-conditional/#at-supports
+// github.com/Modernizr/Modernizr/issues/648
+// Relies on the fact that a browser vendor should expose the CSSSupportsRule interface
+// http://dev.w3.org/csswg/css3-conditional/#the-csssupportsrule-interface
+
+Modernizr.addTest("supports","CSSSupportsRule" in window);// -moz-user-select:none test.
+
+// by ryan seddon
+//https://github.com/Modernizr/Modernizr/issues/250
+
+
+Modernizr.addTest("userselect",function(){
+    return Modernizr.testAllProps("user-select");
+});
+
+// https://github.com/Modernizr/Modernizr/issues/572
+// Similar to http://jsfiddle.net/FWeinb/etnYC/
+Modernizr.addTest('cssvhunit', function() {
+    var bool;
+    Modernizr.testStyles("#modernizr { height: 50vh; }", function(elem, rule) {   
+        var height = parseInt(window.innerHeight/2,10),
+            compStyle = parseInt((window.getComputedStyle ?
+                      getComputedStyle(elem, null) :
+                      elem.currentStyle)["height"],10);
+        
+        bool= (compStyle == height);
+    });
+    return bool;
+});// https://github.com/Modernizr/Modernizr/issues/572
+// http://jsfiddle.net/glsee/JDsWQ/4/
+Modernizr.addTest('cssvmaxunit', function(){
+    var bool;
+    Modernizr.testStyles("#modernizr { width: 50vmax; }", function(elem, rule) {
+        var one_vw = window.innerWidth/100,
+            one_vh = window.innerHeight/100,
+            compWidth = parseInt((window.getComputedStyle ?
+                                  getComputedStyle(elem, null) :
+                                  elem.currentStyle)['width'],10);
+        bool = ( parseInt(Math.max(one_vw, one_vh)*50,10) == compWidth );
+    });
+    return bool;
+});// https://github.com/Modernizr/Modernizr/issues/572
+// http://jsfiddle.net/glsee/JRmdq/8/
+Modernizr.addTest('cssvminunit', function(){
+    var bool;
+    Modernizr.testStyles("#modernizr { width: 50vmin; }", function(elem, rule) {
+        var one_vw = window.innerWidth/100,
+            one_vh = window.innerHeight/100,
+            compWidth = parseInt((window.getComputedStyle ?
+                                  getComputedStyle(elem, null) :
+                                  elem.currentStyle)['width'],10);
+        bool = ( parseInt(Math.min(one_vw, one_vh)*50,10) == compWidth );
+    });
+    return bool;
+});
+// https://github.com/Modernizr/Modernizr/issues/572
+// http://jsfiddle.net/FWeinb/etnYC/
+Modernizr.addTest('cssvwunit', function(){
+    var bool;
+    Modernizr.testStyles("#modernizr { width: 50vw; }", function(elem, rule) {
+        var width = parseInt(window.innerWidth/2,10),
+            compStyle = parseInt((window.getComputedStyle ?
+                      getComputedStyle(elem, null) :
+                      elem.currentStyle)["width"],10);
+        
+        bool= (compStyle == width);
+    });
+    return bool;
+});
 /*
 	Custom protocol handler support
 	http://developers.whatwg.org/timers.html#custom-handlers
-
+	
 	Added by @benschwarz
 */
 
 Modernizr.addTest('customprotocolhandler', function () {
     return !!navigator.registerProtocolHandler;
 });
-// DataView
+// DataView 
 // https://developer.mozilla.org/en/JavaScript_typed_arrays/DataView
 // By Addy Osmani
 Modernizr.addTest('dataview', (typeof DataView !== 'undefined' && 'getFloat64' in DataView.prototype));// classList
 // https://developer.mozilla.org/en/DOM/element.classList
 // By Addy Osmani
 Modernizr.addTest('classlist', 'classList' in document.documentElement);
+// by james a rosen.
+// https://github.com/Modernizr/Modernizr/issues/258
+
+Modernizr.addTest('createelement-attrs', function() {
+  try {
+    return document.createElement("<input name='test' />").getAttribute('name') == 'test';
+  } catch(e) {
+    return false;
+  }
+});
+
 
 // dataset API for data-* attributes
 // test by @phiggins42
@@ -1712,10 +2054,17 @@ Modernizr.addTest('ruby', function () {
 // http://www.whatwg.org/specs/web-apps/current-work/multipage/rendering.html#the-time-element-0
 // by Addy Osmani
 Modernizr.addTest('time', 'valueAsDate' in document.createElement('time'));
-// Track element
+// Track element + Timed Text Track API
 // http://www.w3.org/TR/html5/video.html#the-track-element
+// http://www.w3.org/TR/html5/media-elements.html#text-track-api
+//
+// While IE10 has implemented the track element, IE10 does not expose the underlying APIs to create timed text tracks by JS (really sad)
 // By Addy Osmani
-Modernizr.addTest('track', (typeof (document.createElement('video').addTextTrack) === 'function'));
+Modernizr.addTest({
+	texttrackapi: (typeof (document.createElement('video').addTextTrack) === 'function'),
+	// a more strict test for track including UI support: document.createElement('track').kind === 'subtitles'
+	track: ('kind' in document.createElement('track'))
+});
 // Requires a Modernizr build with `canvastext` included
 // http://www.modernizr.com/download/#-canvas-canvastext
 Modernizr.addTest('emoji', function() {
@@ -1731,7 +2080,7 @@ Modernizr.addTest('emoji', function() {
 // test by @kangax
 
 Modernizr.addTest('strictmode', function(){
-	return (function(){ "use strict"; return !this; })();
+	return (function(){ "use strict"; return !this; })(); 
 });//By Shi Chuan
 //Part of Device Access aspect of HTML5, same category as geolocation
 //W3C Editor's Draft at http://dev.w3.org/geo/api/spec-source-orientation.html
@@ -1787,15 +2136,7 @@ Modernizr.addTest('deviceorientation', ('DeviceOrientationEvent' in window) );
 Modernizr.addTest('filereader', function () {
     return !!(window.File && window.FileList && window.FileReader);
 });
-// Filesystem API
-// dev.w3.org/2009/dap/file-system/file-dir-sys.html
 
-// The API will be present in Chrome incognito, but will throw an exception.
-// See crbug.com/93417
-//
-// By Eric Bidelman (@ebidel)
-
-Modernizr.addTest('filesystem', !!Modernizr.prefixed('requestFileSystem', window));
 
 // Detects whether input type="file" is available on the platform
 // E.g. iOS < 6 and some android version don't support this
@@ -1808,11 +2149,57 @@ Modernizr.addTest('fileinput', function() {
     elem.type = 'file';
     return !elem.disabled;
 });
+// Detects whether input form="form_id" is available on the platform
+// E.g. IE 10 (and below), don't support this
+Modernizr.addTest("formattribute", function() {
+	var form = document.createElement("form"),
+		input = document.createElement("input"),
+		div = document.createElement("div"),
+		id = "formtest"+(new Date().getTime()),
+		attr,
+		bool = false;
+
+		form.id = id;
+
+	//IE6/7 confuses the form idl attribute and the form content attribute
+	if(document.createAttribute){
+		attr = document.createAttribute("form");
+		attr.nodeValue = id;
+		input.setAttributeNode(attr);
+		div.appendChild(form);
+		div.appendChild(input);
+
+		document.documentElement.appendChild(div);
+
+		bool = form.elements.length === 1 && input.form == form;
+
+		div.parentNode.removeChild(div);
+	}
+
+	return bool;
+});// Filesystem API
+// dev.w3.org/2009/dap/file-system/file-dir-sys.html
+
+// The API will be present in Chrome incognito, but will throw an exception.
+// See crbug.com/93417
+//
+// By Eric Bidelman (@ebidel)
+
+Modernizr.addTest('filesystem', !!Modernizr.prefixed('requestFileSystem', window));// testing for placeholder attribute in inputs and textareas
+// re-using Modernizr.input if available
+
+Modernizr.addTest('placeholder', function(){
+
+  return !!( 'placeholder' in ( Modernizr.input    || document.createElement('input')    ) && 
+             'placeholder' in ( Modernizr.textarea || document.createElement('textarea') )
+           );
+
+});
 // speech input for inputs
 // by @alrra
 
 
-// `webkitSpeech` in elem
+// `webkitSpeech` in elem 
 // doesn`t work correctly in all versions of Chromium based browsers.
 //   It can return false even if they have support for speech i.imgur.com/2Y40n.png
 //  Testing with 'onwebkitspeechchange' seems to fix this problem
@@ -1824,21 +2211,11 @@ Modernizr.addTest('fileinput', function() {
 // FIXME: add support for detecting the new spec'd behavior
 
 Modernizr.addTest('speechinput', function(){
-    var elem = document.createElement('input');
-    return 'speech' in elem || 'onwebkitspeechchange' in elem;
-});// testing for placeholder attribute in inputs and textareas
-// re-using Modernizr.input if available
-
-Modernizr.addTest('placeholder', function(){
-
-  return !!( 'placeholder' in ( Modernizr.input    || document.createElement('input')    ) &&
-             'placeholder' in ( Modernizr.textarea || document.createElement('textarea') )
-           );
-
-});
-// This implementation only tests support for interactive form validation.
+    var elem = document.createElement('input'); 
+    return 'speech' in elem || 'onwebkitspeechchange' in elem; 
+});// This implementation only tests support for interactive form validation.
 // To check validation for a specific type or a specific other constraint,
-// the test can be combined:
+// the test can be combined: 
 //    - Modernizr.inputtypes.numer && Modernizr.formvalidation (browser supports rangeOverflow, typeMismatch etc. for type=number)
 //    - Modernizr.input.required && Modernizr.formvalidation (browser supports valueMissing)
 //
@@ -1874,13 +2251,13 @@ Modernizr.addTest('formvalidation', function(){
         e.stopPropagation();
     };
 
-    // Calling form.submit() doesn't trigger interactive validation,
+    // Calling form.submit() doesn't trigger interactive validation, 
     // use a submit button instead
     //older opera browsers need a name attribute
     form.innerHTML = '<input name="modTest" required><button></button>';
 
     // FF4 doesn't trigger "invalid" event if form is not in the DOM tree
-    // Chrome throws error if invalid input is not visible when submitting
+    // Chrome throws error if invalid input is not visible when submitting 
     form.style.position = 'absolute';
     form.style.top = '-99999em';
 
@@ -1895,7 +2272,7 @@ Modernizr.addTest('formvalidation', function(){
 
     body.appendChild(form);
 
-    input = form.getElementsByTagName('input')[0];
+    input = form.getElementsByTagName('input')[0];	
 
     // Record whether "invalid" event is fired
     input.oninvalid = function(e) {
@@ -1918,12 +2295,7 @@ Modernizr.addTest('formvalidation', function(){
 });
 
 
-})(document, window.Modernizr);// GamePad API
-// https://dvcs.w3.org/hg/gamepad/raw-file/default/gamepad.html
-// By Eric Bidelman
-
-Modernizr.addTest('gamepads', !!Modernizr.prefixed('gamepads', navigator));
-Modernizr.addTest('fullscreen',function(){
+})(document, window.Modernizr);Modernizr.addTest('fullscreen',function(){
      for(var i = 0; i < Modernizr._domPrefixes.length; i++) {
         if( document[Modernizr._domPrefixes[i].toLowerCase() + 'CancelFullScreen'])
             return true;
@@ -1933,11 +2305,19 @@ Modernizr.addTest('fullscreen',function(){
 
 // http://developer.apple.com/library/safari/documentation/AudioVideo/Conceptual/Using_HTML5_Audio_Video/ControllingMediaWithJavaScript/ControllingMediaWithJavaScript.html#//apple_ref/doc/uid/TP40009523-CH3-SW20
 // https://developer.mozilla.org/en/API/Fullscreen
-// getUserMedia
-// http://www.whatwg.org/specs/web-apps/current-work/multipage/video-conferencing-and-peer-to-peer-communication.html
+// GamePad API
+// https://dvcs.w3.org/hg/gamepad/raw-file/default/gamepad.html
 // By Eric Bidelman
 
-Modernizr.addTest('getusermedia', !!Modernizr.prefixed('getUserMedia', navigator));
+// FF has Gamepad API support only in special builds, but not in any release (even behind a flag)
+// Their current implementation has no way to feature detect, only events to bind to.
+//   http://www.html5rocks.com/en/tutorials/doodles/gamepad/#toc-featuredetect
+
+// but a patch will bring them up to date with the spec when it lands (and they'll pass this test)
+//   https://bugzilla.mozilla.org/show_bug.cgi?id=690935
+
+Modernizr.addTest('gamepads', !!Modernizr.prefixed('getGamepads', navigator));
+
 // IE8 compat mode aka Fake IE7
 // by Erich Ocean
 
@@ -1949,13 +2329,28 @@ Modernizr.addTest('getusermedia', !!Modernizr.prefixed('getUserMedia', navigator
 Modernizr.addTest('ie8compat',function(){
     return (!window.addEventListener && document.documentMode && document.documentMode === 7);
 });
+// Test for `sandbox` attribute in iframes.
+//
+// Spec: http://www.whatwg.org/specs/web-apps/current-work/multipage/the-iframe-element.html#attr-iframe-sandbox
+
+Modernizr.addTest('sandbox', 'sandbox' in document.createElement('iframe'));
+// Test for `seamless` attribute in iframes.
+//
+// Spec: http://www.whatwg.org/specs/web-apps/current-work/multipage/the-iframe-element.html#attr-iframe-seamless
+
+Modernizr.addTest('seamless', 'seamless' in document.createElement('iframe'));
+// Test for `srcdoc` attribute in iframes.
+//
+// Spec: http://www.whatwg.org/specs/web-apps/current-work/multipage/the-iframe-element.html#attr-iframe-srcdoc
+
+Modernizr.addTest('srcdoc', 'srcdoc' in document.createElement('iframe'));
 // Animated PNG
 // http://en.wikipedia.org/wiki/APNG
 // By Addy Osmani
 (function () {
 
     if (!Modernizr.canvas) return false;
-
+    
     var image = new Image(),
         canvas = document.createElement('canvas'),
         ctx = canvas.getContext('2d');
@@ -1987,7 +2382,7 @@ Modernizr.addTest('ie8compat',function(){
 
   image.onerror = function() {
       Modernizr.addTest('webp', false);
-  };
+  };  
   image.onload = function() {
       Modernizr.addTest('webp', function() { return image.width == 1; });
   };
@@ -2050,17 +2445,21 @@ Modernizr.addTest('xhr2', 'FormData' in window);
 // Notifications
 // By Theodoor van Donge
 
-// window.webkitNotifications is only used by Chrome
+// window.webkitNotifications is only used by Chrome 
 //	http://www.html5rocks.com/en/tutorials/notifications/quick/
 
-// window.Notification only exist in the draft specs
+// window.Notification only exist in the draft specs 
 //	http://dev.w3.org/2006/webapi/WebNotifications/publish/Notifications.html#idl-if-Notification
 
 Modernizr.addTest('notification', !!Modernizr.prefixed('Notifications', window));// Navigation Timing (Performance)
 // https://dvcs.w3.org/hg/webperf/raw-file/tip/specs/NavigationTiming/
 // http://www.html5rocks.com/en/tutorials/webperformance/basics/
 // By Scott Murphy (uxder)
-Modernizr.addTest('performance', !!Modernizr.prefixed('performance', window));// Quota Storage Management API
+Modernizr.addTest('performance', !!Modernizr.prefixed('performance', window));// https://developer.mozilla.org/en-US/docs/API/Pointer_Lock_API
+
+Modernizr.addTest('pointerlock',!!Modernizr.prefixed('pointerLockElement', document));
+
+// Quota Storage Management API
 // This API can be used to check how much quota an origin is using and request more
 
 // Currently only implemented in Chrome.
@@ -2073,7 +2472,7 @@ Modernizr.addTest('quotamanagement', function(){
 });
 
 // requestAnimationFrame
-// Offload animation repainting to browser for optimized performance.
+// Offload animation repainting to browser for optimized performance. 
 // http://dvcs.w3.org/hg/webperf/raw-file/tip/specs/RequestAnimationFrame/Overview.html
 // By Addy Osmani
 
@@ -2102,49 +2501,42 @@ Modernizr.addTest('svgfilters', function(){
 });
 /**
  * Unicode special character support
- *
+ * 
  * Detection is made by testing missing glyph box rendering against star character
  * If widths are the same, this "probably" means the browser didn't support the star character and rendered a glyph box instead
  * Just need to ensure the font characters have different widths
- *
+ * 
  * Warning : positive Unicode support doesn't mean you can use it inside <title>, this seams more related to OS & Language packs
  */
 Modernizr.addTest('unicode', function() {
-
-
+	
+	
 	var bool,
 
 		missingGlyph = document.createElement('span'),
-
+		
 		star = document.createElement('span');
 
 	Modernizr.testStyles('#modernizr{font-family:Arial,sans;font-size:300em;}', function(node) {
 
 		missingGlyph.innerHTML = '&#5987';
-		star.innerHTML = '&#9734';
-
+		star.innerHTML = '&#9734';		
+		
 		node.appendChild(missingGlyph);
 		node.appendChild(star);
-
+		
 		bool = 'offsetWidth' in missingGlyph && missingGlyph.offsetWidth !== star.offsetWidth;
 	});
 
 	return bool;
 
-});// test if IE userdata supported
-// msdn.microsoft.com/en-us/library/ms531424(v=vs.85).aspx
-// test by @stereobooster
-
-Modernizr.addTest('userdata', function(){
-  return !!document.createElement('div').addBehavior;
-});
-// data uri test.
+});// data uri test.
 // https://github.com/Modernizr/Modernizr/issues/14
 
 // This test is asynchronous. Watch out.
 
 
-// in IE7 in HTTPS this can cause a Mixed Content security popup.
+// in IE7 in HTTPS this can cause a Mixed Content security popup. 
 //  github.com/Modernizr/Modernizr/issues/362
 // To avoid that you can create a new iframe and inject this.. perhaps..
 
@@ -2156,7 +2548,7 @@ Modernizr.addTest('userdata', function(){
 
   datauri.onerror = function() {
       Modernizr.addTest('datauri', function () { return false; });
-  };
+  };  
   datauri.onload = function() {
       Modernizr.addTest('datauri', function () { return (datauri.width == 1 && datauri.height == 1); });
   };
@@ -2164,6 +2556,13 @@ Modernizr.addTest('userdata', function(){
   datauri.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
 
 })();
+// test if IE userdata supported
+// msdn.microsoft.com/en-us/library/ms531424(v=vs.85).aspx
+// test by @stereobooster
+
+Modernizr.addTest('userdata', function(){
+  return !!document.createElement('div').addBehavior;
+});
 // Vibration API
 // http://www.w3.org/TR/vibration/
 // https://developer.mozilla.org/en/DOM/window.navigator.mozVibrate
@@ -2174,6 +2573,47 @@ Modernizr.addTest('webintents', function() {
   return !!Modernizr.prefixed('startActivity', navigator);
 });
 
+// Grab the WebGL extensions currently supported and add to the Modernizr.webgl object
+// spec: www.khronos.org/registry/webgl/specs/latest/#5.13.14
+
+// based on code from ilmari heikkinen
+// code.google.com/p/graphics-detect/source/browse/js/detect.js
+
+
+(function(){
+
+    if (!Modernizr.webgl) return;
+
+    var canvas, ctx, exts;
+
+    try {
+        canvas  = document.createElement('canvas');
+        ctx     = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+        exts    = ctx.getSupportedExtensions();
+    }
+    catch (e) {
+        return;
+    }
+
+    if (ctx === undefined) {
+        Modernizr.webgl = new Boolean(false);
+    }
+    else {
+        Modernizr.webgl = new Boolean(true);
+    }
+
+
+    for (var i = -1, len = exts.length; ++i < len; ){
+        Modernizr.webgl[exts[i]] = true;
+    }
+
+    // hack for addressing modernizr testsuite failures. sorry.
+    if (window.TEST && TEST.audvid){
+        TEST.audvid.push('webgl');
+    }
+
+    canvas = undefined;
+})();
 // tests if page is iframed
 
 // github.com/Modernizr/Modernizr/issues/242
@@ -2181,4 +2621,88 @@ Modernizr.addTest('webintents', function() {
 Modernizr.addTest('framed', function(){
   return window.location != top.location;
 });
-;
+// by jussi-kalliokoski
+
+
+// This test is asynchronous. Watch out.
+
+// The test will potentially add garbage to console.
+
+(function(){
+  try {
+
+    // we're avoiding using Modernizr._domPrefixes as the prefix capitalization on
+    // these guys are notoriously peculiar.
+    var BlobBuilder = window.MozBlobBuilder || window.WebKitBlobBuilder || window.MSBlobBuilder || window.OBlobBuilder || window.BlobBuilder,
+        URL         = window.MozURL || window.webkitURL || window.MSURL || window.OURL || window.URL;
+
+    var data    = 'Modernizr',
+        bb      = new BlobBuilder();
+
+    bb.append('this.onmessage=function(e){postMessage(e.data)}');
+
+    var url     = URL.createObjectURL(bb.getBlob()),
+        worker  = new Worker(url);
+
+    bb = null;
+
+    worker.onmessage = function(e) {
+      worker.terminate();
+      URL.revokeObjectURL(url);
+      Modernizr.addTest('blobworkers', data === e.data);
+      worker = null;
+    };
+
+    // Just in case...
+    worker.onerror = function() {
+      Modernizr.addTest('blobworkers', false);
+      worker = null;
+    };
+
+    setTimeout(function() {
+        Modernizr.addTest('blobworkers', false);
+    }, 200);
+
+    worker.postMessage(data);
+
+  } catch (e) {
+    Modernizr.addTest('blobworkers', false);
+  }
+}());
+// by jussi-kalliokoski
+
+
+// This test is asynchronous. Watch out.
+
+// The test will potentially add garbage to console.
+
+(function(){
+  try {
+    var data    = 'Modernizr',
+        worker  = new Worker('data:text/javascript;base64,dGhpcy5vbm1lc3NhZ2U9ZnVuY3Rpb24oZSl7cG9zdE1lc3NhZ2UoZS5kYXRhKX0=');
+
+    worker.onmessage = function(e) {
+      worker.terminate();
+      Modernizr.addTest('dataworkers', data === e.data);
+      worker = null;
+    };
+
+    // Just in case...
+    worker.onerror = function() {
+      Modernizr.addTest('dataworkers', false);
+      worker = null;
+    };
+
+    setTimeout(function() {
+        Modernizr.addTest('dataworkers', false);
+    }, 200);
+
+    worker.postMessage(data);
+
+  } catch (e) {
+    Modernizr.addTest('dataworkers', false);
+  }
+}());
+Modernizr.addTest('sharedworkers', function(){
+  return !!window.SharedWorker;
+});;
