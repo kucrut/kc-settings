@@ -188,7 +188,7 @@ class kcForm {
  * Generate form label
  *
  * @param $title string Label text
- * @param $id string Input's id attribute this label corresponds to, defaul null
+ * @param $id string Input's id attribute this label corresponds to, default null
  * @param $wrap_th bool Wrap with th element, default false
  * @param $echo bool Echo or return the label element
  *
@@ -510,6 +510,7 @@ function _kc_field_file_multiple( $args ) {
 		if ( !isset($value['selected']) || !is_array($value['selected']) )
 			$value['selected'] = array();
 	}
+	$size = !empty($field['size']) ? $field['size'] : 'default';
 
 	$output = "<div id='{$id}' class='kcs-file'>";
 
@@ -538,7 +539,15 @@ function _kc_field_file_multiple( $args ) {
 			foreach ( $files as $post ) {
 				setup_postdata( $post );
 				$attachment_id = get_the_ID();
-				$output .= _kc_field_file_item( $name, $field['mode'], $attachment_id, get_the_title(), in_array($attachment_id, $value['selected']), false );
+				$output .= _kc_field_file_item(
+					$name,
+					$field['mode'],
+					$attachment_id,
+					get_the_title(),
+					in_array($attachment_id, $value['selected']),
+					false,
+					$size
+				);
 			}
 			$post = $tmp_post;
 		} else {
@@ -563,14 +572,17 @@ function _kc_field_file_multiple( $args ) {
 /**
  * File list item
  */
-function _kc_field_file_item( $input_name, $input_type, $attachment_id = '', $attachment_title = '', $checked = false, $hidden = true ) {
+function _kc_field_file_item( $input_name, $input_type, $attachment_id = '', $attachment_title = '', $checked = false, $hidden = true, $size = 'default' ) {
 	$checked = ( $checked ) ? "checked='checked' " : '';
 
 	$output  = "\t<li title='".__('Drag to reorder the items', 'kc-settings')."' class='row";
 	if ( $hidden )
 		$output .= " hidden";
 	$output .= "'>\n";
-	$output .= "\t\t<img src='".kc_get_attachment_icon_src($attachment_id)."' alt=''/>";
+	$output .= "\t\t<img src='".kc_get_attachment_icon_src($attachment_id)."' alt='' ";
+	if ( is_numeric($size) )
+		$output .= " style='width:{$size}px'";
+	$output .= "/>";
 	$output .= "\t\t<a class='rm mid' title='".__('Remove from collection', 'kc-settings')."'><span>".__('Remove', 'kc-settings')."</span></a>\n";
 	$output .= "\t\t<label>";
 	$output .= "<input class='mid include' type='{$input_type}' name='{$input_name}[selected][]' value='{$attachment_id}' {$checked}/> ";
