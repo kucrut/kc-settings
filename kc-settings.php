@@ -606,10 +606,7 @@ final class kcSettings {
 		$path = self::$data['paths'];
 		$admin_color = get_user_option( 'admin_color' );
 
-		if ( !defined('KC_SETTINGS_SNS_DEBUG') )
-			define( 'KC_SETTINGS_SNS_DEBUG', false );
-
-		$suffix = KC_SETTINGS_SNS_DEBUG ? '' : '.min';
+		$suffix = ( defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ) ? '' : '.min';
 
 		# Common
 		wp_register_script( 'modernizr',        "{$path['scripts']}/modernizr-2.6.2-20121030{$suffix}.js", false, '2.6.2-20121030', false );

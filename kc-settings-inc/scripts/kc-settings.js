@@ -116,4 +116,29 @@ jQuery(document).ready(function($) {
 			});
 		}
 	}
+
+	var $kcMetaBoxes = $('#kc-settings-form div.metabox-holder');
+	if ( $kcMetaBoxes.length ) {
+		postboxes.add_postbox_toggles(pagenow);
+		var kcMetaBoxesMark = function() {
+			var visible = $('div.postbox:visible').length, side = $('#post-body #side-sortables');
+
+			$kcMetaBoxes.find('.meta-box-sortables:visible').each(function(n, el){
+				var t = $(this);
+
+				if ( visible == 1 || t.children('.postbox:visible').length )
+					t.removeClass('empty-container');
+				else
+					t.addClass('empty-container');
+			});
+		};
+
+		kcMetaBoxesMark();
+		$kcMetaBoxes.find('.meta-box-sortables').sortable( 'option', 'receive', function( event, ui ) {
+			if ( 'dashboard_browser_nag' == ui.item[0].id )
+				$(ui.sender).sortable('cancel');
+
+			kcMetaBoxesMark();
+		});
+	}
 });
