@@ -415,6 +415,7 @@ function invertColor( color ) {
 		doCallbacks( 'add', e, args );
 
 		args.nuItem.fadeIn('fast', function() {
+			args.nuItem.find('a.rm').trigger('click');
 			doCallbacks( 'afterAdd', e, args );
 			setTimeout(function() {
 				args.nuItem.removeClass('adding');
@@ -457,6 +458,7 @@ function invertColor( color ) {
 				$input.prop('checked', this.checked);
 
 		});
+		item.find('.kcs-file-single p.current').removeAttr('style');
 
 		return item;
 	},
