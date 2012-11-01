@@ -81,7 +81,6 @@ class kcSettings_plugin {
 
 	# Setting link on the plugins listing page
 	function setting_link( $plugin_meta, $plugin_file, $plugin_data ) {
-		//echo '<pre>'.print_r( $this->group, true).'</pre>';
 		if ( $plugin_data['Name'] == $this->group['menu_title'] )
 			$plugin_meta[] = '<a href="'.$this->url.'">'.__('Settings', 'kc-settings').'</a>';
 
@@ -107,11 +106,13 @@ class kcSettings_plugin {
 						$this->metabox->display();
 					break;
 					case 'plain' :
-						foreach ( $this->group['options'] as $section ) {
-							echo "<h3>{$section['title']}</h3>\n";
+						foreach ( $this->group['options'] as $section ) :
+						?>
+						<h3><?php echo esc_html( $section['title'] ) ?></h3>
+						<?php
 							$this->settings_section( $section );
-						}
-						echo "<p class='submit'><input class='button-primary' name='submit' type='submit' value='".esc_attr( __('Save Changes') )."' /></p>\n";
+						endforeach;
+						submit_button( __('Save Changes') );
 					break;
 				}
 			?>
@@ -122,11 +123,13 @@ class kcSettings_plugin {
 
 
 	function settings_section( $section ) {
-		if ( isset($section['desc']) && !empty($section['desc']) ) {
-			echo "<div class='section-desc'>\n";
-			echo wpautop( $section['desc'] );
-			echo "</div>\n";
-		}
+		if ( !empty($section['desc']) ) :
+		?>
+		<div class="section-desc">
+			<?php echo wpautop( $section['desc'] ); ?>
+		</div>
+		<?php
+		endif;
 
 		do_action( 'kc_settings_section_before', $this->group['prefix'], $section );
 
@@ -136,16 +139,18 @@ class kcSettings_plugin {
 				'field_id'   => "{$this->group['prefix']}_settings__{$section['id']}",
 				'field_name' => "{$this->group['prefix']}_settings[{$section['id']}]"
 			) );
-			$cb_args = isset($section['args']) ? $section['args'] : '';
+			$cb_args = !empty($section['args']) ? $section['args'] : '';
 			if ( $cb_args && is_callable($cb_args) )
 				$cb_args = call_user_func_array( $cb_args, array( 'args' => $section) );
 			call_user_func_array( $section['cb'], array('args' => $section, 'cb_args' => $cb_args) );
 		}
 		# Defaults to WordPress' Settings API
 		else {
-			echo "<table class='form-table'>\n";
-			do_settings_fields( "{$this->group['prefix']}_settings", $section['id'] );
-			echo "</table>\n";
+		?>
+		<table class="form-table">
+			<?php do_settings_fields( "{$this->group['prefix']}_settings", $section['id'] ); ?>
+		</table>
+		<?php
 		}
 
 		# Wanna do something after the options table?
