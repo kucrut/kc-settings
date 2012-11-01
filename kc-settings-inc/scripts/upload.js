@@ -1,10 +1,10 @@
 var win = window.dialogArguments || opener || parent || top;
 
 (function($) {
-	var texts    = win.kcSettings.upload.text,
-	    current  = win.kcSettings.upload.target.data('currentFiles'),
-	    $checks  = $(),
-	    $buttons = $('<div class="kcs-wrap"><h4>'+texts.head+'</h4> <a class="button check-all">'+texts.checkAll+'</a> <a class="button check-invert">'+texts.invert+'</a> <a class="button check-clear">'+texts.clear+'</a> <a class="button add-checked">'+texts.addFiles+'</a></div>')
+	var texts     = win.kcSettings.upload.text,
+	    current   = win.kcSettings.upload.target.data('currentFiles'),
+	    $checks   = $(),
+	    $buttons  = $('<div class="kcs-wrap"><h4>'+texts.head+'</h4> <a class="button check-all">'+texts.checkAll+'</a> <a class="button check-invert">'+texts.invert+'</a> <a class="button check-clear">'+texts.clear+'</a> <a class="button add-checked">'+texts.addFiles+'</a></div>')
 				.on('click', 'a', function(e) {
 					e.preventDefault();
 					var $el = $(this);
@@ -47,6 +47,9 @@ var win = window.dialogArguments || opener || parent || top;
 
 
 	$.fn.kcsfPrepare = function( isAjax, newID ) {
+		var mimeType = win.kcSettings.upload.mimeType,
+		    cb = '<input type="checkbox" value="" class="kcs-files" />';
+
 		return this.each(function() {
 			var $wrap = $(this),
 			    $items = $wrap.children();
@@ -63,15 +66,26 @@ var win = window.dialogArguments || opener || parent || top;
 					return;
 
 				var postID  = isAjax ? newID : $item.attr('id').split("-")[2],
-				    checked = ( $.inArray(postID, current) > -1 ) ? ' checked="checked"' : '',
-				    $check  = $('<input type="checkbox" value="'+postID+'" '+checked+'class="kcs-files" />');
+				    itemType = $('#type-of-'+postID).val();
+
+				var $cb = $(cb);
+				    $label = $('<label />');
+
+				$cb.val(postID);
+				if ( $.inArray(postID, current) > -1 ) {
+					$cb.prop('checked', true);
+				}
+				if ( mimeType != 'all' && mimeType != itemType ) {
+					$cb.prop('disabled', true);
+					$label.attr('title', win.kcSettings.upload.text.filenomatch);
+				}
 
 				// Add new checkbox to the collection
-				$checks = $checks.add( $check );
+				$checks = $checks.add( $cb );
 
 				$item.children('.new')
-					.prepend($check)
-					.wrapInner('<label />');
+					.prepend( $cb )
+					.wrapInner( $label );
 			});
 
 			$checks.trigger('change');
@@ -94,7 +108,10 @@ var win = window.dialogArguments || opener || parent || top;
 		// Gallery & Media Library tabs
 		$('#library-form, #gallery-form').find('#media-items').kcsfPrepare( false );
 
-		// From computer / Upload tab
+		// Hide gallery settings
+		$('#gallery-settings').hide();
+
+		// From computer / upload tab
 		$('#media-upload').ajaxComplete(function(e, xhr, settings) {
 			if ( xhr.status !== 200 || settings.url !== 'async-upload.php' )
 				return;

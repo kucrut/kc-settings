@@ -164,9 +164,9 @@ var kcGetSNS = function( id, sources ) {
 	$_doc.on('click', 'a.kcsf-upload', function(e) {
 		e.preventDefault();
 		var $el     = $(this),
-				$target = $el.siblings('.kc-rows'),
-				$solo   = $target.find('.row.hidden'),
-				current = [];
+		    $target = $el.siblings('.kc-rows'),
+		    $solo   = $target.find('.row.hidden'),
+		    current = [];
 
 		// If there's currently only one row and it's hidden, enable the field
 		if ( $solo.length ) {
@@ -179,6 +179,7 @@ var kcGetSNS = function( id, sources ) {
 		}
 
 		win.kcSettings.upload.target = $target.data('currentFiles', current);
+		win.kcSettings.upload.mimeType = $el.closest('div.kcs-file').data('mime-type');
 		tb_show( '', $el.attr('href') );
 	});
 
@@ -201,6 +202,7 @@ var kcGetSNS = function( id, sources ) {
 		var $el = $(this);
 
 		win.kcSettings.upload.target = $el.closest('div');
+		win.kcSettings.upload.mimeType = $el.closest('div.kcs-file-single').data('mime-type');
 		tb_show( '', $el.attr('href') );
 	});
 })(jQuery, document);

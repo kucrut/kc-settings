@@ -513,6 +513,8 @@ final class kcSettings {
 			elseif ( $field['type'] == 'file' ) {
 				if ( !isset($field['mode']) || !in_array($field['mode'], $file_modes) )
 					$field['mode'] = 'radio';
+				if ( empty($field['mime_type']) )
+					$field['mime_type'] = 'all';
 			}
 			elseif ( $field['type'] == 'special' ) {
 				if ( !isset($field['cb']) || !is_callable($field['cb']) ) {
@@ -681,7 +683,8 @@ final class kcSettings {
 				'invert'   => __( 'Invert selection', 'kc-settings' ),
 				'addFiles' => __( 'Add files to collection', 'kc-settings' ),
 				'info'     => __( 'Click the "Media Library" tab to insert files that are already upload, or, upload your files and then go to the "Media Library" tab to insert the files you just uploaded.', 'kc-settings' ),
-				'selFile'  => __( 'Select file', 'kc-settings' )
+				'selFile'  => __( 'Select file', 'kc-settings' ),
+				'filenomatch' => __( "You can't select this because the file type doesn't match", 'kc-settings' )
 			)
 		),
 		'texts' => array(

@@ -399,6 +399,8 @@ function _kc_field_file( $args ) {
 		$post_id = 0;
 	}
 	$args['up_url'] = "media-upload.php?{$param}=true&amp;post_id={$post_id}&amp;tab={$tab}&amp;TB_iframe=1";
+	if ( !empty($args['field']['mime_type']) )
+		$args['up_url'] .= "&amp;post_mime_type={$args['field']['mime_type']}";
 
 	return call_user_func( $fn, $args );
 }
@@ -512,7 +514,7 @@ function _kc_field_file_multiple( $args ) {
 	}
 	$size = !empty($field['size']) ? $field['size'] : 'default';
 
-	$output = "<div id='{$id}' class='kcs-file'>";
+	$output = "<div id='{$id}' class='kcs-file' data-mime-type='{$field['mime_type']}'>";
 
 	# List files
 	$lclass = empty($value['files']) ? ' hidden' : '';
@@ -629,12 +631,15 @@ function _kc_field_file_single( $args ) {
 		$db_value = '';
 	}
 
-	$out  = "<div id='{$id}' class='kcs-file-single' data-type='{$type}' data-size='{$size}'>\n";
+	$out  = "<div id='{$id}' class='kcs-file-single' data-type='{$type}' data-size='{$size}' data-mime-type='{$field['mime_type']}'>\n";
 	$out .= "\t<p class='current";
 	if ( !$valid )
 		$out .= ' hidden';
 	$out .= "'>\n";
-	$out .= "<a href='{$up_url}' title='".__('Change file', 'kc-settings')."' class='up'><img src='".kc_get_attachment_icon_src($db_value, $size)."' alt='' /></a>";
+	$out .= "<a href='{$up_url}' title='".__('Change file', 'kc-settings')."' class='up'><img src='".kc_get_attachment_icon_src($db_value, $size)."' alt=''";
+	if ( !empty($field['size']) && is_numeric($field['size']) )
+		$out .= " style='width:{$field['size']}px'";
+	$out .= " /></a>";
 	$out .= "<span>{$title}</span>";
 	$out .= "<br /><a href='#' class='rm'>".__('Remove', 'kc-settings')."</a>";
 	$out .= "\t</p>\n";

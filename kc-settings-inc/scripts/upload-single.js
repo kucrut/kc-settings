@@ -2,9 +2,11 @@ var win = window.dialogArguments || opener || parent || top;
 
 (function($) {
 	$.fn.kcsfsPrepare = function( isAjax, newID ) {
+		var mimeType = win.kcSettings.upload.mimeType;
+
 		return this.each(function() {
 			var $wrap = $(this),
-					$items = $wrap.children();
+			    $items = $wrap.children();
 
 			if ( !$items.length )
 				return;
@@ -18,6 +20,10 @@ var win = window.dialogArguments || opener || parent || top;
 
 				var postID = isAjax ? newID : $item.attr('id').split("-")[2];
 				if ( postID === currentFile )
+					return;
+
+				var itemType = $('#type-of-'+postID).val();
+				if ( mimeType != 'all' && mimeType != itemType )
 					return;
 
 				var imgSrc = $item.find('img.pinkynail').attr('src'),
@@ -43,7 +49,10 @@ var win = window.dialogArguments || opener || parent || top;
 		// Gallery and Media gallery tabs
 		$('#library-form, #gallery-form').find('#media-items').kcsfsPrepare( false );
 
-		// From computer Upload tab
+		// Hide gallery settings
+		$('#gallery-settings').hide();
+
+		// From computer / upload tab
 		$('#media-upload').ajaxComplete(function(e, xhr, settings) {
 			if ( xhr.status !== 200 || settings.url !== 'async-upload.php' )
 				return;
