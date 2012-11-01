@@ -369,43 +369,6 @@ function _kc_field( $args ) {
 
 
 /**
- * Field: file (back-end only)
- *
- * $args contents:
- * - parent: Post ID, if this field is used for post metadata, otherwise, set to 0
- * - field: The field array
- * - id: HTML `id` attribute
- * - name: HTML `name` attribute
- * - db_value: Current value
- *
- * @param array $args
- */
-function _kc_field_file( $args ) {
-	if ( $args['field']['mode'] === 'single' ) {
-		$param = 'kcsfs';
-		$fn = '_kc_field_file_single';
-	}
-	else {
-		$param = 'kcsf';
-		$fn = '_kc_field_file_multiple';
-	}
-
-	if ( isset($args['parent']) && $args['parent'] ) {
-		$tab = 'gallery';
-		$post_id = $args['parent'];
-	}
-	else {
-		$tab = 'library';
-		$post_id = 0;
-	}
-	$args['up_url'] = "media-upload.php?{$param}=true&amp;post_id={$post_id}&amp;tab={$tab}&amp;TB_iframe=1";
-	if ( !empty($args['field']['mime_type']) )
-		$args['up_url'] .= "&amp;post_mime_type={$args['field']['mime_type']}";
-
-	return call_user_func( $fn, $args );
-}
-
-/**
  * Field: multiinput
  *
  * Generate html multiinput fields
@@ -482,6 +445,53 @@ function _kc_field_multiinput( $name, $db_value, $field, $show_info = true ) {
 
 	$output .= "\t</ul>\n";
 	return $output;
+}
+
+
+/**
+ * Field: file (back-end only)
+ *
+ * $args contents:
+ * - parent: Post ID, if this field is used for post metadata, otherwise, set to 0
+ * - field: The field array
+ * - id: HTML `id` attribute
+ * - name: HTML `name` attribute
+ * - db_value: Current value
+ *
+ * @param array $args
+ */
+function _kc_field_file( $args ) {
+	if ( $args['field']['mode'] === 'single' ) {
+		$param = 'kcsfs';
+		$fn = '_kc_field_file_single';
+	}
+	else {
+		$param = 'kcsf';
+		$fn = '_kc_field_file_multiple';
+	}
+
+	if ( isset($args['parent']) && $args['parent'] ) {
+		$tab = 'gallery';
+		$post_id = $args['parent'];
+	}
+	else {
+		$tab = 'library';
+		$post_id = 0;
+	}
+	$args['up_url'] = add_query_arg(
+		array(
+			$param      => 'true',
+			'post_id'   => $post_id,
+			'tab'       => $tab,
+			'width'     => 640,
+			'TB_iframe' => 1
+		),
+		admin_url( '/media-upload.php' )
+	);
+	if ( !empty($args['field']['mime_type']) )
+		$args['up_url'] = add_query_arg( 'post_mime_type', $args['field']['mime_type'], $args['up_url'] );
+
+	return call_user_func( $fn, $args );
 }
 
 
