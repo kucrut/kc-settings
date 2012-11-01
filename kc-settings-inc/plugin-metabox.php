@@ -20,7 +20,7 @@ class kcSettings_plugin_metabox {
 
 	function fill( $object, $box ) {
 		$this->_parent->settings_section( $box['args'] );
-		echo "<p><input class='button-primary' name='submit' type='submit' value='".esc_attr( __('Save Changes') )."' /></p>";
+		echo '<p>'. get_submit_button( $box['args']['metabox']['button_text'], 'primary', 'submit', false ) .'</p>';
 	}
 
 

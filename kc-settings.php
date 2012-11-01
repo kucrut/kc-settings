@@ -462,11 +462,13 @@ final class kcSettings {
 					unset( $section['priority'] );
 				}
 				$metabox_default = array(
-					'context'  => 'normal',
-					'priority' => isset($metabox_priority) ? $metabox_priority : 'default'
+					'context'     => 'normal',
+					'priority'    => isset($metabox_priority) ? $metabox_priority : 'default',
+					'button_text' => __('Save Changes')
 				);
 				$metabox = isset($section['metabox']) ? $section['metabox'] : array();
 				$section['metabox'] = wp_parse_args( $metabox, $metabox_default );
+				unset( $metabox_priority );
 			}
 
 			# Plugin/themes metabox position
