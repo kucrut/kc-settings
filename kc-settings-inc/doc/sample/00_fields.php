@@ -245,7 +245,7 @@ function kc_settings_sample_fields() {
 			'type'  => 'file', // Not supported in theme customizer
 			'mode'  => 'single',
 			/**
-			 * This the image size that will be used for the preview in the backend.
+			 * This is the image size that will be used for the preview in the backend.
 			 * You can use 'full', 'large', 'medium', 'thumbnail' or any other
 			 * registered custom image size here.
 			 */
@@ -256,14 +256,22 @@ function kc_settings_sample_fields() {
 			'title' => 'File selection (single)',
 			'desc'	=> 'File list with single selection',
 			'type'  => 'file', // Not supported in theme customizer
-			'mode'  => 'radio'
+			'mode'  => 'radio',
+			/**
+			 * Uncomment the next line to customize the file icon width
+			 */
+			//'size'  => 46
 		),
 		array(
 			'id'    => 'sample_file2',
 			'title' => 'File selection (multiple)',
 			'desc'	=> 'File list with multiple selection',
 			'type'  => 'file', // Not supported in theme customizer
-			'mode'  => 'checkbox'
+			'mode'  => 'checkbox',
+			/**
+			 * Uncomment the next line to customize the file icon width
+			 */
+			//'size'  => 46
 		),
 		array(
 			'id'      => 'sample_callback_3',
