@@ -665,7 +665,7 @@ final class kcSettings {
 
 
 	public static function _sns_vars() {
-		global $wp_scripts;
+		global $wp_scripts, $wp_locale;
 		if ( !in_array('kc-settings-base', $wp_scripts->in_footer) )
 			return; ?>
 <script>
@@ -676,7 +676,7 @@ final class kcSettings {
 		'css'    => kc_get_sns( array('jquery-ui', 'thickbox', 'chosen', 'jquery-colorpicker'), 'css' ),
 		'upload' => array(
 			'text' => array(
-				'head'     => __( 'KC Settings', 'kc-settings' ),
+				'head'     => 'KC Settings',
 				'empty'    => __( 'Please upload some files and then go back to this tab.', 'kc-settings' ),
 				'checkAll' => __( 'Select all files', 'kc-settings' ),
 				'clear'    => __( 'Clear selections', 'kc-settings' ),
@@ -700,54 +700,12 @@ final class kcSettings {
 			'next'   => __('Next', 'kc-settings'),
 			'chooseTime' => __('Choose time', 'kc-settings'),
 			'monthNames' => array(
-				'full'  => array(
-					__('January', 'kc-settings'),
-					__('February', 'kc-settings'),
-					__('March', 'kc-settings'),
-					__('April', 'kc-settings'),
-					__('May', 'kc-settings'),
-					__('June', 'kc-settings'),
-					__('July', 'kc-settings'),
-					__('August', 'kc-settings'),
-					__('September', 'kc-settings'),
-					__('October', 'kc-settings'),
-					__('November', 'kc-settings'),
-					__('December', 'kc-settings')
-				),
-				'shrt' => array(
-					_x('Jan', 'month short name', 'kc-settings'),
-					_x('Feb', 'month short name', 'kc-settings'),
-					_x('Mar', 'month short name', 'kc-settings'),
-					_x('Apr', 'month short name', 'kc-settings'),
-					_x('May', 'month short name', 'kc-settings'),
-					_x('Jun', 'month short name', 'kc-settings'),
-					_x('Jul', 'month short name', 'kc-settings'),
-					_x('Aug', 'month short name', 'kc-settings'),
-					_x('Sep', 'month short name', 'kc-settings'),
-					_x('Oct', 'month short name', 'kc-settings'),
-					_x('Nov', 'month short name', 'kc-settings'),
-					_x('Dec', 'month short name', 'kc-settings')
-				)
+				'full'  => $wp_locale->month,
+				'shrt'  => $wp_locale->month_abbrev
 			),
 			'dayNames' => array(
-				'full'  => array(
-					__('Sunday', 'kc-settings'),
-					__('Monday', 'kc-settings'),
-					__('Tuesday', 'kc-settings'),
-					__('Wednesday', 'kc-settings'),
-					__('Thursday', 'kc-settings'),
-					__('Friday', 'kc-settings'),
-					__('Saturday', 'kc-settings')
-				),
-				'shrt' => array(
-					_x('Sun', 'day short name', 'kc-settings'),
-					_x('Mon', 'day short name', 'kc-settings'),
-					_x('Tue', 'day short name', 'kc-settings'),
-					_x('Wed', 'day short name', 'kc-settings'),
-					_x('Thu', 'day short name', 'kc-settings'),
-					_x('Fri', 'day short name', 'kc-settings'),
-					_x('Sat', 'day short name', 'kc-settings')
-				),
+				'full'  => $wp_locale->weekday,
+				'shrt'  => $wp_locale->weekday_abbrev,
 				'min'   => array(
 					_x('Su', 'day min name', 'kc-settings'),
 					_x('Mo', 'day min name', 'kc-settings'),
