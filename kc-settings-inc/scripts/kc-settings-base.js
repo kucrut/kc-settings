@@ -709,6 +709,9 @@ function invertColor( color ) {
 
 	$.fn.kcChosen = function() {
 		var $els = $(this);
+		if ( !$els.length )
+			return this;
+
 		Modernizr.load([{
 			load: kcGetSNS('chosen', kcSettings.js).concat( kcGetSNS('chosen', kcSettings.css) ),
 			complete: function() {
@@ -729,6 +732,9 @@ function invertColor( color ) {
 
 	// Polyfill : input : color
 	$.fn.kcPFiColor = function( config ) {
+		if ( !this.length )
+			return this;
+
 		if ( Modernizr.inputtypes.color !== false )
 			return this;
 
@@ -759,6 +765,9 @@ function invertColor( color ) {
 
 	// Polyfill : input : color
 	$.fn.kcPFiDate = function( config ) {
+		if ( !this.length )
+			return this;
+
 		if ( Modernizr.inputtypes.date !== false )
 			return this;
 
