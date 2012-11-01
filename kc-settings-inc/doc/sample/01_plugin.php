@@ -48,8 +48,9 @@ function kc_settings_sample_plugin( $settings ) {
 		 * priority: default | high | low
 		 */
 		'metabox'       => array(
-			'context'   => 'normal',
-			'priority'  => 'default',
+			'context'     => 'normal',
+			'priority'    => 'default',
+			'button_text' => __('Save Changes')
 		),
 		'options'       => array(
 			array(
