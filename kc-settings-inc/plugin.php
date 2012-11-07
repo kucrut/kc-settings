@@ -1,9 +1,9 @@
 <?php
 
 class kcSettings_plugin {
-	var $url;
-	var $group;
-	var $metabox;
+	public $url;
+	public $group;
+	public $metabox;
 
 	# Add settings menus and register the options
 	function __construct( $group ) {
@@ -23,7 +23,7 @@ class kcSettings_plugin {
 		extract( $this->group, EXTR_OVERWRITE );
 
 		$this->page = add_submenu_page( $menu_location, $page_title, $menu_title, 'manage_options', "kc-settings-{$prefix}", array(&$this, 'settings_page') );
-		$this->url = admin_url( "{$menu_location}?page=kc-settings-{$prefix}" );
+		$this->url = menu_page_url( "kc-settings-{$prefix}", false );
 		kcSettings::add_page( $this->page );
 
 		# Help

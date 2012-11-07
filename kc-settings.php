@@ -113,15 +113,15 @@ final class kcSettings {
 				if ( $type == 'plugin' ) {
 					foreach ( self::$data['settings']['plugin'] as $group )
 						new kcSettings_plugin( $group );
+
+					# Lock
+					add_filter( 'plugin_action_links', array(__CLASS__, '_lock'), 10, 4 );
 				}
 				else {
 					call_user_func( array("kcSettings_{$type}", 'init') );
 				}
 			}
 		}
-
-		# Lock
-		add_filter( 'plugin_action_links', array(__CLASS__, '_lock'), 10, 4 );
 
 		# Admin body class
 		add_action( 'admin_body_class', array(__CLASS__, 'admin_body_class') );
