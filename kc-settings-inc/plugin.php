@@ -10,11 +10,11 @@ class kcSettings_plugin {
 		$this->group = $group;
 
 		# Register the menus to WP
-		add_action( 'admin_menu', array(&$this, 'create_menu'));
+		add_action( 'admin_menu', array( $this, 'create_menu' ) );
 		# Register the options
-		add_action( 'admin_init', array(&$this, 'register_options'), 11 );
+		add_action( 'admin_init', array( $this, 'register_options' ), 11 );
 		# Plugin setting link
-		add_filter( 'plugin_row_meta', array(&$this, 'setting_link'), 10, 3 );
+		add_filter( 'plugin_row_meta', array( $this, 'setting_link' ), 10, 3 );
 	}
 
 
@@ -22,7 +22,7 @@ class kcSettings_plugin {
 	function create_menu() {
 		extract( $this->group, EXTR_OVERWRITE );
 
-		$this->page = add_submenu_page( $menu_location, $page_title, $menu_title, 'manage_options', "kc-settings-{$prefix}", array(&$this, 'settings_page') );
+		$this->page = add_submenu_page( $menu_location, $page_title, $menu_title, 'manage_options', "kc-settings-{$prefix}", array( $this, 'settings_page') );
 		$this->url = menu_page_url( "kc-settings-{$prefix}", false );
 		kcSettings::add_page( $this->page );
 
@@ -31,11 +31,11 @@ class kcSettings_plugin {
 			kcSettings::add_help( $this->page, $help );
 
 		if ( $display == 'metabox' ) {
-			require_once( dirname(__FILE__) . '/plugin-metabox.php' );
+			require_once dirname(__FILE__) . '/plugin-metabox.php';
 			$this->metabox = new kcSettings_plugin_metabox( $this );
 		}
 
-		if ( isset($load_actions) && is_callable($load_actions) )
+		if ( !empty($load_actions) && is_callable($load_actions) )
 			add_action( "load-{$this->page}", $load_actions, 99 );
 	}
 
@@ -44,37 +44,36 @@ class kcSettings_plugin {
 	function register_options() {
 		extract( $this->group, EXTR_OVERWRITE );
 
-		if ( is_array($options) && !empty($options) ) {
+		if ( !is_array($options) || empty($options) )
+			return;
 
-			# register our options, unique for each theme/plugin
-			register_setting( "{$prefix}_settings", "{$prefix}_settings", array(&$this, 'validate') );
+		# register our options, unique for each theme/plugin
+		register_setting( "{$prefix}_settings", "{$prefix}_settings", array( $this, 'validate') );
 
-			foreach ( $options as $section ) {
-				$section_title = ( isset($section['title']) ) ? $section['title'] : "{$prefix}-section-{$section['id']}";
-				# Add sections
-				add_settings_section( $section['id'], $section_title, '', "{$prefix}_settings" );
+		foreach ( $options as $section ) {
+			$section_title = ( isset($section['title']) ) ? $section['title'] : "{$prefix}-section-{$section['id']}";
+			# Add sections
+			add_settings_section( $section['id'], $section_title, '', "{$prefix}_settings" );
 
-				# Skip fields for sections with custom callbacks
-				if ( !isset($section['fields']) )
-					continue;
+			# Skip fields for sections with custom callbacks
+			if ( empty($section['fields']) )
+				continue;
 
-				foreach ( $section['fields'] as $field ) {
-					# add fields on each sections
-					$args = array(
-						'mode'    => 'plugin',
-						'prefix'  => $prefix,
-						'section' => $section['id'],
-						'field'   => $field,
-						'echo'    => true,
-						'tabled'  => true
-					);
-					if ( !in_array($field['type'], array('checkbox', 'radio', 'multiinput')) )
-						$args['label_for'] = "{$section['id']}__{$field['id']}";
+			foreach ( $section['fields'] as $field ) {
+				# add fields on each sections
+				$args = array(
+					'mode'    => 'plugin',
+					'prefix'  => $prefix,
+					'section' => $section['id'],
+					'field'   => $field,
+					'echo'    => true,
+					'tabled'  => true
+				);
+				if ( !in_array($field['type'], array('checkbox', 'radio', 'multiinput', 'file')) )
+					$args['label_for'] = "{$section['id']}__{$field['id']}";
 
-					add_settings_field( $field['id'], $field['title'], '_kc_field', "{$prefix}_settings", $section['id'], $args );
-				}
+				add_settings_field( $field['id'], $field['title'], '_kc_field', "{$prefix}_settings", $section['id'], $args );
 			}
-
 		}
 	}
 
