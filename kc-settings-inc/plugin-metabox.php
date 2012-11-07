@@ -1,7 +1,7 @@
 <?php
 
 class kcSettings_plugin_metabox {
-	var $_parent;
+	protected $_parent;
 
 	function __construct( $_parent ) {
 		$this->_parent = $_parent;
@@ -13,8 +13,17 @@ class kcSettings_plugin_metabox {
 	function create() {
 		wp_enqueue_script( 'postbox' );
 		add_screen_option('layout_columns', array('max' => 4, 'default' => isset($this->_parent->group['has_sidebar']) ? 2 : 1) );
-		foreach ( $this->_parent->group['options'] as $section )
-			add_meta_box( "kc-metabox-{$this->_parent->page}-{$section['id']}", $section['title'], array($this, 'fill'), $this->_parent->page, $section['metabox']['context'], $section['metabox']['priority'], $section );
+		foreach ( $this->_parent->group['options'] as $section ) {
+			add_meta_box(
+				"kc-metabox-{$this->_parent->page}-{$section['id']}",
+				$section['title'],
+				array( $this, 'fill' ),
+				$this->_parent->page,
+				$section['metabox']['context'],
+				$section['metabox']['priority'],
+				$section
+			);
+		}
 	}
 
 
