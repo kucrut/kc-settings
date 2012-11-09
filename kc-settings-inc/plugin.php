@@ -25,18 +25,29 @@ class kcSettings_plugin {
 		$this->page = add_submenu_page( $menu_location, $page_title, $menu_title, 'manage_options', "kc-settings-{$prefix}", array( $this, 'settings_page') );
 		$this->url = menu_page_url( "kc-settings-{$prefix}", false );
 		kcSettings::add_page( $this->page );
-
-		# Help
-		if ( isset($help) )
-			kcSettings::add_help( $this->page, $help );
+		add_action( "load-{$this->page}", array( $this, 'load_actions' ), 99 );
 
 		if ( $display == 'metabox' ) {
 			require_once dirname(__FILE__) . '/plugin-metabox.php';
 			$this->metabox = new kcSettings_plugin_metabox( $this );
 		}
+	}
 
-		if ( !empty($load_actions) && is_callable($load_actions) )
-			add_action( "load-{$this->page}", $load_actions, 99 );
+
+	function load_actions() {
+		$screen = get_current_screen();
+
+		if ( !empty($this->group['help']) ) {
+			foreach ( $this->group['help'] as $help ) {
+				if ( isset($help['sidebar']) && $help['sidebar'] )
+					$screen->set_help_sidebar( $help['content'] );
+				else
+					$screen->add_help_tab( $help );
+			}
+		}
+
+		if ( !empty($this->group['load_actions']) && is_callable($this->group['load_actions']) )
+			call_user_func_array( $this->group['load_actions'], array( $this ) );
 	}
 
 

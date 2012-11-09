@@ -22,7 +22,6 @@ final class kcSettings {
 	protected static $data = array(
 		'paths'    => '',
 		'pages'    => array('media-upload-popup'),
-		'help'     => array(),
 		'messages' => array(),
 		'notices'  => array( 'updated' => array(), 'error' => array() ),
 		'settings' => array(),
@@ -134,9 +133,6 @@ final class kcSettings {
 			require_once( self::$data['paths']['inc'].'/builder.php' );
 			kcSettings_builder::init();
 		}
-
-		# Contextual help
-		add_action( 'admin_head', array(__CLASS__, '_register_help') );
 
 		add_action( 'wp_ajax_kc_get_image_url', 'kc_ajax_get_image_url' );
 	}
@@ -586,24 +582,6 @@ final class kcSettings {
 	}
 
 
-	/**
-	 * Register contextual help
-	 */
-	public static function _register_help() {
-		global $hook_suffix;
-		$screen = get_current_screen();
-		if ( empty(self::$data['help']) || !isset(self::$data['help'][$hook_suffix]) || !is_object($screen) )
-			return;
-
-		foreach ( self::$data['help'][$hook_suffix] as $help ) {
-			if ( isset($help['sidebar']) && $help['sidebar'] )
-				$screen->set_help_sidebar( $help['content'] );
-			else
-				$screen->add_help_tab( $help );
-		}
-	}
-
-
 	public static function _sns_register() {
 		$path = self::$data['paths'];
 		$admin_color = get_user_option( 'admin_color' );
@@ -804,28 +782,6 @@ final class kcSettings {
 	public static function add_page( $page ) {
 		if ( !in_array($page, self::$data['pages']) )
 			self::$data['pages'][] = $page;
-	}
-
-
-	public static function add_help( $page, $helps ) {
-		if ( !is_array($helps) || empty($helps) )
-			return false;
-
-		foreach ( $helps as $idx => $help ) {
-			foreach ( array('id', 'title', 'content') as $c ) {
-				if ( !isset($help[$c]) || empty($help[$c]) ) {
-					unset( $helps[$idx] );
-					continue 2;
-				}
-			}
-		}
-
-		if ( empty($helps) )
-			return false;
-
-		if ( !isset(self::$data['help'][$page]) )
-			self::$data['help'][$page] = array();
-		self::$data['help'][$page] = array_merge( self::$data['help'][$page], $helps );
 	}
 
 

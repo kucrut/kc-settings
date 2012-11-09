@@ -183,33 +183,8 @@ class kcSettings_builder {
 		$page = add_options_page( __('KC Settings', 'kc-settings'), __('KC Settings', 'kc-settings'), 'manage_options', 'kcsb', array(__CLASS__, 'builder') );
 		self::$data['url'] = admin_url('options-general.php?page=kcsb');
 
-		# Help
-		kcSettings::add_help( $page, array(
-			array(
-				'id'      => 'kcsb',
-				'title'   => __( 'KC Settings Builder', 'kc-settings' ),
-				'content' =>
-					'<ul>
-						<li>'.__('All fields are required, unless stated otherwise.', 'kc-settings').'</li>
-						<li>'.__('Some fields depend on other field(s), they will be shown when the dependency is selected/checked.', 'kc-settings').'</li>
-						<li>'.__('Some fields (eg. ID, Prefix) can only be filled with alphanumerics, dashes and underscores, must be unique, and cannot begin with dashes or underscores.', 'kc-settings').'</li>
-					</ul>'
-			),
-			array(
-				'id'      => 'kcsb-side',
-				'title'   => __('Links'),
-				'sidebar' => true,
-				'content' =>
-					'<ul>
-						<li><a href="http://kucrut.github.com/kc-settings/">'.__('Online documentation', 'kc-settings').'</a></li>
-						<li><a href="http://wordpress.org/tags/kc-settings?forum_id=10">'.__('Support', 'kc-settings').'</a></li>
-						<li><a href="https://github.com/kucrut/kc-settings/issues">'.__('Request new feature', 'kc-settings').'</a></li>
-						<li><a href="http://kucrut.org/contact/">'.__('Donate/Contact', 'kc-settings').'</a></li>
-					</ul>'
-			)
-		) );
-
 		add_action( "load-{$page}", array(__CLASS__, 'load') );
+		add_action( "load-{$page}", array(__CLASS__, 'print_help') );
 		add_action( "load-{$page}", array(__CLASS__, 'sns') );
 	}
 
@@ -330,6 +305,29 @@ class kcSettings_builder {
 			update_option( 'kcsb', self::$data['kcsb']['settings'] );
 	}
 
+
+	public static function print_help( $values ) {
+		$screen = get_current_screen();
+		$screen->add_help_tab( array(
+			'id'      => 'kcsb',
+			'title'   => __( 'KC Settings Builder', 'kc-settings' ),
+			'content' =>
+				'<ul>
+					<li>'.__('All fields are required, unless stated otherwise.', 'kc-settings').'</li>
+					<li>'.__('Some fields depend on other field(s), they will be shown when the dependency is selected/checked.', 'kc-settings').'</li>
+					<li>'.__('Some fields (eg. ID, Prefix) can only be filled with alphanumerics, dashes and underscores, must be unique, and cannot begin with dashes or underscores.', 'kc-settings').'</li>
+				</ul>'
+		) );
+
+		$screen->set_help_sidebar('
+			<ul>
+				<li><a href="http://kucrut.github.com/kc-settings/">'.__('Online documentation', 'kc-settings').'</a></li>
+				<li><a href="http://wordpress.org/tags/kc-settings?forum_id=10">'.__('Support', 'kc-settings').'</a></li>
+				<li><a href="https://github.com/kucrut/kc-settings/issues">'.__('Request new feature', 'kc-settings').'</a></li>
+				<li><a href="http://kucrut.org/contact/">'.__('Donate/Contact', 'kc-settings').'</a></li>
+			</ul>
+		');
+	}
 
 	public static function validate( $values ) {
 		/**
