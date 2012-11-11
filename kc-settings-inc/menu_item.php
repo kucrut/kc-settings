@@ -30,15 +30,22 @@ final class kcSettings_menu_item {
 			$out .= '<div class="kc-menu-item-section">';
 			$out .= "<h2>{$section['title']}</h2>\n";
 			foreach ( $section['fields'] as $field ) {
-				$out .= "<p class='description description-wide'>\n";
-				$out .= "<label for='edit-menu-item-{$section['id']}-{$field['id']}-{$item->ID}'>{$field['title']}</label><br />\n";
-				$out .= "<span class='kcs-field-wrap kcs-{$field['type']}-wrap'>" . _kc_field( array(
+				$field_html = _kc_field( array(
 					'mode'      => 'menu_item',
 					'object_id' => $item->ID,
 					'section'   => $section['id'],
 					'field'     => $field,
 					'desc_tag'  => 'span'
-				) ) . "</span>";
+				) );
+
+				if ( $field['type'] == 'special' ) {
+					$out .= $field_html;
+					continue;
+				}
+
+				$out .= "<p class='description description-wide'>\n";
+				$out .= "<label for='edit-menu-item-{$section['id']}-{$field['id']}-{$item->ID}'>{$field['title']}</label><br />\n";
+				$out .= "<span class='kcs-field-wrap kcs-{$field['type']}-wrap'>{$field_html}</span>\n";
 				$out .= "</p>\n";
 			}
 			$out .= '</div>';
