@@ -1,11 +1,15 @@
 summary {cursor:default;}
 /* Polyfills */
 /* 0. <details /> */
-.no-details details {display:block;}
-.no-details details > * { display:none; }
+.no-details details {
+	display:block !important;
+}
+.no-details details > * {
+	display:none !important;
+}
 .no-details details > summary,
 .no-details details[open] > * {
-	display:block;
+	display:block !important;
 }
 .no-details details > summary:before {
 	content:'\25b8\00a0';

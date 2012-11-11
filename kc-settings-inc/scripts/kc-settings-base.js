@@ -821,7 +821,7 @@ function invertColor( color ) {
 				return;
 
 			var $summary = $(this),
-					$details = $summary.parent();
+			    $details = $summary.parent();
 
 			if ( $details.attr('open') )
 				$details.removeAttr('open');
