@@ -602,8 +602,8 @@ function invertColor( color ) {
 			});
 
 			$x.find('label').each(function() {
-				var $label 	= $(this),
-						atFor		= $label.attr('for');
+				var $label = $(this),
+				    atFor  = $label.attr('for');
 
 				if ( atFor !== '' && atFor !== undefined ) {
 					$label.attr( 'for', atFor.replace(rgx2, function(str, p1) {

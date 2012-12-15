@@ -9,7 +9,7 @@ jQuery(document).ready(function($) {
 				ui.placeholder.height( ui.item.height() );
 			},
 			stop: function(ev, ui) {
-				ui.item .parent().kcReorder( ui.item.data('mode'), true );
+				ui.item.parent().kcReorder( ui.item.data('mode'), true );
 			}
 		},
 		colorpicker : {
