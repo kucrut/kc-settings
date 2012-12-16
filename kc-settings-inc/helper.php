@@ -234,9 +234,8 @@ function _kc_sanitize_value( $value, $type ) {
  * @param int $object_id The ID of the object (post/term) that we're gonna update
  * @param array $section The meta section array
  * @param array $field The meta field array
- * @param bool $is_attachment Are we updating attachment metadata?
  */
-function _kc_update_meta( $meta_type = 'post', $object_type_name, $object_id, $section, $field, $is_attachment = false ) {
+function _kc_update_meta( $meta_type = 'post', $object_type_name, $object_id, $section, $field ) {
 	if ( isset($_POST['action']) && $_POST['action'] == 'inline-save' )
 		return;
 
@@ -264,10 +263,7 @@ function _kc_update_meta( $meta_type = 'post', $object_type_name, $object_id, $s
 	$nu_val = '';
 
 	# Get the new meta value from user
-	if ( $is_attachment && isset($_POST['attachments'][$object_id][$field['id']]) ) {
-		$nu_val = $_POST['attachments'][$object_id][$field['id']];
-	}
-	elseif ( isset($_POST["kc-{$meta_type}meta"][$section['id']][$field['id']]) ) {
+	if ( isset($_POST["kc-{$meta_type}meta"][$section['id']][$field['id']]) ) {
 		$nu_val = $_POST["kc-{$meta_type}meta"][$section['id']][$field['id']];
 		if ( $meta_type == 'post' && $object_type_name == 'nav_menu_item' && isset($nu_val[$object_id]) )
 			$nu_val = $nu_val[$object_id];

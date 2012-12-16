@@ -5,18 +5,12 @@ class kcSettings_post {
 
 	public static function init() {
 		self::$settings = kcSettings::get_data('settings', 'post' );
-
-		if ( isset(self::$settings['attachment']) ) {
-			require_once dirname( __FILE__ ) . '/attachment.php';
-			kcSettings_attachment::init( self::$settings['attachment'] );
-			unset( self::$settings['attachment'] );
-		}
-
 		if ( empty(self::$settings) )
 			return;
 
 		add_action( 'add_meta_boxes', array(__CLASS__, '_create'), 11, 2 );
-		add_action( 'save_post', array(__CLASS__, '_save'), 11, 2 );
+		add_action( 'save_post', array(__CLASS__, '_save'), 11 );
+		add_action( 'edit_attachment', array(__CLASS__, '_save'), 11 );
 	}
 
 
@@ -49,47 +43,55 @@ class kcSettings_post {
 		$on_side = $section['metabox']['context'] == 'side' ? true : false;
 		if ( $on_side ) {
 			$wraps = array(
-				'block' => array("<ul class='kcs-sideform'>\n", "</ul>\n"),
-				'row'   => array("\t<li>\n", "\t</li>\n")
+				'block' => array('<ul class="kcs-sideform">', '</ul>'),
+				'row'   => array('<li>', '</li>')
 			);
 		}
 		else {
 			$wraps = array(
-				'block' => array("<table class='form-table'>\n", "</table>\n"),
-				'row'   => array("\t<tr>\n", "\t</tr>\n")
+				'block' => array('<table class="form-table">', '</table>'),
+				'row'   => array('<tr>', '</tr>')
 			);
 		}
-
-		$output .= "<input type='hidden' name='{$object->post_type}_kc_meta_box_nonce' value='".wp_create_nonce( '___kc_meta_box_nonce___' )."' />";
-		$output .= $wraps['block'][0];
-
-		foreach ( $section['fields'] as $field ) {
-			$label_for = ( !in_array($field['type'], array('checkbox', 'radio', 'multiinput', 'file')) ) ? $field['id'] : null;
-			$output .= $wraps['row'][0];
-			$f_label = _kc_field_label( $field['title'], $label_for, !$on_side, false );
-			$output .= ( $on_side ) ? "\t\t<span class='side-label'>{$f_label}</span>\n" : $f_label;
-			$f_input = _kc_field( array( 'mode' => 'post', 'object_id' => $object->ID, 'section' => $section['id'], 'field' => $field ) );
-			$output .= ( $on_side ) ? $f_input : "\t\t<td>\n\t\t\t{$f_input}\n\t\t</td>\n";
-			$output .= $wraps['row'][1];
-		}
-
-		$output .= $wraps['block'][1];
-
-		echo $output;
+		?>
+		<?php echo wp_nonce_field( '-1', "{$object->post_type}_kc_meta_box_nonce" ) . PHP_EOL ?>
+		<?php echo $wraps['block'][0] . PHP_EOL; ?>
+		<?php
+			foreach ( $section['fields'] as $field ) :
+				$label_for = ( !in_array($field['type'], array('checkbox', 'radio', 'multiinput', 'file')) ) ? $field['id'] : null;
+				$f_label = _kc_field_label( $field['title'], $label_for, !$on_side, false );
+				$f_input = _kc_field( array( 'mode' => 'post', 'object_id' => $object->ID, 'section' => $section['id'], 'field' => $field ) );
+		?>
+			<?php echo $wraps['row'][0] . PHP_EOL; ?>
+			<?php if ( $on_side ) : ?>
+			<span class="side-label"><?php echo $f_label ?></span>
+			<?php echo $f_input; ?>
+			<?php else : ?>
+			<?php echo $f_label; ?>
+			<td>
+				<?php echo $f_input ?>
+			</td>
+			<?php endif; ?>
+			<?php echo $wraps['row'][1] . PHP_EOL; ?>
+		<?php endforeach; ?>
+		<?php echo $wraps['block'][1] . PHP_EOL; ?>
+		<?php
 	}
 
 
 	# Save post metadata/custom fields values
-	public static function _save( $post_id, $post ) {
-		if ( !isset(self::$settings[$post->post_type])
-		      || ( isset($_POST['action']) && in_array($_POST['action'], array('inline-save', 'trash', 'untrash')) )
-		      || $post->post_status == 'auto-draft'
-		      || !isset($_POST["{$post->post_type}_kc_meta_box_nonce"]) )
+	public static function _save( $post_id ) {
+		$post = get_post( $post_id );
+		if (
+			!current_user_can( 'edit_post', $post_id )
+			|| !isset( self::$settings[$post->post_type] )
+			|| ( isset($_POST['action']) && in_array($_POST['action'], array('inline-save', 'trash', 'untrash')) )
+			|| $post->post_status == 'auto-draft'
+			|| empty( $_POST["{$post->post_type}_kc_meta_box_nonce"] )
+			|| !wp_verify_nonce( $_POST["{$post->post_type}_kc_meta_box_nonce"], '___kc_meta_box_nonce___' )
+		) {
 			return $post_id;
-
-		$post_type_obj = get_post_type_object( $post->post_type );
-		if ( ( wp_verify_nonce($_POST["{$post->post_type}_kc_meta_box_nonce"], '___kc_meta_box_nonce___') && current_user_can($post_type_obj->cap->edit_post) ) !== true )
-			return $post_id;
+		}
 
 		foreach ( self::$settings[$post->post_type] as $section ) {
 			foreach ( $section['fields'] as $field )
