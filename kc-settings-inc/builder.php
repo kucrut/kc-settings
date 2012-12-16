@@ -656,12 +656,12 @@ class kcSettings_builder {
 			$url = add_query_arg( 'action', 'new', $url );
 			$values = self::$item_to_edit;
 			$form_class = 'editing';
-			$button_txt = __('Save Changes');
+			$submit_text = __('Save Changes');
 		}
 		else {
 			$values = self::$data['defaults'];
 			$form_class = ( self::$table->current_action() == 'new' ) ? '' : 'hidden';
-			$button_txt = __('Create Setting', 'kc-settings');
+			$submit_text = __('Create Setting', 'kc-settings');
 		}
 
 		?>
@@ -870,7 +870,7 @@ class kcSettings_builder {
 										</fieldset>
 									</li>
 									<?php if ( !isset($s_val['metabox']) ) $s_val['metabox'] = array('context' => 'normal', 'priority' => 'default'); ?>
-									<li class="childType childDisplay" data-dep='["post", "metabox"]'>
+									<li class="childType childDisplay _sd_post-type" data-dep='["post", "metabox"]'>
 										<label class="ml"><?php _e('Metabox', 'kc-settings') ?></label>
 										<ul class="mi main">
 											<?php foreach ( $options['metabox'] as $mb_prop => $prop ) { ?>
@@ -901,7 +901,7 @@ class kcSettings_builder {
 						<?php $section_idx++; } ?>
 					</ul>
 					<div class="submit">
-						<button class="button-primary" name="submit" type="submit"><?php echo $button_txt; ?></button>
+						<?php submit_button( $submit_text, 'primary', 'submit', false ) ?>
 						<a href="#" class="button alignright kcsb-cancel"><?php _e('Cancel') ?></a>
 					</div>
 				</form>
