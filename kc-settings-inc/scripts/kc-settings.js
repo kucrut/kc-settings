@@ -62,7 +62,7 @@ jQuery(document).ready(function($) {
 	// Form row cloner
 	$.kcRowCloner();
 	$.kcRowCloner.addCallback( 'add', function( obj ) {
-		$('ul.kc-rows').sortable( 'refresh' );
+		obj.block.sortable( 'refresh' );
 		$('.hasDatepicker', obj.nuItem).each(function() {
 			$(this)
 				.removeData('datepicker')
