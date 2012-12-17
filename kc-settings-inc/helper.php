@@ -61,6 +61,32 @@ function kc_array_search_recursive( $needle, $haystack, $needlekey = '', $strict
 
 
 /**
+ * Apply callback to input, and if it's an array, does it recursively.
+ *
+ * @param string $func Callback function
+ * @param mixed $input Input data
+ * @link http://www.jonasjohn.de/snippets/php/trim-array.htm
+ */
+function kc_array_map_deep( $func, $input ) {
+	if ( is_array( $input ) ) {
+		$out = array_combine(
+			array_keys( $input ),
+			array_map(
+				'kc_array_map_deep',
+				array_fill( 0, count( $input ), $func ),
+				$input
+			)
+		);
+	}
+	else {
+		$out = call_user_func( $func, $input );
+	}
+
+	return $out;
+}
+
+
+/**
  * Cleanup array
  *
  * @param array $arr Array to cleanup
@@ -212,15 +238,12 @@ function kc_sort_query_by_post_in( $sortby, $query ) {
  * Sanitize user input
  */
 function _kc_sanitize_value( $value, $type ) {
-	# default sanitation
+	$value = kc_array_map_deep( 'trim', $value );
 	if ( !empty($value) && $type === 'multiinput' ) {
 		$value = kc_array_remove_empty( $value );
 		$value = kc_array_rebuild_index( $value );
 		if ( empty($value) )
 			$value = '';
-	}
-	elseif ( !is_array($value) ) {
-		$value = trim( $value );
 	}
 
 	return $value;
