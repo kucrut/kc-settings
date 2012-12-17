@@ -541,8 +541,6 @@ function _kc_field_file_multiple( $args ) {
 			'suppress_filters' => false
 		);
 
-		add_filter( 'posts_orderby', 'kc_sort_query_by_post_in', 10, 2 );
-
 		global $post;
 		$tmp_post = $post;
 

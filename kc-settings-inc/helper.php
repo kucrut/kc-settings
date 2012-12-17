@@ -217,24 +217,6 @@ function kc_check_roles( $roles = array() ) {
 
 
 /**
- * Sort query order by 'post__in'
- *
- * Back compat for WP < 3.5
- */
-function kc_sort_query_by_post_in( $sortby, $query ) {
-	remove_filter( current_filter(), __FUNCTION__, 10, 2 );
-
-	if ( !empty($query->query['orderby']) && $query->query['orderby'] == 'post__in' && !empty($query->query['post__in']) ) {
-		global $wpdb;
-		$post__in = implode( ',', array_map( 'absint', $query->query['post__in'] ) );
-		$sortby = $orderby = "FIELD( {$wpdb->posts}.ID, $post__in )";
-	}
-
-	return $sortby;
-}
-
-
-/**
  * Sanitize user input
  */
 function _kc_sanitize_value( $value, $type ) {
