@@ -601,9 +601,6 @@ final class kcSettings {
 		wp_register_script( 'chosen', "{$path['scripts']}/chosen.jquery{$suffix}.js", array('jquery'), '0.9.8', true );
 		wp_register_style(  'chosen', "{$path['styles']}/chosen/chosen{$suffix}.css", false, '0.9.8' );
 
-		wp_register_script( 'jquery-colorpicker', "{$path['scripts']}/colorpicker/js/colorpicker{$suffix}.js", array('jquery'), null, true );
-		wp_register_style(  'jquery-colorpicker', "{$path['scripts']}/colorpicker/css/colorpicker{$suffix}.css", false, null );
-
 		wp_register_script( 'jquery-ui-slider-access', "{$path['scripts']}/jquery-ui-sliderAccess{$suffix}.js", array('jquery-ui-slider'), '0.2', true );
 		wp_register_script( 'jquery-ui-datetimepicker', "{$path['scripts']}/jquery-ui-timepicker-addon{$suffix}.js", array('jquery-ui-datepicker', 'jquery-ui-slider-access'), '1.0.1', true );
 
@@ -650,8 +647,8 @@ final class kcSettings {
 	var kcSettings = <?php echo json_encode( array(
 		'locale' => get_locale(),
 		'paths'  => self::$data['paths'],
-		'js'     => kc_get_sns( array('jquery-ui-datepicker', 'thickbox', 'jquery-ui-sortable', 'jquery-colorpicker', 'chosen'), 'js' ),
-		'css'    => kc_get_sns( array('jquery-ui', 'thickbox', 'chosen', 'jquery-colorpicker'), 'css' ),
+		'js'     => kc_get_sns( array('jquery-ui-datepicker', 'thickbox', 'jquery-ui-sortable', 'chosen', 'wp-color-picker'), 'js' ),
+		'css'    => kc_get_sns( array('jquery-ui', 'thickbox', 'chosen', 'wp-color-picker'), 'css' ),
 		'upload' => array(
 			'text' => array(
 				'head'     => 'KC Settings',

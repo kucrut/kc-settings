@@ -12,20 +12,6 @@ jQuery(document).ready(function($) {
 				ui.item.parent().kcReorder( ui.item.data('mode'), true );
 			}
 		},
-		colorpicker : {
-			onBeforeShow: function () {
-				$(this).ColorPickerSetColor(this.value);
-			},
-			onSubmit: function(hsb, hex, rgb, el) {
-				var clr = '#'+hex;
-				$(el).css({
-					backgroundColor: clr,
-					color: clr
-				})
-					.val( clr )
-					.ColorPickerHide();
-			}
-		},
 		datepicker : {
 			date : {
 				dateFormat: 'yy-mm-dd',
@@ -70,10 +56,12 @@ jQuery(document).ready(function($) {
 				.datepicker( args.datepicker[$(this).attr('type')] );
 		})
 		$('.hasColorpicker', obj.nuItem).each(function() {
-			$(this)
-				.removeData('colorpickerId')
-				.removeAttr('style')
-				.ColorPicker(args.colorpicker);
+			var $el = $(this),
+			    $cpWrap = $el.closest('div.wp-picker-container');
+
+			$el.insertBefore( $cpWrap );
+			$cpWrap.remove();
+			$el.wpColorPicker(args.colorpicker);
 		});
 	});
 
@@ -85,7 +73,7 @@ jQuery(document).ready(function($) {
 	$('select.chosen').kcChosen();
 
 	// Polyfills
-	$('input[type=color]').kcPFiColor( args.colorpicker );
+	$('input.kcs-color').kcPFiColor();
 	$('input[type=date]').kcPFiDate( args.datepicker.date );
 
 	// Add term form

@@ -235,16 +235,6 @@ function kcsbSlug( str ) {
 }
 
 
-function invertColor( color ) {
-	inverted = new RGBColor(color);
-	if ( inverted.ok ) {
-		color = 'rgb(' + (255 - inverted.r) + ', ' + (255 - inverted.g) + ', ' + (255 - inverted.b) + ')';
-	}
-
-	return color;
-}
-
-
 /* Post Finder dialog */
 (function($, document) {
 	var
@@ -735,7 +725,7 @@ function invertColor( color ) {
 
 
 	// Polyfill : input : color
-	$.fn.kcPFiColor = function( config ) {
+	$.fn.kcPFiColor = function() {
 		if ( !this.length )
 			return this;
 
@@ -743,26 +733,17 @@ function invertColor( color ) {
 			return this;
 
 		var $els = $(this);
-		if ( typeof $.fn.ColorPicker !== 'function' ) {
+		if ( typeof $.fn.wpColorPicker !== 'function' ) {
 			return Modernizr.load([{
-				load: kcGetSNS( 'jquery_colorpicker', win.kcSettings.js).concat( kcGetSNS('jquery_colorpicker', win.kcSettings.css) ),
+				load: kcGetSNS( 'wp_color_picker', win.kcSettings.js).concat( kcGetSNS('wp_color_picker', win.kcSettings.css) ),
 				complete: function() {
-					$els.kcPFiColor( config );
+					$els.kcPFiColor();
 				}
 			}]);
 		}
 
 		return this.each(function() {
-			$(this).ColorPicker( config )
-				.each(function() {
-					var $el = $(this).addClass('hasColorpicker');
-					if ( $el.val() !== '' ) {
-						$el.css({
-							backgroundColor: this.value,
-							color: this.value
-						});
-					}
-				});
+			$(this).wpColorPicker().addClass('hasColorpicker');
 		});
 	};
 

@@ -289,17 +289,12 @@ input.kcs-files {margin-right:.5em}
 
 
 /*** HTML5 inputs ***/
-input[type="number"], input[type="color"],
+input[type="number"],
 input[type="date"], input[type="month"],
 input[type="week"], input[type="time"],
 input[type="datetime"], input[type="datetime-local"] {
 	text-align:right;
 	background:#fff;
-}
-input[type="color"] {
-	cursor:default;
-	width:3em !important;
-	padding:0 !important;
 }
 
 /*** WP Editor ***/
