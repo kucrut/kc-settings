@@ -4,7 +4,7 @@ var win = window.dialogArguments || opener || parent || top;
 	var texts     = win.kcSettings.upload.text,
 	    current   = win.kcSettings.upload.target.data('currentFiles'),
 	    $checks   = $(),
-	    $buttons  = $('<div class="kcs-wrap"><h4>'+texts.head+'</h4> <a class="button check-all">'+texts.checkAll+'</a> <a class="button check-invert">'+texts.invert+'</a> <a class="button check-clear">'+texts.clear+'</a> <a class="button add-checked">'+texts.addFiles+'</a></div>')
+	    $buttons  = $('<div class="kcs-wrap"><h4>'+texts.head+'</h4> <a class="button check-all">'+texts.checkAll+'</a> <a class="button check-invert">'+texts.invert+'</a> <a class="button check-clear hidden">'+texts.clear+'</a> <a class="button add-checked hidden">'+texts.addFiles+'</a></div>')
 				.on('click', 'a', function(e) {
 					e.preventDefault();
 					var $el = $(this);
@@ -100,9 +100,9 @@ var win = window.dialogArguments || opener || parent || top;
 			});
 
 			if ( $checked.length )
-				$('a.add-checked, a.check-clear', $buttons).show();
+				$('a.add-checked, a.check-clear', $buttons).removeClass('hidden');
 			else
-				$('a.add-checked, a.check-clear', $buttons).hide();
+				$('a.add-checked, a.check-clear', $buttons).addClass('hidden');
 		});
 
 		// Gallery & Media Library tabs

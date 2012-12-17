@@ -249,10 +249,6 @@ input.kcs-files {margin-right:.5em}
 	margin-right:1em;
 }
 .kcs-wrap {margin:1em 0}
-.kcs-wrap a.check-clear,
-.kcs-wrap a.add-checked {
-	display:none;
-}
 
 .description .impo {color:#cc0000}
 
