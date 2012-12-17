@@ -596,7 +596,7 @@ final class kcSettings {
 		add_action( 'admin_print_footer_scripts', array(__CLASS__, '_sns_vars'), 9 );
 
 		$jqui_theme = ( $admin_color == 'fresh' ) ? 'flick' : 'cupertino';
-		wp_register_style(  'jquery-ui', "{$path['styles']}/jquery-ui/{$jqui_theme}/style{$suffix}.css", false, '1.8.23' );
+		wp_register_style(  'jquery-ui', "{$path['styles']}/jquery-ui/{$jqui_theme}/jquery-ui-1.9.2.custom{$suffix}.css", false, '1.8.23' );
 
 		wp_register_script( 'chosen', "{$path['scripts']}/chosen.jquery{$suffix}.js", array('jquery'), '0.9.8', true );
 		wp_register_style(  'chosen', "{$path['styles']}/chosen/chosen{$suffix}.css", false, '0.9.8' );
