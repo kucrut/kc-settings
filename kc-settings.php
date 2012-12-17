@@ -601,9 +601,6 @@ final class kcSettings {
 		wp_register_script( 'chosen', "{$path['scripts']}/chosen.jquery{$suffix}.js", array('jquery'), '0.9.8', true );
 		wp_register_style(  'chosen', "{$path['styles']}/chosen/chosen{$suffix}.css", false, '0.9.8' );
 
-		wp_register_script( 'jquery-ui-slider-access', "{$path['scripts']}/jquery-ui-sliderAccess{$suffix}.js", array('jquery-ui-slider'), '0.2', true );
-		wp_register_script( 'jquery-ui-datetimepicker', "{$path['scripts']}/jquery-ui-timepicker-addon{$suffix}.js", array('jquery-ui-datepicker', 'jquery-ui-slider-access'), '1.0.1', true );
-
 		# Builder
 		wp_register_script( 'kc-settings-builder', "{$path['scripts']}/kc-settings-builder{$suffix}.js", array('kc-settings-base', 'jquery-ui-sortable'), self::version, true );
 
