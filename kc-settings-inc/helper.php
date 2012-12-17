@@ -456,3 +456,24 @@ function kc_get_sns( $handles, $type = 'js', $_output = array() ) {
 	return $_output;
 }
 }
+
+
+/**
+ * array_filter() Callback helper
+ *
+ * @since 3.0
+ * Inspired by http://stackoverflow.com/questions/5482989/php-array-filter-with-arguments
+ */
+class _kc_Array_Filter_Helper {
+	private $base;
+	private $operator;
+
+	function __construct( $base, $operator = '' ) {
+		$this->base = $base;
+		$this->operator = $operator;
+	}
+
+	function match_mime_types( $mime_type ) {
+		return ( strpos( $this->base, $mime_type ) !== false );
+	}
+}

@@ -4,41 +4,95 @@ class kcSettings_post {
 	protected static $settings;
 
 	public static function init() {
-		self::$settings = kcSettings::get_data('settings', 'post' );
-		if ( empty(self::$settings) )
+		$settings = kcSettings::get_data( 'settings', 'post' );
+		if ( empty($settings) )
 			return;
 
+		self::$settings = $settings;
 		add_action( 'add_meta_boxes', array(__CLASS__, '_create'), 11, 2 );
 		add_action( 'save_post', array(__CLASS__, '_save'), 11 );
 		add_action( 'edit_attachment', array(__CLASS__, '_save'), 11 );
 	}
 
 
+	# Filter settings
+	private static function _bootstrap_sections( $sections, $post ) {
+		foreach ( $sections as $section_index => $section ) {
+			# does this section have role set?
+			if ( !empty($section['role']) && !kc_check_roles($section['role']) ) {
+				unset( $sections[$section_index] );
+				continue;
+			}
+
+			# Attachments:
+			if ( $post->post_type == 'attachment' ) {
+				# 0. Check if this section is meant only for a certain mime types
+				if ( !empty($section['post_mime_types']) ) {
+					$section_mime_type_matches = array_filter(
+						(array) $section['post_mime_types'],
+						array( new _kc_Array_Filter_Helper( $post->post_mime_type ), 'match_mime_types' )
+					);
+					if ( empty($section_mime_type_matches) ) {
+						unset( $sections[$section_index] );
+						continue;
+					}
+				}
+
+				# 1. Check if fields are meant only for certain mime types
+				foreach ( $section['fields'] as $field_index => $field ) {
+					if ( !empty($field['post_mime_types']) ) {
+						$field_mime_type_matches = array_filter(
+							(array) $field['post_mime_types'],
+							array( new _kc_Array_Filter_Helper( $post->post_mime_type ), 'match_mime_types' )
+						);
+						if ( empty($field_mime_type_matches) ) {
+							unset( $sections[$section_index]['fields'][$field_index] );
+							continue;
+						}
+					}
+				}
+
+				if ( empty($sections[$section_index]['fields']) ) {
+					unset( $sections[$section_index] );
+				}
+			}
+		}
+
+		return $sections;
+	}
+
 	# Create metabox
 	public static function _create( $post_type, $post ) {
-		if ( !isset(self::$settings[$post_type]) )
+		if ( empty(self::$settings[$post_type]) )
+			return;
+
+		$sections = self::_bootstrap_sections( self::$settings[$post_type], $post );
+		if ( empty($sections) )
 			return;
 
 		kcSettings::add_page( 'post.php' );
 		kcSettings::add_page( 'post-new.php' );
 
-		foreach ( self::$settings[$post_type] as $section ) {
-			# does this section have role set?
-			if ( (isset($section['role']) && !empty($section['role'])) && !kc_check_roles($section['role']) )
-				continue;
-
-			# add metabox
-			add_meta_box( "kc-metabox-{$post_type}-{$section['id']}", $section['title'], array(__CLASS__, '_fill'), $post_type, $section['metabox']['context'], $section['metabox']['priority'], $section );
+		foreach ( $sections as $section_index => $section ) {
+			add_meta_box(
+				"kc-metabox-{$post_type}-{$section['id']}",
+				$section['title'],
+				array( __CLASS__, '_fill' ),
+				$post_type,
+				$section['metabox']['context'],
+				$section['metabox']['priority'],
+				$section
+			);
 		}
 	}
 
 
 	# Populate metabox
 	public static function _fill( $object, $box ) {
-		$output = '';
 		$section = $box['args'];
-		if ( isset($section['desc']) && !empty($section['desc']) )
-			$output .= wpautop( $section['desc'] );
+		if ( !empty($section['desc']) ) {
+			echo wpautop( $section['desc'] ) . PHP_EOL;
+		}
 
 		$on_side = $section['metabox']['context'] == 'side' ? true : false;
 		if ( $on_side ) {
@@ -81,10 +135,16 @@ class kcSettings_post {
 
 	# Save post metadata/custom fields values
 	public static function _save( $post_id ) {
+		if ( !current_user_can( 'edit_post', $post_id ) )
+			return $post_id;
+
 		$post = get_post( $post_id );
+		if ( empty(self::$settings[$post->post_type]) )
+			return $post_id;
+
+		$sections = self::_bootstrap_sections( self::$settings[$post->post_type], $post );
 		if (
-			!current_user_can( 'edit_post', $post_id )
-			|| !isset( self::$settings[$post->post_type] )
+			empty( $sections )
 			|| ( isset($_POST['action']) && in_array($_POST['action'], array('inline-save', 'trash', 'untrash')) )
 			|| $post->post_status == 'auto-draft'
 			|| empty( $_POST["{$post->post_type}_kc_meta_box_nonce"] )
@@ -93,7 +153,7 @@ class kcSettings_post {
 			return $post_id;
 		}
 
-		foreach ( self::$settings[$post->post_type] as $section ) {
+		foreach ( $sections as $section ) {
 			foreach ( $section['fields'] as $field )
 				_kc_update_meta( 'post', $post->post_type, $post_id, $section, $field );
 		}

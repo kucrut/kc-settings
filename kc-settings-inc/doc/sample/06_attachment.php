@@ -23,11 +23,18 @@ function kc_settings_sample_attachment( $groups ) {
 				'title'  => 'Section title',
 				'desc'   => '<p>Some description about this options group</p>',
 				/**
-				 * Optional. Uncomment this to only display the metadata settings for
+				 * Optional. Uncomment this to only display the metabox for
 				 * certain user roles.
+				 * Accepts string / array.
 				 */
-				// 'role'   => array( 'administrator', 'editor' ),
-				'fields' => kc_settings_sample_fields() // TODO: See 00_fields.php
+				//'role' => array( 'administrator', 'editor' ),
+				'fields' => kc_settings_sample_fields(), // TODO: See 00_fields.php
+				/**
+				 * Optional. Uncomment this to only display the metabox for
+				 * certain mime types.
+				 * Accepts string / array.
+				 */
+				'post_mime_types' => array( 'image', 'audio' ),
 			)
 		)
 	);
