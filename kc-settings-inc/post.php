@@ -54,7 +54,7 @@ class kcSettings_post {
 			);
 		}
 		?>
-		<?php echo wp_nonce_field( '-1', "{$object->post_type}_kc_meta_box_nonce" ) . PHP_EOL ?>
+		<?php echo wp_nonce_field( '___kc_meta_box_nonce___', "{$object->post_type}_kc_meta_box_nonce" ) . PHP_EOL ?>
 		<?php echo $wraps['block'][0] . PHP_EOL; ?>
 		<?php
 			foreach ( $section['fields'] as $field ) :
