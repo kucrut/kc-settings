@@ -13,8 +13,9 @@ function kc_array_rebuild_index( $arr, $cleanup = true ) {
 	$rownum = 0;
 	foreach ( $arr as $row ) {
 		foreach ( $row as $l => $v ) {
-			if ( $cleanup )
+			if ( $cleanup && is_string($v) ) {
 				$v = trim( $v );
+			}
 			$nu_arr[$rownum][$l] = $v;
 		}
 		++$rownum;
@@ -212,7 +213,7 @@ function kc_sort_query_by_post_in( $sortby, $query ) {
  */
 function _kc_sanitize_value( $value, $type ) {
 	# default sanitation
-	if ( $value != '' && $type === 'multiinput' ) {
+	if ( !empty($value) && $type === 'multiinput' ) {
 		$value = kc_array_remove_empty( $value );
 		$value = kc_array_rebuild_index( $value );
 		if ( empty($value) )
