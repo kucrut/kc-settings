@@ -487,7 +487,7 @@ function kc_get_sns( $handles, $type = 'js', $_output = array() ) {
 /**
  * array_filter() Callback helper
  *
- * @since 3.0
+ * @since 2.8
  * Inspired by http://stackoverflow.com/questions/5482989/php-array-filter-with-arguments
  */
 class _kc_Array_Filter_Helper {
