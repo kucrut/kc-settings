@@ -729,8 +729,10 @@ function kcsbSlug( str ) {
 		if ( !this.length )
 			return this;
 
-		if ( Modernizr.inputtypes.color !== false )
+		if ( Modernizr.inputtypes.color !== false ) {
+			$(this).addClass( 'hasNative' );
 			return this;
+		}
 
 		var $els = $(this);
 		if ( typeof $.fn.wpColorPicker !== 'function' ) {

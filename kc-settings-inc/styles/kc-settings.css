@@ -296,6 +296,14 @@ input[type="datetime"], input[type="datetime-local"] {
 	text-align:right;
 	background:#fff;
 }
+input.kcs-color.hasNative {
+	background:none;
+	padding:0;
+	border:0;
+	width:2em !important;
+	height:2em !important;
+	line-height:2em;
+}
 
 /*** WP Editor ***/
 .kcs-field .quicktags-toolbar {padding:2px;}
