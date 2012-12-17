@@ -300,9 +300,10 @@ input.kcs-color.hasNative {
 	background:none;
 	padding:0;
 	border:0;
-	width:2em !important;
-	height:2em !important;
-	line-height:2em;
+	width:3em !important;
+	height:2.5em !important;
+	line-height:2.5em;
+	cursor:pointer;
 }
 
 /*** WP Editor ***/
