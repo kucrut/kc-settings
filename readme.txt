@@ -43,7 +43,7 @@ For complete howto, please find the readme.html file inside the plugin directory
 == Changelog ==
 
 = 2.8 =
-* Compatibility with WordPress 3.5
+* Only for WordPress 3.5+
 * Supports excluding metadata section/field on certain post mime types
 * Bug fixes
 
