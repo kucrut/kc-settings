@@ -47,10 +47,14 @@ var kcGetSNS = function( id, sources ) {
 	}
 	else {
 		for ( var i = 0; i < sources[id].deps.length; i++ ) {
+			if ( !sources.hasOwnProperty(sources[id].deps[i]) )
+				continue;
+
+			var depItem = sources[sources[id].deps[i]];
 			// Only add js/css that hasn't been queued by WP
-			if ( !sources[sources[id].deps[i]].queue ) {
-				out.push( sources[sources[id].deps[i]].src );
-				printVars( sources[sources[id].deps[i]] );
+			if ( depItem.hasOwnProperty('queue') && !depItem.queue && depItem.hasOwnProperty('src') ) {
+				out.push( depItem.src );
+				printVars( depItem );
 			}
 		}
 	}

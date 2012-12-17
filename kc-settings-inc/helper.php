@@ -448,9 +448,11 @@ function kc_get_sns( $handles, $type = 'js', $_output = array() ) {
 
 		$_x = clone $sources;
 		$_x->all_deps( $id );
-		$_output[$_id]['deps'] = array_map( 'kc_get_sns_replacer', $_x->to_do );
 
-		$_output = kc_get_sns( $sources->registered[$id]->deps, $type, $_output );
+		if ( !empty($_x->to_do) ) {
+			$_output[$_id]['deps'] = array_map( 'kc_get_sns_replacer', array_values( $_x->to_do ) );
+			$_output = kc_get_sns( $sources->registered[$id]->deps, $type, $_output );
+		}
 	}
 
 	return $_output;
