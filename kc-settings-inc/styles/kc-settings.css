@@ -471,3 +471,13 @@ input[type="datetime"], input[type="datetime-local"] {
 	border-radius:.3em;
 }
 .help-tab-content pre .ccomment {color:#8a8a8a}
+
+.iris-picker .ui-slider-handle {
+	margin:0;
+}
+.iris-slider-offset {
+	border:0;
+	background:none;
+	width:auto;
+	height:auto;
+}
