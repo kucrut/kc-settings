@@ -61,7 +61,7 @@ jQuery(document).ready(function($) {
 
 			$el.insertBefore( $cpWrap );
 			$cpWrap.remove();
-			$el.wpColorPicker(args.colorpicker);
+			$el.wpColorPicker();
 		});
 	});
 
@@ -74,7 +74,7 @@ jQuery(document).ready(function($) {
 
 	// Polyfills
 	$('input.kcs-color').kcPFiColor();
-	$('input[type=date]').kcPFiDate( args.datepicker.date );
+	$('input.kcs-date').kcPFiDate( args.datepicker.date );
 
 	// Add term form
 	var $addTagForm = $('#addtag');
@@ -94,8 +94,8 @@ jQuery(document).ready(function($) {
 				});
 
 
-				$('input[type=color]', $addTagForm).kcPFiColor( args.colorpicker );
-				$('input[type=date]', $addTagForm).kcPFiDate( args.datepicker.date );
+				$('input.kcs-color', $addTagForm).kcPFiColor();
+				$('input.kcs-date', $addTagForm).kcPFiDate( args.datepicker.date );
 
 				$('.kcs-tabs', $addTagForm).kcTabs();
 				$('select.chosen', $addTagForm).kcChosen();
