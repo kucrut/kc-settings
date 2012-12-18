@@ -789,8 +789,8 @@ final class kcSettings {
 
 	# Plugin activation tasks
 	public static function _activate() {
-		if ( version_compare(get_bloginfo('version'), '3.3', '<') )
-			wp_die( 'Please upgrade your WordPress to version 3.3 before using this plugin.' );
+		if ( version_compare( get_bloginfo('version'), '3.5', '<' ) )
+			wp_die( 'Please upgrade your WordPress to version 3.5 before using this plugin.' );
 
 		/**
 		 * Since 2.7.4
