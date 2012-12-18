@@ -10,7 +10,7 @@
  * Blacklisted fields are: multiinput, multiselect, special, editor,
  * checkbox, file, date, datetime, datetime-local, week, month, time
  *
- * @TODO Make sure to use unique and only alphanumerics/dashes/underscores string for the prefix and section field IDs!
+ * @NOTE Make sure to use unique and only alphanumerics/dashes/underscores string for the prefix and section field IDs!
  * @see 00_fields.php for complete field types.
  *
  */
@@ -19,7 +19,7 @@
 add_filter( 'kc_theme_settings', 'kc_settings_sample_theme' );
 function kc_settings_sample_theme( $settings ) {
 	/**
-	 * TODO: Please copy/paste/edit the fields you need, then remove the require_once line.
+	 * NOTE: Please copy/paste/edit the fields you need, then remove the require_once line.
 	 * This is only for simplifying the development.
 	 */
 	require_once dirname(__FILE__) . '/00_fields.php';
@@ -44,7 +44,7 @@ function kc_settings_sample_theme( $settings ) {
 				 * this will be used as the tooltip for the section title.
 				 */
 				'desc'   => 'Some description about this options group',
-				'fields' => kc_settings_sample_fields() // TODO: See 00_fields.php
+				'fields' => kc_settings_sample_fields() // NOTE: See 00_fields.php
 			),
 			array(
 				/**

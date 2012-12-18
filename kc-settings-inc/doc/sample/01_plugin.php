@@ -3,7 +3,7 @@
 /**
  * Sample plugin/theme options.
  *
- * @TODO Make sure to use unique and only alphanumerics/dashes/underscores string for the prefix and section field IDs!
+ * @NOTE Make sure to use unique and only alphanumerics/dashes/underscores string for the prefix and section field IDs!
  * @see 00_fields.php for complete field types.
  *
  */
@@ -12,7 +12,7 @@
 add_filter( 'kc_plugin_settings', 'kc_settings_sample_plugin' );
 function kc_settings_sample_plugin( $settings ) {
 	/**
-	 * TODO: Please copy/paste/edit the fields you need, then remove the require_once line.
+	 * NOTE: Please copy/paste/edit the fields you need, then remove the require_once line.
 	 * This is only for simplifying the development.
 	 */
 	require_once dirname(__FILE__) . '/00_fields.php';
@@ -57,7 +57,7 @@ function kc_settings_sample_plugin( $settings ) {
 				'id'     => 'sample_section',
 				'title'  => 'Sample Options',
 				'desc'   => '<p>Some description about this options group</p>',
-				'fields' => kc_settings_sample_fields() // TODO: See 00_fields.php
+				'fields' => kc_settings_sample_fields() // NOTE: See 00_fields.php
 			)
 			// You can add more sections here...
 		),

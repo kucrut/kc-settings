@@ -11,13 +11,13 @@
 add_filter( 'kc_post_settings', 'kc_settings_sample_post' );
 function kc_settings_sample_post( $groups ) {
 	/**
-	 * TODO: Please copy/paste/edit the fields you need, then remove the require_once line.
+	 * NOTE: Please copy/paste/edit the fields you need, then remove the require_once line.
 	 * This is only for simplifying the development.
 	 */
 	require_once dirname(__FILE__) . '/00_fields.php';
 
 	$my_group = array(
-		'post' => array( // TODO: Change this key to the desired post type name
+		'post' => array( // NOTE: Change this key to the desired post type name
 			array(
 				'id'     => 'sample_section',
 				'title'  => 'Section title',
@@ -27,7 +27,7 @@ function kc_settings_sample_post( $groups ) {
 				 * certain user roles.
 				 */
 				// 'role'   => array( 'administrator', 'editor' ),
-				'fields' => kc_settings_sample_fields() // TODO: See 00_fields.php
+				'fields' => kc_settings_sample_fields() // NOTE: See 00_fields.php
 			)
 		)
 	);
