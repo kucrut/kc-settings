@@ -4,7 +4,7 @@ Donate link: http://kucrut.org/
 Tags: theme-options, plugin-options, settings, options, term-meta, category-meta, post-meta, custom-fields, user-meta, attachment, theme-customizer
 Requires at least: 3.5
 Tested up to: 3.5
-Stable tag: 2.8
+Stable tag: 2.8.1
 
 Easily create plugin/theme settings pages, custom fields metaboxes and term/user metadata settings.
 
@@ -41,6 +41,9 @@ For complete howto, please find the readme.html file inside the plugin directory
 6. Theme customizer
 
 == Changelog ==
+
+= 2.8.1 =
+* Fix bug in backend scripts and styles loading, props Grawl
 
 = 2.8 =
 * Only for WordPress 3.5+
