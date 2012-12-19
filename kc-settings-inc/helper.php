@@ -439,7 +439,7 @@ function kc_get_sns( $handles, $type = 'js', $_output = array() ) {
 
 		$src = $sources->registered[$id]->src;
 		if ( substr( $sources->registered[$id]->src, 0, 1 ) === '/' )
-			$src = home_url($src);
+			$src = site_url($src);
 
 		$_id = str_replace( '-', '_', $id );
 		$_output[$_id] = array(
