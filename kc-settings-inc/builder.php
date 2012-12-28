@@ -190,7 +190,7 @@ class kcSettings_builder {
 
 
 	public static function builder_link( $plugin_meta, $plugin_file, $plugin_data ) {
-		if ( $plugin_data['Name'] == 'KC Settings' )
+		if ( !empty(self::$data['url']) && $plugin_data['Name'] == 'KC Settings' )
 			$plugin_meta[] = '<a href="'.self::$data['url'].'">'.__('KC Settings Builder', 'kc-settings').'</a>';
 
 		return $plugin_meta;
