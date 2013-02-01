@@ -82,22 +82,29 @@ class kcForm {
 
 
 	public static function checkbox( $args ) {
-		if ( !isset($args['type']) || !$args['type'] )
+		if ( empty( $args['type'] ) || !in_array( $args['type'], array( 'checkbox', 'radio') ) )
 			$args['type'] = 'checkbox';
+
 		unset( $args['attr']['id'] );
 
-		if ( !is_array($args['current']) )
+		if ( $args['type'] === 'checkbox' && !is_array($args['current']) )
 			$args['current'] = array($args['current']);
-		if ( !isset($args['check_sep']) || !is_array($args['check_sep']) || count($args['check_sep']) < 2 )
+
+		if ( empty($args['check_sep']) || !is_array($args['check_sep']) || count($args['check_sep']) < 2 )
 			$args['check_sep'] = array('', '<br />');
+
 		$attr = self::_build_attr( $args['attr'] );
 
 		$output  = '';
-		foreach ( $args['options'] as $o ) {
-			$output .= "{$args['check_sep'][0]}<label class='kcs-check kcs-{$args['type']}'><input type='{$args['type']}' value='{$o['value']}'{$attr}";
-			if ( in_array($o['value'], $args['current']) || ( isset($args['current'][$o['value']]) && $args['current'][$o['value']]) )
+		foreach ( $args['options'] as $option ) {
+			$output .= "{$args['check_sep'][0]}<label class='kcs-check kcs-{$args['type']}'>";
+			$output .= "<input type='{$args['type']}' value='{$option['value']}'{$attr}";
+			if (
+				( $args['current'] == $option['value'] )
+				|| ( is_array($args['current']) && in_array($option['value'], $args['current']) )
+			)
 				$output .= " checked='true'";
-			$output .= " /> {$o['label']}</label>{$args['check_sep'][1]}\n";
+			$output .= " /> {$option['label']}</label>{$args['check_sep'][1]}\n";
 		}
 
 		return $output;
