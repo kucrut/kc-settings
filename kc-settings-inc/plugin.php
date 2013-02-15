@@ -28,7 +28,7 @@ class kcSettings_plugin {
 		add_action( "load-{$this->page}", array( $this, 'load_actions' ), 99 );
 
 		if ( $display == 'metabox' ) {
-			require_once dirname(__FILE__) . '/plugin-metabox.php';
+			require_once dirname( __FILE__ ) . '/plugin-metabox.php';
 			$this->metabox = new kcSettings_plugin_metabox( $this );
 		}
 	}
@@ -46,7 +46,7 @@ class kcSettings_plugin {
 			}
 		}
 
-		if ( !empty($this->group['load_actions']) && is_callable($this->group['load_actions']) )
+		if ( !empty($this->group['load_actions']) && is_callable( $this->group['load_actions'] ) )
 			call_user_func_array( $this->group['load_actions'], array( $this ) );
 	}
 
@@ -55,7 +55,7 @@ class kcSettings_plugin {
 	function register_options() {
 		extract( $this->group, EXTR_OVERWRITE );
 
-		if ( !is_array($options) || empty($options) )
+		if ( !is_array( $options ) || empty( $options ) )
 			return;
 
 		# register our options, unique for each theme/plugin
@@ -78,10 +78,12 @@ class kcSettings_plugin {
 					'section' => $section['id'],
 					'field'   => $field,
 					'echo'    => true,
-					'tabled'  => true
+					'tabled'  => true,
 				);
-				if ( !in_array($field['type'], array('checkbox', 'radio', 'multiinput', 'file')) )
+				if ( !in_array( $field['type'], array('checkbox', 'radio', 'multiinput', 'file') ) )
 					$args['label_for'] = "{$section['id']}__{$field['id']}";
+				if ( $field['type'] === 'editor' )
+					$args['label_for'] = strtolower( str_replace( array( '-', '_' ), '', $args['label_for'] ) );
 
 				add_settings_field( $field['id'], $field['title'], '_kc_field', "{$prefix}_settings", $section['id'], $args );
 			}
@@ -92,7 +94,7 @@ class kcSettings_plugin {
 	# Setting link on the plugins listing page
 	function setting_link( $plugin_meta, $plugin_file, $plugin_data ) {
 		if ( $plugin_data['Name'] == $this->group['menu_title'] )
-			$plugin_meta[] = '<a href="'.$this->url.'">'.__('Settings', 'kc-settings').'</a>';
+			$plugin_meta[] = '<a href="'.$this->url.'">'. __( 'Settings', 'kc-settings' ) .'</a>';
 
 		return $plugin_meta;
 	}
@@ -104,7 +106,7 @@ class kcSettings_plugin {
 
 	<div class="wrap">
 		<?php screen_icon(); ?>
-		<h2><?php echo $page_title ?></h2>
+		<h2><?php echo esc_html( $page_title ) ?></h2>
 		<?php do_action( "{$prefix}_kc_settings_page_before", $this->group ) ?>
 		<form action="options.php" method="post" id="kc-settings-form">
 			<?php
@@ -122,7 +124,7 @@ class kcSettings_plugin {
 						<?php
 							$this->settings_section( $section );
 						endforeach;
-						submit_button( __('Save Changes') );
+						submit_button( __( 'Save Changes' ) );
 					break;
 				}
 			?>
@@ -136,7 +138,7 @@ class kcSettings_plugin {
 		if ( !empty($section['desc']) ) :
 		?>
 		<div class="section-desc">
-			<?php echo wpautop( $section['desc'] ); ?>
+			<?php echo wpautop( $section['desc'] ); // xss ok ?>
 		</div>
 		<?php
 		endif;
@@ -144,14 +146,17 @@ class kcSettings_plugin {
 		do_action( 'kc_settings_section_before', $this->group['prefix'], $section );
 
 		# Call user callback function for displaying the section ( if set )
-		if ( isset($section['cb']) && is_callable($section['cb']) ) {
-			$section = array_merge( $section, array(
-				'field_id'   => "{$this->group['prefix']}_settings__{$section['id']}",
-				'field_name' => "{$this->group['prefix']}_settings[{$section['id']}]"
-			) );
+		if ( isset($section['cb']) && is_callable( $section['cb'] ) ) {
+			$section = array_merge(
+				$section,
+				array(
+					'field_id'   => "{$this->group['prefix']}_settings__{$section['id']}",
+					'field_name' => "{$this->group['prefix']}_settings[{$section['id']}]",
+				)
+			);
 			$cb_args = !empty($section['args']) ? $section['args'] : '';
-			if ( $cb_args && is_callable($cb_args) )
-				$cb_args = call_user_func_array( $cb_args, array( 'args' => $section) );
+			if ( $cb_args && is_callable( $cb_args ) )
+				$cb_args = call_user_func_array( $cb_args, array('args' => $section) );
 			call_user_func_array( $section['cb'], array('args' => $section, 'cb_args' => $cb_args) );
 		}
 		# Defaults to WordPress' Settings API
@@ -177,7 +182,7 @@ class kcSettings_plugin {
 		# prefix-based filter
 		$user_val = apply_filters( "kcv_settings_{$prefix}", $user_val );
 		if ( empty($user_val) )
-			return apply_filters( "kc_psv", $user_val );
+			return apply_filters( 'kc_psv', $user_val );
 
 		$nu_val = array();
 		foreach ( $user_val as $section_id => $section_value ) {

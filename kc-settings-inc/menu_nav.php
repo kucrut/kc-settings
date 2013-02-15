@@ -19,15 +19,15 @@ final class kcSettings_menu_nav {
 	public static function meta_box_fill( $menu_id, $args ) {
 		foreach ( $args['args']['fields'] as $field ) { ?>
 <div class="kc-field">
-	<label for="kc-menu_navmeta-<?php echo "{$args['args']['id']}-{$field['id']}" ?>"><?php echo $field['title'] ?></label>
-	<div class="kc-field-wrap kc-field-<?php echo $field['type'] ?>-wrap">
+	<label for="<?php echo esc_attr( "kc-menu_navmeta-{$args['args']['id']}-{$field['id']}" ) ?>"><?php echo esc_html( $field['title'] ) ?></label>
+	<div class="<?php echo esc_attr( "kc-field-wrap kc-field-{$field['type']}-wrap" ) ?>">
 		<?php
 			echo _kc_field( array(
 				'mode'      => 'menu_nav',
 				'object_id' => $menu_id,
 				'section'   => $args['args']['id'],
 				'field'     => $field,
-			) );
+			) ); // xss ok
 		?>
 	</div>
 </div>
@@ -44,7 +44,7 @@ final class kcSettings_menu_nav {
 			add_meta_box( "kc-nav-menus-metabox-{$section['id']}", $section['title'], array(__CLASS__, 'meta_box_fill'), 'nav-menus', 'kcmenunavmeta', 'default', $section );
 		?>
 <div id="kc-menu_navmeta" class="metabox-holder">
-	<h2><?php _e('Menu metadata', 'kc-settings') ?></h2>
+	<h2><?php _e( 'Menu metadata', 'kc-settings' ) ?></h2>
 	<?php do_meta_boxes( 'nav-menus', 'kcmenunavmeta', $nav_menu_selected_id ) ?>
 </div>
 	<?php }

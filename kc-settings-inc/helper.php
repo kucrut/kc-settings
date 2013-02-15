@@ -13,10 +13,10 @@ function kc_array_rebuild_index( $arr, $cleanup = true ) {
 	$rownum = 0;
 	foreach ( $arr as $row ) {
 		foreach ( $row as $l => $v ) {
-			if ( $cleanup && is_string($v) ) {
+			if ( $cleanup && is_string( $v ) ) {
 				$v = trim( $v );
 			}
-			$nu_arr[$rownum][$l] = $v;
+			$nu_arr[ $rownum ][ $l ] = $v;
 		}
 		++$rownum;
 	}
@@ -42,16 +42,16 @@ function kc_array_rebuild_index( $arr, $cleanup = true ) {
  * @link http://www.php.net/manual/en/function.array-search.php#69232
  */
 function kc_array_search_recursive( $needle, $haystack, $needlekey = '', $strict = false, $path = array() ) {
-	if( !is_array($haystack) )
+	if ( !is_array( $haystack ) )
 		return false;
 
-	foreach( $haystack as $key => $val ) {
-		if ( is_array($val) && $subpath = kc_array_search_recursive( $needle, $val, $needlekey, $strict, $path) ) {
-			$path = array_merge( $path, array($key), $subpath );
+	foreach ( $haystack as $key => $val ) {
+		if ( is_array( $val ) && $subpath = kc_array_search_recursive( $needle, $val, $needlekey, $strict, $path ) ) {
+			$path = array_merge( $path, array( $key ), $subpath );
 			return $path;
 		}
-		elseif ( (!$strict && $val == $needle && $key == (strlen($needlekey) > 0 ? $needlekey : $key))
-		         || ($strict && $val === $needle && $key == (strlen($needlekey) > 0 ? $needlekey : $key)) ) {
+		elseif ( ( !$strict && $val == $needle && $key == ( strlen( $needlekey ) > 0 ? $needlekey : $key ) )
+		         || ( $strict && $val === $needle && $key == ( strlen( $needlekey ) > 0 ? $needlekey : $key ) ) ) {
 			$path[] = $key;
 			return $path;
 		}
@@ -98,16 +98,16 @@ function kc_array_map_deep( $func, $input ) {
  */
 function kc_array_remove_empty( $arr, $rm_zero = true ) {
 	$narr = array();
-	while ( list($key, $val) = each($arr) ) {
-		if ( is_array($val) ) {
+	while ( list( $key, $val ) = each( $arr ) ) {
+		if ( is_array( $val ) ) {
 			$val = kc_array_remove_empty( $val );
-			if ( count($val) != 0 )
-				$narr[$key] = $val;
+			if ( count( $val ) != 0 )
+				$narr[ $key ] = $val;
 		}
 		else {
-			if ( trim($val) != '' ) {
+			if ( trim( $val ) != '' ) {
 				if ( $rm_zero && $val )
-					$narr[$key] = $val;
+					$narr[ $key ] = $val;
 			}
 		}
 	}
@@ -130,11 +130,11 @@ function kc_array_multi_get_value( $array, $keys ) {
 		if ( !isset($array[$key]) )
 			return false;
 
-		if ( count($keys) )
+		if ( count( $keys ) )
 			$array = $array[$key];
 	}
 
-	if ( !isset($array[$key]) )
+	if ( !isset( $array[ $key ] ) )
 		return false;
 
 	return $array[$key];
@@ -150,9 +150,9 @@ function kc_array_multi_get_value( $array, $keys ) {
  *
  * @return bool|array|string
  */
-function kc_get_option( $prefix, $section = '', $field = '') {
+function kc_get_option( $prefix, $section = '', $field = '' ) {
 	$values = get_option( "{$prefix}_settings" );
-	if ( !is_array($values) || func_num_args() < 2 )
+	if ( !is_array( $values ) || func_num_args() < 2 )
 		return $values;
 
 	$keys = func_get_args();
@@ -197,7 +197,7 @@ function kc_check_roles( $roles = array() ) {
 	if ( empty($roles) )
 		return true;
 
-	if ( !is_array($roles) )
+	if ( !is_array( $roles ) )
 		$roles = array( $roles );
 
 	# get current user data
@@ -205,8 +205,8 @@ function kc_check_roles( $roles = array() ) {
 
 	# if current user is not within the roles, abort
 	$allowed = false;
-	foreach ( $roles as $r ) {
-		if ( in_array($r, $current_user->roles) ) {
+	foreach ( $roles as $role ) {
+		if ( in_array( $role, $current_user->roles ) ) {
 			$allowed = true;
 			break;
 		}
@@ -246,7 +246,7 @@ function _kc_update_meta( $meta_type = 'post', $object_type_name, $object_id, $s
 		return;
 
 	# Set the meta key and get the value based on the $meta_type and screen
-	switch( $meta_type ) {
+	switch ( $meta_type ) {
 		case 'post' :
 			$meta_key = "_{$field['id']}";
 			$action = 'editpost';
@@ -313,14 +313,14 @@ function kc_get_image_sizes( $type = 'all' ) {
 		foreach ( array('thumbnail', 'medium', 'large') as $size ) {
 			$sizes[$size] = array(
 				'width'  => get_option( "{$size}_size_w" ),
-				'height' => get_option( "{$size}_size_h" )
+				'height' => get_option( "{$size}_size_h" ),
 			);
 		}
 	}
 
 	if ( $type !== 'default' ) {
 		global $_wp_additional_image_sizes;
-		if ( is_array($_wp_additional_image_sizes) )
+		if ( is_array( $_wp_additional_image_sizes ) )
 			$sizes = array_merge( $sizes, $_wp_additional_image_sizes );
 	}
 
@@ -343,7 +343,7 @@ function kc_get_attachment_icon_src( $id = '', $size = 'thumbnail' ) {
 	if ( $thumb = wp_get_attachment_image_src( $id, $size, true ) )
 		$icon = $thumb[0];
 	else
-		$icon = wp_mime_type_icon( get_post_mime_type($id) );
+		$icon = wp_mime_type_icon( get_post_mime_type( $id ) );
 
 	return $icon;
 }
@@ -362,7 +362,7 @@ function kc_ajax_get_image_url() {
 	else
 		$result = false;
 
-	echo $result;
+	echo $result; // xss ok
 	die();
 }
 
@@ -374,19 +374,19 @@ function kc_var_export( $data, $use_tabs = false, $pad = 0 ) {
 	$data = var_export( $data, true );
 	$pad = (int) $pad;
 	if ( $pad )
-		$data = preg_replace( '/^/m', str_repeat(' ', $pad), $data );
-	$data = preg_replace('/^(\s+array)/m', 'array', $data );
+		$data = preg_replace( '/^/m', str_repeat( ' ', $pad ), $data );
+	$data = preg_replace( '/^(\s+array)/m', 'array', $data );
 	$data = str_replace( "=> \n", '=> ', $data );
 
 	if ( $use_tabs )
-		$data = preg_replace_callback('/^(\s+)/m', 'kc_var_export_tabs', $data );
+		$data = preg_replace_callback( '/^(\s+)/m', 'kc_var_export_tabs', $data );
 
 	return $data;
 }
 
 
 function kc_var_export_tabs( $data ) {
-	return str_repeat( "\t", intval( strlen($data[1])/2 ) );
+	return str_repeat( "\t", intval( strlen( $data[1] ) / 2 ) );
 }
 
 
@@ -398,71 +398,71 @@ function kc_var_export_tabs( $data ) {
  */
 function kc_get_current_url() {
 	global $wp;
-	if ( get_option('permalink_structure') )
+	if ( get_option( 'permalink_structure' ) )
 		$current_url = home_url( $wp->request );
 	else
-		$current_url = add_query_arg( $wp->query_string, '', trailingslashit(home_url()) );
+		$current_url = add_query_arg( $wp->query_string, '', trailingslashit( home_url() ) );
 
 	return $current_url;
 }
 
 
-if ( !function_exists('kc_get_sns') ) {
-function kc_get_sns_replacer( $id ) {
-	return str_replace( '-', '_', $id );
-}
-
-/**
- * Get scripts and styles sources
- *
- * @since 2.7.7
- *
- * @param array|string $handles Registered script/style handle(s)
- * @param string $type js|css Defaults to 'js'
- * @param array $_output Internal
- *
- * @return array Scripts/styles sources and status
- */
-function kc_get_sns( $handles, $type = 'js', $_output = array() ) {
-	if ( $type == 'css' ) {
-		global $wp_styles;
-		$sources = $wp_styles;
-	}
-	else {
-		global $wp_scripts;
-		$sources = $wp_scripts;
+if ( !function_exists( 'kc_get_sns' ) ) {
+	function kc_get_sns_replacer( $id ) {
+		return str_replace( '-', '_', $id );
 	}
 
-	foreach ( (array) $handles as $id ) {
-		if ( isset($_output[$id]) || !isset($sources->registered[$id]) )
-			continue;
-
-		$src = $sources->registered[$id]->src;
-		if ( substr( $sources->registered[$id]->src, 0, 1 ) === '/' )
-			$src = site_url($src);
-
-		$_id = str_replace( '-', '_', $id );
-		$_output[$_id] = array(
-			'src'   => $src,
-			'queue' => (int) wp_script_is( $id )
-		);
-		if ( isset($sources->registered[$id]->extra['data']) )
-			$_output[$_id]['data'] = $sources->registered[$id]->extra['data'];
-
-		if ( empty($sources->registered[$id]->deps) )
-			continue;
-
-		$_x = clone $sources;
-		$_x->all_deps( $id );
-
-		if ( !empty($_x->to_do) ) {
-			$_output[$_id]['deps'] = array_map( 'kc_get_sns_replacer', array_values( $_x->to_do ) );
-			$_output = kc_get_sns( $sources->registered[$id]->deps, $type, $_output );
+	/**
+	* Get scripts and styles sources
+	*
+	* @since 2.7.7
+	*
+	* @param array|string $handles Registered script/style handle(s)
+	* @param string       $type    js|css Defaults to 'js'
+	* @param array        $_output Internal
+	*
+	* @return array Scripts/styles sources and status
+	*/
+	function kc_get_sns( $handles, $type = 'js', $_output = array() ) {
+		if ( $type == 'css' ) {
+			global $wp_styles;
+			$sources = $wp_styles;
 		}
-	}
+		else {
+			global $wp_scripts;
+			$sources = $wp_scripts;
+		}
 
-	return $_output;
-}
+		foreach ( (array) $handles as $id ) {
+			if ( isset( $_output[$id] ) || !isset( $sources->registered[ $id ] ) )
+				continue;
+
+			$src = $sources->registered[ $id ]->src;
+			if ( substr( $sources->registered[ $id ]->src, 0, 1 ) === '/' )
+				$src = site_url( $src );
+
+			$_id = str_replace( '-', '_', $id );
+			$_output[$_id] = array(
+				'src'   => $src,
+				'queue' => (int) wp_script_is( $id ),
+			);
+			if ( isset($sources->registered[ $id ]->extra['data']) )
+				$_output[ $_id ]['data'] = $sources->registered[ $id ]->extra['data'];
+
+			if ( empty( $sources->registered[ $id ]->deps ) )
+				continue;
+
+			$_x = clone $sources;
+			$_x->all_deps( $id );
+
+			if ( !empty($_x->to_do) ) {
+				$_output[ $_id ]['deps'] = array_map( 'kc_get_sns_replacer', array_values( $_x->to_do ) );
+				$_output = kc_get_sns( $sources->registered[ $id ]->deps, $type, $_output );
+			}
+		}
+
+		return $_output;
+	}
 }
 
 

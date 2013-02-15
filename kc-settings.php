@@ -18,7 +18,9 @@ Text Domain: kc-settings
 */
 
 final class kcSettings {
+
 	const version = '2.8.2';
+
 	protected static $data = array(
 		'paths'    => '',
 		'pages'    => array('media-upload-popup'),
@@ -30,19 +32,19 @@ final class kcSettings {
 		'kids'     => array(),
 		'blacklist' => array(
 			'theme' => array(
-				'multiinput', 'multiselect', 'special', 'editor', 'checkbox'
-				, 'file', 'image', 'upload'
-				, 'date', 'datetime', 'datetime-local', 'week', 'month', 'time'
+				'multiinput', 'multiselect', 'special', 'editor', 'checkbox',
+				'file', 'image', 'upload',
+				'date', 'datetime', 'datetime-local', 'week', 'month', 'time',
 			),
 			'menu_item' => array(
-				'multiinput', 'editor', 'file', 'image', 'upload'
-				, 'date', 'datetime', 'datetime-local', 'week', 'month', 'time'
+				'multiinput', 'editor', 'file', 'image', 'upload',
+				'date', 'datetime', 'datetime-local', 'week', 'month', 'time',
 			),
 			'menu_nav' => array(
-				'editor', 'multiinput'
-			)
+				'editor', 'multiinput',
+			),
 		),
-		'is_kcs_page' => false
+		'is_kcs_page' => false,
 	);
 
 
@@ -97,7 +99,7 @@ final class kcSettings {
 
 		# Theme customizer
 		if ( isset(self::$data['settings']['theme']) && !empty(self::$data['settings']) )
-			require_once self::$data['paths']['inc']."/theme.php";
+			require_once self::$data['paths']['inc'] . '/theme.php';
 	}
 
 
@@ -197,13 +199,13 @@ final class kcSettings {
 			'section_no_fields'   => __( "One of your settings' section doesn't have <b>fields</b> set.", 'kc-settings'),
 			'section_no_id'       => __( "One of your settings' sections doesn't have <b>ID</b> set.", 'kc-settings'),
 			'section_no_title'    => __( "One of your settings' sections doesn't have <b>title</b> set.", 'kc-settings'),
-			'section_metabox_old' => __( "One of your settings is still using the old format for metabox setting, please migrate it to the new one.", 'kc-settings'),
+			'section_metabox_old' => __( 'One of your settings is still using the old format for metabox setting, please migrate it to the new one.', 'kc-settings'),
 			'field_no_id'         => __( "One of your fields doesn't have <b>ID</b> set.", 'kc-settings'),
 			'field_no_title'      => __( "One of your fields doesn't have <b>title</b> set.", 'kc-settings'),
 			'field_no_type'       => __( "One of your fields doesn't have <b>type</b> set.", 'kc-settings'),
 			'field_no_opt'        => __( "One of your fields doesn't have the required <b>options</b> set.", 'kc-settings'),
 			'field_no_cb'         => __( "One of your fields doesn't have the required <b>callback</b> set, or is not callable.", 'kc-settings'),
-			'field_nested_multi'  => __( "multiinput fields cannot have a multiinput sub-field.", 'kc-settings')
+			'field_nested_multi'  => __( 'multiinput fields cannot have a multiinput sub-field.', 'kc-settings')
 		);
 
 		$kcsb = array(
@@ -389,7 +391,6 @@ final class kcSettings {
 					$nu[$type][$g_idx] = $group;
 				}
 			}
-
 		}
 
 		# Merge Post, Term & User metadata
@@ -429,13 +430,13 @@ final class kcSettings {
 			# Custom callback for section?
 			if ( $type == 'plugin' && isset($section['cb']) ) {
 				if ( !is_callable($section['cb']) ) {
-					trigger_error( self::$data['messages']['bootstrap']["section_no_cb"] );
+					trigger_error( self::$data['messages']['bootstrap']['section_no_cb'] );
 					continue;
 				}
 			}
 			else {
 				if ( !isset($section['fields']) || !is_array($section['fields']) || empty($section['fields']) ) {
-					trigger_error( self::$data['messages']['bootstrap']["section_no_fields"] );
+					trigger_error( self::$data['messages']['bootstrap']['section_no_fields'] );
 					continue;
 				}
 				else {
@@ -453,14 +454,14 @@ final class kcSettings {
 			if ( $type == 'post' || ($type == 'plugin' && $group['display']) == 'metabox' ) {
 				# TODO: remove in version 3.0
 				if ( isset($section['priority']) ) {
-					trigger_error( self::$data['messages']['bootstrap']["section_metabox_old"] );
+					trigger_error( self::$data['messages']['bootstrap']['section_metabox_old'] );
 					$metabox_priority = $section['priority'];
 					unset( $section['priority'] );
 				}
 				$metabox_default = array(
 					'context'     => 'normal',
 					'priority'    => isset($metabox_priority) ? $metabox_priority : 'default',
-					'button_text' => __('Save Changes')
+					'button_text' => __('Save Changes'),
 				);
 				$metabox = isset($section['metabox']) ? $section['metabox'] : array();
 				$section['metabox'] = wp_parse_args( $metabox, $metabox_default );
@@ -530,13 +531,13 @@ final class kcSettings {
 						array(
 							'id'    => 'key',
 							'title' => __('Key', 'kc-settings'),
-							'type'  => 'text'
+							'type'  => 'text',
 						),
 						array(
 							'id'    => 'value',
 							'title' => __('Value', 'kc-settings'),
-							'type'  => 'textarea'
-						)
+							'type'  => 'textarea',
+						),
 					);
 				}
 				else {
@@ -640,61 +641,61 @@ final class kcSettings {
 		global $wp_scripts, $wp_locale;
 		if ( !in_array('kc-settings-base', $wp_scripts->in_footer) )
 			return; ?>
-<script>
-	var kcSettings = <?php echo json_encode( array(
-		'locale' => get_locale(),
-		'paths'  => self::$data['paths'],
-		'js'     => kc_get_sns( array('jquery-ui-datepicker', 'thickbox', 'jquery-ui-sortable', 'chosen', 'wp-color-picker'), 'js' ),
-		'css'    => kc_get_sns( array('jquery-ui', 'thickbox', 'chosen', 'wp-color-picker'), 'css' ),
-		'upload' => array(
-			'text' => array(
-				'head'     => 'KC Settings',
-				'empty'    => __( 'Please upload some files and then go back to this tab.', 'kc-settings' ),
-				'checkAll' => __( 'Select all files', 'kc-settings' ),
-				'clear'    => __( 'Clear selections', 'kc-settings' ),
-				'invert'   => __( 'Invert selection', 'kc-settings' ),
-				'addFiles' => __( 'Add files to collection', 'kc-settings' ),
-				'info'     => __( 'Click the "Media Library" tab to insert files that are already upload, or, upload your files and then go to the "Media Library" tab to insert the files you just uploaded.', 'kc-settings' ),
-				'selFile'  => __( 'Select file', 'kc-settings' ),
-				'filenomatch' => __( "You can't select this because the file type doesn't match", 'kc-settings' )
-			)
-		),
-		'texts' => array(
-			'show'   => __('Show', 'kc-settings'),
-			'hide'   => __('Hide', 'kc-settings'),
-			'now'    => __('Now', 'kc-settings'),
-			'done'   => __('Done', 'kc-settings'),
-			'time'   => __('Time', 'kc-settings'),
-			'hour'   => __('Hour', 'kc-settings'),
-			'minute' => __('Minute', 'kc-settings'),
-			'today'  => __('Today', 'kc-settings'),
-			'prev'   => __('Prev', 'kc-settings'),
-			'next'   => __('Next', 'kc-settings'),
-			'chooseTime' => __('Choose time', 'kc-settings'),
-			'monthNames' => array(
-				'full'  => $wp_locale->month,
-				'shrt'  => $wp_locale->month_abbrev
-			),
-			'dayNames' => array(
-				'full'  => $wp_locale->weekday,
-				'shrt'  => $wp_locale->weekday_abbrev,
-				'min'   => array(
-					_x('Su', 'day min name', 'kc-settings'),
-					_x('Mo', 'day min name', 'kc-settings'),
-					_x('Tu', 'day min name', 'kc-settings'),
-					_x('We', 'day min name', 'kc-settings'),
-					_x('Th', 'day min name', 'kc-settings'),
-					_x('Fr', 'day min name', 'kc-settings'),
-					_x('Sa', 'day min name', 'kc-settings')
-				)
-			),
-			'weekNames' => array(
-				'full' => __('Week', 'kc-settings'),
-				'shrt' => _x('Wk', 'week short', 'kc-settings'),
-			)
-		)
-	) ); ?>
-</script>
+  <script>
+  var kcSettings = <?php echo json_encode( array(
+    'locale' => get_locale(),
+    'paths'  => self::$data['paths'],
+    'js'     => kc_get_sns( array('jquery-ui-datepicker', 'thickbox', 'jquery-ui-sortable', 'chosen', 'wp-color-picker'), 'js' ),
+    'css'    => kc_get_sns( array('jquery-ui', 'thickbox', 'chosen', 'wp-color-picker'), 'css' ),
+    'upload' => array(
+      'text' => array(
+        'head'     => 'KC Settings',
+        'empty'    => __( 'Please upload some files and then go back to this tab.', 'kc-settings' ),
+        'checkAll' => __( 'Select all files', 'kc-settings' ),
+        'clear'    => __( 'Clear selections', 'kc-settings' ),
+        'invert'   => __( 'Invert selection', 'kc-settings' ),
+        'addFiles' => __( 'Add files to collection', 'kc-settings' ),
+        'info'     => __( 'Click the "Media Library" tab to insert files that are already upload, or, upload your files and then go to the "Media Library" tab to insert the files you just uploaded.', 'kc-settings' ),
+        'selFile'  => __( 'Select file', 'kc-settings' ),
+        'filenomatch' => __( "You can't select this because the file type doesn't match", 'kc-settings' ),
+      ),
+    ),
+    'texts' => array(
+      'show'   => __('Show', 'kc-settings'),
+      'hide'   => __('Hide', 'kc-settings'),
+      'now'    => __('Now', 'kc-settings'),
+      'done'   => __('Done', 'kc-settings'),
+      'time'   => __('Time', 'kc-settings'),
+      'hour'   => __('Hour', 'kc-settings'),
+      'minute' => __('Minute', 'kc-settings'),
+      'today'  => __('Today', 'kc-settings'),
+      'prev'   => __('Prev', 'kc-settings'),
+      'next'   => __('Next', 'kc-settings'),
+      'chooseTime' => __('Choose time', 'kc-settings'),
+      'monthNames' => array(
+        'full'  => $wp_locale->month,
+        'shrt'  => $wp_locale->month_abbrev,
+      ),
+      'dayNames' => array(
+        'full'  => $wp_locale->weekday,
+        'shrt'  => $wp_locale->weekday_abbrev,
+        'min'   => array(
+          _x('Su', 'day min name', 'kc-settings'),
+          _x('Mo', 'day min name', 'kc-settings'),
+          _x('Tu', 'day min name', 'kc-settings'),
+          _x('We', 'day min name', 'kc-settings'),
+          _x('Th', 'day min name', 'kc-settings'),
+          _x('Fr', 'day min name', 'kc-settings'),
+          _x('Sa', 'day min name', 'kc-settings'),
+        ),
+      ),
+      'weekNames' => array(
+        'full' => __('Week', 'kc-settings'),
+        'shrt' => _x('Wk', 'week short', 'kc-settings'),
+      ),
+    ),
+  ) ); ?>
+  </script>
 	<?php }
 
 
@@ -756,8 +757,11 @@ final class kcSettings {
 			foreach ( $messages as $message ) {
 				if ( empty($message) )
 					continue;
-
-				echo "<div class='{$type}'>".wpautop( $message )."</div>\n";
+				?>
+				<div class="<?php echo esc_attr($type) ?>">
+					<?php echo wpautop( $message ) // xss ok ?>
+				</div>
+				<?php
 			}
 		}
 	}

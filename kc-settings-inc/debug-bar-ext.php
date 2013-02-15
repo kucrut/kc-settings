@@ -6,11 +6,11 @@
  * Inject our own debug info into Debug Bar
  */
 class kcDebug {
-	var $content = '';
+	public $content = '';
 
 
 	function title() {
-		return __( 'KC Debug' );
+		return sprintf( __('%s Debug', 'kc-settings'), 'KC' );
 	}
 
 

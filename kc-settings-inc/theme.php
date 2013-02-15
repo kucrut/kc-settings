@@ -18,20 +18,20 @@ class kcSettings_theme {
 		'number'   => 'WP_Customize_KC_Common_Control',
 		'password' => 'WP_Customize_KC_Common_Control',
 		'tel'      => 'WP_Customize_KC_Common_Control',
-		'textarea' => 'WP_Customize_KC_Common_Control'
+		'textarea' => 'WP_Customize_KC_Common_Control',
 	);
 	protected static $wp_sections = array(
 		'title_tagline',
 		'colors',
 		'background_image',
-		'static_front_page'
+		'static_front_page',
 	);
 	protected static $count = 999;
 	protected static $script_files = array();
 	protected static $scripts = array();
 
 	public static function init() {
-		if ( class_exists('kcSettings') )
+		if ( class_exists( 'kcSettings' ) )
 			$settings = kcSettings::get_data( 'settings', 'theme' );
 		else
 			$settings = apply_filters( 'kc_theme_settings', array() );
@@ -48,7 +48,7 @@ class kcSettings_theme {
 
 
 	public static function create_menu() {
-		add_theme_page( __('Customize'), __('Customize'), 'edit_theme_options', 'customize.php' );
+		add_theme_page( __( 'Customize' ), __( 'Customize' ), 'edit_theme_options', 'customize.php' );
 	}
 
 
@@ -57,16 +57,16 @@ class kcSettings_theme {
 			extract( $group, EXTR_OVERWRITE );
 			if ( isset($script) && !empty($script) ) {
 				$has_script_file = true;
-				self::$script_files[$prefix] = $script;
+				self::$script_files[ $prefix ] = $script;
 			}
 			else {
 				$has_script_file = false;
 			}
-			foreach( $group['options'] as $section ) {
+			foreach ( $group['options'] as $section ) {
 				$field_prefix = "{$prefix}_{$section['id']}";
 				# Add the section
 				# 0. Inject to WP's section
-				if ( in_array($section['id'], self::$wp_sections) ) {
+				if ( in_array( $section['id'], self::$wp_sections ) ) {
 					$section_id = $section['id'];
 				}
 				# 1. Create new section
@@ -78,7 +78,7 @@ class kcSettings_theme {
 					);
 					if ( isset($section['desc']) && !empty($section['desc']) )
 						$section_args['description'] = strip_tags( $section['desc'] );
-					$wp_customize->add_section( $section_id, $section_args);
+					$wp_customize->add_section( $section_id, $section_args );
 				}
 
 				# Add fields
@@ -107,7 +107,7 @@ class kcSettings_theme {
 						$wp_customize->add_control( new $_class( $wp_customize, $field_id, array(
 							'label'   => $field['title'],
 							'section' => $section_id,
-							'type'    => $field['type']
+							'type'    => $field['type'],
 						) ) );
 					}
 					# 1. Default controls
@@ -118,7 +118,7 @@ class kcSettings_theme {
 							'type'    => $field['type'],
 						);
 						if ( $field['type'] == 'radio' || $field['type'] == 'select' ) {
-							if ( is_callable($field['options']) )
+							if ( is_callable( $field['options'] ) )
 								$control_args['choices'] = call_user_func_array( $field['options'], isset($field['args']) ? (array) $field['args'] : array() );
 							else
 								$control_args['choices'] = $field['options'];
@@ -126,7 +126,6 @@ class kcSettings_theme {
 
 						$wp_customize->add_control( $field_id, $control_args );
 					}
-
 				}
 			}
 		}
@@ -159,7 +158,7 @@ wp.customize( '{$field_id}', function( value ) {
 		} ?>
 <script>
 	(function($) {
-		<?php echo $out ?>
+		<?php echo $out // xss ok ?>
 	})(jQuery);
 </script>
 	<?php }
@@ -167,7 +166,7 @@ wp.customize( '{$field_id}', function( value ) {
 kcSettings_theme::init();
 
 
-if ( class_exists('WP_Customize_Control') ) {
+if ( class_exists( 'WP_Customize_Control' ) ) {
 class WP_Customize_KC_Common_Control extends WP_Customize_Control {
 	public $type = 'email';
 

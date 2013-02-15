@@ -4,7 +4,7 @@ class kcSettings_user {
 	protected static $settings;
 
 	public static function init() {
-		self::$settings = kcSettings::get_data('settings', 'user' );
+		self::$settings = kcSettings::get_data( 'settings', 'user' );
 		kcSettings::add_page( 'profile.php' );
 		kcSettings::add_page( 'user-edit.php' );
 
@@ -40,19 +40,27 @@ class kcSettings_user {
 				$output .= "<table class='form-table'>\n";
 				$output .= "\t<tbody>\n";
 				foreach ( $section['fields'] as $field ) {
-					$label_for = ( !in_array($field['type'], array('checkbox', 'radio', 'multiinput')) ) ? $field['id'] : null;
+					if ( !in_array( $field['type'], array( 'checkbox', 'radio', 'multiinput', 'file' ) ) ) {
+						$label_for = $field['id'];
+						if ( $field['type'] === 'editor' )
+							$label_for = strtolower( str_replace( array( '-', '_' ), '', $label_for ) );
+					}
+					else {
+						$label_for = '';
+					}
+
 					$args = array( 'mode' => 'user', 'object_id' => $user->ID, 'section' => $section['id'], 'field' => $field );
 
 					$output .= "\t\t<tr>\n";
-					$output .= "\t\t\t<th>"._kc_field_label($field['title'], $label_for, false, false)."</th>\n";
-					$output .= "\t\t\t<td>"._kc_field( $args )."</td>\n";
+					$output .= "\t\t\t<th>". _kc_field_label( $field['title'], $label_for, false, false ) ."</th>\n";
+					$output .= "\t\t\t<td>". _kc_field( $args ) ."</td>\n";
 					$output .= "\t\t</tr>\n";
 				}
 				$output .= "\t</tbody>\n";
 				$output .= "</table>\n";
 			}
 		}
-		echo $output;
+		echo $output; // xss ok
 	}
 
 

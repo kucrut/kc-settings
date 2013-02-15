@@ -35,7 +35,7 @@ final class kcSettings_menu_item {
 					'object_id' => $item->ID,
 					'section'   => $section['id'],
 					'field'     => $field,
-					'desc_tag'  => 'span'
+					'desc_tag'  => 'span',
 				) );
 
 				if ( $field['type'] == 'special' ) {

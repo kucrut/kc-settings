@@ -19,31 +19,34 @@ class kcSettings_options {
 
 
 	public static function init() {
-		foreach ( get_class_methods(__CLASS__) as $method )
-			if ( !in_array($method, array('init', 'channels')) )
+		foreach ( get_class_methods( __CLASS__ ) as $method )
+			if ( !in_array( $method, array('init', 'channels') ) )
 				call_user_func( array(__CLASS__, $method) );
 
 		# Trivial ones
 
 		# User roles
 		global $wp_roles;
-		if ( is_object($wp_roles) )
+		if ( is_object( $wp_roles ) )
 			self::$roles = $wp_roles->role_names;
 
 		# ALL post statuses
-		$post_statuses = array_merge( get_post_statuses(), array(
-			'auto-draft' => __('Auto Draft'),
-			'inherit'    => __('Inherit', 'kc-essentials'),
-			'trash'      => __('Trash'),
-			'future'     => __('Scheduled')
-		) );
+		$post_statuses = array_merge(
+			get_post_statuses(),
+			array(
+				'auto-draft' => __( 'Auto Draft' ),
+				'inherit'    => __( 'Inherit', 'kc-settings' ),
+				'trash'      => __( 'Trash' ),
+				'future'     => __( 'Scheduled' ),
+			)
+		);
 		asort( $post_statuses );
 		self::$post_statuses = $post_statuses;
 
 		# Yes/No
 		self::$yesno = array(
-			'1' => __('Yes', 'kc-settings'),
-			'0' => __('No', 'kc-settings')
+			'0' => __( 'No', 'kc-settings' ),
+			'1' => __( 'Yes', 'kc-settings' ),
 		);
 	}
 
@@ -55,7 +58,7 @@ class kcSettings_options {
 
 		$menus = array();
 		foreach ( $_menus as $menu )
-			$menus[$menu->term_id] = $menu->name;
+			$menus[ $menu->term_id ] = $menu->name;
 
 		self::$nav_menus = $menus;
 	}
@@ -69,7 +72,7 @@ class kcSettings_options {
 			else
 				$sizes[$id] = $id;
 		}
-		$sizes['full'] = __('Full (original size)', 'kc-settings');
+		$sizes['full'] = __( 'Full (original size)', 'kc-settings' );
 
 		if ( !$store )
 			return $sizes;
@@ -150,7 +153,7 @@ class kcSettings_options {
 class kcWalker_Terms extends Walker {
 	var $tree_type = 'category';
 	var $pad = '';
-	var $db_fields = array ('parent' => 'parent', 'id' => 'term_id');
+	var $db_fields = array( 'parent' => 'parent', 'id' => 'term_id' );
 
 	function start_el( &$output, $term, $depth, $args, $id = 0 ) {
 		$indent = ( $depth && !empty($this->pad) ) ? str_repeat( $this->pad, $depth ) .'&nbsp;' : '';
@@ -161,15 +164,15 @@ class kcWalker_Terms extends Walker {
 class kcWalker_Posts extends Walker {
 	var $tree_type = 'page';
 	var $pad = '';
-	var $db_fields = array ('parent' => 'post_parent', 'id' => 'ID');
+	var $db_fields = array( 'parent' => 'post_parent', 'id' => 'ID' );
 
 	function start_el( &$output, $post, $depth, $args, $id = 0 ) {
 		$indent = ( $depth && !empty($this->pad) ) ? str_repeat( $this->pad, $depth ) .'&nbsp;' : '';
-		$output[$post->ID] = $indent . apply_filters( 'the_title', $post->post_title );
+		$output[ $post->ID ] = $indent . apply_filters( 'the_title', $post->post_title );
 	}
 }
 
-if ( !class_exists('kcWalker_Menu') ) {
+if ( !class_exists( 'kcWalker_Menu' ) ) {
 	class kcWalker_Menu extends Walker {
 		var $tree_type = array( 'post_type', 'taxonomy', 'custom' );
 		var $db_fields = array( 'parent' => 'menu_item_parent', 'id' => 'db_id' );
@@ -177,7 +180,7 @@ if ( !class_exists('kcWalker_Menu') ) {
 
 		function start_el( &$output, $item, $depth = 0, $args = array(), $id = 0 ) {
 			$indent = ( $depth && !empty($this->pad) ) ? str_repeat( $this->pad, $depth ) .'&nbsp;' : '';
-			$output[$item->ID] = $indent . apply_filters( 'the_title', $item->title, $item->ID );
+			$output[ $item->ID ] = $indent . apply_filters( 'the_title', $item->title, $item->ID );
 		}
 	}
 }
@@ -185,18 +188,18 @@ if ( !class_exists('kcWalker_Menu') ) {
 
 class kcSettings_options_cb {
 	public static function terms( $taxonomy = 'category', $args = array(), $pad = '&mdash;' ) {
-		$none = array( '' => __('Nothing found', 'kc-settings') );
-		if ( !taxonomy_exists($taxonomy) )
+		$none = array( '' => __( 'Nothing found', 'kc-settings' ) );
+		if ( !taxonomy_exists( $taxonomy ) )
 			return $none;
 
 		$args = wp_parse_args( $args, array(
 			'depth'        => 0,
 			'hide_empty'   => false,
-			'hierarchical' => true
+			'hierarchical' => true,
 		) );
 
 		$result = get_terms( $taxonomy, $args );
-		if ( !$result || is_wp_error($result) )
+		if ( !$result || is_wp_error( $result ) )
 			return $none;
 
 		$walk = new kcWalker_Terms;
@@ -210,7 +213,7 @@ class kcSettings_options_cb {
 			'depth'          => 0,
 			'post_type'      => $post_type,
 			'hierarchical'   => true,
-			'posts_per_page' => -1
+			'posts_per_page' => -1,
 		) );
 		if ( $args['post_type'] === 'attachment' && !isset($args['post_status']) )
 			$args['post_status'] = 'inherit';
@@ -221,7 +224,7 @@ class kcSettings_options_cb {
 		wp_reset_postdata();
 
 		if ( !isset($result) )
-			return array( '' => __('Nothing found', 'kc-settings') );
+			return array( '' => __( 'Nothing found', 'kc-settings' ) );
 
 		$walk = new kcWalker_Posts;
 		$walk->pad = $pad;

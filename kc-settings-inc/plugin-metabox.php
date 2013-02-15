@@ -12,7 +12,7 @@ class kcSettings_plugin_metabox {
 
 	function create() {
 		wp_enqueue_script( 'postbox' );
-		add_screen_option('layout_columns', array('max' => 4, 'default' => isset($this->_parent->group['has_sidebar']) ? 2 : 1) );
+		add_screen_option( 'layout_columns', array('max' => 4, 'default' => isset($this->_parent->group['has_sidebar']) ? 2 : 1) );
 		foreach ( $this->_parent->group['options'] as $section ) {
 			add_meta_box(
 				"kc-metabox-{$this->_parent->page}-{$section['id']}",
@@ -29,7 +29,7 @@ class kcSettings_plugin_metabox {
 
 	function fill( $object, $box ) {
 		$this->_parent->settings_section( $box['args'] );
-		echo '<p>'. get_submit_button( $box['args']['metabox']['button_text'], 'primary', 'submit', false ) .'</p>';
+		echo '<p>'. get_submit_button( $box['args']['metabox']['button_text'], 'primary', 'submit', false ) .'</p>'; // xss ok
 	}
 
 
@@ -39,7 +39,7 @@ class kcSettings_plugin_metabox {
 		wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false );
 		wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false );
 		?>
-		<div id="kc-metabox-<?php echo esc_attr($this->_parent->page) ?>" class="<?php echo $class ?>">
+		<div id="<?php echo esc_attr( "kc-metabox-{$this->_parent->page}" ) ?>" class="<?php echo esc_attr( $class ) ?>">
 			<div id="postbox-container-1" class="postbox-container">
 				<?php
 					do_meta_boxes( $this->_parent->page, 'normal', $this->_parent->group );

@@ -11,7 +11,7 @@ class kcForm {
 		'password',
 		'email',
 		'date', 'month', 'week', 'time', 'datetime', 'datetime-local',
-		'color', 'range'
+		'color', 'range',
 	);
 
 
@@ -19,57 +19,55 @@ class kcForm {
 		$defaults = array(
 			'type'    => 'text',
 			'attr'    => '',
-			'current' => ''
+			'current' => '',
 		);
 		$args = wp_parse_args( $args, $defaults );
 
-		$type = ( in_array($args['type'], self::$i_text) ) ? 'input' : $args['type'];
+		$type = ( in_array( $args['type'], self::$i_text ) ) ? 'input' : $args['type'];
 		if ( $type === 'multiselect' ) {
 			$type = 'select';
 			if ( !isset($args['attr']['multiple']) || !$args['attr']['multiple'] )
 				$args['attr']['multiple'] = true;
 		}
 
-		if ( !method_exists(__CLASS__, $type) )
+		if ( !method_exists( __CLASS__, $type ) )
 			return false;
 
-		if ( in_array($type, array('select', 'radio', 'checkbox')) ) {
-			if ( !isset($args['options']) || empty($args['options']) )
+		if ( in_array( $type, array( 'select', 'radio', 'checkbox' ) ) ) {
+			if ( !isset( $args['options'] ) || empty( $args['options'] ) )
 				return false;
 
-			if ( is_callable($args['options']) )
-				$args['options'] = call_user_func_array( $args['options'], isset($args['args']) ? (array) $args['args'] : array() );
-
-			if ( !is_array($args['options']) || empty($args['options']) )
+			if ( is_callable( $args['options'] ) )
+				$args['options'] = call_user_func_array( $args['options'], isset( $args['args'] ) ? (array) $args['args'] : array() );
+			if ( empty( $args['options'] ) || !is_array( $args['options'] ) )
 				return false;
-
-			elseif ( count($args['options']) == count($args['options'], COUNT_RECURSIVE) )
+			elseif ( count( $args['options'] ) == count( $args['options'], COUNT_RECURSIVE ) )
 				$args['options'] = self::_build_options( $args['options'] );
 		}
 
-		return call_user_func( array(__CLASS__, $type), $args );
+		return call_user_func( array( __CLASS__, $type ), $args );
 	}
 
 
 	public static function input( $args ) {
-		if ( !isset($args['type']) || in_array($args['type'], array('', 'input')) )
+		if ( empty( $args['type'] ) || in_array( $args['type'], array( '', 'input' ) ) )
 			$args['type'] = 'text';
 
-		$output  = "<input type='{$args['type']}'";
+		$output  = '<input type="'. $args['type'] .'"';
 		$output .= self::_build_attr( $args['attr'] );
-		$output .= " value='".esc_attr($args['current'])."'";
-		$output .= " />";
+		$output .= ' value="'. esc_attr( $args['current'] ) .'"';
+		$output .= ' />';
 
 		return $output;
 	}
 
 
 	public static function textarea( $args ) {
-		$output  = "<textarea";
+		$output  = '<textarea';
 		$output .= self::_build_attr( $args['attr'] );
-		$output .= ">";
+		$output .= '>';
 		$output .= esc_textarea( $args['current'] );
-		$output .= "</textarea>";
+		$output .= '</textarea>';
 
 		return $output;
 	}
@@ -77,6 +75,7 @@ class kcForm {
 
 	public static function radio( $args ) {
 		$args['type'] = 'radio';
+
 		return self::checkbox( $args );
 	}
 
@@ -87,24 +86,32 @@ class kcForm {
 
 		unset( $args['attr']['id'] );
 
-		if ( $args['type'] === 'checkbox' && !is_array($args['current']) )
+		if ( $args['type'] === 'checkbox' && !is_array( $args['current'] ) )
 			$args['current'] = array($args['current']);
 
-		if ( empty($args['check_sep']) || !is_array($args['check_sep']) || count($args['check_sep']) < 2 )
-			$args['check_sep'] = array('', '<br />');
+		if ( empty( $args['check_sep'] ) || !is_array( $args['check_sep'] ) || count( $args['check_sep'] ) < 2 )
+			$args['check_sep'] = array( '', '<br />' );
 
 		$attr = self::_build_attr( $args['attr'] );
 
 		$output  = '';
 		foreach ( $args['options'] as $option ) {
-			$output .= "{$args['check_sep'][0]}<label class='kcs-check kcs-{$args['type']}'>";
-			$output .= "<input type='{$args['type']}' value='{$option['value']}'{$attr}";
-			if (
+			$checked = (
 				( $args['current'] == $option['value'] )
-				|| ( is_array($args['current']) && in_array($option['value'], $args['current']) )
-			)
-				$output .= " checked='true'";
-			$output .= " /> {$option['label']}</label>{$args['check_sep'][1]}\n";
+				|| ( is_array( $args['current'] ) && in_array( $option['value'], $args['current'] ) )
+			) ? " checked='true'" : '';
+
+			$output .= $args['check_sep'][0];
+			$output .= '<label class="'. esc_attr( "kcs-check kcs-{$args['type']}" ) .'">';
+			$output .= '<input';
+			$output .= ' type="'. esc_attr( $args['type'] ) .'"';
+			$output .= ' value="'. esc_attr( $option['value'] ) .'"';
+			$output .= $attr;
+			$output .= $checked;
+			$output .= ' /> ';
+			$output .= $option['label'];
+			$output .= '</label>';
+			$output .= $args['check_sep'][1] . PHP_EOL;
 		}
 
 		return $output;
@@ -112,68 +119,77 @@ class kcForm {
 
 
 	public static function select( $args ) {
-		if ( isset($args['none']) ) {
+		if ( isset( $args['none'] ) ) {
 			if ( $args['none'] )
 				$none = $args['none'];
 			else
 				$none = false;
 		}
 		else {
-			$none = '&mdash;&nbsp;'.__('Select', 'kc-settings').'&nbsp;&mdash;';
+			$none = sprintf( __( '%1$s Select %2$s', 'kc-settings' ), '&mdash;&nbsp;', '&nbsp;&mdash;' );
 		}
+
+		// for yes/no
+		if (
+			count( $args['options'] ) === 2
+			&& array_keys( $args['options'] ) === array( 0, 1 )
+		) {
+			$none = false;
+		}
+
 		if ( $none ) {
 			$args['options'] = array_merge(
-				array( array('value' => '', 'label' => $none) ),
+				array( array('value' => '', 'label' => $none ) ),
 				$args['options']
 			);
 		}
 
-		if ( !is_array($args['current']) )
+		if ( !is_array( $args['current'] ) )
 			$args['current'] = array($args['current']);
 
-		$output  = "<select";
+		$output  = '<select';
 		$output .= self::_build_attr( $args['attr'] );
-		$output .= ">\n";
-		foreach ( $args['options'] as $o ) {
-			$output .= "\t<option value='".esc_attr($o['value'])."'";
-			if ( $o['value'] == $args['current'] || in_array($o['value'], $args['current']) )
-				$output .= " selected='true'";
-			$output .= ">{$o['label']}</option>\n";
+		$output .= '>' . PHP_EOL;
+		foreach ( $args['options'] as $option ) {
+			$output .= "\t". '<option value="'. esc_attr( $option['value'] ) .'"';
+			$output .= selected( in_array( $option['value'], $args['current'] ), true, false );
+			$output .= '>'. $option['label'] .'</option>' . PHP_EOL;
 		}
-		$output .= "</select>";
+		$output .= '</select>' . PHP_EOL;
 
 		return $output;
 	}
 
 
 	public static function editor( $args ) {
-		if ( !isset($args['attr']['id']) )
+		if ( empty( $args['attr']['id'] ) )
 			$args['attr']['id'] = 'wpeditor';
 
-		$settings = isset($args['editor_settings']) ? $args['editor_settings'] : array( 'media_buttons' => true, 'tinymce' => true, 'quicktags' => true );
+		$settings = !empty($args['editor_settings']) ? $args['editor_settings'] : array( 'media_buttons' => true, 'tinymce' => true, 'quicktags' => true );
 		$settings['textarea_name'] = $args['attr']['name'];
 		unset( $settings['_kc-check'] );
 
 		ob_start();
 		wp_editor(
 			is_string( $args['current'] ) ? $args['current'] : '',
-			strtolower( str_replace(array('-', '_'), '', $args['attr']['id']) ),
+			strtolower( str_replace( array( '-', '_' ), '', $args['attr']['id'] ) ),
 			$settings
 		);
+
 		return ob_get_clean();
 	}
 
 
 	public static function _build_attr( $attr, $q = '"' ) {
-		if ( !is_array($attr) || empty($attr) )
+		if ( !is_array( $attr ) || empty( $attr ) )
 			return '';
 
-		foreach ( array('type', 'value', 'checked', 'selected') as $x )
+		foreach ( array( 'type', 'value', 'checked', 'selected' ) as $x )
 			unset( $attr[$x] );
 
 		$output = '';
 		foreach ( $attr as $k => $v )
-			$output .= " {$k}={$q}".esc_attr($v)."{$q}";
+			$output .= " {$k}={$q}". esc_attr( $v ) ."{$q}";
 
 		return $output;
 	}
@@ -203,16 +219,16 @@ class kcForm {
  *
  */
 function _kc_field_label( $title, $id = null, $wrap_th = false, $echo = true ) {
-	$output  = "<label";
+	$output  = '<label';
 	if ( $id )
-		$output .= " for='{$id}' ";
-	$output .= ">{$title}</label>";
+		$output .= ' for="'. esc_attr( $id ) .'"';
+	$output .= '>'. esc_html( $title ) .'</label>';
 
 	if ( $wrap_th )
-		$output = "<th scope='row'>{$output}</th>\n";
+		$output = '<th scope="row">'. $output .'</th>' . PHP_EOL;
 
 	if ( $echo )
-		echo $output;
+		echo $output; // xss ok
 	else
 		return $output;
 }
@@ -228,18 +244,21 @@ function _kc_field_label( $title, $id = null, $wrap_th = false, $echo = true ) {
  *
  */
 function _kc_field( $args ) {
-	if ( !isset($args['field']['attr']) )
+	if ( empty( $args['field']['attr'] ) )
 		$args['field']['attr'] = array();
 
-	extract($args, EXTR_OVERWRITE);
+	extract( $args, EXTR_OVERWRITE );
 
 	$i_text = kcForm::$i_text;
-	$field_types = array_merge( $i_text, array(
-		'checkbox', 'radio', 'select', 'multiselect',
-		'multiinput', 'special', 'file',
-		'textarea', 'editor'
-	) );
-	$type = ( isset($field['type']) && in_array($field['type'], $field_types) ) ? $field['type'] : 'input';
+	$field_types = array_merge(
+		$i_text,
+		array(
+			'checkbox', 'radio', 'select', 'multiselect',
+			'multiinput', 'special', 'file',
+			'textarea', 'editor',
+		)
+	);
+	$type = ( !empty( $field['type'] ) && in_array( $field['type'], $field_types ) ) ? $field['type'] : 'input';
 
 	# setup the input id and name attributes, also get the current value from db
 	switch ( $mode ) {
@@ -297,11 +316,11 @@ function _kc_field( $args ) {
 	# Special option with callback
 	if ( $type == 'special' ) {
 		$args['field']['name'] = $name;
-		$cb_args = isset($field['args']) ? $field['args'] : '';
-		if ( isset($field['args']) && is_callable($field['args']) )
-			$cb_args = call_user_func_array( $field['args'], array( 'args' => $args, 'db_value' => $db_value) );
+		$cb_args = isset( $field['args'] ) ? $field['args'] : '';
+		if ( !empty( $field['args'] ) && is_callable( $field['args'] ) )
+			$cb_args = call_user_func_array( $field['args'], array( 'args' => $args, 'db_value' => $db_value ) );
 
-		$output .= call_user_func_array( $field['cb'], array( 'args' => $args, 'db_value' => $db_value, 'cb_args' => $cb_args) );
+		$output .= call_user_func_array( $field['cb'], array( 'args' => $args, 'db_value' => $db_value, 'cb_args' => $cb_args ) );
 		$output .= $desc;
 	}
 
@@ -312,7 +331,7 @@ function _kc_field( $args ) {
 			'field'     => $field,
 			'id'        => $id,
 			'name'      => $name,
-			'db_value'  => $db_value
+			'db_value'  => $db_value,
 		) );
 		$output .= "\t{$desc}\n";
 	}
@@ -320,6 +339,7 @@ function _kc_field( $args ) {
 	# Multiinput
 	elseif ( $type == 'multiinput' ) {
 		$field['_id'] = $id;
+
 		$output .= _kc_field_multiinput( $name, $db_value, $field );
 		$output .= "\t{$desc}\n";
 	}
@@ -327,7 +347,7 @@ function _kc_field( $args ) {
 	# Others
 	else {
 		// Attributes
-		$field_attr = wp_parse_args( $field['attr'], array('name' => $name, 'class' => "kcs-{$type}" ));
+		$field_attr = wp_parse_args( $field['attr'], array( 'name' => $name, 'class' => "kcs-{$type}" ) );
 
 		if ( $type == 'multiselect' ) {
 			$type = 'select';
@@ -337,13 +357,13 @@ function _kc_field( $args ) {
 		if ( $type == 'checkbox' ) {
 			$field_attr['name'] .= '[]';
 		}
-		if ( !in_array($type, array('checkbox', 'radio')) ) {
+		if ( !in_array( $type, array( 'checkbox', 'radio' ) ) ) {
 			$field_attr['id'] = $id;
 		}
 		if ( $mode === 'attachment' ) {
 			$field_attr['id'] = $name;
 		}
-		if ( in_array($type, array_merge($i_text, array('textarea'))) ) {
+		if ( in_array( $type, array_merge( $i_text, array( 'textarea' ) ) ) ) {
 			$field_attr['class'] .= ' kcs-input';
 			if ( $mode == 'menu_item' )
 				$field_attr['class'] .= ' widefat';
@@ -353,12 +373,12 @@ function _kc_field( $args ) {
 		$field_args = array(
 			'type'    => $type,
 			'attr'    => $field_attr,
-			'current' => $db_value
+			'current' => $db_value,
 		);
 
-		foreach ( array('options', 'none', 'editor_settings', 'args') as $key )
-		if ( isset($field[$key]) )
-			$field_args[$key] = $field[$key];
+		foreach ( array( 'options', 'none', 'editor_settings', 'args' ) as $key )
+		if ( !empty($field[ $key ]) )
+			$field_args[ $key ] = $field[ $key ];
 
 		$output .= "\t" . kcForm::field( $field_args ) . "\n";
 		$output .= "\t{$desc}\n";
@@ -368,8 +388,8 @@ function _kc_field( $args ) {
 	if ( $mode !== 'subfield' )
 		$output = apply_filters( 'kc_settings_field_after', $output, $section, $field );
 
-	if ( isset($args['echo']) && $args['echo'] )
-		echo $output;
+	if ( isset($args['echo']) && $args['echo'] === true )
+		echo $output; // xss ok
 	else
 		return $output;
 }
@@ -391,7 +411,7 @@ function _kc_field_multiinput( $name, $db_value, $field, $show_info = true ) {
 	# Sanitize subfields
 	foreach ( $field['subfields'] as $idx => $subfield ) {
 		# 0. attributes
-		if ( isset($subfield['attr']) && is_array($subfield['attr']) ) {
+		if ( !empty( $subfield['attr'] ) && is_array( $subfield['attr'] ) ) {
 			unset( $subfield['attr']['id'] );
 			unset( $subfield['attr']['name'] );
 		}
@@ -402,16 +422,16 @@ function _kc_field_multiinput( $name, $db_value, $field, $show_info = true ) {
 		$field['subfields'][$idx] = $subfield;
 	}
 
-	if ( !is_array($db_value) || empty($db_value) ) {
+	if ( !is_array( $db_value ) || empty( $db_value ) ) {
 		$_temp_value = array();
 		foreach ( $field['subfields'] as $subfield )
-			$_temp_value[$subfield['id']] = '';
+			$_temp_value[ $subfield['id'] ] = '';
 		$db_value = array( $_temp_value );
 	}
 
 	$output = '';
 	if ( $show_info )
-		$output .= "<p class='info'><em>". __('Info: Drag & drop to reorder.', 'kc-settings') ."</em></p>\n";
+		$output .= "<p class='info'><em>". __( 'Info: Drag & drop to reorder.', 'kc-settings' ) ."</em></p>\n";
 	$output .= "\n\t<ul class='kc-rows kcs-multiinput'>\n";
 
 	foreach ( $db_value as $row_idx => $row_values ) {
@@ -426,11 +446,11 @@ function _kc_field_multiinput( $name, $db_value, $field, $show_info = true ) {
 			$subfield_args = array(
 				'mode' => 'subfield',
 				'data' => array(
-					'db_value' => isset($row_values[$subfield['id']]) ? $row_values[$subfield['id']] : '',
+					'db_value' => !empty( $row_values[$subfield['id']] ) ? $row_values[$subfield['id']] : '',
 					'name'     => "{$name}[$row_idx][{$subfield['id']}]",
-					'id'       => "{$field['_id']}-{$row_idx}-{$subfield['id']}"
+					'id'       => "{$field['_id']}-{$row_idx}-{$subfield['id']}",
 				),
-				'field' => $subfield
+				'field' => $subfield,
 			);
 
 			$output .= "\t\t\t\t\t<tr>\n";
@@ -443,9 +463,9 @@ function _kc_field_multiinput( $name, $db_value, $field, $show_info = true ) {
 
 		# actions
 		$output .= "\t\t\t<p class='actions'>";
-		$output .= "<a class='add' title='".__('Add new row', 'kc-settings')."'>".__('Add', 'kc-settings')."</a>";
-		$output .= "<a class='del' title='".__('Remove this row', 'kc-settings')."'>".__('Remove', 'kc-settings')."</a>";
-		$output .= "<a class='clear' title='".__('Clear', 'kc-settings')."'>".__('Clear', 'kc-settings')."</a>";
+		$output .= '<a class="add" title="'. __( 'Add new row', 'kc-settings' ) .'">'. __( 'Add', 'kc-settings' ) .'</a>';
+		$output .= '<a class="del" title="'. __( 'Remove this row', 'kc-settings' ) .'">'. __( 'Remove', 'kc-settings' ) .'</a>';
+		$output .= '<a class="clear" title="'. __( 'Clear', 'kc-settings' ) .'">'. __( 'Clear', 'kc-settings' ) .'</a>';
 		$output .= "</p>\n";
 		$output .= "\t\t</li>\n";
 	}
@@ -491,11 +511,11 @@ function _kc_field_file( $args ) {
 			'post_id'   => $post_id,
 			'tab'       => $tab,
 			'width'     => 640,
-			'TB_iframe' => 1
+			'TB_iframe' => 1,
 		),
 		admin_url( '/media-upload.php' )
 	);
-	if ( !empty($args['field']['mime_type']) )
+	if ( !empty( $args['field']['mime_type'] ) )
 		$args['up_url'] = add_query_arg( 'post_mime_type', $args['field']['mime_type'], $args['up_url'] );
 
 	return call_user_func( $fn, $args );
@@ -509,10 +529,10 @@ function _kc_field_file_multiple( $args ) {
 	extract( $args, EXTR_OVERWRITE );
 
 	#  Handle migration from single mode
-	if ( is_numeric($db_value) ) {
+	if ( is_numeric( $db_value ) ) {
 		$db_value = array(
-			'files' => array($db_value),
-			'selected' => array($db_value)
+			'files' => array( $db_value ),
+			'selected' => array( $db_value )
 		);
 	}
 
@@ -520,13 +540,14 @@ function _kc_field_file_multiple( $args ) {
 	if ( empty($db_value) ) {
 		$value = array(
 			'files' => array(),
-			'selected' => array()
+			'selected' => array(),
 		);
-	} else {
+	}
+	else {
 		$value = $db_value;
-		if ( !isset($value['files']) || !is_array($value['files']) )
+		if ( !isset( $value['files'] ) || !is_array( $value['files'] ) )
 			$value['files'] = array();
-		if ( !isset($value['selected']) || !is_array($value['selected']) )
+		if ( !isset( $value['selected'] ) || !is_array( $value['selected'] ) )
 			$value['selected'] = array();
 	}
 	$size = !empty($field['size']) ? $field['size'] : 'default';
@@ -535,7 +556,7 @@ function _kc_field_file_multiple( $args ) {
 
 	# List files
 	$lclass = empty($value['files']) ? ' hidden' : '';
-	$output .= "<p class='info{$lclass}'><em>". __('Info: Drag & drop to reorder.', 'kc-settings') ."</em></p>\n";
+	$output .= "<p class='info{$lclass}'><em>". __( 'Info: Drag & drop to reorder.', 'kc-settings' ) ."</em></p>\n";
 	$output .= "\t<ul class='kc-rows sortable{$lclass}'>\n";
 
 	if ( !empty($value['files']) ) {
@@ -545,7 +566,7 @@ function _kc_field_file_multiple( $args ) {
 			'post_status'      => 'inherit',
 			'posts_per_page'   => -1,
 			'orderby'          => 'post__in',
-			'suppress_filters' => false
+			'suppress_filters' => false,
 		);
 
 		global $post;
@@ -561,7 +582,7 @@ function _kc_field_file_multiple( $args ) {
 					$field['mode'],
 					$attachment_id,
 					get_the_title(),
-					in_array($attachment_id, $value['selected']),
+					in_array( $attachment_id, $value['selected'] ),
 					false,
 					$size
 				);
@@ -576,9 +597,8 @@ function _kc_field_file_multiple( $args ) {
 	}
 
 	$output .= "\t</ul>\n";
-	$output .= "\t<a href='{$up_url}' class='button kcsf-upload' title='".__('Add files to collection', 'kc-settings')."'>".__('Add files', 'kc-settings')."</a>\n";
+	$output .= "\t<a href='". esc_url( $up_url ) ."' class='button kcsf-upload' title='". __( 'Add files to collection', 'kc-settings' )."'>". __( 'Add files', 'kc-settings' ) ."</a>\n";
 	$output .= "</div>\n";
-
 
 	return $output;
 }
@@ -590,15 +610,15 @@ function _kc_field_file_multiple( $args ) {
 function _kc_field_file_item( $input_name, $input_type, $attachment_id = '', $attachment_title = '', $checked = false, $hidden = true, $size = 'default' ) {
 	$checked = ( $checked ) ? "checked='checked' " : '';
 
-	$output  = "\t<li title='".__('Drag to reorder the items', 'kc-settings')."' class='row";
+	$output  = "\t<li title='". __( 'Drag to reorder the items', 'kc-settings' ) ."' class='row";
 	if ( $hidden )
-		$output .= " hidden";
+		$output .= ' hidden';
 	$output .= "'>\n";
-	$output .= "\t\t<img src='".kc_get_attachment_icon_src($attachment_id)."' alt='' ";
-	if ( is_numeric($size) )
+	$output .= "\t\t<img src='". kc_get_attachment_icon_src( $attachment_id ) ."' alt='' ";
+	if ( is_numeric( $size ) )
 		$output .= " style='width:{$size}px'";
-	$output .= "/>";
-	$output .= "\t\t<a class='rm mid' title='".__('Remove from collection', 'kc-settings')."'><span>".__('Remove', 'kc-settings')."</span></a>\n";
+	$output .= '/>';
+	$output .= "\t\t<a class='rm mid' title='". __( 'Remove from collection', 'kc-settings' ) ."'><span>". __( 'Remove', 'kc-settings' )."</span></a>\n";
 	$output .= "\t\t<label>";
 	$output .= "<input class='mid include' type='{$input_type}' name='{$input_name}[selected][]' value='{$attachment_id}' {$checked}/> ";
 	$output .= "<span class='title'>{$attachment_title}</span>";
@@ -606,7 +626,7 @@ function _kc_field_file_item( $input_name, $input_type, $attachment_id = '', $at
 	$output .= "\t\t<input class='fileID' type='hidden' name='{$input_name}[files][]' value='{$attachment_id}'";
 	if ( $hidden )
 		$output .= " disabled='true'";
-	$output .= "/> ";
+	$output .= '/> ';
 	$output .= "\t</li>\n";
 
 	return $output;
@@ -618,22 +638,22 @@ function _kc_field_file_item( $input_name, $input_type, $attachment_id = '', $at
  */
 function _kc_field_file_single( $args ) {
 	extract( $args, EXTR_OVERWRITE );
-	$size = isset($field['size']) ? $field['size'] : 'thumbnail';
+	$size = isset( $field['size'] ) ? $field['size'] : 'thumbnail';
 
 	#  Handle migration from multiple mode
-	if ( is_array($db_value) ) {
-		if ( isset($db_value['selected']) && !empty($db_value['selected']) )
+	if ( is_array( $db_value ) ) {
+		if ( !empty($db_value['selected']) )
 			$db_value = $db_value['selected'][0];
-		elseif ( isset($db_value['files']) && !empty($db_value['files']) )
+		elseif ( !empty($db_value['files']) )
 			$db_value = $db_value['files'][0];
 		else
 			$db_value = '';
 	}
 
-	if ( get_post_type(absint($db_value)) == 'attachment' && $attachment = get_post(absint($db_value)) ) {
+	if ( get_post_type( absint( $db_value ) ) === 'attachment' && $attachment = get_post( absint( $db_value ) ) ) {
 		$post_mime_types = get_post_mime_types();
 		$keys  = array_keys( wp_match_mime_types( array_keys( $post_mime_types ), $attachment->post_mime_type ) );
-		$type  = esc_attr(array_shift($keys));
+		$type  = esc_attr( array_shift( $keys ) );
 		$valid = true;
 		$title = $attachment->post_title;
 	}
@@ -649,17 +669,17 @@ function _kc_field_file_single( $args ) {
 	if ( !$valid )
 		$out .= ' hidden';
 	$out .= "'>\n";
-	$out .= "<a href='{$up_url}' title='".__('Change file', 'kc-settings')."' class='up'><img src='".kc_get_attachment_icon_src($db_value, $size)."' alt=''";
-	if ( !empty($field['size']) && is_numeric($field['size']) )
+	$out .= "<a href='". esc_url( $up_url ) ."' title='". __( 'Change file', 'kc-settings' ) ."' class='up'><img src='". kc_get_attachment_icon_src( $db_value, $size ) ."' alt=''";
+	if ( !empty($field['size']) && is_numeric( $field['size'] ) )
 		$out .= " style='width:{$field['size']}px'";
-	$out .= " /></a>";
+	$out .= ' /></a>';
 	$out .= "<span>{$title}</span>";
-	$out .= "<br /><a href='#' class='rm'>".__('Remove', 'kc-settings')."</a>";
+	$out .= '<br /><a href="#" class="rm">'. __( 'Remove', 'kc-settings' ) .'</a>';
 	$out .= "\t</p>\n";
-	$out .= "\t<a href='{$up_url}' class='up";
+	$out .= "\t<a href='". esc_url( $up_url ) ."' class='up";
 	if ( $valid )
 		$out .= ' hidden';
-	$out .= "'>".__('Select file', 'kc-settings')."</a>";
+	$out .= "'>". __( 'Select file', 'kc-settings' ) .'</a>';
 	$out .= "\t<input type='hidden' name='{$name}' value='{$db_value}' />\n";
 	$out .= "</div>\n";
 

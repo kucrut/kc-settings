@@ -1,6 +1,10 @@
 <?php
 
 require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
+
+/**
+ * Settings list table
+ */
 class kcSettings_builder_table extends WP_List_Table {
 	function get_columns() {
 		$columns = array(
@@ -8,7 +12,7 @@ class kcSettings_builder_table extends WP_List_Table {
 			'id'    => __('ID', 'kc-settings'),
 			'type'  => __('Type'),
 			'name'  => __('Name'),
-			'tools' => __('Tools')
+			'tools' => __('Tools'),
 		);
 
 		return $columns;
@@ -32,17 +36,17 @@ class kcSettings_builder_table extends WP_List_Table {
 			array(),
 			array(
 				'id'   => array( 'id', true ),
-				'type' => array( 'type', false )
-			)
+				'type' => array( 'type', false ),
+			),
 		);
 
 		usort( $this->_args['kcsb']['settings'], array($this, 'usort_reorder') );
 		$this->items = $this->_args['kcsb']['settings'];
-  }
+	}
 
 
-  function column_id( $item ) {
-		$url = "options-general.php?page=kcsb&amp;id={$item['id']}&amp;_wpnonce=".wp_create_nonce( "__kcsb__{$item['id']}" )."&amp;action=";
+	function column_id( $item ) {
+		$url     = 'options-general.php?page=kcsb&amp;id='. $item['id'] .'&amp;_wpnonce='. wp_create_nonce( "__kcsb__{$item['id']}" ) .'&amp;action=';
 		$actions = array('edit' => "<a href='".admin_url( "{$url}edit" )."'>".__('Edit')."</a>");
 
 		if ( isset($item['status']) && !$item['status'] )
@@ -62,25 +66,25 @@ class kcSettings_builder_table extends WP_List_Table {
 			$actions['export'] = "<a href='".admin_url( "{$url}export&amp;type={$item['type']}")."'>".__('Export', 'kc-settings')."</a>";
 
 		return sprintf('%1$s %2$s', $item['id'], $this->row_actions($actions) );
-  }
-
-
-  function column_name( $item ) {
-   return $item['type'] === 'plugin' ? $item['page_title'] : '&mdash;&nbsp;N/A&nbsp;&mdash;';
 	}
 
 
-  function column_type( $item ) {
+	function column_name( $item ) {
+		return $item['type'] === 'plugin' ? $item['page_title'] : '&mdash;&nbsp;N/A&nbsp;&mdash;';
+	}
+
+
+	function column_type( $item ) {
 		return $this->_args['kcsb']['options']['type'][$item['type']];
 	}
 
 
-  function column_cb( $item ) {
+	function column_cb( $item ) {
 		return '<input type="checkbox" name="ids[]" value="'.$item['id'].'"/>';
 	}
 
 
-  function column_tools( $item ) {
+	function column_tools( $item ) {
 		$out  = "<div class='kcsb-tools'>\n";
 		$out .= "<div class='hide-if-no-js'>\n";
 		$out .= "<a class='clone-open' href='#'>".__('Clone', 'kc-settings')."</a>\n";
@@ -95,12 +99,12 @@ class kcSettings_builder_table extends WP_List_Table {
 		$out .= "</div>\n";
 
 		return $out;
-  }
+	}
 
 
-  function column_default( $item, $column_name ) {
+	function column_default( $item, $column_name ) {
 		return $item[$column_name];
-  }
+	}
 
 
 	function no_items() {

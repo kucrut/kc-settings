@@ -19,7 +19,7 @@ class kcSettings_post {
 	private static function _bootstrap_sections( $sections, $post ) {
 		foreach ( $sections as $section_index => $section ) {
 			# does this section have role set?
-			if ( !empty($section['role']) && !kc_check_roles($section['role']) ) {
+			if ( !empty($section['role']) && !kc_check_roles( $section['role'] ) ) {
 				unset( $sections[$section_index] );
 				continue;
 			}
@@ -91,7 +91,7 @@ class kcSettings_post {
 	public static function _fill( $object, $box ) {
 		$section = $box['args'];
 		if ( !empty($section['desc']) ) {
-			echo wpautop( $section['desc'] ) . PHP_EOL;
+			echo wpautop( $section['desc'] ) . PHP_EOL; // xss ok
 		}
 
 		$on_side = $section['metabox']['context'] == 'side' ? true : false;
@@ -108,27 +108,35 @@ class kcSettings_post {
 			);
 		}
 		?>
-		<?php echo wp_nonce_field( '___kc_meta_box_nonce___', "{$object->post_type}_kc_meta_box_nonce" ) . PHP_EOL ?>
+		<?php wp_nonce_field( '___kc_meta_box_nonce___', "{$object->post_type}_kc_meta_box_nonce" ) ?>
 		<?php echo $wraps['block'][0] . PHP_EOL; ?>
 		<?php
 			foreach ( $section['fields'] as $field ) :
-				$label_for = ( !in_array($field['type'], array('checkbox', 'radio', 'multiinput', 'file')) ) ? $field['id'] : null;
+				if ( !in_array( $field['type'], array( 'checkbox', 'radio', 'multiinput', 'file' ) ) ) {
+					$label_for = $field['id'];
+					if ( $field['type'] === 'editor' )
+						$label_for = strtolower( str_replace( array( '-', '_' ), '', $label_for ) );
+				}
+				else {
+					$label_for = '';
+				}
+
 				$f_label = _kc_field_label( $field['title'], $label_for, !$on_side, false );
 				$f_input = _kc_field( array( 'mode' => 'post', 'object_id' => $object->ID, 'section' => $section['id'], 'field' => $field ) );
 		?>
-			<?php echo $wraps['row'][0] . PHP_EOL; ?>
+			<?php echo $wraps['row'][0] . PHP_EOL; // xss ok ?>
 			<?php if ( $on_side ) : ?>
-			<span class="side-label"><?php echo $f_label ?></span>
-			<?php echo $f_input; ?>
+			<span class="side-label"><?php echo $f_label; // xss ok ?></span>
+			<?php echo $f_input; // xss ok ?>
 			<?php else : ?>
-			<?php echo $f_label; ?>
+			<?php echo $f_label; // xss ok ?>
 			<td>
-				<?php echo $f_input ?>
+				<?php echo $f_input; // xss ok ?>
 			</td>
 			<?php endif; ?>
-			<?php echo $wraps['row'][1] . PHP_EOL; ?>
+			<?php echo $wraps['row'][1] . PHP_EOL; // xss ok ?>
 		<?php endforeach; ?>
-		<?php echo $wraps['block'][1] . PHP_EOL; ?>
+		<?php echo $wraps['block'][1] . PHP_EOL; // xss ok ?>
 		<?php
 	}
 
@@ -145,10 +153,10 @@ class kcSettings_post {
 		$sections = self::_bootstrap_sections( self::$settings[$post->post_type], $post );
 		if (
 			empty( $sections )
-			|| ( isset($_POST['action']) && in_array($_POST['action'], array('inline-save', 'trash', 'untrash')) )
+			|| ( isset($_POST['action']) && in_array( $_POST['action'], array('inline-save', 'trash', 'untrash') ) )
 			|| $post->post_status == 'auto-draft'
 			|| empty( $_POST["{$post->post_type}_kc_meta_box_nonce"] )
-			|| !wp_verify_nonce( $_POST["{$post->post_type}_kc_meta_box_nonce"], '___kc_meta_box_nonce___' )
+			|| !wp_verify_nonce( $_POST[ "{$post->post_type}_kc_meta_box_nonce" ], '___kc_meta_box_nonce___' )
 		) {
 			return $post_id;
 		}
