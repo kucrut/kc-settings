@@ -2,7 +2,7 @@
 
 /**
  * @package KC_Settings
- * @version 2.8.2
+ * @version 2.8.3
  */
 
 
@@ -10,7 +10,7 @@
 Plugin name: KC Settings
 Plugin URI: http://kucrut.org/kc-settings/
 Description: Easily create plugin/theme settings page, custom fields metaboxes, term meta and user meta settings.
-Version: 2.8.2
+Version: 2.8.3
 Author: Dzikri Aziz
 Author URI: http://kucrut.org/
 License: GPL v2
@@ -19,7 +19,7 @@ Text Domain: kc-settings
 
 final class kcSettings {
 
-	const version = '2.8.2';
+	const version = '2.8.3';
 
 	protected static $data = array(
 		'paths'    => '',
