@@ -33,18 +33,20 @@ final class kcSettings {
 		'blacklist' => array(
 			'theme' => array(
 				'multiinput', 'multiselect', 'special', 'editor', 'checkbox',
-				'file', 'image', 'upload',
+				'file', 'image', 'upload', 'media',
 				'date', 'datetime', 'datetime-local', 'week', 'month', 'time',
 			),
 			'menu_item' => array(
-				'multiinput', 'editor', 'file', 'image', 'upload',
+				'multiinput', 'editor', 'file', 'image', 'upload', 'media',
 				'date', 'datetime', 'datetime-local', 'week', 'month', 'time',
 			),
 			'menu_nav' => array(
 				'editor', 'multiinput',
 			),
 		),
-		'is_kcs_page' => false,
+		'is_kcs_page'    => false,
+		'field_defaults' => array(),
+		'media_fields'   => array(),
 	);
 
 
@@ -64,12 +66,29 @@ final class kcSettings {
 		if ( is_readable($mo_file) )
 			load_textdomain( 'kc-settings', $mo_file );
 
+		self::_set_field_defaults();
+
 		add_action( 'admin_notices', array(__CLASS__, '_admin_notices') );
 		add_action( 'init', array(__CLASS__, 'init'), 99 );
 
 		# Debug bar extension
 		require_once "{$paths['inc']}/debug-bar-ext.php";
 		add_filter( 'debug_bar_panels', array(__CLASS__, 'debug_bar_ext') );
+	}
+
+
+	private static function _set_field_defaults() {
+		self::$data['field_defaults'] = array(
+			'media' => array(
+				'multiple'      => false,
+				'mime_type'     => '_all',
+				'frame_title'   => __( 'Select', 'kc-settings' ), // Title of the media manager lightbox
+				'select_button' => __( 'Select', 'kc-settings' ), // Button text
+				'insert_button' => __( 'Select', 'kc-settings' ), // Button text
+				'preview_size'  => 'thumbnail',
+				'animate'       => 500,
+			),
+		);
 	}
 
 
@@ -88,7 +107,7 @@ final class kcSettings {
 		kcSettings_options::init();
 
 		# Include samples (for development)
-		// self::_samples( array('01_plugin', '02_post', '03_term', '04_user', '05_theme', '06_attachment', '07_menu_item', '08_menu_nav') );
+		//self::_samples( array('01_plugin', '02_post', '03_term', '04_user', '05_theme', '06_attachment', '07_menu_item', '08_menu_nav') );
 
 		# Get all settings
 		self::_bootstrap_settings();
@@ -544,6 +563,9 @@ final class kcSettings {
 					$field['subfields'] = $subfields['fields'];
 				}
 			}
+			elseif ( $field['type'] == 'media' ) {
+				$field = wp_parse_args( $field, self::$data['field_defaults']['media'] );
+			}
 
 			# Has default value?
 			if ( ($type == 'plugin' || $type == 'theme') && isset($field['default']) )
@@ -590,11 +612,11 @@ final class kcSettings {
 		$suffix = ( defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ) ? '' : '.min';
 
 		# Common
-		wp_register_script( 'modernizr',        "{$path['scripts']}/modernizr-2.6.2-20121030{$suffix}.js", false, '2.6.2-20121030', false );
-		wp_register_script( 'kc-settings-base', "{$path['scripts']}/kc-settings-base{$suffix}.js", array('jquery', 'modernizr', 'json2'), self::version, true );
-		wp_register_script( 'kc-settings', "{$path['scripts']}/kc-settings{$suffix}.js", array('kc-settings-base', 'jquery-ui-sortable'), self::version, true );
-		wp_register_style(  'kc-settings', "{$path['styles']}/kc-settings{$suffix}.css", false, self::version );
-		add_action( 'admin_print_footer_scripts', array(__CLASS__, '_sns_vars'), 9 );
+		wp_register_script( 'modernizr',         "{$path['scripts']}/modernizr-2.6.2-20121030{$suffix}.js", false, '2.6.2-20121030', false );
+		wp_register_script( 'kc-media-selector', "{$path['scripts']}/media-selector{$suffix}.js", array('jquery-ui-sortable'), self::version, true );
+		wp_register_script( 'kc-settings-base',  "{$path['scripts']}/kc-settings-base{$suffix}.js", array('jquery', 'modernizr', 'json2'), self::version, true );
+		wp_register_script( 'kc-settings',       "{$path['scripts']}/kc-settings{$suffix}.js", array('kc-settings-base', 'kc-media-selector'), self::version, true );
+		wp_register_style(  'kc-settings',       "{$path['styles']}/kc-settings{$suffix}.css", false, self::version );
 
 		$jqui_theme = ( $admin_color == 'fresh' ) ? 'flick' : 'cupertino';
 		wp_register_style(  'jquery-ui', "{$path['styles']}/jquery-ui/{$jqui_theme}/jquery-ui-1.9.2.custom{$suffix}.css", false, '1.8.23' );
@@ -608,6 +630,10 @@ final class kcSettings {
 		# Uploader
 		wp_register_script( 'kc-settings-upload',        "{$path['scripts']}/upload{$suffix}.js", array('media-upload'), self::version, true );
 		wp_register_script( 'kc-settings-upload-single', "{$path['scripts']}/upload-single{$suffix}.js", array('media-upload'), self::version, true );
+
+		wp_enqueue_media();
+		add_action( 'admin_print_footer_scripts', array(__CLASS__, '_sns_vars'), 9 );
+
 	}
 
 
@@ -640,63 +666,68 @@ final class kcSettings {
 	public static function _sns_vars() {
 		global $wp_scripts, $wp_locale;
 		if ( !in_array('kc-settings-base', $wp_scripts->in_footer) )
-			return; ?>
-  <script>
-  var kcSettings = <?php echo json_encode( array(
-    'locale' => get_locale(),
-    'paths'  => self::$data['paths'],
-    'js'     => kc_get_sns( array('jquery-ui-datepicker', 'thickbox', 'jquery-ui-sortable', 'chosen', 'wp-color-picker'), 'js' ),
-    'css'    => kc_get_sns( array('jquery-ui', 'thickbox', 'chosen', 'wp-color-picker'), 'css' ),
-    'upload' => array(
-      'text' => array(
-        'head'     => 'KC Settings',
-        'empty'    => __( 'Please upload some files and then go back to this tab.', 'kc-settings' ),
-        'checkAll' => __( 'Select all files', 'kc-settings' ),
-        'clear'    => __( 'Clear selections', 'kc-settings' ),
-        'invert'   => __( 'Invert selection', 'kc-settings' ),
-        'addFiles' => __( 'Add files to collection', 'kc-settings' ),
-        'info'     => __( 'Click the "Media Library" tab to insert files that are already upload, or, upload your files and then go to the "Media Library" tab to insert the files you just uploaded.', 'kc-settings' ),
-        'selFile'  => __( 'Select file', 'kc-settings' ),
-        'filenomatch' => __( "You can't select this because the file type doesn't match", 'kc-settings' ),
-      ),
-    ),
-    'texts' => array(
-      'show'   => __('Show', 'kc-settings'),
-      'hide'   => __('Hide', 'kc-settings'),
-      'now'    => __('Now', 'kc-settings'),
-      'done'   => __('Done', 'kc-settings'),
-      'time'   => __('Time', 'kc-settings'),
-      'hour'   => __('Hour', 'kc-settings'),
-      'minute' => __('Minute', 'kc-settings'),
-      'today'  => __('Today', 'kc-settings'),
-      'prev'   => __('Prev', 'kc-settings'),
-      'next'   => __('Next', 'kc-settings'),
-      'chooseTime' => __('Choose time', 'kc-settings'),
-      'monthNames' => array(
-        'full'  => $wp_locale->month,
-        'shrt'  => $wp_locale->month_abbrev,
-      ),
-      'dayNames' => array(
-        'full'  => $wp_locale->weekday,
-        'shrt'  => $wp_locale->weekday_abbrev,
-        'min'   => array(
-          _x('Su', 'day min name', 'kc-settings'),
-          _x('Mo', 'day min name', 'kc-settings'),
-          _x('Tu', 'day min name', 'kc-settings'),
-          _x('We', 'day min name', 'kc-settings'),
-          _x('Th', 'day min name', 'kc-settings'),
-          _x('Fr', 'day min name', 'kc-settings'),
-          _x('Sa', 'day min name', 'kc-settings'),
-        ),
-      ),
-      'weekNames' => array(
-        'full' => __('Week', 'kc-settings'),
-        'shrt' => _x('Wk', 'week short', 'kc-settings'),
-      ),
-    ),
-  ) ); ?>
-  </script>
-	<?php }
+			return;
+
+		$vars = array(
+			'locale' => get_locale(),
+			'paths'  => self::$data['paths'],
+			'js'     => kc_get_sns( array('jquery-ui-datepicker', 'thickbox', 'jquery-ui-sortable', 'chosen', 'wp-color-picker', 'kc-media-selector'), 'js' ),
+			'css'    => kc_get_sns( array('jquery-ui', 'thickbox', 'chosen', 'wp-color-picker'), 'css' ),
+			'upload' => array(
+				'text' => array(
+					'head'     => 'KC Settings',
+					'empty'    => __( 'Please upload some files and then go back to this tab.', 'kc-settings' ),
+					'checkAll' => __( 'Select all files', 'kc-settings' ),
+					'clear'    => __( 'Clear selections', 'kc-settings' ),
+					'invert'   => __( 'Invert selection', 'kc-settings' ),
+					'addFiles' => __( 'Add files to collection', 'kc-settings' ),
+					'info'     => __( 'Click the "Media Library" tab to insert files that are already upload, or, upload your files and then go to the "Media Library" tab to insert the files you just uploaded.', 'kc-settings' ),
+					'selFile'  => __( 'Select file', 'kc-settings' ),
+					'filenomatch' => __( "You can't select this because the file type doesn't match", 'kc-settings' ),
+				),
+			),
+			'texts' => array(
+				'show'   => __('Show', 'kc-settings'),
+				'hide'   => __('Hide', 'kc-settings'),
+				'now'    => __('Now', 'kc-settings'),
+				'done'   => __('Done', 'kc-settings'),
+				'time'   => __('Time', 'kc-settings'),
+				'hour'   => __('Hour', 'kc-settings'),
+				'minute' => __('Minute', 'kc-settings'),
+				'today'  => __('Today', 'kc-settings'),
+				'prev'   => __('Prev', 'kc-settings'),
+				'next'   => __('Next', 'kc-settings'),
+				'chooseTime' => __('Choose time', 'kc-settings'),
+				'monthNames' => array(
+					'full' => $wp_locale->month,
+					'shrt' => $wp_locale->month_abbrev,
+				),
+				'dayNames' => array(
+					'full' => $wp_locale->weekday,
+					'shrt' => $wp_locale->weekday_abbrev,
+					'min'  => array(
+						_x('Su', 'day min name', 'kc-settings'),
+						_x('Mo', 'day min name', 'kc-settings'),
+						_x('Tu', 'day min name', 'kc-settings'),
+						_x('We', 'day min name', 'kc-settings'),
+						_x('Th', 'day min name', 'kc-settings'),
+						_x('Fr', 'day min name', 'kc-settings'),
+						_x('Sa', 'day min name', 'kc-settings'),
+					),
+				),
+				'weekNames' => array(
+					'full' => __('Week', 'kc-settings'),
+					'shrt' => _x('Wk', 'week short', 'kc-settings'),
+				),
+			),
+			'mediaFields' => self::$data['media_fields'],
+		);
+?>
+<script>
+  var kcSettings = <?php echo json_encode( $vars ); ?>
+</script>
+<?php
+	}
 
 
 	private static function _samples( $types ) {
@@ -788,6 +819,11 @@ final class kcSettings {
 			$type = 'updated';
 
 		self::$data['notices'][$type][] = $message;
+	}
+
+
+	public static function add_media_field( $id, $args ) {
+		self::$data['media_fields'][ $id ] = $args;
 	}
 
 

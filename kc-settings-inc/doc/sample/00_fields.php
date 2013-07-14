@@ -280,6 +280,32 @@ function kc_settings_sample_fields() {
 			//'size'  => 46
 		),
 		array(
+			'id'          => 'sample_media0',
+			'title'       => 'Media (single)',
+			'desc'        => 'Select media/attachment',
+			'type'        => 'media', // Not supported in theme customizer
+			'multiple'    => false,
+			/**
+			 * This is the image size that will be used for the preview in the backend.
+			 * You can use 'full', 'large', 'medium', 'thumbnail' or any other
+			 * registered custom image size here.
+			 */
+			'preview_size' => 'thumbnail',
+		),
+		array(
+			'id'          => 'sample_media1',
+			'title'       => 'Media (multiple)',
+			'desc'        => 'Select media/attachment',
+			'type'        => 'media', // Not supported in theme customizer
+			'multiple'    => true,
+			/**
+			 * This is the image size that will be used for the preview in the backend.
+			 * You can use 'full', 'large', 'medium', 'thumbnail' or any other
+			 * registered custom image size here.
+			 */
+			'preview_size' => 'thumbnail',
+		),
+		array(
 			'id'      => 'sample_callback_3',
 			'title'   => 'Callback',
 			'desc'    => 'Callback with static argument',

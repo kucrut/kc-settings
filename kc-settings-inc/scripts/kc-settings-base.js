@@ -136,6 +136,11 @@ var kcGetSNS = function( id, sources ) {
 		Modernizr.load( kcGetSNS('thickbox', kcSettings.js).concat( kcGetSNS('thickbox', kcSettings.css) ) );
 	}
 
+	Modernizr.load({
+		test: kcSettings.mediaFields.length,
+		yep: kcGetSNS( 'kc_media_selector', kcSettings.js )
+	});
+
 
 	// File: multiple
 	$_doc.on('click', '.kcs-file a.rm', function(e) {

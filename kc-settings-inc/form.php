@@ -254,7 +254,7 @@ function _kc_field( $args ) {
 		$i_text,
 		array(
 			'checkbox', 'radio', 'select', 'multiselect',
-			'multiinput', 'special', 'file',
+			'multiinput', 'special', 'file', 'media',
 			'textarea', 'editor',
 		)
 	);
@@ -327,6 +327,18 @@ function _kc_field( $args ) {
 	# File
 	elseif ( $type == 'file' ) {
 		$output .= _kc_field_file( array(
+			'parent'    => ( $mode === 'post' || $mode === 'menu_item' ) ? $object_id : 0,
+			'field'     => $field,
+			'id'        => $id,
+			'name'      => $name,
+			'db_value'  => $db_value,
+		) );
+		$output .= "\t{$desc}\n";
+	}
+
+	# Media
+	elseif ( $type == 'media' ) {
+		$output .= _kc_field_media( array(
 			'parent'    => ( $mode === 'post' || $mode === 'menu_item' ) ? $object_id : 0,
 			'field'     => $field,
 			'id'        => $id,
@@ -684,4 +696,106 @@ function _kc_field_file_single( $args ) {
 	$out .= "</div>\n";
 
 	return $out;
+}
+
+
+/**
+ * Field: media
+ */
+function _kc_field_media( $args ) {
+	kcSettings::add_media_field( $args['id'], $args['field'] );
+
+	if ( !is_array($args['db_value']) ) {
+		$args['db_value'] = array( $args['db_value'] );
+	}
+	foreach ( $args['db_value'] as $idx => $attachment_id ) {
+		if ( empty($attachment_id) ) {
+			unset( $args['db_value'][ $idx ] );
+			continue;
+		}
+
+		$attachment = get_post( $attachment_id );
+		if ( empty($attachment) || !is_object($attachment) ) {
+			unset( $args['db_value'][ $idx ] );
+		}
+	}
+
+	$wrap_class = 'kc-media-selector';
+	$list_class = 'kc-media-list attachments';
+
+	if ( empty($args['db_value']) ) {
+		$list_class .= ' hidden';
+		$args['db_value'][] = ''; // Needed to print out the item template.
+	}
+
+	if ( $args['field']['multiple'] ) {
+		$args['name'] .= '[]';
+		$list_class .= ' multiple';
+	}
+	else {
+		$wrap_class .= ' single-file';
+	}
+
+	$list_attr  = ' id="'. esc_attr( $args['id'] ) .'"';
+	$list_attr .= ' class="'. esc_attr( $list_class ) .'"';
+	$list_attr .= ' data-size="'. esc_attr( $args['field']['preview_size'] ) .'"';
+	$list_attr .= ' data-animate="'. esc_attr( $args['field']['animate'] ) .'"';
+
+	$did_once = false;
+	ob_start();
+?>
+<div class="<?php echo esc_attr($wrap_class) ?>">
+	<ul<?php echo $list_attr // xss ok ?>>
+		<?php
+			foreach ( $args['db_value'] as $attachment_id ) :
+				$item_class = 'attachment';
+				$thumb_style = '';
+
+				if ( !empty($attachment_id) ) {
+					$image = wp_get_attachment_image( $attachment_id, $args['field']['preview_size'], true );
+					$title = get_the_title( $attachment_id );
+					$item_class .= ' type-' .substr( get_post_mime_type($attachment_id), 0, strpos($attachment->post_mime_type, '/') );
+					if (
+						$args['field']['mime_type'] === 'image'
+						&& $args['field']['preview_size'] !== 'thumbnail'
+						&& $image_src = wp_get_attachment_image_src( $attachment_id, $args['field']['preview_size'], false )
+					) {
+						$thumb_style = ' style="width:'. $image_src[1] .'px;height:'. $image_src[2] .'px"';
+					}
+				}
+				else {
+					if ( $did_once ) {
+						// Skip, we already printed the template.
+						continue;
+					}
+
+					$image = '<img />';
+					$title = '';
+				}
+
+				$did_once = true;
+		?>
+			<li class="<?php echo esc_attr($item_class) ?>">
+				<div class="attachment-preview"<?php echo $thumb_style // xss ok ?>>
+					<div class="thumbnail"<?php echo $thumb_style // xss ok ?>>
+						<div class="centered">
+							<?php echo $image // xss ok ?>
+						</div>
+						<div class="filename">
+							<div><?php echo esc_html($title) ?></div>
+						</div>
+					</div>
+					<a title="<?php esc_attr_e('Deselect') ?>" href="#" class="check"><div class="media-modal-icon"></div></a>
+				</div>
+				<input type="hidden" name="<?php echo esc_attr( $args['name'] ) ?>" value="<?php echo esc_attr( $attachment_id ) ?>" />
+			</li>
+		<?php endforeach; ?>
+	</ul>
+	<p><a href="#" class="button-primary kc-media-select" data-fieldid="<?php echo esc_attr( $args['id'] ) ?>"><?php echo esc_html( $args['field']['select_button'] ) ?></a></p>
+</div>
+<?php
+	$output = ob_get_contents();
+	ob_end_clean();
+
+	return $output;
 }

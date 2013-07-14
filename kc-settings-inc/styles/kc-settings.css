@@ -486,3 +486,44 @@ input.kcs-color.hasNative {
 	width:auto;
 	height:auto;
 }
+
+.kc-media-list {
+	margin-top:0;
+	margin-left:-10px;
+}
+.kc-media-list li {
+	float:left;
+	text-align:center;
+	position:relative;
+}
+.kc-media-list .attachment-preview {
+	height:100px;
+	width:100px;
+}
+.kc-media-list .filename {
+	line-height:1.3;
+}
+.kc-media-list .type-image .filename {
+	display:none;
+}
+.kc-media-list img {
+	width:auto;
+	max-width:100%;
+	height:auto !important;
+	vertical-align:middle;
+}
+.kc-media-list .title {
+	display:block;
+	text-align:center;
+	height:1em;
+	line-height:1em;
+	text-overflow:ellipsis;
+	overflow:hidden;
+}
+.wrap .kc-media-selector p {
+	clear:both;
+	font-style:normal;
+}
+.wrap .kc-media-selector p.description {
+	padding-left:0;
+}
