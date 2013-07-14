@@ -631,9 +631,7 @@ final class kcSettings {
 		wp_register_script( 'kc-settings-upload',        "{$path['scripts']}/upload{$suffix}.js", array('media-upload'), self::version, true );
 		wp_register_script( 'kc-settings-upload-single', "{$path['scripts']}/upload-single{$suffix}.js", array('media-upload'), self::version, true );
 
-		wp_enqueue_media();
 		add_action( 'admin_print_footer_scripts', array(__CLASS__, '_sns_vars'), 9 );
-
 	}
 
 
@@ -660,6 +658,9 @@ final class kcSettings {
 			elseif ( (isset($_REQUEST['kcsf']) && $_REQUEST['kcsf']) || strpos( wp_get_referer(), 'kcsf') !== false )
 				wp_enqueue_script( 'kc-settings-upload' );
 		}
+
+		$media_args = ( 'post' === get_current_screen()->base ) ? array('post' => get_queried_object_id()) : '';
+		wp_enqueue_media( $media_args );
 	}
 
 
