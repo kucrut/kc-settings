@@ -487,7 +487,7 @@ input.kcs-color.hasNative {
 	height:auto;
 }
 
-.kc-media-list {
+.wrap .kc-media-list {
 	margin-top:0;
 	margin-left:-10px;
 }

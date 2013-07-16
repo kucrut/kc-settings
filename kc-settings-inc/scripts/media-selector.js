@@ -1,14 +1,13 @@
 window.kcSettings.mediaFieldsFrames = {};
 
 jQuery(document).ready(function($){
-	var setMedia = function( $el, media ) {
+	var setMedia = function( $el, media, size_wanted ) {
 		var
 			$img = $el.find('img'),
 			$filename = $el.find('div.filename').text( media.title ),
 			src, size, size_wanted;
 
 		if ( media.type === 'image' ) {
-			size_wanted = $el.parent().data('size');
 			if ( size_wanted !== 'thumbnail' && media.sizes[size_wanted] ) {
 				size = media.sizes[size_wanted];
 				$el.find('div.attachment-preview')
@@ -101,7 +100,7 @@ jQuery(document).ready(function($){
 						if ( $.inArray(itemID, current) > -1 )
 							return;
 
-						$target.append( setMedia( $template.clone(), item ) );
+						$target.append( setMedia( $template.clone(), item, $target.data('size') ) );
 					});
 
 					if ( $target.is('.hidden') ) {
@@ -109,7 +108,7 @@ jQuery(document).ready(function($){
 					}
 				}
 				else {
-					setMedia( $firstItem, selection.first().toJSON() );
+					setMedia( $firstItem, selection.first().toJSON(), $target.data('size') );
 				}
 
 				if ( $target.is('.hidden') ) {

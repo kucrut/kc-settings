@@ -703,6 +703,7 @@ function _kc_field_file_single( $args ) {
  * Field: media
  */
 function _kc_field_media( $args ) {
+	$args['field']['multiple'] = (bool) $args['field']['multiple'];
 	kcSettings::add_media_field( $args['id'], $args['field'] );
 
 	if ( !is_array($args['db_value']) ) {
@@ -752,11 +753,12 @@ function _kc_field_media( $args ) {
 				$thumb_style = '';
 
 				if ( !empty($attachment_id) ) {
-					$image = wp_get_attachment_image( $attachment_id, $args['field']['preview_size'], true );
-					$title = get_the_title( $attachment_id );
-					$item_class .= ' type-' .substr( get_post_mime_type($attachment_id), 0, strpos($attachment->post_mime_type, '/') );
+					$image       = wp_get_attachment_image( $attachment_id, $args['field']['preview_size'], true );
+					$title       = get_the_title( $attachment_id );
+					$mime_type   = substr( get_post_mime_type($attachment_id), 0, strpos($attachment->post_mime_type, '/') );
+					$item_class .= sprintf(' type-%s', $mime_type);
 					if (
-						$args['field']['mime_type'] === 'image'
+						'image' === $mime_type
 						&& $args['field']['preview_size'] !== 'thumbnail'
 						&& $image_src = wp_get_attachment_image_src( $attachment_id, $args['field']['preview_size'], false )
 					) {
