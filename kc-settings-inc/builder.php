@@ -108,13 +108,14 @@ class kcSettings_builder {
 				'datetime-local' => __('Datetime (local)', 'kc-settings'),
 				'datetime' => __('Datetime (with timezone)', 'kc-settings'),
 				'editor'      => __('WYSIWYG Editor', 'kc-settings'),
-				'file'        => __('File', 'kc-settings'),
+				'media'       => __('Media', 'kc-settings'),
 				'checkbox'    => __('Checkbox', 'kc-settings'),
 				'radio'       => __('Radio', 'kc-settings'),
 				'select'      => __('Select', 'kc-settings'),
 				'multiselect' => __('Select (multiple)', 'kc-settings'),
 				'multiinput'  => __('Multiinput', 'kc-settings'),
 				'special'     => __('Special', 'kc-settings'),
+				'file'        => __('File (deprecated)', 'kc-settings'),
 			),
 			'metabox' => array(
 				'context'   => array(
@@ -495,6 +496,38 @@ class kcSettings_builder {
 									),
 									'options' => kcSettings_options::$image_sizes,
 									'current' => isset($f_val['size']) ? $f_val['size'] : 'thumbnail',
+									'none'    => false,
+								)); // xss ok
+							?>
+						</li>
+						<li class="childFieldType" data-dep='media'>
+							<label for="<?php echo esc_attr("{$f_id}-multiple") ?>" class="ml"><?php _e('Multiple', 'kc-settings') ?></label>
+							<?php
+								echo kcForm::field(array(
+									'type'    => 'select',
+									'attr'    => array(
+										'id'    => "{$f_id}-multiple",
+										'name'  => "{$f_name}[multiple]",
+										'class' => 'mi',
+									),
+									'options' => kcSettings_options::$yesno,
+									'current' => isset($f_val['multiple']) ? $f_val['multiple'] : false,
+									'none'    => false,
+								)); // xss ok
+							?>
+						</li>
+						<li class="childFieldType" data-dep='media'>
+							<label for="<?php echo esc_attr("{$f_id}-preview_size") ?>" class="ml"><?php _e('Preview size', 'kc-settings') ?></label>
+							<?php
+								echo kcForm::field(array(
+									'type'    => 'select',
+									'attr'    => array(
+										'id'    => "{$f_id}-preview_size",
+										'name'  => "{$f_name}[preview_size]",
+										'class' => 'mi',
+									),
+									'options' => kcSettings_options::$image_sizes,
+									'current' => isset($f_val['preview_size']) ? $f_val['preview_size'] : 'thumbnail',
 									'none'    => false,
 								)); // xss ok
 							?>
