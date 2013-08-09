@@ -155,9 +155,9 @@ class kcWalker_Terms extends Walker {
 	var $pad = '';
 	var $db_fields = array( 'parent' => 'parent', 'id' => 'term_id' );
 
-	function start_el( &$output, $term, $depth, $args, $id = 0 ) {
+	function start_el( &$output, $object, $depth = 0, $args = array(), $current_object_id = 0 ) {
 		$indent = ( $depth && !empty($this->pad) ) ? str_repeat( $this->pad, $depth ) .'&nbsp;' : '';
-		$output[$term->term_id] = $indent . $term->name;
+		$output[$object->term_id] = $indent . $object->name;
 	}
 }
 
@@ -166,9 +166,9 @@ class kcWalker_Posts extends Walker {
 	var $pad = '';
 	var $db_fields = array( 'parent' => 'post_parent', 'id' => 'ID' );
 
-	function start_el( &$output, $post, $depth, $args, $id = 0 ) {
+	function start_el( &$output, $object, $depth = 0, $args = array(), $current_object_id = 0 ) {
 		$indent = ( $depth && !empty($this->pad) ) ? str_repeat( $this->pad, $depth ) .'&nbsp;' : '';
-		$output[ $post->ID ] = $indent . apply_filters( 'the_title', $post->post_title );
+		$output[ $object->ID ] = $indent . apply_filters( 'the_title', $object->post_title );
 	}
 }
 
