@@ -41,14 +41,7 @@ class kcSettings_theme {
 
 		self::$settings = $settings;
 
-		# Add menu under Appearance
-		add_action( 'admin_menu', array(__CLASS__, 'create_menu') );
 		add_action( 'customize_register', array(__CLASS__, 'register') );
-	}
-
-
-	public static function create_menu() {
-		add_theme_page( __( 'Customize' ), __( 'Customize' ), 'edit_theme_options', 'customize.php' );
 	}
 
 
