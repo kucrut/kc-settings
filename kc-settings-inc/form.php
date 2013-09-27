@@ -703,7 +703,6 @@ function _kc_field_file_single( $args ) {
  * Field: media
  */
 function _kc_field_media( $args ) {
-	$args['field']['multiple'] = (bool) $args['field']['multiple'];
 	kcSettings::add_media_field( $args['id'], $args['field'] );
 
 	if ( !is_array($args['db_value']) ) {

@@ -83,6 +83,22 @@ jQuery(document).ready(function($){
 
 			window.kcSettings.mediaFieldsFrames[ fieldID ] = wp.media( _options );
 
+			window.kcSettings.mediaFieldsFrames[ fieldID ].on('open', function() {
+				var selection   = window.kcSettings.mediaFieldsFrames[ fieldID ].state().get('selection');
+				var current_ids = $( '#'+fieldID ).data('current');
+
+				if ( !current_ids.length )
+					return;
+
+				_.forEach( current_ids, function(id) {
+					var attachment = wp.media.attachment(id);
+					attachment.fetch();
+					if ( attachment ) {
+						selection.add( [attachment] );
+					}
+				});
+			});
+
 			window.kcSettings.mediaFieldsFrames[ fieldID ].on('select', function() {
 				var $target    = $('#'+fieldID);
 				var current    = $target.data('current');
