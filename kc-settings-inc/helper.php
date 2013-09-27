@@ -69,14 +69,14 @@ function kc_array_search_recursive( $needle, $haystack, $needlekey = '', $strict
  */
 function kc_array_map_deep( $func, $input ) {
 	if ( is_array( $input ) ) {
-		$out = array_combine(
+		$out = array_filter( array_combine(
 			array_keys( $input ),
 			array_map(
 				'kc_array_map_deep',
 				array_fill( 0, count( $input ), $func ),
 				$input
 			)
-		);
+		) );
 	}
 	else {
 		$out = call_user_func( $func, $input );
