@@ -28,39 +28,55 @@ class kcSettings_user {
 	 * @return null
 	 */
 	public static function _fields( $user ) {
-		$output = '';
-		foreach ( self::$settings as $group ) {
-			foreach ( $group as $section ) {
-				# Section title & desc
-				$output .= "<h3>{$section['title']}</h3>\n";
-				if ( isset($section['desc']) && !empty($section['desc']) )
-					$output .= "{$section['desc']}\n";
-
-				# The section
-				$output .= "<table class='form-table'>\n";
-				$output .= "\t<tbody>\n";
-				foreach ( $section['fields'] as $field ) {
-					if ( !in_array( $field['type'], array( 'checkbox', 'radio', 'multiinput', 'file' ) ) ) {
-						$label_for = $field['id'];
-						if ( $field['type'] === 'editor' )
-							$label_for = strtolower( str_replace( array( '-', '_' ), '', $label_for ) );
-					}
-					else {
-						$label_for = '';
-					}
-
-					$args = array( 'mode' => 'user', 'object_id' => $user->ID, 'section' => $section['id'], 'field' => $field );
-
-					$output .= "\t\t<tr>\n";
-					$output .= "\t\t\t<th>". _kc_field_label( $field['title'], $label_for, false, false ) ."</th>\n";
-					$output .= "\t\t\t<td>". _kc_field( $args ) ."</td>\n";
-					$output .= "\t\t</tr>\n";
-				}
-				$output .= "\t</tbody>\n";
-				$output .= "</table>\n";
-			}
-		}
-		echo $output; // xss ok
+		foreach ( self::$settings as $group ) :
+			foreach ( $group as $section ) :
+			?>
+				<?php printf(
+					'<h3 id="%s" class="kcs-section">%s</h3>',
+					esc_attr( "kcs-section-{$section['id']}" ),
+					esc_html( $section['title'] )
+				); ?>
+				<?php if ( ! empty( $section['desc'] ) ) : ?>
+					<?php echo $section['desc']; // xss ok ?>
+				<?php endif; ?>
+				<table class="form-table">
+					<tbody>
+						<?php foreach ( $section['fields'] as $field ) : ?>
+							<?php
+								if ( ! in_array( $field['type'], array( 'checkbox', 'radio', 'multiinput', 'file' ) ) ) {
+									$label_for = $field['id'];
+									if ( $field['type'] === 'editor' ) {
+										$label_for = strtolower(
+											str_replace(
+												array( '-', '_' ),
+												'',
+												$label_for
+											)
+										);
+									}
+								}
+								else {
+									$label_for = '';
+								}
+								$args = array(
+									'mode'      => 'user',
+									'object_id' => $user->ID,
+									'section'   => $section['id'],
+									'field'     => $field
+								);
+							?>
+							<tr>
+								<th><?php _kc_field_label( $field['title'], $label_for, false ); ?></th>
+								<td>
+									<?php echo _kc_field( $args ); // xss ok ?>
+								</td>
+							</tr>
+						<?php endforeach; ?>
+					</tbody>
+				</table>
+			<?php
+			endforeach;
+		endforeach;
 	}
 
 

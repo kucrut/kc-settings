@@ -169,6 +169,12 @@ input.kcs-input {
 	border-collapse:separate;
 	margin-bottom:0;
 }
+.profile-php .kcs-multiinput table,
+.user-edit-php .kcs-multiinput table {
+	background: none;
+	border: 0;
+	box-shadow: none;
+}
 .kcs-multiinput th {cursor:move}
 .kcs-multiinput p.actions {margin:1em 0 .75em;}
 #wpbody-content .kcs-multiinput input[type="text"],
