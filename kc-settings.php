@@ -18,7 +18,7 @@
 
 final class kcSettings {
 
-	const version = '2.8.5';
+	const VERSION = '2.8.5';
 
 	protected static $data = array(
 		'paths'    => '',
@@ -612,10 +612,10 @@ final class kcSettings {
 
 		# Common
 		wp_register_script( 'modernizr',         "{$path['scripts']}/modernizr-2.6.2-20121030{$suffix}.js", false, '2.6.2-20121030', false );
-		wp_register_script( 'kc-media-selector', "{$path['scripts']}/media-selector{$suffix}.js", array('jquery-ui-sortable'), self::version, true );
-		wp_register_script( 'kc-settings-base',  "{$path['scripts']}/kc-settings-base{$suffix}.js", array('jquery', 'modernizr', 'json2'), self::version, true );
-		wp_register_script( 'kc-settings',       "{$path['scripts']}/kc-settings{$suffix}.js", array('kc-settings-base', 'kc-media-selector'), self::version, true );
-		wp_register_style(  'kc-settings',       "{$path['styles']}/kc-settings{$suffix}.css", false, self::version );
+		wp_register_script( 'kc-media-selector', "{$path['scripts']}/media-selector{$suffix}.js", array('jquery-ui-sortable'), self::VERSION, true );
+		wp_register_script( 'kc-settings-base',  "{$path['scripts']}/kc-settings-base{$suffix}.js", array('jquery', 'modernizr', 'json2'), self::VERSION, true );
+		wp_register_script( 'kc-settings',       "{$path['scripts']}/kc-settings{$suffix}.js", array('kc-settings-base', 'kc-media-selector'), self::VERSION, true );
+		wp_register_style(  'kc-settings',       "{$path['styles']}/kc-settings{$suffix}.css", false, self::VERSION );
 
 		$jqui_theme = ( $admin_color == 'fresh' ) ? 'flick' : 'cupertino';
 		wp_register_style(  'jquery-ui', "{$path['styles']}/jquery-ui/{$jqui_theme}/jquery-ui-1.9.2.custom{$suffix}.css", false, '1.8.23' );
@@ -624,11 +624,11 @@ final class kcSettings {
 		wp_register_style(  'chosen', "{$path['styles']}/chosen/chosen{$suffix}.css", false, '0.9.8' );
 
 		# Builder
-		wp_register_script( 'kc-settings-builder', "{$path['scripts']}/kc-settings-builder{$suffix}.js", array('kc-settings-base', 'jquery-ui-sortable'), self::version, true );
+		wp_register_script( 'kc-settings-builder', "{$path['scripts']}/kc-settings-builder{$suffix}.js", array('kc-settings-base', 'jquery-ui-sortable'), self::VERSION, true );
 
 		# Uploader
-		wp_register_script( 'kc-settings-upload',        "{$path['scripts']}/upload{$suffix}.js", array('media-upload'), self::version, true );
-		wp_register_script( 'kc-settings-upload-single', "{$path['scripts']}/upload-single{$suffix}.js", array('media-upload'), self::version, true );
+		wp_register_script( 'kc-settings-upload',        "{$path['scripts']}/upload{$suffix}.js", array('media-upload'), self::VERSION, true );
+		wp_register_script( 'kc-settings-upload-single', "{$path['scripts']}/upload-single{$suffix}.js", array('media-upload'), self::VERSION, true );
 
 		add_action( 'admin_print_footer_scripts', array(__CLASS__, '_sns_vars'), 9 );
 	}
