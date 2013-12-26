@@ -5,22 +5,27 @@
  * @version 2.8.5
  */
 
-
-/*
-Plugin name: KC Settings
-Plugin URI: http://kucrut.org/kc-settings/
-Description: Easily create plugin/theme settings page, custom fields metaboxes, term meta and user meta settings.
-Version: 2.8.5
-Author: Dzikri Aziz
-Author URI: http://kucrut.org/
-License: GPL v2
-Text Domain: kc-settings
-*/
+/**
+ * Plugin name: KC Settings
+ * Plugin URI: http://kucrut.org/kc-settings/
+ * Description: Easily create plugin/theme settings page, custom fields metaboxes, term meta and user meta settings.
+ * Version: 2.8.5
+ * Author: Dzikri Aziz
+ * Author URI: http://kucrut.org/
+ * License: GPL v2
+ * Text Domain: kc-settings
+ */
 
 final class kcSettings {
 
-	const version = '2.8.5';
+	const VERSION = '2.8.5';
 
+	/**
+	 * Holds plugin data
+	 *
+	 * @access protected
+	 * @var array
+	 */
 	protected static $data = array(
 		'paths'    => '',
 		'pages'    => array('media-upload-popup'),
@@ -50,6 +55,12 @@ final class kcSettings {
 	);
 
 
+	/**
+	 * Setup plugin
+	 *
+	 * @access public
+	 * @hook action plugins_loaded
+	 */
 	public static function setup() {
 		$paths = self::_paths( __FILE__ );
 		if ( !is_array($paths) )
@@ -77,6 +88,11 @@ final class kcSettings {
 	}
 
 
+	/**
+	 * Set field defaults
+	 *
+	 * @access private
+	 */
 	private static function _set_field_defaults() {
 		self::$data['field_defaults'] = array(
 			'media' => array(
@@ -92,6 +108,11 @@ final class kcSettings {
 	}
 
 
+	/**
+	 * Initialize plugin
+	 *
+	 * @hook action init
+	 */
 	public static function init() {
 		# Get children (plugins/themes that depend on KC Settings)
 		self::$data['kids'] = apply_filters( 'kc_settings_kids', array() );
@@ -122,6 +143,10 @@ final class kcSettings {
 	}
 
 
+	/**
+	 * Initialize settings in the admin pages
+	 *
+	 */
 	public static function _admin_init() {
 		# Register settings
 		if ( self::$data['settings'] ) {
@@ -161,6 +186,11 @@ final class kcSettings {
 
 	/**
 	 * Set plugin paths
+	 *
+	 * @param string $file       Plugin file
+	 * @param string $inc_suffix Include path suffix
+	 *
+	 * @return mixes Plugin paths array or FALSE on failure
 	 */
 	public static function _paths( $file, $inc_suffix = '-inc' ) {
 		if ( !file_exists($file) )
@@ -205,7 +235,9 @@ final class kcSettings {
 
 
 	/**
-	 * Get all settings
+	 * Bootstrap settings
+	 *
+	 * @access private
 	 */
 	private static function _bootstrap_settings() {
 		# Settings bootstrap error messages
@@ -339,7 +371,13 @@ final class kcSettings {
 	}
 
 
-	# Validate settings
+	/**
+	 * Validate settings
+	 *
+	 * @access private
+	 * @param array $settings
+	 * @return array
+	 */
 	private static function _validate_settings( $settings ) {
 		$nu = array();
 
@@ -432,7 +470,15 @@ final class kcSettings {
 	}
 
 
-	# Validate each setting's section
+	/**
+	 * Validate setting section
+	 *
+	 * @access private
+	 * @param string $type     Setting type
+	 * @param array  $sections Setting sections
+	 * @param string $group    Setting group
+	 * @return array
+	 */
 	private static function _validate_sections( $type, $sections, $group = '' ) {
 		$defaults = array();
 		foreach ( $sections as $s_idx => $section ) {
@@ -502,6 +548,15 @@ final class kcSettings {
 	}
 
 
+	/**
+	 * Validate setting field
+	 *
+	 * @access private
+	 * @param string $type  Field type
+	 * @param array  $field Section fields
+	 * @param bool   $sub   Whether this is a subfield or not
+	 * @return array
+	 */
 	private static function _validate_fields( $type, $fields, $sub = false ) {
 		$defaults = array();
 		$need_options = array( 'select', 'radio', 'checkbox' );
@@ -583,11 +638,9 @@ final class kcSettings {
 	 *
 	 * Merge all the custom fields set by themes/plugins. Also rebuild the array.
 	 *
-	 * @param string $meta_type post|term|user Which meta?
+	 * @param array $settings All settings
 	 * @return array $nu Our valid post/term/user meta options array
-	 *
 	 */
-
 	private static function _bootstrap_meta( $settings ) {
 		$nu = array();
 
@@ -605,6 +658,9 @@ final class kcSettings {
 	}
 
 
+	/**
+	 * Register scripts and styles
+	 */
 	public static function _sns_register() {
 		$path = self::$data['paths'];
 		$admin_color = get_user_option( 'admin_color' );
@@ -613,10 +669,10 @@ final class kcSettings {
 
 		# Common
 		wp_register_script( 'modernizr',         "{$path['scripts']}/modernizr-2.6.2-20121030{$suffix}.js", false, '2.6.2-20121030', false );
-		wp_register_script( 'kc-media-selector', "{$path['scripts']}/media-selector{$suffix}.js", array('jquery-ui-sortable'), self::version, true );
-		wp_register_script( 'kc-settings-base',  "{$path['scripts']}/kc-settings-base{$suffix}.js", array('jquery', 'modernizr', 'json2'), self::version, true );
-		wp_register_script( 'kc-settings',       "{$path['scripts']}/kc-settings{$suffix}.js", array('kc-settings-base', 'kc-media-selector'), self::version, true );
-		wp_register_style(  'kc-settings',       "{$path['styles']}/kc-settings{$suffix}.css", false, self::version );
+		wp_register_script( 'kc-media-selector', "{$path['scripts']}/media-selector{$suffix}.js", array('jquery-ui-sortable'), self::VERSION, true );
+		wp_register_script( 'kc-settings-base',  "{$path['scripts']}/kc-settings-base{$suffix}.js", array('jquery', 'modernizr', 'json2'), self::VERSION, true );
+		wp_register_script( 'kc-settings',       "{$path['scripts']}/kc-settings{$suffix}.js", array('kc-settings-base', 'kc-media-selector'), self::VERSION, true );
+		wp_register_style(  'kc-settings',       "{$path['styles']}/kc-settings{$suffix}.css", false, self::VERSION );
 
 		$jqui_theme = ( $admin_color == 'fresh' ) ? 'flick' : 'cupertino';
 		wp_register_style(  'jquery-ui', "{$path['styles']}/jquery-ui/{$jqui_theme}/jquery-ui-1.9.2.custom{$suffix}.css", false, '1.8.23' );
@@ -625,16 +681,23 @@ final class kcSettings {
 		wp_register_style(  'chosen', "{$path['styles']}/chosen/chosen{$suffix}.css", false, '0.9.8' );
 
 		# Builder
-		wp_register_script( 'kc-settings-builder', "{$path['scripts']}/kc-settings-builder{$suffix}.js", array('kc-settings-base', 'jquery-ui-sortable'), self::version, true );
+		wp_register_script( 'kc-settings-builder', "{$path['scripts']}/kc-settings-builder{$suffix}.js", array('kc-settings-base', 'jquery-ui-sortable'), self::VERSION, true );
 
 		# Uploader
-		wp_register_script( 'kc-settings-upload',        "{$path['scripts']}/upload{$suffix}.js", array('media-upload'), self::version, true );
-		wp_register_script( 'kc-settings-upload-single', "{$path['scripts']}/upload-single{$suffix}.js", array('media-upload'), self::version, true );
+		wp_register_script( 'kc-settings-upload',        "{$path['scripts']}/upload{$suffix}.js", array('media-upload'), self::VERSION, true );
+		wp_register_script( 'kc-settings-upload-single', "{$path['scripts']}/upload-single{$suffix}.js", array('media-upload'), self::VERSION, true );
 
 		add_action( 'admin_print_footer_scripts', array(__CLASS__, '_sns_vars'), 9 );
 	}
 
 
+	/**
+	 * Add class to admin pages' body
+	 *
+	 * @hook filter admin_body_class
+	 * @param string $classes HTML classes
+	 * @return string
+	 */
 	public static function admin_body_class( $classes ) {
 		if ( self::$data['is_kcs_page'] )
 			$classes .= 'kc-settings-page';
@@ -643,6 +706,12 @@ final class kcSettings {
 	}
 
 
+	/**
+	 * Enqueue admin scripts & styles
+	 *
+	 * @hook action admin_enqueue_scripts
+	 * @param string $hook_suffix
+	 */
 	public static function _sns_admin( $hook_suffix ) {
 		if ( !in_array($hook_suffix, self::$data['pages']) )
 			return;
@@ -664,6 +733,9 @@ final class kcSettings {
 	}
 
 
+	/**
+	 * Setup global JS vars
+	 */
 	public static function _sns_vars() {
 		global $wp_scripts, $wp_locale;
 		if ( !in_array('kc-settings-base', $wp_scripts->in_footer) )
@@ -731,6 +803,12 @@ final class kcSettings {
 	}
 
 
+	/**
+	 * Load sample settings
+	 *
+	 * @access private
+	 * @param array $types Setting types
+	 */
 	private static function _samples( $types ) {
 		foreach ( $types as $type )
 			require_once self::$data['paths']['inc'] . "/doc/sample/{$type}.php";
@@ -771,6 +849,13 @@ final class kcSettings {
 	/**
 	 * Lock plugin/prevent deactivation when there are other plugins/themes
 	 *   that depend on it.
+	 *
+	 * @hook filter plugin_action_links
+	 * @param array  $actions     Plugin actions
+	 * @param string $file        Plugin main file
+	 * @param array  $plugin_data Plugin data
+	 * @param string $context
+	 * @return array
 	 */
 	public static function _lock( $actions, $plugin_file, $plugin_data, $context ) {
 		if ( $plugin_file == self::$data['paths']['p_file'] && !empty(self::$data['kids']) )
@@ -780,6 +865,11 @@ final class kcSettings {
 	}
 
 
+	/**
+	 * Display admin notices
+	 *
+	 * @hook action admin_notices
+	 */
 	public static function _admin_notices() {
 		$notices = kc_array_remove_empty( self::$data['notices'] );
 		if ( empty($notices) )
@@ -799,6 +889,12 @@ final class kcSettings {
 	}
 
 
+	/**
+	 * Get class data/variable
+	 *
+	 * @param mixed Keys
+	 * @return mixed
+	 */
 	public static function get_data() {
 		$data = self::$data;
 		if ( !func_num_args() )
@@ -809,12 +905,23 @@ final class kcSettings {
 	}
 
 
+	/**
+	 * Add KC Settings page
+	 *
+	 * @param string $page Page hook name
+	 */
 	public static function add_page( $page ) {
 		if ( !in_array($page, self::$data['pages']) )
 			self::$data['pages'][] = $page;
 	}
 
 
+	/**
+	 * Add admin notice
+	 *
+	 * @param string $type    Notice type (update|error)
+	 * @param string $message Message
+	 */
 	public static function add_notice( $type, $message ) {
 		if ( !in_array($type, array('updated', 'error')) )
 			$type = 'updated';
@@ -823,36 +930,61 @@ final class kcSettings {
 	}
 
 
+	/**
+	 * Add media field
+	 *
+	 * @param string $id   Field ID
+	 * @param array  $args Field args
+	 */
 	public static function add_media_field( $id, $args ) {
 		self::$data['media_fields'][ $id ] = $args;
 	}
 
 
-	# Plugin activation tasks
+	/**
+	 * Plugin activation tasks
+	 *
+	 * @hook action activated_plugin
+	 */
 	public static function _activate() {
 		if ( version_compare( get_bloginfo('version'), '3.5', '<' ) )
 			wp_die( 'Please upgrade your WordPress to version 3.5 before using this plugin.' );
 
 		/**
-		 * Since 2.7.4
+		 * Remove options from DB
+		 *
 		 * We're not saving any plugin status to the DB anymore so the plugin
 		 *   can be bundled with a plugin/theme.
+		 *
+		 * @since 2.7.4
 		 */
 		delete_option( 'kc_settings' );
 	}
 
 
+	/**
+	 * Add debug bar panel
+	 *
+	 * @hook filter debug_bar_panels
+	 * @param array $panels Panels
+	 * @return array
+	 */
 	public static function debug_bar_ext( $panels ) {
 		$panels[] = new kcDebug;
 		return $panels;
 	}
-
 }
 add_action( 'plugins_loaded', array('kcSettings', 'setup'), 7 );
 
 
 # A hack for symlinks
 if ( !function_exists('kc_plugin_file') ) {
+	/**
+	 * Get plugin's real file path
+	 *
+	 * This is a hack for symlinked plugin, until #16953 is fixed
+	 * @link http://core.trac.wordpress.org/ticket/16953
+	 */
 	function kc_plugin_file( $file ) {
 		if ( !file_exists($file) )
 			return $file;
