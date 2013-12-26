@@ -28,18 +28,18 @@ class kcSettings_user {
 	 * @return null
 	 */
 	public static function _fields( $user ) {
-		foreach ( self::$settings as $group ) :
-			foreach ( $group as $section ) :
-			?>
+		foreach ( self::$settings as $group ) : ?>
+			<?php foreach ( $group as $section ) : ?>
 				<?php printf(
-					'<h3 id="%s" class="kcs-section">%s</h3>',
-					esc_attr( "kcs-section-{$section['id']}" ),
+					'<h3 id="%s" data-target="%s" class="kcs-section-title">%s</h3>',
+					esc_attr( "kcs-section-title-{$section['id']}" ),
+					esc_attr( "#kcs-section-{$section['id']}" ),
 					esc_html( $section['title'] )
 				); ?>
 				<?php if ( ! empty( $section['desc'] ) ) : ?>
 					<?php echo $section['desc']; // xss ok ?>
 				<?php endif; ?>
-				<table class="form-table">
+				<table id="kcs-section-<?php echo esc_attr( $section['id'] ) ?>" class="form-table kcs-section">
 					<tbody>
 						<?php foreach ( $section['fields'] as $field ) : ?>
 							<?php
