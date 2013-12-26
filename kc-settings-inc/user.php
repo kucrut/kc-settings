@@ -44,46 +44,48 @@ class kcSettings_user {
 					esc_attr( "#kcs-section-{$section['id']}" ),
 					esc_html( $section['title'] )
 				); ?>
-				<?php if ( ! empty( $section['desc'] ) ) : ?>
-					<?php echo $section['desc']; // xss ok ?>
-				<?php endif; ?>
-				<table id="kcs-section-<?php echo esc_attr( $section['id'] ) ?>" class="form-table kcs-section">
-					<tbody>
-						<?php foreach ( $section['fields'] as $field ) : ?>
-							<?php
-								if ( ! in_array( $field['type'], array( 'checkbox', 'radio', 'multiinput', 'file' ) ) ) {
-									$label_for = $field['id'];
-									if ( $field['type'] === 'editor' ) {
-										$label_for = strtolower(
-											str_replace(
-												array( '-', '_' ),
-												'',
-												$label_for
-											)
-										);
+				<div id="kcs-section-<?php echo esc_attr( $section['id'] ) ?>" class="kcs-section">
+					<?php if ( ! empty( $section['desc'] ) ) : ?>
+						<?php echo $section['desc']; // xss ok ?>
+					<?php endif; ?>
+					<table class="form-table">
+						<tbody>
+							<?php foreach ( $section['fields'] as $field ) : ?>
+								<?php
+									if ( ! in_array( $field['type'], array( 'checkbox', 'radio', 'multiinput', 'file' ) ) ) {
+										$label_for = $field['id'];
+										if ( $field['type'] === 'editor' ) {
+											$label_for = strtolower(
+												str_replace(
+													array( '-', '_' ),
+													'',
+													$label_for
+												)
+											);
+										}
 									}
-								}
-								else {
-									$label_for = '';
-								}
+									else {
+										$label_for = '';
+									}
 
-								$row_class = sprintf( 'kcs-field-%s-%s', $section['id'], $field['id'] );
-								$args      = array(
-									'mode'      => 'user',
-									'object_id' => $user->ID,
-									'section'   => $section['id'],
-									'field'     => $field
-								);
-							?>
-							<tr class="<?php echo esc_attr( $row_class ) ?>">
-								<th><?php _kc_field_label( $field['title'], $label_for, false ); ?></th>
-								<td>
-									<?php echo _kc_field( $args ); // xss ok ?>
-								</td>
-							</tr>
-						<?php endforeach; ?>
-					</tbody>
-				</table>
+									$row_class = sprintf( 'kcs-field-%s-%s', $section['id'], $field['id'] );
+									$args      = array(
+										'mode'      => 'user',
+										'object_id' => $user->ID,
+										'section'   => $section['id'],
+										'field'     => $field
+									);
+								?>
+								<tr class="<?php echo esc_attr( $row_class ) ?>">
+									<th><?php _kc_field_label( $field['title'], $label_for, false ); ?></th>
+									<td>
+										<?php echo _kc_field( $args ); // xss ok ?>
+									</td>
+								</tr>
+							<?php endforeach; ?>
+						</tbody>
+					</table>
+				</div>
 				<?php
 					/**
 					* Do something before printing the section
