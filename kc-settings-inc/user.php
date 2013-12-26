@@ -66,14 +66,16 @@ class kcSettings_user {
 								else {
 									$label_for = '';
 								}
-								$args = array(
+
+								$row_class = sprintf( 'kcs-field-%s-%s', $section['id'], $field['id'] );
+								$args      = array(
 									'mode'      => 'user',
 									'object_id' => $user->ID,
 									'section'   => $section['id'],
 									'field'     => $field
 								);
 							?>
-							<tr>
+							<tr class="<?php echo esc_attr( $row_class ) ?>">
 								<th><?php _kc_field_label( $field['title'], $label_for, false ); ?></th>
 								<td>
 									<?php echo _kc_field( $args ); // xss ok ?>
