@@ -22,14 +22,22 @@ class kcSettings_user {
 	 * Display additional fields on profile edit page
 	 *
 	 * @credit Justin Tadlock
-	 * @links http://justintadlock.com/archives/2009/09/10/adding-and-using-custom-user-profile-fields
+	 * @link http://justintadlock.com/archives/2009/09/10/adding-and-using-custom-user-profile-fields
 	 *
-	 * @param int $user_id User ID
-	 * @return null
+	 * @param stdClass $user User object
+	 * @return void
 	 */
 	public static function _fields( $user ) {
-		foreach ( self::$settings as $group ) : ?>
+		foreach ( self::$settings as $group_id => $group ) : ?>
 			<?php foreach ( $group as $section ) : ?>
+				<?php
+					/**
+					* Do something before printing the section
+					*
+					* @param array $section
+					*/
+					do_action( 'kc_settings_before_user_meta_section', $section );
+				?>
 				<?php printf(
 					'<h3 id="%s" data-target="%s" class="kcs-section-title">%s</h3>',
 					esc_attr( "kcs-section-title-{$section['id']}" ),
@@ -74,9 +82,16 @@ class kcSettings_user {
 						<?php endforeach; ?>
 					</tbody>
 				</table>
-			<?php
-			endforeach;
-		endforeach;
+				<?php
+					/**
+					* Do something before printing the section
+					*
+					* @param array $section
+					*/
+					do_action( 'kc_settings_after_user_meta_section', $section );
+				?>
+			<?php endforeach; ?>
+		<?php endforeach;
 	}
 
 
